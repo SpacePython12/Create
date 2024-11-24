@@ -2,12 +2,6 @@ package com.simibubi.create.foundation.blockEntity.behaviour.fluid;
 
 import java.util.function.Consumer;
 
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -15,15 +9,14 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.createmod.catnip.utility.NBTHelper;
 import net.createmod.catnip.utility.animation.LerpedFloat;
 import net.createmod.catnip.utility.animation.LerpedFloat.Chaser;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

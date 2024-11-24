@@ -1,10 +1,23 @@
 package com.simibubi.create.content.contraptions.minecart.capability;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.mutable.MutableBoolean;
+
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.content.contraptions.minecart.CouplingHandler;
+
+import io.github.fabricators_of_create.porting_lib.core.util.INBTSerializable;
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.NBTHelper;
@@ -22,16 +35,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.network.PacketDistributor;
-import org.apache.commons.lang3.mutable.MutableBoolean;
-
-import javax.annotation.Nullable;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Extended code for Minecarts, this allows for handling stalled carts and

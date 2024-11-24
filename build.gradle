@@ -21,19 +21,19 @@ archivesBaseName = "create-fabric"
 
 repositories {
     maven { url = "https://maven.parchmentmc.org" } // Parchment
-    maven { url = "https://maven.fabricmc.net/" } // FAPI, Loader
+    maven { url = "https://maven.fabricmc.net" } // FAPI, Loader
     maven { url = "https://maven.createmod.net" } // Catnip, Ponder
-    maven { url = "https://mvn.devos.one/snapshots/" } // Registrate, Forge Tags, Milk Lib
-    maven { url = "https://mvn.devos.one/releases/" } // Porting Lib
+    maven { url = "https://mvn.devos.one/snapshots" } // Registrate, Forge Tags, Milk Lib
+    maven { url = "https://mvn.devos.one/releases" } // Porting Lib
     maven { // for Porting Lib: Mixin Extras, Fabric ASM
-        url = "https://jitpack.io/"
+        url = "https://jitpack.io"
         content { includeGroupAndSubgroups("com.github") }
     }
-    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // Forge Config API Port
-    maven { url = "https://maven.tterrag.com/" } // Flywheel
-    maven { url = "https://maven.shedaniel.me/" } // REI and deps
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // Forge Config API Port
+    maven { url = "https://maven.tterrag.com" } // Flywheel
+    maven { url = "https://maven.shedaniel.me" } // REI and deps
     maven { url = "https://api.modrinth.com/maven" } // LazyDFU, Sodium, Sandwichable
-    maven { url = "https://maven.terraformersmc.com/" } // Mod Menu, Trinkets
+    maven { url = "https://maven.terraformersmc.com" } // Mod Menu, Trinkets
     maven { url = "https://squiddev.cc/maven" } // CC:T
     maven { url = "https://modmaven.dev" } // Botania
     maven { // Reach Entity Attributes
@@ -41,6 +41,10 @@ repositories {
         content { includeGroup("com.jamieswhiteshirt") }
     }
     maven { url = "https://maven.ladysnake.org/releases" } // CCA, for Trinkets
+    maven { url = "https://maven.saps.dev/releases" } // FTB
+    maven { url = "https://maven.architectury.dev" } // Architectury API
+    // FIXME grab artifact from this maven for JM
+    //maven { url = "https://jm.gserv.me/repository/maven-public" } // Journey map
 }
 
 dependencies {
@@ -111,6 +115,14 @@ def compat(DependencyHandler deps) {
     // for Trinkets
     deps.modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cca_version")
     deps.modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:$cca_version")
+
+    // FIXME - Use gradle.properties for these versions, make change to concealed for this
+    deps.modCompileOnly("dev.architectury:architectury-fabric:9.1.12")
+    deps.modCompileOnly("dev.ftb.mods:ftb-chunks-fabric:2001.3.1")
+    deps.modCompileOnly("dev.ftb.mods:ftb-teams-fabric:2001.3.0")
+    deps.modCompileOnly("dev.ftb.mods:ftb-library-fabric:2001.2.4")
+
+    deps.modCompileOnly("maven.modrinth:journeymap:1.20.1-5.10.3-fabric")
 
     recipeViewers(deps)
 }

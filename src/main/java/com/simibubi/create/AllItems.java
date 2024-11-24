@@ -1,9 +1,9 @@
 package com.simibubi.create;
 
-import static com.simibubi.create.AllTags.forgeItemTag;
 import static com.simibubi.create.AllTags.AllItemTags.CREATE_INGOTS;
 import static com.simibubi.create.AllTags.AllItemTags.CRUSHED_RAW_MATERIALS;
 import static com.simibubi.create.AllTags.AllItemTags.PLATES;
+import static com.simibubi.create.AllTags.forgeItemTag;
 import static com.simibubi.create.Create.REGISTRATE;
 import static com.simibubi.create.foundation.data.recipe.CompatMetals.ALUMINUM;
 import static com.simibubi.create.foundation.data.recipe.CompatMetals.LEAD;
@@ -40,6 +40,7 @@ import com.simibubi.create.content.equipment.sandPaper.SandPaperItem;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperItemRenderer;
 import com.simibubi.create.content.equipment.symmetryWand.SymmetryWandItem;
 import com.simibubi.create.content.equipment.symmetryWand.SymmetryWandItemRenderer;
+import com.simibubi.create.content.equipment.tool.CardboardSwordItem;
 import com.simibubi.create.content.equipment.wrench.WrenchItem;
 import com.simibubi.create.content.equipment.wrench.WrenchItemRenderer;
 import com.simibubi.create.content.equipment.zapper.terrainzapper.WorldshaperItem;

@@ -2,15 +2,14 @@ package com.simibubi.create.content.redstone.link.controller;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.utility.AdventureUtil;
-import com.simibubi.create.foundation.utility.Couple;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
 import io.github.fabricators_of_create.porting_lib.item.UseFirstBehaviorItem;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
+import net.createmod.catnip.utility.Couple;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -122,7 +121,7 @@ public class LinkedControllerItem extends Item implements MenuProvider, UseFirst
 		return newInv;
 	}
 
-	public static Couple<RedstoneLinkNetworkHandler.Frequency> toFrequency(ItemStack controller, int slot) {
+	public static Couple<Frequency> toFrequency(ItemStack controller, int slot) {
 		ItemStackHandler frequencyItems = getFrequencyItems(controller);
 		return Couple.create(Frequency.of(frequencyItems.getStackInSlot(slot * 2)),
 			Frequency.of(frequencyItems.getStackInSlot(slot * 2 + 1)));

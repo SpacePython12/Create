@@ -6,11 +6,6 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
-
-import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
-import net.fabricmc.fabric.api.entity.FakePlayer;
-
 import org.apache.commons.lang3.Validate;
 
 import com.simibubi.create.AllEntityTypes;
@@ -22,14 +17,18 @@ import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType;
 import com.simibubi.create.foundation.networking.ISyncPersistentData;
 import com.simibubi.create.foundation.utility.IInteractionChecker;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;
 
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
+import net.createmod.catnip.utility.Couple;
+import net.createmod.catnip.utility.VecHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;

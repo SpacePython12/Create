@@ -15,11 +15,12 @@ import com.simibubi.create.content.equipment.symmetryWand.mirror.CrossPlaneMirro
 import com.simibubi.create.content.equipment.symmetryWand.mirror.EmptyMirror;
 import com.simibubi.create.content.equipment.symmetryWand.mirror.PlaneMirror;
 import com.simibubi.create.content.equipment.symmetryWand.mirror.SymmetryMirror;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import net.createmod.catnip.gui.ScreenOpener;
+import net.createmod.catnip.utility.Iterate;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;

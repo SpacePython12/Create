@@ -17,6 +17,7 @@ import com.simibubi.create.content.trains.graph.DimensionPalette;
 import com.simibubi.create.content.trains.graph.TrackNode;
 import com.simibubi.create.content.trains.signal.SingleBlockEntityEdgePoint;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import net.createmod.catnip.utility.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -29,10 +30,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class GlobalStation extends SingleBlockEntityEdgePoint {
 
@@ -215,7 +212,7 @@ public class GlobalStation extends SingleBlockEntityEdgePoint {
 					carriageInventory.setStackInSlot(slot, ItemStack.EMPTY);
 					if (box != null)
 						box.spawnParticles();
-					
+
 					break;
 				}
 			}

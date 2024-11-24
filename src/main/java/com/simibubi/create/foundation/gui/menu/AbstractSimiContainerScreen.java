@@ -10,6 +10,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.ScreenAccessor;
+import net.createmod.catnip.gui.TickableGuiEventListener;
+import net.createmod.catnip.gui.widget.AbstractSimiWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;

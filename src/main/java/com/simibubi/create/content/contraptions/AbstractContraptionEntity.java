@@ -8,15 +8,9 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.simibubi.create.foundation.utility.AdventureUtil;
-
-import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
-import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.EntityAccessor;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllItems;
@@ -42,7 +36,14 @@ import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.collision.Matrix3d;
 import com.simibubi.create.foundation.mixin.accessor.ServerLevelAccessor;
+import com.simibubi.create.foundation.utility.AdventureUtil;
 
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.EntityAccessor;
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import net.createmod.catnip.utility.VecHelper;
+import net.createmod.catnip.utility.math.AngleHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -55,7 +56,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -80,8 +80,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractContraptionEntity extends Entity implements IEntityAdditionalSpawnData {
 

@@ -1,20 +1,8 @@
 package com.simibubi.create.foundation.mixin.fabric;
 
-import com.google.common.collect.ImmutableList;
-import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
-import com.simibubi.create.foundation.ponder.PonderWorld;
+import java.util.List;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Entity.RemovalReason;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.border.WorldBorder;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-
-import net.minecraft.world.phys.shapes.VoxelShape;
-
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.EntityAccessor;
+import javax.annotation.Nullable;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,9 +11,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
+import com.google.common.collect.ImmutableList;
+import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
 
-import java.util.List;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.EntityAccessor;
+import net.createmod.ponder.api.level.PonderLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -47,7 +45,7 @@ public abstract class EntityMixin {
 	 */
 	@Inject(method = "collideBoundingBox", at = @At("HEAD"), cancellable = true)
 	private static void create$stopLithiumCollisionChangesInPonderWorld(@Nullable Entity entity, Vec3 movement, AABB entityBoundingBox, Level world, List<VoxelShape> shapes, CallbackInfoReturnable<Vec3> ci) {
-		if (world instanceof PonderWorld) {
+		if (world instanceof PonderLevel) {
 			// Vanilla copy
 			ImmutableList.Builder<VoxelShape> builder = ImmutableList.builderWithExpectedSize(shapes.size() + 1);
 			if (!shapes.isEmpty()) {

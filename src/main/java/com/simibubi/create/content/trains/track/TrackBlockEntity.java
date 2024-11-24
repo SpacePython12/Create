@@ -19,11 +19,10 @@ import com.simibubi.create.foundation.blockEntity.IMergeableBE;
 import com.simibubi.create.foundation.blockEntity.RemoveBlockEntityPacket;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
 import dev.engine_room.flywheel.lib.visualization.VisualizationHelper;
+import net.createmod.catnip.utility.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;

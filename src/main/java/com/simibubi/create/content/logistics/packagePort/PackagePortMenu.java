@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.animatedContainer.An
 import com.simibubi.create.foundation.gui.menu.MenuBase;
 import com.simibubi.create.foundation.item.SmartInventory;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -16,7 +17,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.SlotItemHandler;
 
 public class PackagePortMenu extends MenuBase<PackagePortBlockEntity> {
 

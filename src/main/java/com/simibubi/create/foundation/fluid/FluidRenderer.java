@@ -1,15 +1,10 @@
 package com.simibubi.create.foundation.fluid;
 
-import java.util.function.Function;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.create.foundation.render.RenderTypes;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.Iterate;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.createmod.catnip.utility.BasicFluidRenderer;
 import net.createmod.catnip.utility.math.AngleHelper;
 import net.fabricmc.api.EnvType;
@@ -20,13 +15,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
-import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
-
-import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class FluidRenderer extends BasicFluidRenderer {

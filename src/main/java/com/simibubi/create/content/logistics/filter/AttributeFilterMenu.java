@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.simibubi.create.AllMenuTypes;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 import net.createmod.catnip.utility.Pair;
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.ChatFormatting;

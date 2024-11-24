@@ -13,15 +13,12 @@ import javax.annotation.Nullable;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.contraptions.minecart.CouplingHandler;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.WorldAttached;
-import com.simibubi.create.foundation.utility.fabric.AbstractMinecartExtensions;
 
 import io.github.fabricators_of_create.porting_lib.core.util.INBTSerializable;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
+import net.createmod.catnip.utility.Iterate;
+import net.createmod.catnip.utility.WorldAttached;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;

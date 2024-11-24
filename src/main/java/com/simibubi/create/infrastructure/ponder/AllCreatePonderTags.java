@@ -8,13 +8,13 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.createmod.catnip.platform.CatnipServices;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class AllCreatePonderTags {
 
@@ -470,7 +470,7 @@ public class AllCreatePonderTags {
 			.add(Blocks.BARREL);
 
 		Mods.COMPUTERCRAFT.executeIfInstalled(() -> () -> {
-			Block computer = ForgeRegistries.BLOCKS.getValue(Mods.COMPUTERCRAFT.rl("computer_advanced"));
+			Block computer = BuiltInRegistries.BLOCK.get(Mods.COMPUTERCRAFT.rl("computer_advanced"));
 			if (computer != null)
 				itemHelper.addToTag(DISPLAY_SOURCES).add(computer);
 		});

@@ -3,11 +3,9 @@ package com.simibubi.create.compat;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
-
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.utility.lang.Lang;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

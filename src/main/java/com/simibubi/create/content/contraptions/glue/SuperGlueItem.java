@@ -1,9 +1,8 @@
 package com.simibubi.create.content.contraptions.glue;
 
 import com.simibubi.create.content.contraptions.chassis.AbstractChassisBlock;
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.item.CustomMaxCountItem;
 
+import net.createmod.catnip.utility.VecHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -21,8 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import org.apache.logging.log4j.core.Filter.Result;
 
 public class SuperGlueItem extends Item {
 

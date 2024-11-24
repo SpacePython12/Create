@@ -2,7 +2,6 @@ package com.simibubi.create.foundation.blockEntity.behaviour.scrollValue;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableList;
@@ -13,10 +12,8 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.utility.lang.Components;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

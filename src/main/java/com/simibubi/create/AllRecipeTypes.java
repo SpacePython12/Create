@@ -4,8 +4,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import com.simibubi.create.content.processing.basin.BasinRecipe;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.compat.rei.ConversionRecipe;
@@ -24,15 +22,16 @@ import com.simibubi.create.content.kinetics.mixer.CompactingRecipe;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeFactory;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
 import io.github.fabricators_of_create.porting_lib.util.ShapedRecipeUtil;
+import net.createmod.catnip.utility.lang.Lang;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;

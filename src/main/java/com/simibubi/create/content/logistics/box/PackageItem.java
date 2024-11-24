@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import com.simibubi.create.AllEntityTypes;
 import com.simibubi.create.content.logistics.stockTicker.PackageOrder;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import net.createmod.catnip.utility.VecHelper;
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.ChatFormatting;
@@ -39,8 +40,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class PackageItem extends Item {
 

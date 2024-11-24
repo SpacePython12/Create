@@ -11,6 +11,10 @@ import javax.annotation.Nullable;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.mixin.accessor.FluidInteractionRegistryAccessor;
 
+import io.github.fabricators_of_create.porting_lib.fluids.FluidInteractionRegistry.FluidInteraction;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidInteractionRegistry.HasFluidInteraction;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidInteractionRegistry.InteractionInformation;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidType;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.Pair;
 import net.createmod.catnip.utility.levelWrappers.PlacementSimulationServerLevel;
@@ -22,10 +26,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.fluids.FluidInteractionRegistry.FluidInteraction;
-import net.minecraftforge.fluids.FluidInteractionRegistry.HasFluidInteraction;
-import net.minecraftforge.fluids.FluidInteractionRegistry.InteractionInformation;
-import net.minecraftforge.fluids.FluidType;
 
 public class CobbleGenOptimisation {
 

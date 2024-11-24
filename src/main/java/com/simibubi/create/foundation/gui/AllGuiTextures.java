@@ -2,6 +2,10 @@ package com.simibubi.create.foundation.gui;
 
 import com.simibubi.create.Create;
 
+import net.createmod.catnip.gui.TextureSheetSegment;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.ScreenElement;
+import net.createmod.catnip.utility.theme.Color;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;

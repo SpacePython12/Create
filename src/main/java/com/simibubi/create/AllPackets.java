@@ -118,6 +118,7 @@ import com.simibubi.create.infrastructure.debugInfo.ServerDebugInfoPacket;
 
 import me.pepperbell.simplenetworking.S2CPacket;
 import me.pepperbell.simplenetworking.SimpleChannel;
+import net.createmod.catnip.net.ClientboundSimpleActionPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

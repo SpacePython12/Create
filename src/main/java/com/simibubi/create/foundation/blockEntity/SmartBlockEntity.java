@@ -18,6 +18,7 @@ import com.simibubi.create.foundation.utility.IInteractionChecker;
 import com.simibubi.create.foundation.utility.IPartialSafeNBT;
 
 import io.github.fabricators_of_create.porting_lib.block.ChunkUnloadListeningBlockEntity;
+import net.createmod.ponder.api.VirtualBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

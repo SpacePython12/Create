@@ -1,10 +1,17 @@
 package com.simibubi.create.compat.jei;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.content.logistics.filter.AttributeFilterScreen;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
 import com.simibubi.create.foundation.gui.menu.GhostItemSubmitPacket;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.AbstractContainerScreenAccessor;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.ingredients.ITypedIngredient;
@@ -12,10 +19,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.LinkedList;
-import java.util.List;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -65,7 +68,7 @@ public class GhostIngredientHandler<T extends GhostItemMenu<?>>
 			this.slotIndex = slotIndex;
 			this.isAttributeFilter = isAttributeFilter;
 			Slot slot = gui.getMenu().slots.get(slotIndex + 36);
-			this.area = new Rect2i(gui.getGuiLeft() + slot.x, gui.getGuiTop() + slot.y, 16, 16);
+			this.area = new Rect2i(((AbstractContainerScreenAccessor) gui).port_lib$getGuiLeft() + slot.x, ((AbstractContainerScreenAccessor) gui).port_lib$getGuiTop() + slot.y, 16, 16);
 		}
 
 		@Override

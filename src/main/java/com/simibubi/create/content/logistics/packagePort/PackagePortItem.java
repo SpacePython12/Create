@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.network.PacketDistributor;
 
 public class PackagePortItem extends BlockItem {
 
@@ -22,8 +21,7 @@ public class PackagePortItem extends BlockItem {
 	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level world, Player player, ItemStack p_195943_4_,
 		BlockState p_195943_5_) {
 		if (!world.isClientSide && player instanceof ServerPlayer sp)
-			AllPackets.getChannel()
-				.send(PacketDistributor.PLAYER.with(() -> sp), new PackagePortPlacementPacket.ClientBoundRequest(pos));
+			AllPackets.getChannel().sendToClient(new PackagePortPlacementPacket.ClientBoundRequest(pos), sp);
 		return super.updateCustomBlockEntityTag(pos, world, player, p_195943_4_, p_195943_5_);
 	}
 

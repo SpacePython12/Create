@@ -10,8 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.registries.GameData;
 
 public class RadialWrenchMenuSubmitPacket extends SimplePacketBase {
 
@@ -35,7 +33,7 @@ public class RadialWrenchMenuSubmitPacket extends SimplePacketBase {
 	}
 
 	@Override
-	public boolean handle(NetworkEvent.Context context) {
+	public boolean handle(Context context) {
 		context.enqueueWork(() -> {
 			ServerPlayer player = context.getSender();
 			Level level = player.level();

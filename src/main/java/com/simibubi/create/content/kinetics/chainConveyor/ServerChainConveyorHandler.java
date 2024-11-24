@@ -9,7 +9,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.PacketDistributor;
 
 public class ServerChainConveyorHandler {
 
@@ -53,7 +52,7 @@ public class ServerChainConveyorHandler {
 
 	public static void sync() {
 		ClientboundChainConveyorRidingPacket packet = new ClientboundChainConveyorRidingPacket(hangingPlayers.keySet());
-		AllPackets.getChannel().send(PacketDistributor.ALL.noArg(), packet);
+		AllPackets.getChannel().sendToClientsInCurrentServer(packet);
 	}
 
 }

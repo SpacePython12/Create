@@ -15,6 +15,8 @@ import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringB
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import net.createmod.catnip.utility.VecHelper;
+import net.createmod.catnip.utility.math.AngleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;

@@ -28,7 +28,7 @@ public class AllCommands {
 				.then(FabulousWarningCommand.register())
 				.then(OverlayConfigCommand.register())
 				.then(DumpRailwaysCommand.register())
-				.then(FixLightingCommand.register())
+				//.then(FixLightingCommand.register()) fabric: Forge only command
 				.then(DebugInfoCommand.register())
 				.then(HighlightCommand.register())
 				.then(PassengerCommand.register())

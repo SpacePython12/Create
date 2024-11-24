@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraftforge.common.ForgeConfig;
 
 public class SimpleCreateActions {
 
@@ -42,11 +41,6 @@ public class SimpleCreateActions {
 
 	public static void overlayScreen(String value) {
 		ScreenOpener.open(new GoggleConfigScreen());
-	}
-
-	public static void experimentalLighting(String value) {
-		ForgeConfig.CLIENT.experimentalForgeLightPipelineEnabled.set(true);
-		Minecraft.getInstance().levelRenderer.allChanged();
 	}
 
 	public static void fabulousWarning(String value) {

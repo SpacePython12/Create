@@ -2,9 +2,8 @@ package com.simibubi.create.content.logistics.packager;
 
 import com.simibubi.create.content.logistics.box.PackageItem;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 public class PackagerItemHandler implements IItemHandlerModifiable {
 

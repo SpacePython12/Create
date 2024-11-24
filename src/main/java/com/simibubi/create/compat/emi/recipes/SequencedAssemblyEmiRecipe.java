@@ -2,21 +2,18 @@ package com.simibubi.create.compat.emi.recipes;
 
 import java.util.List;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.emi.CreateEmiPlugin;
 import com.simibubi.create.compat.emi.EmiSequencedAssemblySubCategory;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.CreateLang;
-import com.simibubi.create.foundation.utility.Lang;
 
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
+import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -49,9 +46,9 @@ public class SequencedAssemblyEmiRecipe extends CreateEmiRecipe<SequencedAssembl
 
 		addTexture(widgets, AllGuiTextures.JEI_LONG_ARROW, mid - 38 + xOff, 94);
 
-		widgets.addDrawable(mid - 38 + xOff, 94, AllGuiTextures.JEI_LONG_ARROW.width, 20, (matrices, mx, my, delta) -> {})
+		widgets.addDrawable(mid - 38 + xOff, 94, AllGuiTextures.JEI_LONG_ARROW.getWidth(), 20, (matrices, mx, my, delta) -> {})
 			.tooltip((mouseX, mouseY) -> List.of(ClientTooltipComponent.create(
-				Lang.translateDirect("recipe.assembly.repeat", recipe.getLoops()).getVisualOrderText())));
+				CreateLang.translateDirect("recipe.assembly.repeat", recipe.getLoops()).getVisualOrderText())));
 
 		if (recipe.getOutputChance() != 1) {
 			float chance = recipe.getOutputChance();

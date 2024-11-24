@@ -8,7 +8,7 @@ import com.google.gson.JsonParseException;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 
-import net.minecraft.core.Registry;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

@@ -33,8 +33,8 @@ public class DisplayClothPricingScreen extends AbstractSimiContainerScreen<Displ
 		super.init();
 		clearWidgets();
 
-		int x = getGuiLeft();
-		int y = getGuiTop();
+		int x = leftPos;
+		int y = topPos;
 
 		scrollInput = new ScrollInput(x + 33, y - 4 + 72, 100, 20).withRange(1, 513)
 			.withShiftStep(10)
@@ -49,8 +49,8 @@ public class DisplayClothPricingScreen extends AbstractSimiContainerScreen<Displ
 
 	@Override
 	protected void renderBg(GuiGraphics graphics, float pPartialTick, int mouseX, int mouseY) {
-		int x = getGuiLeft();
-		int y = getGuiTop();
+		int x = leftPos;
+		int y = topPos;
 
 		AllGuiTextures.PLAYER_INVENTORY.render(graphics, x + 25, y + 100);
 		graphics.drawString(font, playerInventoryTitle, x + 8 + 25, y + 6 + 100, 0x404040, false);
@@ -101,9 +101,9 @@ public class DisplayClothPricingScreen extends AbstractSimiContainerScreen<Displ
 	}
 
 	private int getHoveredSlot(int mouseX, int mouseY) {
-		if (mouseY < getGuiTop() + 20 || mouseY > getGuiTop() + 20 + rowHeight)
+		if (mouseY < topPos + 20 || mouseY > topPos + 20 + rowHeight)
 			return -1;
-		int slot = (mouseX - getGuiLeft()) / colWidth;
+		int slot = (mouseX - leftPos) / colWidth;
 		if (slot >= currentStacks().size())
 			return -1;
 		return Math.max(-1, slot);

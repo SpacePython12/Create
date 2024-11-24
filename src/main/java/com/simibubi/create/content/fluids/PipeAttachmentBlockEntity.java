@@ -1,13 +1,12 @@
 package com.simibubi.create.content.fluids;
 
-import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.utility.Iterate;
+import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**

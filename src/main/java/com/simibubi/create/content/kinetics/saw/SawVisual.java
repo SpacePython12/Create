@@ -7,7 +7,6 @@ import com.simibubi.create.content.kinetics.base.SingleRotatingVisual;
 import dev.engine_room.flywheel.api.model.Model;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.model.Models;
-import net.createmod.catnip.render.VirtualRenderHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
@@ -30,11 +29,11 @@ public class SawVisual extends SingleRotatingVisual<SawBlockEntity> {
 		if (state.getValue(BlockStateProperties.FACING)
 			.getAxis()
 			.isHorizontal()) {
-			BlockState referenceState = state.rotate(level, pos, Rotation.CLOCKWISE_180);
+			BlockState referenceState = state.rotate(Rotation.CLOCKWISE_180);
 			Direction facing = referenceState.getValue(BlockStateProperties.FACING);
 			return Models.partial(AllPartialModels.SHAFT_HALF, facing);
 		} else {
-			return VirtualRenderHelper.blockModel(KineticBlockEntityVisual.shaft(state));
+			return Models.block(KineticBlockEntityVisual.shaft(state));
 		}
 	}
 }

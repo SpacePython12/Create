@@ -12,8 +12,8 @@ import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
+import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import net.createmod.catnip.render.VirtualRenderHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -33,7 +33,7 @@ public class HandCrankVisual extends KineticBlockEntityVisual<HandCrankBlockEnti
 		rotateCrank(partialTick);
 
 		if (blockEntity.shouldRenderShaft()) {
-			rotatingModel = instancerProvider().instancer(AllInstanceTypes.ROTATING, VirtualRenderHelper.blockModel(blockState))
+			rotatingModel = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.block(blockState))
 					.createInstance();
 			setup(rotatingModel);
 		}

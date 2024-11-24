@@ -17,6 +17,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollVa
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import dev.engine_room.flywheel.api.model.Model;
+import dev.engine_room.flywheel.lib.model.Models;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.createmod.catnip.utility.VecHelper;
@@ -149,7 +150,7 @@ public class ValveHandleBlockEntity extends HandCrankBlockEntity {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public Model getRenderedHandleInstance() {
-		return VirtualRenderHelper.blockModel(getBlockState());
+		return Models.block(getBlockState());
 	}
 
 	@Override

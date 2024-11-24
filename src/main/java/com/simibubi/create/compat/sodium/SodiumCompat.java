@@ -11,9 +11,9 @@ import java.util.function.Supplier;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.Mods;
-import com.simibubi.create.foundation.utility.Components;
 
 import me.jellysquid.mods.sodium.client.render.texture.SpriteUtil;
+import net.createmod.catnip.utility.lang.Components;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -32,6 +33,8 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 
 import io.github.fabricators_of_create.porting_lib.tags.Tags;
+import io.github.fabricators_of_create.porting_lib.util.CraftingHelper;
+import net.createmod.catnip.platform.CatnipServices;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
@@ -1695,7 +1698,7 @@ public class StandardRecipeGen extends CreateRecipeProvider {
 		}
 	}
 
-	private record ConditionSupportingShapelessRecipeResult(FinishedRecipe wrapped, List<ICondition> conditions)
+	private record ConditionSupportingShapelessRecipeResult(FinishedRecipe wrapped, List<ConditionJsonProvider> conditions)
 		implements FinishedRecipe {
 		@Override
 		public ResourceLocation getId() {
@@ -1721,9 +1724,7 @@ public class StandardRecipeGen extends CreateRecipeProvider {
 		public void serializeRecipeData(@NotNull JsonObject pJson) {
 			wrapped.serializeRecipeData(pJson);
 
-			JsonArray conds = new JsonArray();
-			conditions.forEach(c -> conds.add(CraftingHelper.serialize(c)));
-			pJson.add("conditions", conds);
+			ConditionJsonProvider.write(pJson, conditions.toArray(new ConditionJsonProvider[0]));
 		}
 	}
 }

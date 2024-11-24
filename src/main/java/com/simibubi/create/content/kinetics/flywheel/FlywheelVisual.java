@@ -12,9 +12,9 @@ import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
+import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import net.createmod.catnip.render.VirtualRenderHelper;
 import net.createmod.catnip.utility.math.AngleHelper;
 import net.minecraft.core.Direction;
 
@@ -27,9 +27,9 @@ public class FlywheelVisual extends KineticBlockEntityVisual<FlywheelBlockEntity
 	public FlywheelVisual(VisualizationContext context, FlywheelBlockEntity blockEntity, float partialTick) {
 		super(context, blockEntity, partialTick);
 
-		shaft = setup(instancerProvider().instancer(AllInstanceTypes.ROTATING, VirtualRenderHelper.blockModel(shaft()))
+		shaft = setup(instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.block(shaft()))
 			.createInstance());
-		wheel = instancerProvider().instancer(InstanceTypes.TRANSFORMED, VirtualRenderHelper.blockModel(blockState))
+		wheel = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.block(blockState))
 			.createInstance();
 
 		animate(blockEntity.angle);

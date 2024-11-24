@@ -14,7 +14,6 @@ import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
-import net.createmod.catnip.render.VirtualRenderHelper;
 import net.createmod.catnip.utility.math.AngleHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -25,7 +24,7 @@ public class StandardBogeyVisual implements BogeyVisual {
 
 	public StandardBogeyVisual(VisualizationContext ctx, float partialTick, boolean inContraption) {
 		var shaftInstancer = ctx.instancerProvider()
-				.instancer(InstanceTypes.TRANSFORMED, VirtualRenderHelper.blockModel(AllBlocks.SHAFT.getDefaultState()
+				.instancer(InstanceTypes.TRANSFORMED, Models.block(AllBlocks.SHAFT.getDefaultState()
 						.setValue(ShaftBlock.AXIS, Direction.Axis.Z)));
 		shaft1 = shaftInstancer.createInstance();
 		shaft2 = shaftInstancer.createInstance();
@@ -147,7 +146,7 @@ public class StandardBogeyVisual implements BogeyVisual {
 		public Large(VisualizationContext ctx, float partialTick, boolean inContraption) {
 			super(ctx, partialTick, inContraption);
 			var secondaryShaftInstancer = ctx.instancerProvider()
-					.instancer(InstanceTypes.TRANSFORMED, VirtualRenderHelper.blockModel(AllBlocks.SHAFT.getDefaultState()
+					.instancer(InstanceTypes.TRANSFORMED, Models.block(AllBlocks.SHAFT.getDefaultState()
 							.setValue(ShaftBlock.AXIS, Direction.Axis.X)));
 			secondaryShaft1 = secondaryShaftInstancer.createInstance();
 			secondaryShaft2 = secondaryShaftInstancer.createInstance();

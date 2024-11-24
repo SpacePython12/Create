@@ -7,7 +7,7 @@ import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.model.Model;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
-import net.createmod.catnip.render.VirtualRenderHelper;
+import dev.engine_room.flywheel.lib.model.Models;
 
 public class SingleRotatingVisual<T extends KineticBlockEntity> extends KineticBlockEntityVisual<T> {
 
@@ -36,7 +36,7 @@ public class SingleRotatingVisual<T extends KineticBlockEntity> extends KineticB
 	}
 
 	protected Model model() {
-		return VirtualRenderHelper.blockModel(blockState);
+		return Models.block(blockState);
 	}
 
 	@Override

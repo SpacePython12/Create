@@ -6,8 +6,6 @@ import java.util.UUID;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.util.EntityHelper;
 
 import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.core.BlockPos;

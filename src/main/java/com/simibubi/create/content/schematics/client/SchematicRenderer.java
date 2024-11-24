@@ -5,11 +5,12 @@ import java.util.Map;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.render.BlockEntityRenderHelper;
-import com.simibubi.create.foundation.render.ShadedBlockSbbBuilder;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.render.SuperRenderTypeBuffer;
 import com.simibubi.create.foundation.render.fabric.LayerFilteringBakedModel;
 
+import net.createmod.catnip.render.ShadedBlockSbbBuilder;
+import net.createmod.catnip.render.SuperByteBuffer;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
+import net.createmod.catnip.utility.levelWrappers.SchematicLevel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;

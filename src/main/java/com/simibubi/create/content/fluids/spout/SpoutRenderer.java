@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.fluid.FluidRenderer;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import net.createmod.catnip.render.CachedBuffers;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

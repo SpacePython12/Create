@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 import com.simibubi.create.AllStructureProcessorTypes;
 
 import io.github.fabricators_of_create.porting_lib.extensions.extensions.StructureProcessorExtensions;
-
+import net.createmod.catnip.utility.NBTProcessors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;

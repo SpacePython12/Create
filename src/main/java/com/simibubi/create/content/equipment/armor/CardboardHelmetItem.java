@@ -2,9 +2,8 @@ package com.simibubi.create.content.equipment.armor;
 
 import java.util.function.Consumer;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class CardboardHelmetItem extends CardboardArmorItem {
 
@@ -13,7 +12,7 @@ public class CardboardHelmetItem extends CardboardArmorItem {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 		super.initializeClient(consumer);
 		consumer.accept(new CardboardArmorStealthOverlay());

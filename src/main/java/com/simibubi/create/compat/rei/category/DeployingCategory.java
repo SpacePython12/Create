@@ -2,12 +2,11 @@ package com.simibubi.create.compat.rei.category;
 
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.rei.category.animations.AnimatedDeployer;
 import com.simibubi.create.compat.rei.display.CreateDisplay;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import me.shedaniel.math.Point;
 import me.shedaniel.rei.api.client.gui.widgets.Slot;
@@ -33,7 +32,7 @@ public class DeployingCategory extends CreateRecipeCategory<DeployerApplicationR
 				.entries(EntryIngredients.ofIngredient(recipe.getProcessedItem()));
 		ClientEntryStacks.setTooltipProcessor(input.getCurrentEntry(), ((entryStack, tooltip) -> {
 			if (recipe.shouldKeepHeldItem())
-					tooltip.add(Lang.translateDirect("recipe.deploying.not_consumed")
+					tooltip.add(CreateLang.translateDirect("recipe.deploying.not_consumed")
 							.withStyle(ChatFormatting.GOLD));
 			return tooltip;
 		}));

@@ -8,6 +8,7 @@ import com.simibubi.create.compat.rei.display.CreateDisplay;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.Lang;
 
 import me.shedaniel.math.Point;
@@ -39,7 +40,7 @@ public class PressingCategory extends CreateRecipeCategory<PressingRecipe> {
 		for (int outputIndex = 0; outputIndex < results.size(); outputIndex++) {
 			List<Component> tooltip = new ArrayList<>();
 			if (results.get(outputIndex).getChance() != 1)
-				tooltip.add(Lang.translateDirect("recipe.processing.chance", results.get(outputIndex).getChance() < 0.01 ? "<1" : (int) (results.get(outputIndex).getChance() * 100))
+				tooltip.add(CreateLang.translateDirect("recipe.processing.chance", results.get(outputIndex).getChance() < 0.01 ? "<1" : (int) (results.get(outputIndex).getChance() * 100))
 						.withStyle(ChatFormatting.GOLD));
 			widgets.add(Widgets.createSlot(new Point((origin.x + 131 + 19 * outputIndex) + 1, (origin.y + 50) + 1))
 					.disableBackground().markOutput()

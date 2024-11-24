@@ -17,6 +17,7 @@ import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.Lang;
 
 import me.shedaniel.math.Point;
@@ -130,7 +131,7 @@ public abstract class ReiSequencedAssemblySubCategory {
 			entryIngredient.forEach(entryStack -> {
 				IAssemblyRecipe contained = recipe.getAsAssemblyRecipe();
 				if (contained instanceof DeployerApplicationRecipe && ((DeployerApplicationRecipe) contained).shouldKeepHeldItem()) {
-					entryStack.tooltip(Lang.translateDirect("recipe.deploying.not_consumed")
+					entryStack.tooltip(CreateLang.translateDirect("recipe.deploying.not_consumed")
 							.withStyle(ChatFormatting.GOLD));
 				}
 			});

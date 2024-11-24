@@ -5,9 +5,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.simibubi.create.foundation.utility.Couple;
-
 import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.utility.Couple;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 

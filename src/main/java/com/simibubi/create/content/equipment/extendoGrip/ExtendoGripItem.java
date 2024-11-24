@@ -1,5 +1,10 @@
 package com.simibubi.create.content.equipment.extendoGrip;
 
+import java.util.UUID;
+import java.util.function.Supplier;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -24,9 +29,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.UUID;
-import java.util.function.Supplier;
 
 public class ExtendoGripItem extends Item {
 	public static final int MAX_DAMAGE = 200;

@@ -2,9 +2,10 @@ package com.simibubi.create.infrastructure.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.simibubi.create.CreateClient;
-import com.simibubi.create.foundation.utility.Components;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
+import net.createmod.catnip.CatnipClient;
+import net.createmod.catnip.utility.lang.Components;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.commands.CommandSourceStack;

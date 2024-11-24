@@ -3,10 +3,10 @@ package com.simibubi.create.compat.botania;
 import com.simibubi.create.api.behaviour.BlockSpoutingBehaviour;
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import net.createmod.catnip.platform.CatnipServices;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +32,7 @@ public class ApothecaryFilling extends BlockSpoutingBehaviour {
 		if (te == null)
 			return 0;
 
-		ResourceLocation registryName = RegisteredObjects.getKeyOrThrow(te.getType());
+		ResourceLocation registryName = CatnipServices.REGISTRIES.getKeyOrThrow(te.getType());
 		if (!registryName.equals(APOTHECARY))
 			return 0;
 

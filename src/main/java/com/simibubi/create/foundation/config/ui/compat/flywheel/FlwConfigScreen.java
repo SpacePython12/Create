@@ -4,16 +4,15 @@ import java.util.Locale;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.simibubi.create.foundation.config.ui.BaseConfigScreen;
-import com.simibubi.create.foundation.config.ui.ConfigModListScreen;
-import com.simibubi.create.foundation.config.ui.ConfigScreen;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.Theme;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
-import com.simibubi.create.foundation.gui.element.TextStencilElement;
-import com.simibubi.create.foundation.gui.widget.BoxWidget;
 
 import dev.engine_room.flywheel.impl.FabricFlwConfig;
+import net.createmod.catnip.config.ui.BaseConfigScreen;
+import net.createmod.catnip.config.ui.ConfigModListScreen;
+import net.createmod.catnip.config.ui.ConfigScreen;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.TextStencilElement;
+import net.createmod.catnip.gui.widget.BoxWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.fml.config.ModConfig;

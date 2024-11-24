@@ -10,9 +10,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent.Context;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class StockKeeperOpenRequestScreenPacket extends SimplePacketBase {
 
@@ -40,7 +39,7 @@ public class StockKeeperOpenRequestScreenPacket extends SimplePacketBase {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public boolean handle(Context context) {
 		context.enqueueWork(() -> {
 			LocalPlayer player = Minecraft.getInstance().player;

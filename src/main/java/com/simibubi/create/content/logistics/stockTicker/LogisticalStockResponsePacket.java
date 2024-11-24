@@ -9,9 +9,8 @@ import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent.Context;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class LogisticalStockResponsePacket extends SimplePacketBase {
 
@@ -48,7 +47,7 @@ public class LogisticalStockResponsePacket extends SimplePacketBase {
 		return true;
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void handleClient() {
 		if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof StockTickerBlockEntity stbe)
 			stbe.receiveStockPacket(items, lastPacket);

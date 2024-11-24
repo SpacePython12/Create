@@ -2,6 +2,7 @@ package com.simibubi.create.foundation.utility;
 
 import com.simibubi.create.Create;
 
+import net.createmod.catnip.utility.lang.Components;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;

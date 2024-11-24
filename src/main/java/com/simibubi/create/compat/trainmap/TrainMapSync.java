@@ -30,8 +30,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent.ServerTickEvent;
-import net.minecraftforge.network.PacketDistributor;
 
 public class TrainMapSync {
 
@@ -180,12 +178,12 @@ public class TrainMapSync {
 			send(sender.server, false);
 	}
 
-	public static void serverTick(ServerTickEvent event) {
+	public static void serverTick(MinecraftServer server) {
 		ticks++;
 		if (ticks % fullPacketInterval == 0)
-			send(event.getServer(), false);
+			send(server, false);
 		else if (ticks % lightPacketInterval == 0)
-			send(event.getServer(), true);
+			send(server, true);
 	}
 
 	public static void send(MinecraftServer minecraftServer, boolean light) {
@@ -201,8 +199,7 @@ public class TrainMapSync {
 			ServerPlayer player = weakReference.get();
 			if (player == null)
 				continue;
-			AllPackets.getChannel()
-				.send(PacketDistributor.PLAYER.with(() -> player), packet);
+			AllPackets.getChannel().sendToClient(packet, player);
 		}
 	}
 

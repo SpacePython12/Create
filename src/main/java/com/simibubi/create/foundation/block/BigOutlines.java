@@ -1,14 +1,14 @@
 package com.simibubi.create.foundation.block;
 
 import com.simibubi.create.foundation.utility.RaycastHelper;
-
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;
 
+import net.createmod.catnip.utility.VecHelper;
+import net.createmod.ponder.utility.LevelTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;

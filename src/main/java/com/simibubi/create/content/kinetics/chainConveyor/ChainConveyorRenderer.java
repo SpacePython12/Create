@@ -3,6 +3,8 @@ package com.simibubi.create.content.kinetics.chainConveyor;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -36,7 +38,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ChainConveyorRenderer extends KineticBlockEntityRenderer<ChainConveyorBlockEntity> {
 
@@ -88,7 +89,7 @@ public class ChainConveyorRenderer extends KineticBlockEntityRenderer<ChainConve
 			level.getBrightness(LightLayer.SKY, containingPos));
 
 		if (physicsData.modelKey == null) {
-			ResourceLocation key = ForgeRegistries.ITEMS.getKey(box.item.getItem());
+			ResourceLocation key = BuiltInRegistries.ITEM.getKey(box.item.getItem());
 			if (key == null)
 				return;
 			physicsData.modelKey = key;

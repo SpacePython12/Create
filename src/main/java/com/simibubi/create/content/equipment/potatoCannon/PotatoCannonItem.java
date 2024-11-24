@@ -290,7 +290,7 @@ public class PotatoCannonItem extends ProjectileWeaponItem implements CustomArmP
 	}
 
 //	@Override
-//	@OnlyIn(Dist.CLIENT)
+//	@Environment(EnvType.CLIENT)
 //	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 //		consumer.accept(SimpleCustomRenderer.create(this, new PotatoCannonItemRenderer()));
 //	}

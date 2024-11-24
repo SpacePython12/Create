@@ -10,7 +10,6 @@ import com.simibubi.create.foundation.networking.SimplePacketBase;
 
 import net.createmod.catnip.utility.Pair;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 public class TrainMapSyncPacket extends SimplePacketBase {
 

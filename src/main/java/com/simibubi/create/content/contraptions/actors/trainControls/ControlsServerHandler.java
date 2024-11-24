@@ -9,9 +9,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
-import com.simibubi.create.foundation.utility.IntAttached;
-import com.simibubi.create.foundation.utility.LongAttached;
-import com.simibubi.create.foundation.utility.WorldAttached;
 
 import net.createmod.catnip.utility.IntAttached;
 import net.createmod.catnip.utility.WorldAttached;

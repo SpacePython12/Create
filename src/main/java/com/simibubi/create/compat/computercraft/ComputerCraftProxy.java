@@ -1,12 +1,14 @@
 package com.simibubi.create.compat.computercraft;
 
+import static com.simibubi.create.compat.computercraft.implementation.ComputerBehaviour.peripheralProvider;
+
+import java.util.function.Function;
+
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.compat.computercraft.implementation.ComputerBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
 import dan200.computercraft.api.peripheral.PeripheralLookup;
-
-import static com.simibubi.create.compat.computercraft.implementation.ComputerBehaviour.peripheralProvider;
 
 public class ComputerCraftProxy {
 

@@ -26,6 +26,7 @@ import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.ScreenWithStencils;
 import com.simibubi.create.foundation.utility.CreateLang;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.GuiGameElement;
@@ -42,6 +43,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -49,8 +51,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class StockTickerRequestScreen extends AbstractSimiScreen implements ScreenWithStencils {
 
@@ -238,7 +238,7 @@ public class StockTickerRequestScreen extends AbstractSimiScreen implements Scre
 				ItemStack stack = entry.stack;
 
 				if (modSearch) {
-					if (ForgeRegistries.ITEMS.getKey(stack.getItem())
+					if (BuiltInRegistries.ITEM.getKey(stack.getItem())
 						.getNamespace()
 						.contains(value)) {
 						displayedItemsInCategory.add(entry);
@@ -258,7 +258,7 @@ public class StockTickerRequestScreen extends AbstractSimiScreen implements Scre
 				if (stack.getHoverName()
 					.getString()
 					.contains(value)
-					|| ForgeRegistries.ITEMS.getKey(stack.getItem())
+					|| BuiltInRegistries.ITEM.getKey(stack.getItem())
 						.getPath()
 						.contains(value)) {
 					displayedItemsInCategory.add(entry);

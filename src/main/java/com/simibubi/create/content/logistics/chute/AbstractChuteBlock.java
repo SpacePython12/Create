@@ -42,7 +42,7 @@ public abstract class AbstractChuteBlock extends Block implements IWrenchable, I
 		super(p_i48440_1_);
 	}
 
-//	@OnlyIn(Dist.CLIENT)
+//	@Environment(EnvType.CLIENT)
 //	public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
 //		consumer.accept(new ReducedDestroyEffects());
 //	}

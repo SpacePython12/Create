@@ -151,10 +151,7 @@ public class Create implements ModInitializer {
 		Create.init();
 //		modEventBus.addListener(EventPriority.LOW, CreateDatagen::gatherData); // CreateData entrypoint
 		AllSoundEvents.register();
-		modEventBus.addListener(Create::init);
 		modEventBus.addListener(AllEntityTypes::registerEntityAttributes);
-		modEventBus.addListener(EventPriority.LOWEST, CreateDatagen::gatherData);
-		modEventBus.addListener(AllSoundEvents::register);
 
 		// causes class loading issues or something
 		// noinspection Convert2MethodRef

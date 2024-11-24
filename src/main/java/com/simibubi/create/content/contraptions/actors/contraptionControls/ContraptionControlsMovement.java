@@ -9,6 +9,10 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import net.createmod.catnip.utility.Couple;
+import net.createmod.catnip.utility.IntAttached;
+import net.createmod.catnip.utility.animation.LerpedFloat;
+import net.createmod.catnip.utility.animation.LerpedFloat.Chaser;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;

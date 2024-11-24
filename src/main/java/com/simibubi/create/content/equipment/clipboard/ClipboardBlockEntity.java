@@ -46,7 +46,7 @@ public class ClipboardBlockEntity extends SmartBlockEntity {
 	public void lazyTick() {
 		super.lazyTick();
 		if (level.isClientSide())
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::advertiseToAddressHelper);
+			DistExecutor.unsafeRunWhenOn(EnvType.CLIENT, () -> this::advertiseToAddressHelper);
 	}
 
 	public void updateWrittenState() {
@@ -97,7 +97,7 @@ public class ClipboardBlockEntity extends SmartBlockEntity {
 		cs.reopenWith(dataContainer);
 	}
 	
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	private void advertiseToAddressHelper() {
 		AddressEditBoxHelper.advertiseClipboard(this);
 	}

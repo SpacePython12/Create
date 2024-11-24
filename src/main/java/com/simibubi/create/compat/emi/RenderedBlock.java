@@ -3,7 +3,7 @@ package com.simibubi.create.compat.emi;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import com.mojang.math.Axis;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
+import net.createmod.catnip.gui.element.GuiGameElement;
 
 import dev.emi.emi.api.render.EmiRenderable;
 import dev.emi.emi.api.stack.EmiIngredient;

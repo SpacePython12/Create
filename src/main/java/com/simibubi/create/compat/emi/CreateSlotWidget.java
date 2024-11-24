@@ -3,10 +3,8 @@ package com.simibubi.create.compat.emi;
 import java.util.List;
 
 import com.simibubi.create.foundation.mixin.fabric.ClientTextTooltipAccessor;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
-
-import com.tterrag.registrate.util.entry.FluidEntry;
 
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
@@ -18,7 +16,6 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -47,7 +44,7 @@ public class CreateSlotWidget extends SlotWidget {
 		String amount = FluidTextUtil.getUnicodeMillibuckets(stack.getAmount(), unit, AllConfigs.client().simplifyFluidUnit.get());
 
 		Component amountComponent = Component.literal(" " + amount)
-				.append(Lang.translateDirect(unit.getTranslationKey()))
+				.append(CreateLang.translateDirect(unit.getTranslationKey()))
 				.withStyle(ChatFormatting.GOLD);
 
 		MutableComponent fluidName = FluidVariantAttributes.getName(fluid)

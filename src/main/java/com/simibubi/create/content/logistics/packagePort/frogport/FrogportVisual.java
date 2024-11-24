@@ -2,6 +2,8 @@ package com.simibubi.create.content.logistics.packagePort.frogport;
 
 import java.util.function.Consumer;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllPartialModels;
@@ -17,7 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class FrogportVisual extends AbstractBlockEntityVisual<FrogportBlockEntity> implements SimpleDynamicVisual {
 	private final TransformedInstance body;
@@ -118,7 +119,7 @@ public class FrogportVisual extends AbstractBlockEntityVisual<FrogportBlockEntit
 
 		headPitch = Math.max(headPitch, blockEntity.manualOpenAnimationProgress.getValue(partialTicks) * 60);
 		tongueLength = Math.max(tongueLength, blockEntity.manualOpenAnimationProgress.getValue(partialTicks) * 0.25f);
-		
+
 		body.setIdentityTransform()
 			.translate(getVisualPosition())
 			.center()
@@ -156,7 +157,7 @@ public class FrogportVisual extends AbstractBlockEntityVisual<FrogportBlockEntit
 				.setVisible(false);
 			return;
 		}
-		ResourceLocation key = ForgeRegistries.ITEMS.getKey(blockEntity.animatedPackage.getItem());
+		ResourceLocation key = BuiltInRegistries.ITEM.getKey(blockEntity.animatedPackage.getItem());
 		if (key == null) {
 			rig.handle()
 				.setVisible(false);

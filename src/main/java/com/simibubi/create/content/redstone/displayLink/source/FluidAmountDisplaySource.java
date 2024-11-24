@@ -6,8 +6,8 @@ import com.simibubi.create.content.redstone.smartObserver.SmartObserverBlockEnti
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.TankManipulationBehaviour;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.FluidFormatter;
-import com.simibubi.create.foundation.utility.Lang;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
@@ -72,8 +72,8 @@ public class FluidAmountDisplaySource extends SingleLineDisplaySource {
 	public void initConfigurationWidgets(DisplayLinkContext context, ModularGuiLineBuilder builder, boolean isFirstLine) {
 		if (isFirstLine) {
 			builder.addSelectionScrollInput(0, 75,
-					(si, l) -> si.forOptions(Lang.translatedOptions("display_source.fluid_amount", "millibuckets", "droplets"))
-							.titled(Lang.translateDirect("display_source.fluid_amount.display")),
+					(si, l) -> si.forOptions(CreateLang.translatedOptions("display_source.fluid_amount", "millibuckets", "droplets"))
+							.titled(CreateLang.translateDirect("display_source.fluid_amount.display")),
 					"FluidUnit");
 		}
 	}

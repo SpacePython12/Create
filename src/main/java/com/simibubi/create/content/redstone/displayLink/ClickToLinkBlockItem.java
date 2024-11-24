@@ -20,14 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event.Result;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber
 public abstract class ClickToLinkBlockItem extends BlockItem {
 
 	public ClickToLinkBlockItem(Block pBlock, Properties pProperties) {
@@ -133,7 +126,7 @@ public abstract class ClickToLinkBlockItem extends BlockItem {
 	private static BlockPos lastShownPos = null;
 	private static AABB lastShownAABB = null;
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public static void clientTick() {
 		Player player = Minecraft.getInstance().player;
 		if (player == null)
@@ -171,7 +164,7 @@ public abstract class ClickToLinkBlockItem extends BlockItem {
 		return true;
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public AABB getSelectionBounds(BlockPos pos) {
 		Level world = Minecraft.getInstance().level;
 		BlockState state = world.getBlockState(pos);

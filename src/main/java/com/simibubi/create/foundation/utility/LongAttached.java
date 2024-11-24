@@ -3,6 +3,8 @@ package com.simibubi.create.foundation.utility;
 import java.util.Comparator;
 import java.util.function.Function;
 
+import net.createmod.catnip.utility.IntAttached;
+import net.createmod.catnip.utility.Pair;
 import net.minecraft.nbt.CompoundTag;
 
 /**
@@ -27,23 +29,23 @@ public class LongAttached<V> extends Pair<Long, V> {
 	}
 
 	public boolean isZero() {
-		return first == 0;
+		return getFirst() == 0;
 	}
 
 	public boolean exceeds(long value) {
-		return first > value;
+		return getFirst() > value;
 	}
 
 	public boolean isOrBelowZero() {
-		return first <= 0;
+		return getFirst() <= 0;
 	}
 
 	public void increment() {
-		first++;
+		setFirst(getFirst() + 1);
 	}
 
 	public void decrement() {
-		first--;
+		setFirst(getFirst() - 1);
 	}
 
 	public V getValue() {

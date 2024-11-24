@@ -6,9 +6,8 @@ import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity.CasingType;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity.RenderData;
-import com.simibubi.create.foundation.block.render.SpriteShiftEntry;
-
 import io.github.fabricators_of_create.porting_lib.models.CustomParticleIconModel;
+import net.createmod.catnip.render.SpriteShiftEntry;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;

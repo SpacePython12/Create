@@ -10,17 +10,17 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.base.Predicates;
-import com.simibubi.create.foundation.config.ui.ConfigAnnotations;
-import com.simibubi.create.foundation.config.ui.ConfigHelper;
-import com.simibubi.create.foundation.config.ui.ConfigScreen;
-import com.simibubi.create.foundation.config.ui.entries.ValueEntry;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.element.DelegatedStencilElement;
-import com.simibubi.create.foundation.gui.widget.BoxWidget;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.config.ui.ConfigAnnotations;
+import net.createmod.catnip.config.ui.ConfigHelper;
+import net.createmod.catnip.config.ui.ConfigScreen;
+import net.createmod.catnip.config.ui.entries.ValueEntry;
+import net.createmod.catnip.gui.element.DelegatedStencilElement;
+import net.createmod.catnip.gui.widget.BoxWidget;
+import net.createmod.catnip.utility.FontHelper.Palette;
+import net.createmod.catnip.utility.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 

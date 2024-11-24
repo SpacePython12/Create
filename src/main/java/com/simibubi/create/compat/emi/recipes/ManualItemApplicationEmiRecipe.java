@@ -5,6 +5,7 @@ import com.simibubi.create.compat.emi.CyclingDrawable;
 import com.simibubi.create.compat.emi.RenderedBlock;
 import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.Lang;
 
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -42,7 +43,7 @@ public class ManualItemApplicationEmiRecipe extends CreateEmiRecipe<ItemApplicat
 		SlotWidget held = addSlot(widgets, input.get(1), 51, 5);
 		if (recipe.shouldKeepHeldItem()) {
 			held.catalyst(true);
-			held.appendTooltip(Lang.translateDirect("recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD));
+			held.appendTooltip(CreateLang.translateDirect("recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD));
 		}
 
 		addSlot(widgets, output.get(0), 132, 38);

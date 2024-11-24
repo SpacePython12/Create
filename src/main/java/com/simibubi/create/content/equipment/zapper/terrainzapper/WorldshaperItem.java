@@ -7,6 +7,8 @@ import com.simibubi.create.content.equipment.zapper.PlacementPatterns;
 import com.simibubi.create.content.equipment.zapper.ZapperItem;
 import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.gui.ScreenOpener;
+import net.createmod.catnip.utility.NBTHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -92,7 +94,7 @@ public class WorldshaperItem extends ZapperItem {
 	}
 
 //	@Override
-//	@OnlyIn(Dist.CLIENT)
+//	@Environment(EnvType.CLIENT)
 //	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 //		consumer.accept(SimpleCustomRenderer.create(this, new WorldshaperItemRenderer()));
 //	}

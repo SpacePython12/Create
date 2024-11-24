@@ -118,7 +118,7 @@ public class InputEvents {
 			return;
 		}
 
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+		DistExecutor.unsafeRunWhenOn(EnvType.CLIENT, () -> () -> {
 			if (ChainPackageInteractionHandler.onUse())
 				event.setCanceled(true);
 		});

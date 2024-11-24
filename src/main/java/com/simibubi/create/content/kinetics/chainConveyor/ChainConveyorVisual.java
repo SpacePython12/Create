@@ -23,12 +23,12 @@ import net.createmod.catnip.utility.math.AngleHelper;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ChainConveyorVisual extends SingleRotatingVisual<ChainConveyorBlockEntity> implements SimpleDynamicVisual, SimpleTickableVisual {
 
@@ -99,7 +99,7 @@ public class ChainConveyorVisual extends SingleRotatingVisual<ChainConveyorBlock
 			level.getBrightness(LightLayer.SKY, containingPos));
 
 		if (physicsData.modelKey == null) {
-			ResourceLocation key = ForgeRegistries.ITEMS.getKey(box.item.getItem());
+			ResourceLocation key = BuiltInRegistries.ITEM.getKey(box.item.getItem());
 			if (key == null)
 				return;
 			physicsData.modelKey = key;

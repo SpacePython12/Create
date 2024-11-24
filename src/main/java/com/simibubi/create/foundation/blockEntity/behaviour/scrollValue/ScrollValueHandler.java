@@ -1,6 +1,7 @@
 package com.simibubi.create.foundation.blockEntity.behaviour.scrollValue;
 
 
+import net.createmod.catnip.utility.animation.PhysicalFloat;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;

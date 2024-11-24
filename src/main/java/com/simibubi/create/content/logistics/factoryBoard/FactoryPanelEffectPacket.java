@@ -8,9 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent.Context;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class FactoryPanelEffectPacket extends SimplePacketBase {
 
@@ -42,7 +41,7 @@ public class FactoryPanelEffectPacket extends SimplePacketBase {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public boolean handle(Context context) {
 		context.enqueueWork(() -> {
 			ClientLevel level = Minecraft.getInstance().level;

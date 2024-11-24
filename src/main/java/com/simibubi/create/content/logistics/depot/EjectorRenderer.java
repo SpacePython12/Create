@@ -4,17 +4,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.ShaftRenderer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.LongAttached;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.content.logistics.box.PackageItem;
+import com.simibubi.create.foundation.utility.LongAttached;
 
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import dev.engine_room.flywheel.lib.transform.Rotate;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import dev.engine_room.flywheel.lib.transform.Translate;
 import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
+import net.createmod.catnip.utility.VecHelper;
+import net.createmod.catnip.utility.math.AngleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -55,8 +55,8 @@ public class EjectorRenderer extends ShaftRenderer<EjectorBlockEntity> {
 
 		float maxTime =
 				(float) (be.earlyTarget != null ? be.earlyTargetTime : be.launcher.getTotalFlyingTicks());
-		for (LongAttached<ItemStack> LongAttached : be.launchedItems) {
-			float time = LongAttached.getFirst() + partialTicks;
+		for (LongAttached<ItemStack> longAttached : be.launchedItems) {
+			float time = longAttached.getFirst() + partialTicks;
 			if (time > maxTime)
 				continue;
 
@@ -66,7 +66,7 @@ public class EjectorRenderer extends ShaftRenderer<EjectorBlockEntity> {
 			Vec3 itemRotOffset = VecHelper.voxelSpace(0, 2, -1);
 			msr.translate(itemRotOffset);
 
-			if (PackageItem.isPackage(intAttached.getValue())) {
+			if (PackageItem.isPackage(longAttached.getValue())) {
 				ms.translate(0, 4 / 16f, 0);
 				ms.scale(1.5f, 1.5f, 1.5f);
 				msr.rotateYDegrees(time * 20);
@@ -78,7 +78,7 @@ public class EjectorRenderer extends ShaftRenderer<EjectorBlockEntity> {
 			msr.translateBack(itemRotOffset);
 			Minecraft.getInstance()
 				.getItemRenderer()
-				.renderStatic(LongAttached.getValue(), ItemDisplayContext.FIXED, light, overlay, ms, buffer, be.getLevel(), 0);
+				.renderStatic(longAttached.getValue(), ItemDisplayContext.FIXED, light, overlay, ms, buffer, be.getLevel(), 0);
 			ms.popPose();
 		}
 

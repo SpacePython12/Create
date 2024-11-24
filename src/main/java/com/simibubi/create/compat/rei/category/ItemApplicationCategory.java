@@ -8,7 +8,8 @@ import com.simibubi.create.compat.rei.category.animations.AnimatedKinetics;
 import com.simibubi.create.compat.rei.display.CreateDisplay;
 import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
+import net.createmod.catnip.gui.element.GuiGameElement;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.Lang;
 
 import me.shedaniel.math.Point;
@@ -41,7 +42,7 @@ public class ItemApplicationCategory extends CreateRecipeCategory<ItemApplicatio
 				.entries(EntryIngredients.ofIngredient(display.getRecipe().getRequiredHeldItem()));
 		ClientEntryStacks.setTooltipProcessor(slot.getCurrentEntry(), (entryStack, tooltip) -> {
 			if (display.getRecipe().shouldKeepHeldItem())
-					tooltip.add(Lang.translateDirect("recipe.deploying.not_consumed")
+					tooltip.add(CreateLang.translateDirect("recipe.deploying.not_consumed")
 					.withStyle(ChatFormatting.GOLD));
 			return tooltip;
 		});

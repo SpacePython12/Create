@@ -10,7 +10,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 public class PackageDestroyPacket extends SimplePacketBase {
 
@@ -35,7 +34,7 @@ public class PackageDestroyPacket extends SimplePacketBase {
 		buffer.writeDouble(location.z);
 		buffer.writeItem(box);
 	}
-	
+
 	@Override
 	public boolean handle(Context ctx) {
 		ctx.enqueueWork(() -> {

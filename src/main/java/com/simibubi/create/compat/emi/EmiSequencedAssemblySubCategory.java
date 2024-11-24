@@ -6,18 +6,16 @@ import java.util.function.BiFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.emi.recipes.CreateEmiRecipe;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedRecipe;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 
@@ -43,7 +41,7 @@ public abstract class EmiSequencedAssemblySubCategory {
 	// I tried to implement this and Ingredients not exposing tags is painful
 	public static BiFunction<Integer, Integer, List<ClientTooltipComponent>> getTooltip(SequencedRecipe<?> recipe, int index) {
 		return (mouseX, mouseY) -> List.of(
-			ClientTooltipComponent.create(Lang.translateDirect("recipe.assembly.step", index + 1).getVisualOrderText()),
+			ClientTooltipComponent.create(CreateLang.translateDirect("recipe.assembly.step", index + 1).getVisualOrderText()),
 			ClientTooltipComponent.create(recipe.getAsAssemblyRecipe()
 				.getDescriptionForAssembly()
 				.plainCopy()

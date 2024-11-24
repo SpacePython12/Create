@@ -253,7 +253,7 @@ public class SandPaperItem extends Item implements CustomUseEffectsItem {
 	}
 
 //	@Override
-//	@OnlyIn(Dist.CLIENT)
+//	@Environment(EnvType.CLIENT)
 //	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 //		consumer.accept(SimpleCustomRenderer.create(this, new SandPaperItemRenderer()));
 //	}

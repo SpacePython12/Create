@@ -16,22 +16,19 @@ import com.simibubi.create.content.trains.display.FlapDisplaySection;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.TankManipulationBehaviour;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Couple;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.FluidFormatter;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LongAttached;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
+import net.createmod.catnip.utility.Couple;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.createmod.catnip.utility.Couple;
-import net.createmod.catnip.utility.IntAttached;
-import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
@@ -128,8 +125,8 @@ public class FluidListDisplaySource extends ValueListDisplaySource {
 	@Override
 	protected void addFullNumberConfig(ModularGuiLineBuilder builder) {
 		builder.addSelectionScrollInput(0, 75,
-				(si, l) -> si.forOptions(Lang.translatedOptions("display_source.value_list", "shortened", "full_number", "full_number_droplets"))
-					.titled(Lang.translateDirect("display_source.value_list.display")),
+				(si, l) -> si.forOptions(CreateLang.translatedOptions("display_source.value_list", "shortened", "full_number", "full_number_droplets"))
+					.titled(CreateLang.translateDirect("display_source.value_list.display")),
 				"Format");
 	}
 }

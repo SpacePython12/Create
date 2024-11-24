@@ -9,9 +9,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
+import net.fabricmc.api.EnvType;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 public class PackagePortPlacementPacket extends SimplePacketBase {
 
@@ -79,7 +78,7 @@ public class PackagePortPlacementPacket extends SimplePacketBase {
 
 		@Override
 		public boolean handle(Context context) {
-			context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+			context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(EnvType.CLIENT,
 				() -> () -> PackagePortTargetSelectionHandler.flushSettings(pos)));
 			return true;
 		}

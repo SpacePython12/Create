@@ -33,7 +33,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-//@EventBusSubscriber(bus = Bus.FORGE)
 public class AllSoundEvents {
 
 	public static final Map<ResourceLocation, SoundEntry> ALL = new HashMap<>();
@@ -162,7 +161,7 @@ public class AllSoundEvents {
 			.playExisting(SoundEvents.NETHERITE_BLOCK_HIT, .25f, .75f)
 			.category(SoundSource.BLOCKS)
 			.build(),
-			
+
 		PACKAGE_POP = create("package_pop").subtitle("Package breaks")
 			.playExisting(SoundEvents.ARMOR_STAND_BREAK, .25f, .75f)
 			.playExisting(SoundEvents.WOOL_BREAK, .5f, 1.15f)
@@ -223,7 +222,7 @@ public class AllSoundEvents {
 			.playExisting(SoundEvents.GENERIC_EAT, .5f, 1f)
 			.category(SoundSource.BLOCKS)
 			.build(),
-			
+
 		ITEM_HATCH = create("item_hatch").subtitle("Item Hatch opens")
 			.playExisting(SoundEvents.BARREL_OPEN, .25f, 1.4f)
 			.playExisting(SoundEvents.NETHERITE_BLOCK_PLACE, .75f, 1.15f)
@@ -249,7 +248,7 @@ public class AllSoundEvents {
 			.playExisting(SoundEvents.BELL_BLOCK)
 			.category(SoundSource.BLOCKS)
 			.build(),
-			
+
 		DESK_BELL_USE = create("desk_bell").subtitle("Reception bell dings")
 			.category(SoundSource.BLOCKS)
 			.attenuationDistance(64)

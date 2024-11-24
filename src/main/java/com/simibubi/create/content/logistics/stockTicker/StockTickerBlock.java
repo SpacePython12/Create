@@ -27,9 +27,8 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class StockTickerBlock extends HorizontalDirectionalBlock implements IBE<StockTickerBlockEntity>, IWrenchable {
 
@@ -57,7 +56,7 @@ public class StockTickerBlock extends HorizontalDirectionalBlock implements IBE<
 		if (pPlayer != null && pPlayer.getItemInHand(pHand)
 			.getItem() instanceof LogisticallyLinkedBlockItem)
 			return InteractionResult.PASS;
-		
+
 		return onBlockEntityUse(pLevel, pPos, stbe -> {
 			if (!stbe.behaviour.mayInteractMessage(pPlayer))
 				return InteractionResult.SUCCESS;
@@ -83,7 +82,7 @@ public class StockTickerBlock extends HorizontalDirectionalBlock implements IBE<
 		return AllShapes.STOCK_TICKER;
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public PartialModel getHat(LevelAccessor level, BlockPos pos, LivingEntity keeper) {
 		return AllPartialModels.LOGISTICS_HAT;
 	}

@@ -12,6 +12,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+
 import org.joml.Math;
 
 import com.google.common.collect.HashMultimap;
@@ -55,9 +57,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class FactoryPanelBehaviour extends FilteringBehaviour {
 
@@ -363,7 +364,7 @@ public class FactoryPanelBehaviour extends FilteringBehaviour {
 		}
 
 		if (player.level().isClientSide)
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> displayScreen(player));
+			EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> displayScreen(player));
 	}
 
 	public void enable() {
@@ -677,7 +678,7 @@ public class FactoryPanelBehaviour extends FilteringBehaviour {
 		};
 	}
 
-	@OnlyIn(value = Dist.CLIENT)
+	@Environment(value = EnvType.CLIENT)
 	public void displayScreen(Player player) {
 		if (player instanceof LocalPlayer)
 			ScreenOpener.open(new FactoryPanelScreen(this));

@@ -1,14 +1,17 @@
 package com.simibubi.create.content.contraptions.glue;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.content.contraptions.BlockMovementChecks;
-import com.simibubi.create.foundation.placement.IPlacementHelper;
 import com.simibubi.create.foundation.utility.AdventureUtil;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;
-import com.simibubi.create.foundation.utility.worldWrappers.RayTraceWorld;
 
+import net.createmod.catnip.utility.Iterate;
+import net.createmod.catnip.utility.levelWrappers.RayTraceLevel;
+import net.createmod.catnip.utility.placement.IPlacementHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

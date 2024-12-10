@@ -2,6 +2,7 @@ package com.simibubi.create.content.equipment.symmetryWand;
 
 import org.joml.Vector3f;
 
+import com.jozufozu.flywheel.fabric.model.DefaultLayerFilteringBakedModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllItems;
@@ -72,7 +73,6 @@ public class SymmetryHandler {
 		if (player.isSpectator())
 			return true;
 
-//		Player player = event.getPlayer();
 		Inventory inv = player.getInventory();
 		handlingSymmetry = true;
 		for (int i = 0; i < Inventory.getSelectionSize(); i++)

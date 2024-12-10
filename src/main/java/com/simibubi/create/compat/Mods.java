@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.Block;
  */
 public enum Mods {
 	AETHER,
+	BETTEREND,
 	COMPUTERCRAFT,
 	CONNECTIVITY,
 	CURIOS,

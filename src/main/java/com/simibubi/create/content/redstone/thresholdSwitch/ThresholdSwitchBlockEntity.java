@@ -1,6 +1,7 @@
 package com.simibubi.create.content.redstone.thresholdSwitch;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.simibubi.create.compat.thresholdSwitch.ThresholdSwitchCompat;
 import com.simibubi.create.content.logistics.stockTicker.StockTickerBlockEntity;
@@ -17,7 +18,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.inventory.TankManipu
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.VersionedInventoryTrackerBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -28,7 +28,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -128,9 +127,24 @@ public class ThresholdSwitchBlockEntity extends SmartBlockEntity {
 			// lazyTick should catch any updates we miss.
 			return;
 		}
+
+		// fabric: this method gets called by onPlace in the block class.
+		// onPlace is called during setBlock, but updating the BE's cached state is done afterward.
+		// no clue why this is different on forge, not worth digging through its rewrite of use logic.
+		// manually updating the cache here is sufficient. If this isn't done, it causes:
+		// - a delay when wrench rotating, caused by the setBlocks here undoing the original setBlock
+		// - a delay in level updating when wrench rotating, caused by initializing the StorageProviders based on the outdated state
+		Objects.requireNonNull(this.level);
+		BlockState state = this.level.getBlockState(this.worldPosition);
+		//noinspection deprecation
+		this.setBlockState(state);
+
 		boolean changed = false;
 		int prevLevel = currentLevel;
 		int prevMaxLevel = currentMaxLevel;
+
+		observedInventory.findNewCapability();
+		observedTank.findNewCapability();
 
 		BlockPos target = getTargetPos();
 		BlockEntity targetBlockEntity = level.getBlockEntity(target);
@@ -164,20 +178,14 @@ public class ThresholdSwitchBlockEntity extends SmartBlockEntity {
 				} else {
 					invVersionTracker.awaitNewVersion(inv);
 					for (StorageView<ItemVariant> view : inv) {
-						ItemStack stackInSlot = view.getResource().toStack();
-						long space = COMPAT
-									.stream()
-									.filter(compat -> compat.isFromThisMod(targetBlockEntity))
-									.map(compat -> compat.getSpaceInSlot(view))
-									.findFirst()
-									.orElseGet(() -> Math.min(view.getResource().toStack().getMaxStackSize(), view.getCapacity()));
-
-						long count = view.getCapacity();
+						// fabric: forge also checks for item max stack size, we should just trust capacity on fabric though.
+						long space = view.getCapacity();
+						long count = view.getAmount();
 						if (space == 0)
 							continue;
 
 						currentMaxLevel += space;
-						if (filtering.test(stackInSlot))
+						if (filtering.test(view.getResource().toStack()))
 							currentLevel += count;
 					}
 				}
@@ -235,7 +243,7 @@ public class ThresholdSwitchBlockEntity extends SmartBlockEntity {
 		if (currentLevel > 0)
 			displayLevel = (int) (1 + normedLevel * 4);
 		level.setBlock(worldPosition, getBlockState().setValue(ThresholdSwitchBlock.LEVEL, displayLevel),
-			update ? 3 : 2);
+				update ? 3 : 2);
 
 		if (update)
 			scheduleBlockTick();

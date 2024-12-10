@@ -3,21 +3,20 @@
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "betterend"
+        "bewitchment"
       ]
     }
   ],
-  "type": "create:pressing",
+  "type": "create:splashing",
   "ingredients": [
-    [
-      {
-        "item": "betterend:amber_moss"
-      }
-    ]
+    {
+      "item": "create:crushed_raw_silver"
+    }
   ],
   "results": [
     {
-      "item": "betterend:amber_moss_path"
+      "count": 9,
+      "item": "bewitchment:silver_nugget"
     }
   ]
 }

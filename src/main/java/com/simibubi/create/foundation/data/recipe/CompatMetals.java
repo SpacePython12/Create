@@ -1,6 +1,7 @@
 package com.simibubi.create.foundation.data.recipe;
 
 import static com.simibubi.create.foundation.data.recipe.Mods.ALG;
+import static com.simibubi.create.foundation.data.recipe.Mods.BWT;
 import static com.simibubi.create.foundation.data.recipe.Mods.GS;
 import static com.simibubi.create.foundation.data.recipe.Mods.IC2;
 import static com.simibubi.create.foundation.data.recipe.Mods.IE;
@@ -21,7 +22,7 @@ public enum CompatMetals {
 	OSMIUM(MEK, MTM),
 	PLATINUM(MTM, MI),
 	QUICKSILVER(),
-	SILVER(TH, IE, IC2, OREGANIZED, GS, IF, TR, MI, MTM),
+	SILVER(TH, IE, IC2, OREGANIZED, GS, IF, TR, MI, MTM, BWT),
 	TIN(TH, MEK, IC2, TR, MI, ALG, MTM),
 	URANIUM(MEK, IE, IC2, MI);
 
@@ -36,7 +37,7 @@ public enum CompatMetals {
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getName(Mods mod) {
 		if (this == ALUMINUM && mod == IC2) // include in mods.builder if this happens again
 			return "aluminium";

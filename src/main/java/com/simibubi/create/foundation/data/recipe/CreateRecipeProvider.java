@@ -173,7 +173,7 @@ public abstract class CreateRecipeProvider extends FabricRecipeProvider {
 		}
 
 		static TagKey<Item> copperSheet() {
-			return AllTags.forgeItemTag("plates/copper");
+			return AllTags.forgeItemTag("copper_plates");
 		}
 
 		static TagKey<Item> brassNugget() {

@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -33,8 +32,6 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 
 import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import io.github.fabricators_of_create.porting_lib.util.CraftingHelper;
-import net.createmod.catnip.platform.CatnipServices;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
@@ -1329,7 +1326,7 @@ public class StandardRecipeGen extends CreateRecipeProvider {
 			.inBlastFurnace(),
 
 		RAW_ZINC_ORE = create(AllItems.ZINC_INGOT::get).withSuffix("_from_raw_ore")
-			.viaCookingTag(() -> AllTags.forgeItemTag("raw_materials/zinc"))
+			.viaCookingTag(() -> AllTags.forgeItemTag("raw_zinc_ores"))
 			.rewardXP(.7f)
 			.inBlastFurnace(),
 

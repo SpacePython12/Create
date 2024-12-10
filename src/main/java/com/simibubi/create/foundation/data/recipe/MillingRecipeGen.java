@@ -10,7 +10,6 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import io.github.fabricators_of_create.porting_lib.tags.Tags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -198,7 +197,7 @@ public class MillingRecipeGen extends ProcessingRecipeGen {
 		// AE2
 
 		AE2_CERTUS = create(Mods.AE2.recipeId("certus_quartz"), b -> b.duration(200)
-				.require(AllTags.forgeItemTag("gems/certus_quartz"))
+				.require(AllTags.forgeItemTag("certus_quartz"))
 				.output(Mods.AE2, "certus_quartz_dust")
 				.whenModLoaded(Mods.AE2.getId())),
 

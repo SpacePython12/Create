@@ -38,14 +38,17 @@ jobs:
                     restore-keys: "${{ runner.os }}-gradle-"
 
             -   name: Setup Gradle
-                uses: gradle/actions/setup-gradle@v3
+                uses: gradle/actions/setup-gradle@v4
                 with:
                     gradle-home-cache-cleanup: true
 
             -   name: Validate Gradle Wrapper Integrity
                 uses: gradle/wrapper-validation-action@v2
 
-            -   name: Build
+            -   name: Run Gametests
+                run: ./gradlew runGametestServer --no-daemon
+
+            -   name: Build and/or Publish
                 run: ./gradlew buildOrPublish
 
             -   name: Capture build artifacts

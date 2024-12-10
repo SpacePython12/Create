@@ -3,14 +3,14 @@
     {
       "condition": "fabric:tags_populated",
       "values": [
-        "c:raw_materials/aluminum"
+        "c:raw_aluminum"
       ]
     }
   ],
   "type": "create:crushing",
   "ingredients": [
     {
-      "tag": "c:raw_materials/aluminum"
+      "tag": "c:raw_aluminum"
     }
   ],
   "processingTime": 400,

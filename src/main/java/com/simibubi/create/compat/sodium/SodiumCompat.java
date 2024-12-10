@@ -3,20 +3,24 @@ package com.simibubi.create.compat.sodium;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.Mods;
 
-import me.jellysquid.mods.sodium.client.render.texture.SpriteUtil;
+import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
 import net.createmod.catnip.utility.lang.Components;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.Version;
+import net.fabricmc.loader.api.VersionParsingException;
+import net.fabricmc.loader.api.metadata.version.VersionPredicate;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -37,23 +41,39 @@ public class SodiumCompat {
 	public static final ResourceLocation SAW_TEXTURE = Create.asResource("block/saw_reversed");
 
 	public static void init() {
-		if (!Mods.INDIUM.isLoaded()) {
+		ModContainer container = FabricLoader.getInstance().getModContainer(Mods.SODIUM.id()).orElseThrow();
+		Version sodiumVersion = container.getMetadata().getVersion();
+
+		boolean supportsFRAPI = false;
+
+		try {
+			// Any 0.6.0 version or alpha/beta for it
+			supportsFRAPI = VersionPredicate.parse("~0.6.0-")
+					.test(sodiumVersion);
+		} catch (VersionParsingException ignored) {}
+
+		// If the sodium version is 0.6.0* then it natively supports FRAPI
+		if (!Mods.INDIUM.isLoaded() && !supportsFRAPI) {
 			ClientPlayConnectionEvents.JOIN.register(SodiumCompat::sendNoIndiumWarning);
 		}
 
 		boolean compatInitialized = false;
+
+
 		for (SpriteUtilCompat value : SpriteUtilCompat.values()) {
-			if (value.doesWork.get()) {
+			if (value.doesWork.test(sodiumVersion)) {
 				Minecraft mc = Minecraft.getInstance();
 				WorldRenderEvents.START.register(ctx -> {
 					Function<ResourceLocation, TextureAtlasSprite> atlas = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
 					TextureAtlasSprite sawSprite = atlas.apply(SAW_TEXTURE);
-					value.markSpriteAsActive.accept(sawSprite);
+					value.markSpriteAsActive.get().accept(sawSprite);
 				});
 				compatInitialized = true;
 				break;
 			}
 		}
+
+
 		if (!compatInitialized) {
 			Create.LOGGER.error("Create's Sodium compat errored and has been partially disabled. Report this!");
 		}
@@ -80,65 +100,45 @@ public class SodiumCompat {
 	}
 
 	private enum SpriteUtilCompat {
-		V0_5(() -> {
+		V0_5((version) -> {
 			try {
-				return checkMarkSpriteActiveSignature(SpriteUtil.class);
-			} catch (Throwable t) {
+				invokeOld(null);
+				return true;
+			} catch (Throwable ignored) {
 				return false;
 			}
-		}, (sawSprite) -> {
+		}, () -> SpriteUtilCompat::invokeOld),
+		V0_6_API((version) -> {
 			try {
-				SpriteUtil.markSpriteActive(sawSprite);
-			} catch (Throwable ignored) {}
-		}),
-		V0_6(() -> {
-			try {
-				return checkMarkSpriteActiveSignature(Class.forName("net.caffeinemc.mods.sodium.client.render.texture.SpriteUtil"));
-			} catch (Throwable t) {
+				return VersionPredicate.parse(">=0.6.0-beta.3").test(version);
+			} catch (VersionParsingException e) {
 				return false;
 			}
-		}, (sawSprite) -> {
-			try {
-				invokeMarkSpriteActive(Class.forName("net.caffeinemc.mods.sodium.client.render.texture.SpriteUtil"), sawSprite);
-			} catch (Throwable ignored) {}
-		}),
-		V0_6_API(() -> {
-			try {
-				Field field = Class.forName("net.caffeinemc.mods.sodium.api.texture.SpriteUtil")
-						.getDeclaredField("INSTANCE");
-				return checkMarkSpriteActiveSignature((Class<?>) field.get(null));
-			} catch (Throwable t) {
-				return false;
-			}
-		}, (sawSprite) -> {
-			try {
-				Field field = Class.forName("net.caffeinemc.mods.sodium.api.texture.SpriteUtil")
-						.getDeclaredField("INSTANCE");
+		}, () -> SpriteUtil.INSTANCE::markSpriteActive);
 
-				invokeMarkSpriteActive((Class<?>) field.get(null), sawSprite);
-			} catch (Throwable ignored) {}
-		});
+		private static MethodHandle markSpriteActiveHandle;
 
-		private final Supplier<Boolean> doesWork;
-		private final Consumer<TextureAtlasSprite> markSpriteAsActive;
+		private final Predicate<Version> doesWork;
+		private final Supplier<Consumer<TextureAtlasSprite>> markSpriteAsActive;
 
-		SpriteUtilCompat(Supplier<Boolean> doesWork, Consumer<TextureAtlasSprite> markSpriteAsActive) {
+		SpriteUtilCompat(Predicate<Version> doesWork, Supplier<Consumer<TextureAtlasSprite>> markSpriteAsActive) {
 			this.doesWork = doesWork;
 			this.markSpriteAsActive = markSpriteAsActive;
 		}
 
-		private static boolean checkMarkSpriteActiveSignature(Class<?> clazz) throws Throwable {
-			Method method = clazz.getMethod("markSpriteActive", TextureAtlasSprite.class);
-			if (method.getReturnType() != Void.TYPE)
-				throw new IllegalStateException("markSpriteActive's signature has changed");
-			return true;
+		static {
+			try {
+				Class<?> spriteUtil = Class.forName("nme.jellysquid.mods.sodium.client.render.texture.SpriteUtil");
+
+				MethodType methodType = MethodType.methodType(void.class, TextureAtlasSprite.class);
+				markSpriteActiveHandle = lookup.findStatic(spriteUtil, "markSpriteActive", methodType);
+			} catch (Throwable ignored) {}
 		}
 
-		private static void invokeMarkSpriteActive(Class<?> clazz, TextureAtlasSprite sawSprite) throws Throwable {
-			MethodType methodType = MethodType.methodType(Void.TYPE);
-			MethodHandle handle = lookup.findVirtual(clazz, "markSpriteActive", methodType);
-
-			handle.invoke(sawSprite);
+		public static void invokeOld(TextureAtlasSprite sawSprite) {
+			try {
+				markSpriteActiveHandle.invoke(sawSprite);
+			} catch(Throwable ignored) {}
 		}
 	}
 }

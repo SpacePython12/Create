@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "A": {
-      "tag": "c:plates/copper"
+      "tag": "c:copper_plates"
     },
     "C": {
       "item": "minecraft:redstone_torch"

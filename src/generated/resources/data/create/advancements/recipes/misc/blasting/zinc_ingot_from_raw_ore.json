@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "c:raw_materials/zinc"
+            "tag": "c:raw_zinc_ores"
           }
         ]
       },

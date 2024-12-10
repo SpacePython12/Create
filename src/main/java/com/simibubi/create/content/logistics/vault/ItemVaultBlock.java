@@ -167,7 +167,19 @@ public class ItemVaultBlock extends Block implements IWrenchable, IBE<ItemVaultB
 	public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
 		return getBlockEntityOptional(pLevel, pPos)
 			.filter(vte -> !Transaction.isOpen()) // fabric: hack fix for comparators updating when they shouldn't
-			.map(vte -> vte.getItemStorage(null))
+			.map(vte -> {
+				// fabric: fix for comparators grabbing the capability too quickly, relying on grabbing it through
+				// the non-controller's initCapability method isn't reliable and doesn't work properly.
+				// so what we end up doing is just returning the capability for the controller, and if it's
+				// not the controller it's own capability is returned
+				if (!vte.isController()) {
+					ItemVaultBlockEntity controllerBE = vte.getControllerBE();
+					if (controllerBE != null)
+						return controllerBE.getItemStorage(null);
+				}
+
+				return vte.getItemStorage(null);
+			})
 			.map(ItemHelper::calcRedstoneFromInventory)
 			.orElse(0);
 	}

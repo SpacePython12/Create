@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "C": {
-      "tag": "c:plates/copper"
+      "tag": "c:copper_plates"
     },
     "S": {
       "item": "create:andesite_alloy"

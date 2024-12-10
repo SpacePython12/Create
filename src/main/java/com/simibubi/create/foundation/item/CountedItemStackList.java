@@ -30,7 +30,7 @@ public class CountedItemStackList {
 				ItemVariant resource = view.getResource();
 				ItemStack stack = resource.toStack();
 				if (!filteringBehaviour.test(stack))
-					return;
+					continue;
 
 				long amount = view.getAmount();
 				add(stack, amount);

@@ -64,7 +64,8 @@ public class GenericItemEmptying {
 			return Pair.of(resultingFluid, resultingItem);
 		try (Transaction t = TransferUtil.getTransaction()) {
 			resultingFluid = TransferUtil.extractAnyFluid(tank, FluidConstants.BUCKET);
-			resultingItem = ctx.getItemVariant().toStack((int) ctx.getAmount());
+			int amount = ctx.getItemVariant().isBlank() ? 0 : (int) ctx.getAmount(); // GH#1622
+			resultingItem = ctx.getItemVariant().toStack(amount);
 			if (!simulate) {
 				stack.shrink(1);
 				t.commit();

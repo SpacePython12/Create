@@ -1,10 +1,10 @@
 package com.simibubi.create;
 
-import static com.simibubi.create.AllTags.NameSpace.CURIOS;
 import static com.simibubi.create.AllTags.NameSpace.FORGE;
 import static com.simibubi.create.AllTags.NameSpace.MOD;
 import static com.simibubi.create.AllTags.NameSpace.QUARK;
 import static com.simibubi.create.AllTags.NameSpace.TIC;
+import static com.simibubi.create.AllTags.NameSpace.TRINKETS;
 
 import net.createmod.catnip.utility.lang.Lang;
 
@@ -54,7 +54,9 @@ public class AllTags {
 		TIC("tconstruct"),
 		QUARK("quark"),
 		GS("galosphere"),
-		CURIOS("curios")
+		// fabric: Trinkets compat is used instead
+		CURIOS("curios"),
+		TRINKETS("trinkets")
 
 		;
 
@@ -192,7 +194,9 @@ public class AllTags {
 		LUMIERE(MOD, "stone_types/galosphere/lumiere"),
 
 		UA_CORAL(MOD, "upgrade_aquatic/coral"),
-		CURIOS_HEAD(CURIOS, "head")
+		// fabric: Trinkets compat is used instead
+		//CURIOS_HEAD(CURIOS, "head"),
+		TRINKETS_FACE(TRINKETS, "head/face")
 
 		;
 

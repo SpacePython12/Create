@@ -194,7 +194,9 @@ public class CreateRegistrateTags {
 
 		genStrippedWoodItemTags(prov);
 
-		prov.tag(AllItemTags.CURIOS_HEAD.tag).add(AllItems.GOGGLES.get());
+		// fabric: Trinkets compat is used instead
+		//prov.tag(AllItemTags.CURIOS_HEAD.tag).add(AllItems.GOGGLES.get());
+		prov.tag(AllItemTags.TRINKETS_FACE.tag).add(AllItems.GOGGLES.get());
 
 		TagGen.addOptional(prov.tag(AllItemTags.ALLURITE.tag), Mods.GS, gsPalette("allurite"));
 

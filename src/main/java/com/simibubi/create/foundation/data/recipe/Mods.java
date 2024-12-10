@@ -64,7 +64,8 @@ public enum Mods {
 	MTM("mythicmetals"),
 	ALG("alloygery"),
 	BC("bitsandchisels"),
-	BE("betterend")
+	BE("betterend"),
+	BWT("bewitchment")
 
 	;
 

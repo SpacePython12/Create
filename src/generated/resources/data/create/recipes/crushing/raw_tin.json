@@ -3,14 +3,14 @@
     {
       "condition": "fabric:tags_populated",
       "values": [
-        "c:raw_materials/tin"
+        "c:raw_tin"
       ]
     }
   ],
   "type": "create:crushing",
   "ingredients": [
     {
-      "tag": "c:raw_materials/tin"
+      "tag": "c:raw_tin"
     }
   ],
   "processingTime": 400,

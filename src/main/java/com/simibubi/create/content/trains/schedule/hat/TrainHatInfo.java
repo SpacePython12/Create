@@ -41,6 +41,6 @@ public record TrainHatInfo(String part, int cubeIndex, Vec3 offset, float scale)
 	}
 
 	public static Map<String, ModelPart> getChildren(ModelPart modelPart) {
-		return ((ModelPartAccessor) modelPart).porting_lib$children();
+		return ((ModelPartAccessor) (Object) modelPart).porting_lib$children();
 	}
 }

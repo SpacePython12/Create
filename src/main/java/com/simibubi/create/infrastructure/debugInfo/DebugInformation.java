@@ -68,7 +68,7 @@ public class DebugInformation {
 
 	static {
 		DebugInfoSection.builder(Create.NAME)
-				.put("Mod Version", Create.VERSION)
+				.put("Mod Version", getVersionOfMod("create")) // fabric: We use this here so that we get the full version
 				.put("Fabric API Version", getVersionOfMod("fabric-api"))
 				.put("Minecraft Version", SharedConstants.getCurrentVersion().getName())
 				.buildTo(DebugInformation::registerBothInfo);

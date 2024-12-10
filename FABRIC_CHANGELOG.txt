@@ -5,17 +5,6 @@ No formatting, just plain text. CurseForge support for it is terrible.
 
 Change logging starts below:
 ----------
-- Added red sandpaper as a polishing workstation to EMI (#1453)
-- Fix a possible error in EMI init (#1439)
-- Fix deploying in EMI missing sandpaper and item application recipes (#1397)
-- switched from Forge Config API Port to Porting Lib Config
-- updated Porting Lib, fixing config syncing
-- fix waterwheels failing to assemble (#1424)
-- fix water wheel structural blocks having missing texture break particles
-- Remove breaks for Sound Physics Remastered
-- Fix crash with caxton
-- Implement breaks for Create: Interactive
-- Fix ingredients overlapping with heat bar when using EMI (#1582)
-- Fix extendo grip not using up durability
-- Fix displaying sequenced assembly with multiple spout steps in REI (#1490)
-- Update to 0.5.1.h (https://github.com/Creators-of-Create/Create/wiki/0.5.1g-&-h)
+- Fix goggles not being equippable in the face slot
+- Fix mixers and presses not processing any items after processing twice
+- Fix spoutputs returning double the amount they should

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
@@ -122,11 +125,12 @@ public class FluidListDisplaySource extends ValueListDisplaySource {
 		return format == 2 ? FluidUnit.DROPLETS : FluidUnit.MILLIBUCKETS;
 	}
 
-	@Override
+	@Environment(EnvType.CLIENT)
 	protected void addFullNumberConfig(ModularGuiLineBuilder builder) {
+		// fabric: replace shortened / full number option (buckets / millibuckets) with fluid unit selection
 		builder.addSelectionScrollInput(0, 75,
-				(si, l) -> si.forOptions(CreateLang.translatedOptions("display_source.value_list", "shortened", "full_number", "full_number_droplets"))
-					.titled(CreateLang.translateDirect("display_source.value_list.display")),
+				(si, l) -> si.forOptions(CreateLang.translatedOptions("display_source.fluid_amount", "buckets", "millibuckets", "droplets"))
+						.titled(CreateLang.translateDirect("display_source.fluid_amount.display")),
 				"Format");
 	}
 }

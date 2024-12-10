@@ -44,4 +44,4 @@ local.properties
 /linkie-cache/
 
 .DS_Store
-/libs/
+#/libs/

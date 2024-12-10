@@ -1,11 +1,13 @@
 {
-  "type": "create:milling",
-  "conditions": [
+  "fabric:load_conditions": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "botania"
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "botania"
+      ]
     }
   ],
+  "type": "create:milling",
   "ingredients": [
     {
       "tag": "botania:petals/blue"

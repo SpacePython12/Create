@@ -28,7 +28,6 @@ import me.shedaniel.rei.api.client.registry.entry.EntryRegistry;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -77,7 +76,8 @@ public class ItemDrainCategory extends CreateRecipeCategory<EmptyingRecipe> {
 			if (handler == null)
 				return;
 			FluidStack extracted = TransferUtil.extractAnyFluid(handler, FluidConstants.BUCKET);
-			ItemStack result = ctx.getItemVariant().toStack(ItemHelper.truncateLong(ctx.getAmount()));
+			int amount = ctx.getItemVariant().isBlank() ? 0 : (int) ctx.getAmount(); // GH#1622
+			ItemStack result = ctx.getItemVariant().toStack(ItemHelper.truncateLong(amount));
 			if (extracted.isEmpty())
 				return;
 			if (result.isEmpty())

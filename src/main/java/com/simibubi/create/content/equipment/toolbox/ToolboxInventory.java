@@ -13,7 +13,6 @@ import io.github.fabricators_of_create.porting_lib.transfer.callbacks.Transactio
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerSlot;
-import net.createmod.catnip.utility.NBTHelper;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.CompoundTag;
@@ -119,7 +118,7 @@ public class ToolboxInventory extends ItemStackHandler {
 		if (!stack.isEmpty() && filters.get(compartment)
 				.isEmpty()) {
 			filters.set(compartment, ItemHandlerHelper.copyStackWithSize(stack, 1));
-			if (ctx != null) TransactionCallback.onSuccess(ctx, this::notifyUpdate);
+			if (ctx != null) TransactionCallback.onSuccess(ctx, blockEntity::notifyUpdate);
 			else notifyUpdate();
 		}
 	}
@@ -137,6 +136,9 @@ public class ToolboxInventory extends ItemStackHandler {
 			settle(slot / STACKS_PER_COMPARTMENT);
 		notifyUpdate();
 		super.onContentsChanged(slot);
+		// fabric: since slots bypass setStackInSlot, call this here too
+		ItemStack stack = this.getStackInSlot(slot);
+		updateCompartmentFilters(slot, stack, null);
 	}
 
 	@Override
@@ -210,5 +212,4 @@ public class ToolboxInventory extends ItemStackHandler {
 			// change to sendData if this doesn't exist
 			blockEntity.notifyUpdate();
 	}
-
 }

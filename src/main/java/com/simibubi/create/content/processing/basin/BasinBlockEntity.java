@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.simibubi.create.foundation.utility.IntAttached;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableList;
@@ -31,8 +33,16 @@ import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import com.simibubi.create.foundation.utility.CreateLang;
+import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.Couple;
+import com.simibubi.create.foundation.utility.Iterate;
+import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.LangBuilder;
 import com.simibubi.create.foundation.utility.LongAttached;
+import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
@@ -449,25 +459,24 @@ public class BasinBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 					continue;
 				}
 
-			if (targetInv == null)
-				break;
+				if (targetInv == null)
+					break;
 
-			long inserted = TransferUtil.insertItem(targetInv, itemStack);
-			if (inserted == 0)
-				continue;
-			if (filter != null && !filter.test(itemStack))
-				continue;
+				try (Transaction nested = t.openNested()) {
+					long inserted = targetInv.insert(ItemVariant.of(itemStack), itemStack.getCount(), nested);
+					if (itemStack.getCount() != inserted)
+						continue;
+					if (filter != null && !filter.test(itemStack))
+						continue;
 
-			if (visualizedOutputItems.size() < 3)
-				visualizedOutputItems.add(LongAttached.withZero(itemStack));
-			update = true;
+					if (visualizedOutputItems.size() < 3)
+						visualizedOutputItems.add(LongAttached.withZero(itemStack));
+					update = true;
 
-			inserted = TransferUtil.insertItem(targetInv, itemStack.copy());
-			if (inserted == itemStack.getCount())
-				iterator.remove();
-			else
-				itemStack.setCount((int) inserted);
-		}
+					iterator.remove();
+					nested.commit();
+				}
+			}
 
 			for (Iterator<FluidStack> iterator = spoutputFluidBuffer.iterator(); iterator.hasNext();) {
 				FluidStack fluidStack = iterator.next();

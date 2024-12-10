@@ -73,12 +73,12 @@
     "optifabric": "*",
     "colormatic": "<=3.1.1",
     "iris": "<=1.2.5",
-    "sodium": "<=0.4.10",
-    "sound_physics_remastered": ">1.20.1-1.4.0 <1.20.2-1.0.0",
+    "sodium": ["<0.5.0", "~0.6.0- <0.6.0-beta.3"],
+    "sound_physics_remastered": "<1.20.1-1.4.5",
 
-    "create_interactive": "*",
     "create_tab_fix": "*",
 
+    "create_interactive": "<1.1.0",
     "railways": "<1.5.3",
     "create_enchantment_industry": "<1.2.16",
     "createfabricfixes": "<=0.0.1",

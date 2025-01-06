@@ -38,7 +38,6 @@ import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.Item;
@@ -61,26 +60,28 @@ import net.minecraft.world.phys.Vec3;
 public class AllArmInteractionPointTypes {
 	private static final DeferredRegister<ArmInteractionPointType> REGISTER = DeferredRegister.create(AllRegistries.Keys.ARM_INTERACTION_POINT_TYPES, Create.ID);
 
-	public static final Supplier<BasinType> BASIN = register("basin", new BasinType());
-	public static final Supplier<BeltType> BELT = register("belt", new BeltType());
-	public static final Supplier<BlazeBurnerType> BLAZE_BURNER = register("blaze_burner", new BlazeBurnerType());
-	public static final Supplier<ChuteType> CHUTE = register("chute", new ChuteType());
-	public static final Supplier<CrafterType> CRAFTER = register("crafter", new CrafterType());
-	public static final Supplier<CrushingWheelsType> CRUSHING_WHEELS = register("crushing_wheels", new CrushingWheelsType());
-	public static final Supplier<DeployerType> DEPLOYER = register("deployer", new DeployerType());
-	public static final Supplier<DepotType> DEPOT = register("depot", new DepotType());
-	public static final Supplier<FunnelType> FUNNEL = register("funnel", new FunnelType());
-	public static final Supplier<MillstoneType> MILLSTONE = register("millstone", new MillstoneType());
-	public static final Supplier<PackagerType> PACKAGER = register("packager", new PackagerType());
-	public static final Supplier<SawType> SAW = register("saw", new SawType());
+	static {
+		register("basin", new BasinType());
+		register("belt", new BeltType());
+		register("blaze_burner", new BlazeBurnerType());
+		register("chute", new ChuteType());
+		register("crafter", new CrafterType());
+		register("crushing_wheels", new CrushingWheelsType());
+		register("deployer", new DeployerType());
+		register("depot", new DepotType());
+		register("funnel", new FunnelType());
+		register("millstone", new MillstoneType());
+		register("packager", new PackagerType());
+		register("saw", new SawType());
 
-	public static final Supplier<CampfireType> CAMPFIRE = register("campfire", new CampfireType());
-	public static final Supplier<ComposterType> COMPOSTER = register("composter", new ComposterType());
-	public static final Supplier<JukeboxType> JUKEBOX = register("jukebox", new JukeboxType());
-	public static final Supplier<RespawnAnchorType> RESPAWN_ANCHOR = register("respawn_anchor", new RespawnAnchorType());
+		register("campfire", new CampfireType());
+		register("composter", new ComposterType());
+		register("jukebox", new JukeboxType());
+		register("respawn_anchor", new RespawnAnchorType());
+	}
 
-	private static <T extends ArmInteractionPointType> Supplier<T> register(String name, T type) {
-		return REGISTER.register(name, () -> type);
+	private static <T extends ArmInteractionPointType> void register(String name, T type) {
+		REGISTER.register(name, () -> type);
 	}
 
 	public static void register(IEventBus eventBus) {

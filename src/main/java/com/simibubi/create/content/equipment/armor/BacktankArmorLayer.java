@@ -47,6 +47,7 @@ public class BacktankArmorLayer<T extends LivingEntity, M extends EntityModel<T>
 				.setValue(BacktankBlock.HORIZONTAL_FACING, Direction.SOUTH);
 		SuperByteBuffer backtank = CachedBuffers.block(renderedState);
 		SuperByteBuffer cogs = CachedBuffers.partial(BacktankRenderer.getCogsModel(renderedState), renderedState);
+		SuperByteBuffer nob = CachedBuffers.partial(BacktankRenderer.getShaftModel(renderedState), renderedState);
 
 		ms.pushPose();
 
@@ -55,6 +56,11 @@ public class BacktankArmorLayer<T extends LivingEntity, M extends EntityModel<T>
 		ms.scale(1, -1, -1);
 
 		backtank.disableDiffuse()
+			.light(light)
+			.renderInto(ms, vc);
+
+		nob.disableDiffuse()
+			.translate(0, -3f / 16, 0)
 			.light(light)
 			.renderInto(ms, vc);
 

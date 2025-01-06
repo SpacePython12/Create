@@ -2,6 +2,7 @@ package com.simibubi.create.content.logistics.packagerLink;
 
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllShapes;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 
@@ -30,7 +31,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PackagerLinkBlock extends FaceAttachedHorizontalDirectionalBlock
-	implements IBE<PackagerLinkBlockEntity>, ProperWaterloggedBlock {
+	implements IBE<PackagerLinkBlockEntity>, ProperWaterloggedBlock, IWrenchable {
 
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 

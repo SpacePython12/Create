@@ -705,7 +705,7 @@ public class ChainConveyorBlockEntity extends KineticBlockEntity implements ITra
 		updateBoxWorldPositions();
 		updateChainShapes();
 		
-		if (connections.size() != sizeBefore && level.isClientSide)
+		if (connections.size() != sizeBefore && level != null && level.isClientSide)
 			invalidateRenderBoundingBox();
 	}
 

@@ -33,7 +33,8 @@ public class PackagerRenderer extends SmartBlockEntityRenderer<PackagerBlockEnti
 
 		ItemStack renderedBox = be.getRenderedBox();
 		float trayOffset = be.getTrayOffset(partialTicks);
-		boolean hatchOpen = be.animationTicks > 5 && be.animationTicks < PackagerBlockEntity.CYCLE - 5;
+		boolean hatchOpen = be.animationTicks > (be.animationInward ? 1 : 5)
+			&& be.animationTicks < PackagerBlockEntity.CYCLE - (be.animationInward ? 5 : 1);
 		BlockState blockState = be.getBlockState();
 		Direction facing = blockState.getValue(PackagerBlock.FACING)
 			.getOpposite();

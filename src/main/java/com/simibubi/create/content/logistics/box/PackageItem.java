@@ -284,7 +284,7 @@ public class PackageItem extends Item {
 		}
 
 		Vec3 position = playerIn.position();
-		worldIn.playSound((Player) null, position.x, position.y, position.z, SoundEvents.ARMOR_STAND_BREAK,
+		worldIn.playSound((Player) null, position.x, position.y, position.z, SoundEvents.CHISELED_BOOKSHELF_BREAK,
 			SoundSource.PLAYERS, 0.5F, 1.0F);
 
 		if (worldIn.isClientSide()) {

@@ -1,14 +1,10 @@
 package com.simibubi.create.content.logistics.item.filter.attribute;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-
-import net.minecraft.core.Registry;
 
 import org.jetbrains.annotations.ApiStatus;
 
@@ -34,6 +30,9 @@ import com.simibubi.create.content.logistics.item.filter.attribute.attributes.as
 import com.simibubi.create.content.logistics.item.filter.attribute.attributes.astralsorcery.AstralSorceryPerkGemAttribute;
 import com.simibubi.create.content.logistics.item.filter.attribute.legacydeserializers.AllItemAttributeLegacyDeserializers;
 
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.minecraft.core.Registry;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -45,8 +44,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.registries.DeferredRegister;
 
 // TODO - Documentation
 public class AllItemAttributeTypes {
@@ -55,8 +52,7 @@ public class AllItemAttributeTypes {
 	public static final Supplier<ItemAttributeType>
 		PLACEABLE = singleton("placeable", s -> s.getItem() instanceof BlockItem),
 		CONSUMABLE = singleton("consumable", ItemStack::isEdible),
-		FLUID_CONTAINER = singleton("fluid_container", s -> s.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
-			.isPresent()),
+		FLUID_CONTAINER = singleton("fluid_container", s -> ContainerItemContext.withConstant(s).find(FluidStorage.ITEM) != null),
 		ENCHANTED = singleton("enchanted", ItemStack::isEnchanted),
 		MAX_ENCHANTED = singleton("max_enchanted", AllItemAttributeTypes::maxEnchanted),
 		RENAMED = singleton("renamed", ItemStack::hasCustomHoverName),

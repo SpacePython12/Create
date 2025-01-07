@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.foundation.utility.RaycastHelper;
 
@@ -11,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
 
 public class ChainPackageInteractionHandler {
 
@@ -30,7 +30,7 @@ public class ChainPackageInteractionHandler {
 					.expandTowards(0, 0.5, 0)
 					.inflate(0.45);
 
-				double range = mc.player.getAttribute(ForgeMod.BLOCK_REACH.get())
+				double range = mc.player.getAttribute(ReachEntityAttributes.REACH)
 					.getValue() + 1;
 				Vec3 from = RaycastHelper.getTraceOrigin(mc.player);
 				Vec3 to = RaycastHelper.getTraceTarget(mc.player, range, from);

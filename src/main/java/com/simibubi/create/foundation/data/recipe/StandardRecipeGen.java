@@ -10,6 +10,8 @@ import static com.simibubi.create.foundation.data.recipe.CompatMetals.SILVER;
 import static com.simibubi.create.foundation.data.recipe.CompatMetals.TIN;
 import static com.simibubi.create.foundation.data.recipe.CompatMetals.URANIUM;
 
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
@@ -31,7 +33,7 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
+import net.createmod.catnip.platform.CatnipServices;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;

@@ -23,6 +23,4 @@ accessible method net/minecraft/world/item/context/UseOnContext <init> (Lnet/min
 
 accessible field net/minecraft/data/tags/TagsProvider$TagAppender builder Lnet/minecraft/tags/TagBuilder;
 
-# I (IThundxr) will change these to use accessors upstream eventually
-accessible field net/minecraft/client/renderer/LevelRenderer capturedFrustum Lnet/minecraft/client/renderer/culling/Frustum;
-accessible field net/minecraft/client/renderer/LevelRenderer cullingFrustum Lnet/minecraft/client/renderer/culling/Frustum;
+accessible class net/minecraft/data/models/ItemModelGenerators$TrimModelData

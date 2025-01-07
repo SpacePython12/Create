@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.google.common.cache.Cache;
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllBlocks;
@@ -48,7 +49,7 @@ public class ChainConveyorInteractionHandler {
 		ItemStack mainHandItem = mc.player.getMainHandItem();
 		boolean isWrench = AllItemTags.WRENCH.matches(mainHandItem);
 		boolean dismantling = isWrench && mc.player.isShiftKeyDown();
-		double range = mc.player.getAttribute(ForgeMod.BLOCK_REACH.get())
+		double range = mc.player.getAttribute(ReachEntityAttributes.REACH)
 			.getValue() + 1;
 
 		Vec3 from = RaycastHelper.getTraceOrigin(mc.player);

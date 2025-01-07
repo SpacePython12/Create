@@ -12,9 +12,10 @@ import com.simibubi.create.content.logistics.item.filter.attribute.attributes.En
 import com.simibubi.create.content.logistics.item.filter.attribute.attributes.InTagAttribute;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 
 @SuppressWarnings("deprecation")
 public class AllItemAttributeLegacyDeserializers {
@@ -22,7 +23,7 @@ public class AllItemAttributeLegacyDeserializers {
 	public static void register() {
 		addLegacyDeserializer(new StandardTraitsLegacyDeserializer());
 		createLegacyDeserializer("in_tag", tag ->
-			new InTagAttribute(ItemTags.create(new ResourceLocation(
+			new InTagAttribute(TagKey.create(Registries.ITEM, new ResourceLocation(
 				tag.getString("space"),
 				tag.getString("path")
 			)))

@@ -64,7 +64,7 @@ public class CTModel extends ForwardingBakedModel {
 			int index = data.get(quad.lightFace());
 			if (index != -1) {
 				TextureAtlasSprite sprite = spriteFinder.find(quad, 0);
-				CTSpriteShiftEntry spriteShift = behaviour.getShift(state, rand, quad.lightFace(), sprite);
+				CTSpriteShiftEntry spriteShift = behaviour.getShift(state, randomSupplier.get(), quad.lightFace(), sprite);
 				if (spriteShift != null) {
 					if (sprite == spriteShift.getOriginal()) {
 						for (int vertex = 0; vertex < 4; vertex++) {

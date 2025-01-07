@@ -2,7 +2,6 @@ package com.simibubi.create.content.logistics.item.filter.attribute.attributes;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -11,12 +10,11 @@ import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttrib
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.forgespi.language.IModInfo;
 
 public class AddedByAttribute implements ItemAttribute {
 	private String modId;
@@ -38,11 +36,8 @@ public class AddedByAttribute implements ItemAttribute {
 
 	@Override
 	public Object[] getTranslationParameters() {
-		Optional<? extends ModContainer> modContainerById = ModList.get()
-			.getModContainerById(modId);
-		String name = modContainerById.map(ModContainer::getModInfo)
-			.map(IModInfo::getDisplayName)
-			.orElse(StringUtils.capitalize(modId));
+		ModContainer container = FabricLoader.getInstance().getModContainer(modId).orElse(null);
+		String name = container == null ? name = StringUtils.capitalize(modId) : container.getMetadata().getName();
 		return new Object[]{name};
 	}
 

@@ -1,5 +1,12 @@
 package com.simibubi.create.content.processing.basin;
 
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.util.FluidTextUtil;
+import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,8 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import com.simibubi.create.foundation.utility.IntAttached;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -33,24 +38,10 @@ import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.LangBuilder;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.LongAttached;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.FluidTextUtil;
-import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
 import it.unimi.dsi.fastutil.Pair;
 import net.createmod.catnip.utility.AnimationTickHolder;
 import net.createmod.catnip.utility.Couple;

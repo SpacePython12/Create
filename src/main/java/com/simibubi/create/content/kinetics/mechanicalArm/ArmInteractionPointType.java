@@ -2,6 +2,7 @@ package com.simibubi.create.content.kinetics.mechanicalArm;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -25,7 +26,9 @@ public abstract class ArmInteractionPointType {
 		if (sortedTypes == null) {
 			sortedTypes = new ReferenceArrayList<>();
 
-			sortedTypes.addAll(AllRegistries.ARM_INTERACTION_POINT_TYPES.get().getValues());
+			for (Entry<?, ArmInteractionPointType> set : AllRegistries.ARM_INTERACTION_POINT_TYPES.entrySet())
+				sortedTypes.add(set.getValue());
+
 			sortedTypes.sort((t1, t2) -> t2.getPriority() - t1.getPriority());
 
 			sortedTypesView = Collections.unmodifiableList(sortedTypes);

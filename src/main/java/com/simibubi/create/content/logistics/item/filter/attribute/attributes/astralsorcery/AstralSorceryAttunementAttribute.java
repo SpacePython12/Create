@@ -3,19 +3,18 @@ package com.simibubi.create.content.logistics.item.filter.attribute.attributes.a
 import java.util.ArrayList;
 import java.util.List;
 
-import net.createmod.catnip.utility.lang.Components;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttributeTypes;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
 
+import net.createmod.catnip.utility.lang.Components;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class AstralSorceryAttunementAttribute implements ItemAttribute {
 	String constellationName;
@@ -34,8 +33,8 @@ public class AstralSorceryAttunementAttribute implements ItemAttribute {
 		String constellation = nbt.contains("constellation") ? nbt.getString("constellation") : nbt.getString("constellationName");
 
 		// Special handling for shifting stars
-		ResourceLocation itemResource = ForgeRegistries.ITEMS.getKey(itemStack.getItem());
-		if (itemResource != null && itemResource.toString().contains("shifting_star_")) {
+		ResourceLocation itemResource = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
+		if (!itemResource.equals(new ResourceLocation("air")) && itemResource.toString().contains("shifting_star_")) {
 			constellation = itemResource.toString().replace("shifting_star_", "");
 		}
 
@@ -81,8 +80,8 @@ public class AstralSorceryAttunementAttribute implements ItemAttribute {
 			String constellation = nbt.contains("constellation") ? nbt.getString("constellation") : nbt.getString("constellationName");
 
 			// Special handling for shifting stars
-			ResourceLocation itemResource = ForgeRegistries.ITEMS.getKey(itemStack.getItem());
-			if (itemResource != null && itemResource.toString().contains("shifting_star_")) {
+			ResourceLocation itemResource = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
+			if (!itemResource.equals(new ResourceLocation("air")) && itemResource.toString().contains("shifting_star_")) {
 				constellation = itemResource.toString().replace("shifting_star_", "");
 			}
 

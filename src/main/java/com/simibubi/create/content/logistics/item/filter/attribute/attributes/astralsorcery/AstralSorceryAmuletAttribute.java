@@ -3,15 +3,14 @@ package com.simibubi.create.content.logistics.item.filter.attribute.attributes.a
 import java.util.ArrayList;
 import java.util.List;
 
-import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttributeTypes;
-
-import net.createmod.catnip.utility.lang.Components;
-
 import org.jetbrains.annotations.NotNull;
 
+import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttributeTypes;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
 
+import net.createmod.catnip.utility.lang.Components;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -52,7 +51,7 @@ public class AstralSorceryAmuletAttribute implements ItemAttribute {
 	public Object[] getTranslationParameters() {
 		String something = "";
 
-		Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue(ResourceLocation.tryParse(enchName));
+		Enchantment enchant = BuiltInRegistries.ENCHANTMENT.get(ResourceLocation.tryParse(enchName));
 		if (enchant != null) {
 			something = Components.translatable(enchant.getDescriptionId()).getString();
 		}

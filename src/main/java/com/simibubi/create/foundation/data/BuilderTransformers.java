@@ -62,6 +62,7 @@ import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredM
 import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
 
 import net.createmod.catnip.platform.CatnipServices;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
@@ -543,7 +544,7 @@ public class BuilderTransformers {
 			.blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
 				.cubeColumn(c.getName(), p.modLoc("block/" + c.getName()), p.modLoc("block/" + c.getName() + "_top"))))
 			.tag(AllBlockTags.WRENCH_PICKUP.tag)
-			.recipe((c, p) -> p.stonecutting(DataIngredient.tag(Tags.Items.INGOTS_IRON), RecipeCategory.BUILDING_BLOCKS,
+			.recipe((c, p) -> p.stonecutting(DataIngredient.tag(ConventionalItemTags.IRON_INGOTS), RecipeCategory.BUILDING_BLOCKS,
 				c::get, 2))
 			.simpleItem();
 	}

@@ -49,6 +49,17 @@ public final class BakedQuadHelper {
 		vertexData[vertex * VERTEX_STRIDE + Z_OFFSET] = Float.floatToRawIntBits((float) xyz.z);
 	}
 
+	public static Vec3 getXYZ(QuadView quad, int vertex) {
+		float x = quad.x(vertex);
+		float y = quad.y(vertex);
+		float z = quad.z(vertex);
+		return new Vec3(x, y, z);
+	}
+
+	public static void setXYZ(MutableQuadView quad, int vertex, Vec3 xyz) {
+		quad.pos(vertex, (float) xyz.x, (float) xyz.y, (float) xyz.z);
+	}
+
 	public static Vec3 getNormalXYZ(int[] vertexData, int vertex) {
 		int data = vertexData[vertex * VERTEX_STRIDE + NORMAL_OFFSET];
 		float x = (byte) (data >> 24 & 0xFF) / 127f;
@@ -64,17 +75,6 @@ public final class BakedQuadHelper {
 		int data = (x << 24) | (y << 16) | (z << 8);
 		vertexData[vertex * VERTEX_STRIDE + NORMAL_OFFSET] = data;
 	}
-
-	// 	public static Vec3 getXYZ(QuadView quad, int vertex) {
-	//		float x = quad.x(vertex);
-	//        float y = quad.y(vertex);
-	//        float z = quad.z(vertex);
-	//        return new Vec3(x, y, z);
-	//	}
-	//
-	//	public static void setXYZ(MutableQuadView quad, int vertex, Vec3 xyz) {
-	//		quad.pos(vertex, (float) xyz.x, (float) xyz.y, (float) xyz.z);
-	//	}
 
 	public static float getU(int[] vertexData, int vertex) {
 		return Float.intBitsToFloat(vertexData[vertex * VERTEX_STRIDE + U_OFFSET]);

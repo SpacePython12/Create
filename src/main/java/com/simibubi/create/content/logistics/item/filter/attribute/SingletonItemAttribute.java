@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-import com.mojang.serialization.Codec;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-
-import org.jetbrains.annotations.NotNull;
 
 public final class SingletonItemAttribute implements ItemAttribute {
 	private final Type type;

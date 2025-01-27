@@ -16,8 +16,6 @@ import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonnullType;
 
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
-
 import net.createmod.catnip.utility.lang.Lang;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -33,6 +31,8 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
 
 public abstract class PaletteBlockPartial<B extends Block> {
 

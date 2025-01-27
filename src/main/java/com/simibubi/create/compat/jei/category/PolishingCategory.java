@@ -1,12 +1,12 @@
 package com.simibubi.create.compat.jei.category;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import net.createmod.catnip.gui.element.GuiGameElement;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -18,7 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 @ParametersAreNonnullByDefault
 public class PolishingCategory extends CreateRecipeCategory<SandPaperPolishingRecipe> {

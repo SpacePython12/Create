@@ -5,12 +5,13 @@ import java.util.function.Supplier;
 
 import net.createmod.catnip.platform.CatnipServices;
 import net.createmod.catnip.utility.lang.Lang;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 /**
  * For compatibility with and without another mod present, we have to define load conditions of the specific code

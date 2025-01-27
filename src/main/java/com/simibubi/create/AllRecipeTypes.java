@@ -28,7 +28,6 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
-import io.github.fabricators_of_create.porting_lib.util.ShapedRecipeUtil;
 import net.createmod.catnip.utility.lang.Lang;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,6 +38,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
+
+import io.github.fabricators_of_create.porting_lib.util.ShapedRecipeUtil;
 
 public enum AllRecipeTypes implements IRecipeTypeInfo {
 

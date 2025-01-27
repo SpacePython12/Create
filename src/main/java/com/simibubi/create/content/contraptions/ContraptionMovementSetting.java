@@ -1,18 +1,18 @@
 package com.simibubi.create.content.contraptions;
 
+import java.util.Collection;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 import com.simibubi.create.foundation.utility.AttachedRegistry;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.function.Supplier;
 
 public enum ContraptionMovementSetting {
 	MOVABLE, NO_PICKUP, UNMOVABLE;

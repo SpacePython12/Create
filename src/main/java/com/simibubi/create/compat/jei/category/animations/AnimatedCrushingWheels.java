@@ -3,6 +3,7 @@ package com.simibubi.create.compat.jei.category.animations;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;

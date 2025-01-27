@@ -8,13 +8,14 @@ import org.jetbrains.annotations.Nullable;
 import com.simibubi.create.AllRegistries;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public interface ItemAttribute {
 	static CompoundTag saveStatic(ItemAttribute attribute) {

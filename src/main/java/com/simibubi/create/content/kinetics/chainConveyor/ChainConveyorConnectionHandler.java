@@ -10,7 +10,6 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.createmod.catnip.CatnipClient;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.VecHelper;
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -33,6 +32,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
 
 public class ChainConveyorConnectionHandler {
 

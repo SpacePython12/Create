@@ -9,16 +9,17 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.foundation.particle.ICustomParticleData;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 public class CubeParticleData implements ParticleOptions, ICustomParticleData<CubeParticleData> {
 
-	public static final Codec<CubeParticleData> CODEC = RecordCodecBuilder.create(i -> 
+	public static final Codec<CubeParticleData> CODEC = RecordCodecBuilder.create(i ->
 		i.group(
 			Codec.FLOAT.fieldOf("r").forGetter(p -> p.r),
 			Codec.FLOAT.fieldOf("g").forGetter(p -> p.g),

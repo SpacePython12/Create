@@ -1,22 +1,21 @@
 package com.simibubi.create.compat.emi;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.createmod.catnip.gui.element.GuiGameElement;
 
 import dev.emi.emi.api.render.EmiRenderable;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.DrawableWidget.DrawableWidgetConsumer;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nullable;
-
-import java.util.List;
 
 public record RenderedBlock(BlockState state) implements EmiRenderable, DrawableWidgetConsumer {
 	@Nullable

@@ -2,8 +2,6 @@ package com.simibubi.create.content.logistics.packagePort.frogport;
 
 import java.util.function.Consumer;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllPartialModels;
@@ -15,6 +13,7 @@ import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import dev.engine_room.flywheel.lib.visual.AbstractBlockEntityVisual;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;

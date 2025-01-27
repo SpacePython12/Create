@@ -9,17 +9,18 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.foundation.particle.ICustomParticleDataWithSprite;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 public class AirFlowParticleData implements ParticleOptions, ICustomParticleDataWithSprite<AirFlowParticleData> {
-	
-	public static final Codec<AirFlowParticleData> CODEC = RecordCodecBuilder.create(i -> 
+
+	public static final Codec<AirFlowParticleData> CODEC = RecordCodecBuilder.create(i ->
 		i.group(
 			Codec.INT.fieldOf("x").forGetter(p -> p.posX),
 			Codec.INT.fieldOf("y").forGetter(p -> p.posY),
@@ -82,7 +83,7 @@ public class AirFlowParticleData implements ParticleOptions, ICustomParticleData
 	public Deserializer<AirFlowParticleData> getDeserializer() {
 		return DESERIALIZER;
 	}
-	
+
 	@Override
 	public Codec<AirFlowParticleData> getCodec(ParticleType<AirFlowParticleData> type) {
 		return CODEC;

@@ -1,9 +1,10 @@
 package com.simibubi.create.content.contraptions.minecart;
 
 import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
+
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.Iterate;
-import net.createmod.catnip.utility.VecHelper;import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
+import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
@@ -15,6 +16,8 @@ import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
 public class CouplingPhysics {
 

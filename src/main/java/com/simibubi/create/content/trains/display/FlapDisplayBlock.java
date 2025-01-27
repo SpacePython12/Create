@@ -16,7 +16,6 @@ import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.AdventureUtil;
 
-import io.github.fabricators_of_create.porting_lib.util.TagUtil;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.lang.Components;
 import net.createmod.catnip.utility.placement.IPlacementHelper;
@@ -60,6 +59,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.LevelTickAccess;
+
+import io.github.fabricators_of_create.porting_lib.util.TagUtil;
 
 public class FlapDisplayBlock extends HorizontalKineticBlock
 	implements IBE<FlapDisplayBlockEntity>, IWrenchable, ICogWheel, SimpleWaterloggedBlock {

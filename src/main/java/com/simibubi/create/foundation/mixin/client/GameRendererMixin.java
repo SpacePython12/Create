@@ -9,6 +9,7 @@ import com.simibubi.create.content.trains.track.TrackBlockOutline;
 import com.simibubi.create.foundation.block.BigOutlines;
 
 import net.minecraft.client.renderer.GameRenderer;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

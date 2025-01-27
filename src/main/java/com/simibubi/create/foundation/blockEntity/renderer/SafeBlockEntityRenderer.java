@@ -1,7 +1,6 @@
 package com.simibubi.create.foundation.blockEntity.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import com.simibubi.create.foundation.mixin.accessor.LevelRendererAccessor;
 
 import net.createmod.ponder.api.level.PonderLevel;

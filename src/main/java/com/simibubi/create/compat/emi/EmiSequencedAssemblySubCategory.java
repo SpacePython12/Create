@@ -15,9 +15,10 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public abstract class EmiSequencedAssemblySubCategory {
 	private final int width;

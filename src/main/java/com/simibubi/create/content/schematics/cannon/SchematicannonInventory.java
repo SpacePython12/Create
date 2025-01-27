@@ -2,11 +2,12 @@ package com.simibubi.create.content.schematics.cannon;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+
+import net.minecraft.world.item.Items;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class SchematicannonInventory extends ItemStackHandler {
 	private final SchematicannonBlockEntity blockEntity;

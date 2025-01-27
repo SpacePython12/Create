@@ -8,8 +8,6 @@ import com.simibubi.create.content.kinetics.crafter.MechanicalCrafterBlock;
 import com.simibubi.create.content.kinetics.crafter.MechanicalCrafterBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.Pointing;
 import net.createmod.ponder.api.PonderPalette;
@@ -26,6 +24,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class CrafterScenes {
 

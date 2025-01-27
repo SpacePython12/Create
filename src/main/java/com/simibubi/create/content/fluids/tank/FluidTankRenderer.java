@@ -7,9 +7,6 @@ import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRender
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.animation.LerpedFloat;
@@ -19,6 +16,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 
 public class FluidTankRenderer extends SafeBlockEntityRenderer<FluidTankBlockEntity> {
 

@@ -6,10 +6,11 @@ import com.simibubi.create.compat.tconstruct.SpoutCasting;
 import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
 import com.simibubi.create.impl.behaviour.BlockSpoutingBehaviourImpl;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public abstract class BlockSpoutingBehaviour {
 	/**

@@ -20,10 +20,11 @@ import com.simibubi.create.foundation.utility.LongAttached;
 
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public abstract class ValueListDisplaySource extends DisplaySource {
 

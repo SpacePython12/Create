@@ -1,10 +1,12 @@
 package com.simibubi.create.content.logistics.box;
 
-import io.github.fabricators_of_create.porting_lib.entity.events.player.AttackEntityEvent;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.entity.events.player.AttackEntityEvent;
 
 public class PackageClientInteractionHandler {
 

@@ -9,9 +9,9 @@ import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.create.Create;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.createmod.catnip.platform.CatnipServices;
 import net.createmod.catnip.utility.Pair;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

@@ -5,13 +5,14 @@ import static com.simibubi.create.content.equipment.potatoCannon.PotatoProjectil
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.createmod.catnip.utility.math.AngleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public interface PotatoProjectileRenderMode {
 

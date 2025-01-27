@@ -6,10 +6,10 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-
-import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Event that is fired just before a SmartBlockEntity is being deserialized<br>

@@ -27,7 +27,6 @@ import com.simibubi.create.foundation.utility.ServerSpeedProvider;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import dev.engine_room.flywheel.api.backend.BackendManager;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.NBTHelper;
 import net.createmod.catnip.utility.VecHelper;
@@ -53,6 +52,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class ChainConveyorBlockEntity extends KineticBlockEntity implements ITransformableBlockEntity {
 
@@ -704,7 +705,7 @@ public class ChainConveyorBlockEntity extends KineticBlockEntity implements ITra
 		connectionStats = null;
 		updateBoxWorldPositions();
 		updateChainShapes();
-		
+
 		if (connections.size() != sizeBefore && level != null && level.isClientSide)
 			invalidateRenderBoundingBox();
 	}

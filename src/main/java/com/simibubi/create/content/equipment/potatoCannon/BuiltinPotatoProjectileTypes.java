@@ -1,17 +1,18 @@
 package com.simibubi.create.content.equipment.potatoCannon;
 
+import java.util.UUID;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.mixin.accessor.FallingBlockEntityAccessor;
-import net.createmod.catnip.utility.WorldAttached;
-
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.common.util.IPlantable;
-import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
-import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.createmod.catnip.utility.WorldAttached;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -42,10 +43,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.UUID;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import net.fabricmc.fabric.api.entity.FakePlayer;
+
+import io.github.fabricators_of_create.porting_lib.common.util.IPlantable;
+import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
 
 public class BuiltinPotatoProjectileTypes {
 

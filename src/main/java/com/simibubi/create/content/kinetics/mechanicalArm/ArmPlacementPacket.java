@@ -3,10 +3,8 @@ package com.simibubi.create.content.kinetics.mechanicalArm;
 import java.util.Collection;
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import net.fabricmc.api.EnvType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -15,6 +13,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import net.fabricmc.api.EnvType;
 
 public class ArmPlacementPacket extends SimplePacketBase {
 

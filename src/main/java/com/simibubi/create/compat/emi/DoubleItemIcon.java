@@ -1,16 +1,15 @@
 package com.simibubi.create.compat.emi;
 
+import java.util.Objects;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.createmod.catnip.gui.element.GuiGameElement;
-
 import dev.emi.emi.api.render.EmiRenderable;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-
-import java.util.Objects;
 
 // based on ItemEmiStack
 public final class DoubleItemIcon implements EmiRenderable {

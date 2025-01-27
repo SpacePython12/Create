@@ -10,7 +10,6 @@ import com.simibubi.create.compat.betterend.BetterEndPortalCompat;
 import com.simibubi.create.content.contraptions.glue.SuperGlueEntity;
 import com.simibubi.create.foundation.utility.AttachedRegistry;
 
-import io.github.fabricators_of_create.porting_lib.entity.ITeleporter;
 import net.createmod.catnip.utility.BlockFace;
 import net.createmod.catnip.utility.Pair;
 import net.minecraft.core.BlockPos;
@@ -28,6 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.portal.PortalInfo;
 import net.minecraft.world.phys.AABB;
+
+import io.github.fabricators_of_create.porting_lib.entity.ITeleporter;
 
 /**
  * Manages portal track integrations for various dimensions and mods within the Create mod.

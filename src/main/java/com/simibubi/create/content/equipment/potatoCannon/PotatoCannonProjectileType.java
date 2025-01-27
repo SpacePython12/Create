@@ -2,7 +2,6 @@ package com.simibubi.create.content.equipment.potatoCannon;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -14,7 +13,6 @@ import com.google.gson.JsonPrimitive;
 
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.ResourceLocationException;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

@@ -13,13 +13,14 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 @ParametersAreNonnullByDefault
 public class CuttingRecipe extends ProcessingRecipe<Container> implements IAssemblyRecipe {

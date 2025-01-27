@@ -21,7 +21,6 @@ import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 import net.createmod.catnip.utility.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -49,6 +48,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.EntityHitResult;
+
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
 public class MinecartContraptionItem extends Item {
 

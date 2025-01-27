@@ -12,7 +12,6 @@ import com.simibubi.create.content.trains.schedule.destination.DestinationInstru
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.ChatFormatting;
@@ -34,8 +33,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
 
 public class ScheduleItem extends Item implements MenuProvider {
 

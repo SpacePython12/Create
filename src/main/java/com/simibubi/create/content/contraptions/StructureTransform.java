@@ -7,7 +7,6 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 import com.simibubi.create.api.contraption.transformable.ContraptionTransformableRegistry;
 import com.simibubi.create.api.contraption.transformable.ITransformableBlock;
 import com.simibubi.create.api.contraption.transformable.ITransformableBlockEntity;
-
 import com.simibubi.create.impl.contraption.transformable.ContraptionTransformableRegistryImpl;
 
 import net.createmod.catnip.utility.VecHelper;

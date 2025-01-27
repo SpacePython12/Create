@@ -13,8 +13,6 @@ import com.mojang.datafixers.util.Pair;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllKeys;
 import com.simibubi.create.AllSpecialTextures;
-import com.simibubi.create.AllTags;
-import com.simibubi.create.CreateClient;
 
 import net.createmod.catnip.CatnipClient;
 import net.minecraft.client.Minecraft;

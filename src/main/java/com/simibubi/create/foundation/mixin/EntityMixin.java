@@ -1,20 +1,17 @@
 package com.simibubi.create.foundation.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-
-import com.llamalad7.mixinextras.sugar.Local;
-import com.simibubi.create.content.equipment.armor.CardboardArmorHandler;
-
-import net.minecraft.world.entity.Pose;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.simibubi.create.content.equipment.armor.CardboardArmorHandler;
 import com.simibubi.create.content.equipment.armor.NetheriteDivingHandler;
 
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Pose;
 
 @Mixin(value = Entity.class, priority = 900)
 public class EntityMixin {

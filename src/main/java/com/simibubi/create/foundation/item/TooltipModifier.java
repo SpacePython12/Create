@@ -2,14 +2,11 @@ package com.simibubi.create.foundation.item;
 
 import java.util.List;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.player.Player;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.foundation.utility.AttachedRegistry;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;

@@ -12,17 +12,19 @@ import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.utility.fabric.ListeningStorageView;
 import com.simibubi.create.foundation.utility.fabric.ProcessingIterator;
 
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Unit;
+import net.minecraft.world.level.block.entity.BlockEntity;
+
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Unit;
-import net.minecraft.world.level.block.entity.BlockEntity;
+
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 
 public class TrainCargoManager extends MountedStorageManager {
 

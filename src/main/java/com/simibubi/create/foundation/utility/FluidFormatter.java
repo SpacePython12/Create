@@ -1,11 +1,13 @@
 package com.simibubi.create.foundation.utility;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidTextUtil;
-import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.network.chat.MutableComponent;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+
+import io.github.fabricators_of_create.porting_lib.util.FluidTextUtil;
+import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 
 public class FluidFormatter {
 

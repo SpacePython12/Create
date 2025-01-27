@@ -29,8 +29,11 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
 
 public class StockTickerBlock extends HorizontalDirectionalBlock implements IBE<StockTickerBlockEntity>, IWrenchable {
 
@@ -104,7 +107,7 @@ public class StockTickerBlock extends HorizontalDirectionalBlock implements IBE<
 	public BlockEntityType<? extends StockTickerBlockEntity> getBlockEntityType() {
 		return AllBlockEntityTypes.STOCK_TICKER.get();
 	}
-	
+
 	@Override
 	public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
 		return false;

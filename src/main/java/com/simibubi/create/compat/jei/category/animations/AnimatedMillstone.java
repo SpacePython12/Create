@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
+
 import net.minecraft.client.gui.GuiGraphics;
 
 public class AnimatedMillstone extends AnimatedKinetics {

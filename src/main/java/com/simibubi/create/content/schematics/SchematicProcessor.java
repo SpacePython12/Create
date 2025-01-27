@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.simibubi.create.AllStructureProcessorTypes;
 
-import io.github.fabricators_of_create.porting_lib.extensions.extensions.StructureProcessorExtensions;
 import net.createmod.catnip.utility.NBTProcessors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -21,6 +20,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+
+import io.github.fabricators_of_create.porting_lib.extensions.extensions.StructureProcessorExtensions;
 
 public class SchematicProcessor extends StructureProcessor implements StructureProcessorExtensions {
 	public static final SchematicProcessor INSTANCE = new SchematicProcessor();

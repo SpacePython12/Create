@@ -1,7 +1,5 @@
 package com.simibubi.create.content.logistics.funnel;
 
-import java.util.function.Consumer;
-
 import javax.annotation.Nullable;
 
 import com.simibubi.create.AllBlockEntityTypes;

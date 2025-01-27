@@ -12,8 +12,6 @@ import com.simibubi.create.Create;
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.FilesHelper;
 
-import net.fabricmc.loader.api.FabricLoader;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
@@ -22,6 +20,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 public class SchematicExport {
 	public static final Path SCHEMATICS = FabricLoader.getInstance().getGameDir().resolve("schematics");

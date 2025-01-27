@@ -9,8 +9,6 @@ import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.gui.ScreenOpener;
 import net.createmod.catnip.utility.NBTHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -21,6 +19,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class WorldshaperItem extends ZapperItem {
 

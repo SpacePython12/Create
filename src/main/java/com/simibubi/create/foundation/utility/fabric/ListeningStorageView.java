@@ -1,8 +1,9 @@
 package com.simibubi.create.foundation.utility.fabric;
 
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 
 /**
  * A StorageView wrapper that listens for it's wrapped view updating.

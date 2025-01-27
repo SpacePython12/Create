@@ -46,12 +46,13 @@ import com.simibubi.create.infrastructure.worldgen.AllPlacementModifiers;
 import io.github.tropheusj.milk.Milk;
 import net.createmod.catnip.utility.FontHelper;
 import net.createmod.catnip.utility.lang.LangBuilder;
-import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.Level;
+
+import net.fabricmc.api.ModInitializer;
 
 public class Create implements ModInitializer {
 

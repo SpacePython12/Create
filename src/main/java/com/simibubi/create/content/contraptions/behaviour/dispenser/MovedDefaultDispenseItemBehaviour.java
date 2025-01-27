@@ -2,10 +2,6 @@ package com.simibubi.create.content.contraptions.behaviour.dispenser;
 
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
@@ -16,6 +12,10 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class MovedDefaultDispenseItemBehaviour implements IMovedDispenseItemBehaviour {
 	private static final MovedDefaultDispenseItemBehaviour DEFAULT_INSTANCE = new MovedDefaultDispenseItemBehaviour();

@@ -3,6 +3,7 @@ package com.simibubi.create.infrastructure.config;
 
 import net.createmod.catnip.config.ConfigBase;
 import net.createmod.catnip.config.ui.ConfigAnnotations;
+
 import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 
 public class CClient extends ConfigBase {

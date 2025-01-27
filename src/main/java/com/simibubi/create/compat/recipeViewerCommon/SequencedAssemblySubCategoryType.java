@@ -1,10 +1,10 @@
 package com.simibubi.create.compat.recipeViewerCommon;
 
+import java.util.function.Supplier;
+
 import com.simibubi.create.compat.emi.EmiSequencedAssemblySubCategory;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.JeiSequencedAssemblySubCategory;
 import com.simibubi.create.compat.rei.category.sequencedAssembly.ReiSequencedAssemblySubCategory;
-
-import java.util.function.Supplier;
 
 public record SequencedAssemblySubCategoryType(Supplier<Supplier<JeiSequencedAssemblySubCategory>> jei,
 											   Supplier<Supplier<ReiSequencedAssemblySubCategory>> rei,

@@ -9,8 +9,6 @@ import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
 
-import io.github.fabricators_of_create.porting_lib.block.NeighborChangeListeningBlock;
-import net.createmod.catnip.utility.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -31,6 +29,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+
+import io.github.fabricators_of_create.porting_lib.block.NeighborChangeListeningBlock;
 
 public class PackagerBlock extends WrenchableDirectionalBlock implements IBE<PackagerBlockEntity>, IWrenchable, NeighborChangeListeningBlock {
 

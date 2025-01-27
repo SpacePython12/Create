@@ -6,8 +6,9 @@ import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentType
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.createmod.catnip.utility.Iterate;
-import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
 
 /**
  * Fabric: Implement this on any BlockEntity that uses {@link PipeAttachmentModel} and call {@link #getAttachments(BlockEntity)}

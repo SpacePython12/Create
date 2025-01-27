@@ -1,9 +1,5 @@
 package com.simibubi.create.foundation.blockEntity.behaviour;
 
-import com.simibubi.create.foundation.utility.AdventureUtil;
-
-import net.fabricmc.fabric.api.entity.FakePlayer;
-
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.simibubi.create.AllBlocks;
@@ -11,16 +7,20 @@ import com.simibubi.create.AllTags.AllItemTags;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.SidedFilteringBehaviour;
+import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.utility.RaycastHelper;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.entity.FakePlayer;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class ValueSettingsInputHandler {
 

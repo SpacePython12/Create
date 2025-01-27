@@ -3,10 +3,6 @@ package com.simibubi.create;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.core.Registry;
-
-import com.simibubi.create.content.contraptions.behaviour.FenceGateMovingInteraction;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.contraptions.behaviour.DoorMovingInteraction;

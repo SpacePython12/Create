@@ -13,6 +13,7 @@ import net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

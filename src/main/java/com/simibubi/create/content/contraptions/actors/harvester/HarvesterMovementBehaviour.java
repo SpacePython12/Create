@@ -2,8 +2,6 @@ package com.simibubi.create.content.contraptions.actors.harvester;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.common.util.IPlantable;
-
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
@@ -36,6 +34,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.common.util.IPlantable;
 
 public class HarvesterMovementBehaviour implements MovementBehaviour {
 

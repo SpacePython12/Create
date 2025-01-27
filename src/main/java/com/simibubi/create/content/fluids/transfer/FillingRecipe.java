@@ -12,10 +12,6 @@ import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.util.FluidUtil;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -23,6 +19,12 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.util.FluidUtil;
 
 public class FillingRecipe extends ProcessingRecipe<Container> implements IAssemblyRecipe {
 

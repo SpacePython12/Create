@@ -3,21 +3,14 @@ package com.simibubi.create.content.kinetics.waterwheel;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.simibubi.create.foundation.utility.AdventureUtil;
-
-import io.github.fabricators_of_create.porting_lib.block.CustomHitEffectsBlock;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.goggles.IProxyHoveringInformation;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.render.MultiPosDestructionHandler;
+import com.simibubi.create.foundation.utility.AdventureUtil;
 
-import io.github.fabricators_of_create.porting_lib.block.CustomDestroyEffectsBlock;
-import io.github.fabricators_of_create.porting_lib.block.CustomLandingEffectsBlock;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
@@ -39,9 +32,15 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomDestroyEffectsBlock;
+import io.github.fabricators_of_create.porting_lib.block.CustomHitEffectsBlock;
+import io.github.fabricators_of_create.porting_lib.block.CustomLandingEffectsBlock;
 
 public class WaterWheelStructuralBlock extends DirectionalBlock implements IWrenchable, IProxyHoveringInformation, MultiPosDestructionHandler, CustomLandingEffectsBlock, CustomDestroyEffectsBlock, CustomHitEffectsBlock {
 

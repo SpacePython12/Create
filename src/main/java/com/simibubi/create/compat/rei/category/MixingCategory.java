@@ -2,7 +2,6 @@ package com.simibubi.create.compat.rei.category;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.rei.category.animations.AnimatedBlazeBurner;
 import com.simibubi.create.compat.rei.category.animations.AnimatedMixer;
 import com.simibubi.create.content.processing.basin.BasinRecipe;

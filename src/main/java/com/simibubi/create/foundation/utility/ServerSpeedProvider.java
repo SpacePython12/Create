@@ -6,11 +6,12 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import net.createmod.catnip.utility.animation.LerpedFloat;
 import net.createmod.catnip.utility.animation.LerpedFloat.Chaser;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ServerSpeedProvider {
 

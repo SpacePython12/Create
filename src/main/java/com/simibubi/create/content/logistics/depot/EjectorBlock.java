@@ -12,7 +12,6 @@ import com.simibubi.create.content.logistics.depot.EjectorBlockEntity.State;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 import com.simibubi.create.foundation.item.ItemHelper;
-import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
 
 import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.core.BlockPos;
@@ -37,6 +36,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
 
 public class EjectorBlock extends HorizontalKineticBlock implements IBE<EjectorBlockEntity>, ProperWaterloggedBlock, CustomFrictionBlock {
 

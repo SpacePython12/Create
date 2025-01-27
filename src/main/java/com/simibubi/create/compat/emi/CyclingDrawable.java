@@ -1,9 +1,9 @@
 package com.simibubi.create.compat.emi;
 
+import java.util.List;
+
 import dev.emi.emi.api.widget.DrawableWidget.DrawableWidgetConsumer;
 import net.minecraft.client.gui.GuiGraphics;
-
-import java.util.List;
 
 public record CyclingDrawable(List<? extends DrawableWidgetConsumer> children) implements DrawableWidgetConsumer {
 	@Override

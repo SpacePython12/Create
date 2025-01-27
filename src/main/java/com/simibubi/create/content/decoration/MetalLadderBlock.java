@@ -11,8 +11,6 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.createmod.catnip.utility.placement.IPlacementHelper;
 import net.createmod.catnip.utility.placement.PlacementHelpers;
 import net.createmod.catnip.utility.placement.PlacementOffset;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,6 +30,9 @@ import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class MetalLadderBlock extends LadderBlock implements IWrenchable {
 

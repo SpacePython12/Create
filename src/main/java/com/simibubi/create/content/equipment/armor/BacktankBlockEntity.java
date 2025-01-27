@@ -2,8 +2,6 @@ package com.simibubi.create.content.equipment.armor;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;

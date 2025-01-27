@@ -2,8 +2,6 @@ package com.simibubi.create.content.trains.display;
 
 import java.util.List;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.FontAccessor;
-
 import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.font.GlyphInfo;
@@ -33,8 +31,11 @@ import net.minecraft.util.FormattedCharSink;
 import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.FontAccessor;
 
 public class FlapDisplayRenderer extends KineticBlockEntityRenderer<FlapDisplayBlockEntity> {
 

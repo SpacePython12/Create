@@ -1,14 +1,16 @@
 package com.simibubi.create.content.equipment.armor;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
 import com.simibubi.create.AllEnchantments;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.api.EnvType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -23,9 +25,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
+import net.fabricmc.api.EnvType;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class BacktankUtil {
 

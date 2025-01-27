@@ -3,8 +3,6 @@ package com.simibubi.create.content.equipment.zapper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback.RenderHandEvent;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -18,6 +16,9 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback;
+import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback.RenderHandEvent;
 
 public abstract class ShootableGadgetRenderHandler {
 

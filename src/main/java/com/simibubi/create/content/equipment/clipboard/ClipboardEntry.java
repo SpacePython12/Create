@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.createmod.catnip.utility.NBTHelper;
-
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class ClipboardEntry {
 

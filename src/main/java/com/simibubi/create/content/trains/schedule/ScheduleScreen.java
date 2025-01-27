@@ -39,8 +39,6 @@ import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.ScreenAccessor;
-import io.github.fabricators_of_create.porting_lib.util.KeyBindingHelper;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.GuiGameElement;
 import net.createmod.catnip.utility.IntAttached;
@@ -62,6 +60,9 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.ScreenAccessor;
+import io.github.fabricators_of_create.porting_lib.util.KeyBindingHelper;
 
 public class ScheduleScreen extends AbstractSimiContainerScreen<ScheduleMenu> implements ScreenWithStencils {
 

@@ -7,9 +7,10 @@ import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe.Splas
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
+import net.minecraft.world.level.Level;
+
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
-import net.minecraft.world.level.Level;
 
 @ParametersAreNonnullByDefault
 public class SplashingRecipe extends ProcessingRecipe<SplashingWrapper> {

@@ -5,6 +5,7 @@ import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

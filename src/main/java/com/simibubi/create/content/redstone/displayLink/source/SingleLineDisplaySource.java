@@ -14,6 +14,7 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

@@ -7,8 +7,6 @@ import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 
 import dev.engine_room.flywheel.api.model.Model;
 import dev.engine_room.flywheel.lib.model.Models;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.createmod.catnip.utility.AnimationTickHolder;
@@ -18,6 +16,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class HandCrankBlockEntity extends GeneratingKineticBlockEntity {
 

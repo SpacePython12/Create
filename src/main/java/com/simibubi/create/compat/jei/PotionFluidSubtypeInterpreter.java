@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.simibubi.create.content.fluids.potion.PotionFluid.BottleType;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import mezz.jei.api.fabric.ingredients.fluids.IJeiFluidIngredient;
 import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;

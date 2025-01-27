@@ -6,10 +6,11 @@ import com.tterrag.registrate.fabric.EnvExecutor;
 
 import net.createmod.catnip.CatnipClient;
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ClearBufferCacheCommand {
 

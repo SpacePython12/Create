@@ -10,8 +10,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags.AllEntityTags;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.BaseSpawnerAccessor;
-
 import net.createmod.catnip.platform.CatnipServices;
 import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -36,6 +34,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.BaseSpawnerAccessor;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault

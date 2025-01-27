@@ -23,7 +23,6 @@ import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.GuiGameElement;
 import net.createmod.catnip.utility.animation.LerpedFloat;
@@ -41,6 +40,8 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 
 public class StockKeeperCategoryScreen extends AbstractSimiContainerScreen<StockKeeperCategoryMenu>
 	implements ScreenWithStencils {

@@ -2,9 +2,6 @@ package com.simibubi.create.content.kinetics.waterwheel;
 
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.createmod.catnip.CatnipClient;
 import net.createmod.catnip.utility.Pair;
 import net.minecraft.client.player.LocalPlayer;
@@ -18,6 +15,11 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class LargeWaterWheelBlockItem extends BlockItem {
 

@@ -1,16 +1,12 @@
 package com.simibubi.create.foundation.networking;
 
-import com.simibubi.create.foundation.mixin.fabric.BlockableEventLoopAccessor;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 import org.jetbrains.annotations.Nullable;
+
+import com.simibubi.create.foundation.mixin.fabric.BlockableEventLoopAccessor;
 
 import me.pepperbell.simplenetworking.C2SPacket;
 import me.pepperbell.simplenetworking.S2CPacket;
 import me.pepperbell.simplenetworking.SimpleChannel;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,6 +15,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.thread.BlockableEventLoop;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
 public abstract class SimplePacketBase implements C2SPacket, S2CPacket {
 

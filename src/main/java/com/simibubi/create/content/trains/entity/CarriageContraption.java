@@ -7,12 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
-
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.simibubi.create.AllBlocks;
@@ -26,6 +20,7 @@ import com.simibubi.create.content.contraptions.minecart.TrainCargoManager;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
+import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.utility.Couple;
@@ -45,8 +40,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.AABB;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class CarriageContraption extends Contraption {
 

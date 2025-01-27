@@ -6,8 +6,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 
-import io.github.fabricators_of_create.porting_lib.block.MinecartPassHandlerBlock;
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -38,6 +36,9 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.block.MinecartPassHandlerBlock;
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

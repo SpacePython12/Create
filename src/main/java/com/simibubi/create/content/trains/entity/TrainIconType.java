@@ -7,6 +7,7 @@ import com.simibubi.create.Create;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

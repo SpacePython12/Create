@@ -7,8 +7,6 @@ import com.simibubi.create.AllPartialModels;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback.RenderHandEvent;
-import io.github.fabricators_of_create.porting_lib.util.FirstPersonRendererHelper;
 import net.createmod.catnip.utility.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -21,6 +19,9 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback.RenderHandEvent;
+import io.github.fabricators_of_create.porting_lib.util.FirstPersonRendererHelper;
 
 public class ExtendoGripRenderHandler {
 

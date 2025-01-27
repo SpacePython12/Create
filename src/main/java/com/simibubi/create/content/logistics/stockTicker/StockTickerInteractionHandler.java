@@ -1,8 +1,5 @@
 package com.simibubi.create.content.logistics.stockTicker;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +19,6 @@ import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.Iterate;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,6 +32,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
 
 public class StockTickerInteractionHandler {
 

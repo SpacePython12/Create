@@ -1,10 +1,9 @@
 package com.simibubi.create.compat.emi.recipes.fan;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.emi.CreateEmiAnimations;
 import com.simibubi.create.compat.emi.CreateEmiPlugin;
-import net.createmod.catnip.gui.element.GuiGameElement;
 
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;

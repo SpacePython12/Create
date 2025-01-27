@@ -17,7 +17,6 @@ import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import com.simibubi.create.foundation.ponder.element.BeltItemElement;
 import com.simibubi.create.foundation.utility.LongAttached;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.NBTHelper;
 import net.createmod.catnip.utility.Pointing;
@@ -41,6 +40,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class ProcessingScenes {
 

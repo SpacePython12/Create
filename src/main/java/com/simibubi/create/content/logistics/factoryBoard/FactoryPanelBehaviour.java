@@ -13,8 +13,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-
 import org.joml.Math;
 
 import com.google.common.collect.HashMultimap;
@@ -61,8 +59,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class FactoryPanelBehaviour extends FilteringBehaviour {
 

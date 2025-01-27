@@ -8,7 +8,6 @@ import com.simibubi.create.foundation.render.RenderTypes;
 import com.simibubi.create.foundation.utility.DyeHelper;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import io.github.fabricators_of_create.porting_lib.util.FontRenderUtil;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.Iterate;
@@ -29,6 +28,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.FontRenderUtil;
 
 public class NixieTubeRenderer extends SafeBlockEntityRenderer<NixieTubeBlockEntity> {
 

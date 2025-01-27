@@ -4,10 +4,11 @@ import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
 public enum AllKeys {
 

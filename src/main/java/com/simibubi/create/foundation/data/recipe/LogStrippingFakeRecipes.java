@@ -3,8 +3,6 @@ package com.simibubi.create.foundation.data.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.AxeItemAccessor;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
@@ -23,6 +21,8 @@ import net.minecraft.world.item.ItemStack.TooltipPart;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.AxeItemAccessor;
 
 /**
  * Just in case players don't know about that vanilla feature

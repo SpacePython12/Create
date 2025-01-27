@@ -18,8 +18,6 @@ import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.decoration.palettes.AllPaletteBlocks;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
@@ -28,6 +26,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class WashingRecipeGen extends ProcessingRecipeGen {
 
@@ -89,7 +91,7 @@ public class WashingRecipeGen extends ProcessingRecipeGen {
 		BLUE_CONCRETE = convert(Blocks.BLUE_CONCRETE_POWDER, Blocks.BLUE_CONCRETE),
 		CYAN_CONCRETE = convert(Blocks.CYAN_CONCRETE_POWDER, Blocks.CYAN_CONCRETE),
 		BLACK_CONCRETE = convert(Blocks.BLACK_CONCRETE_POWDER, Blocks.BLACK_CONCRETE),
-		
+
 		FLOUR = create("wheat_flour", b -> b.require(I.wheatFlour())
 			.output(AllItems.DOUGH.get())),
 

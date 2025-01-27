@@ -3,8 +3,6 @@ package com.simibubi.create.content.fluids.tank;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.core.Registry;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlocks;

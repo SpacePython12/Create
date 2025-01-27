@@ -1,9 +1,5 @@
 package com.simibubi.create.content.legacy;
 
-import java.util.Random;
-
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.BeaconBlockEntityAccessor;
-
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.simibubi.create.AllItems;
@@ -14,9 +10,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 
-import io.github.fabricators_of_create.porting_lib.block.LightEmissiveBlock;
-import io.github.fabricators_of_create.porting_lib.item.CustomMaxCountItem;
-import io.github.fabricators_of_create.porting_lib.item.EntityTickListenerItem;
 import net.createmod.catnip.utility.VecHelper;
 import net.createmod.catnip.utility.theme.Color;
 import net.minecraft.core.BlockPos;
@@ -39,6 +32,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.block.LightEmissiveBlock;
+import io.github.fabricators_of_create.porting_lib.item.CustomMaxCountItem;
+import io.github.fabricators_of_create.porting_lib.item.EntityTickListenerItem;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.BeaconBlockEntityAccessor;
 
 public class ChromaticCompoundItem extends Item implements CustomMaxCountItem, EntityTickListenerItem {
 

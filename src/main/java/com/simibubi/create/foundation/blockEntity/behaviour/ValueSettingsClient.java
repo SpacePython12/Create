@@ -1,6 +1,9 @@
 package com.simibubi.create.foundation.blockEntity.behaviour;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.List;
+
+import org.apache.commons.lang3.mutable.MutableBoolean;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPackets;
 
@@ -15,9 +18,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import org.apache.commons.lang3.mutable.MutableBoolean;
-
-import java.util.List;
 
 public class ValueSettingsClient {
 	private Minecraft mc;

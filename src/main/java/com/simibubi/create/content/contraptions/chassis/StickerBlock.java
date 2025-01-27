@@ -4,9 +4,6 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
-import io.github.fabricators_of_create.porting_lib.block.CustomLandingEffectsBlock;
-import io.github.fabricators_of_create.porting_lib.block.CustomRunningEffectsBlock;
-import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,6 +24,10 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomLandingEffectsBlock;
+import io.github.fabricators_of_create.porting_lib.block.CustomRunningEffectsBlock;
+import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 
 public class StickerBlock extends WrenchableDirectionalBlock implements IBE<StickerBlockEntity>, CustomRunningEffectsBlock,
 		CustomLandingEffectsBlock, WeakPowerCheckingBlock {

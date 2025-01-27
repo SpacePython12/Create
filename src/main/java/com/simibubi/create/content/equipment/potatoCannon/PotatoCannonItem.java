@@ -16,11 +16,6 @@ import com.simibubi.create.foundation.item.CustomArmPoseItem;
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.enchant.CustomEnchantingBehaviorItem;
-import io.github.fabricators_of_create.porting_lib.item.EntitySwingListenerItem;
-import io.github.fabricators_of_create.porting_lib.item.ReequipAnimationItem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.createmod.catnip.utility.AnimationTickHolder;
 import net.createmod.catnip.utility.VecHelper;
 import net.createmod.catnip.utility.lang.Components;
@@ -50,6 +45,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.enchant.CustomEnchantingBehaviorItem;
+import io.github.fabricators_of_create.porting_lib.item.EntitySwingListenerItem;
+import io.github.fabricators_of_create.porting_lib.item.ReequipAnimationItem;
 
 public class PotatoCannonItem extends ProjectileWeaponItem implements CustomArmPoseItem, EntitySwingListenerItem, ReequipAnimationItem, CustomEnchantingBehaviorItem {
 

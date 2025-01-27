@@ -1,7 +1,11 @@
 package com.simibubi.create.content.decoration.copycat;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllShapes;
+
 import net.createmod.catnip.utility.placement.IPlacementHelper;
 import net.createmod.catnip.utility.placement.PlacementHelpers;
 import net.createmod.catnip.utility.placement.PlacementOffset;
@@ -31,9 +35,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 public class CopycatPanelBlock extends WaterloggedCopycatBlock {
 

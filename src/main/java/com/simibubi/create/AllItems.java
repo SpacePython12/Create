@@ -15,8 +15,6 @@ import static com.simibubi.create.foundation.data.recipe.CompatMetals.SILVER;
 import static com.simibubi.create.foundation.data.recipe.CompatMetals.TIN;
 import static com.simibubi.create.foundation.data.recipe.CompatMetals.URANIUM;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-
 import com.simibubi.create.AllTags.AllItemTags;
 import com.simibubi.create.content.contraptions.glue.SuperGlueItem;
 import com.simibubi.create.content.contraptions.minecart.MinecartCouplingItem;
@@ -79,8 +77,6 @@ import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -90,6 +86,11 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class AllItems {
 

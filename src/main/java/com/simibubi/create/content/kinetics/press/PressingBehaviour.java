@@ -11,7 +11,6 @@ import com.simibubi.create.content.processing.basin.BasinBlock;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.createmod.catnip.utility.NBTHelper;
 import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.core.BlockPos;
@@ -27,6 +26,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class PressingBehaviour extends BeltProcessingBehaviour {
 

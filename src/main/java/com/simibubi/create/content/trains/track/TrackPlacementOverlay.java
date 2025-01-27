@@ -6,8 +6,6 @@ import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.utility.lang.Components;
 import net.createmod.catnip.utility.theme.Color;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -15,6 +13,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.GameType;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class TrackPlacementOverlay {
 

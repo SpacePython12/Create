@@ -8,7 +8,6 @@ import java.util.List;
 import com.google.common.base.Strings;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.common.util.MinecraftClientUtil;
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.FontHelper;
 import net.createmod.catnip.utility.lang.Components;
@@ -18,6 +17,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+
+import io.github.fabricators_of_create.porting_lib.common.util.MinecraftClientUtil;
 
 public class TooltipHelper {
 

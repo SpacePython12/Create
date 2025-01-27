@@ -8,7 +8,6 @@ import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.IDisplayAssemblyExceptions;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.content.contraptions.minecart.CouplingHandler;
-import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
 import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
 import com.simibubi.create.content.redstone.rail.ControllerRailBlock;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
@@ -20,9 +19,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIc
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.utility.CreateLang;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.Iterate;
@@ -42,6 +38,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class CartAssemblerBlockEntity extends SmartBlockEntity implements IDisplayAssemblyExceptions {
 	private static final int assemblyCooldown = 8;

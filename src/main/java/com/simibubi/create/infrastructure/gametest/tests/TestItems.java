@@ -17,11 +17,8 @@ import com.simibubi.create.content.trains.display.FlapDisplaySection;
 import com.simibubi.create.infrastructure.gametest.CreateGameTestHelper;
 import com.simibubi.create.infrastructure.gametest.GameTestGroup;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -35,6 +32,11 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RedstoneLampBlock;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 @GameTestGroup(path = "items")
 public class TestItems {

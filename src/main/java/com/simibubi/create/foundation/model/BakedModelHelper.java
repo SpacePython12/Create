@@ -11,7 +11,6 @@ import java.util.function.UnaryOperator;
 
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.VecHelper;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,6 +20,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 
 public class BakedModelHelper {
 

@@ -28,8 +28,6 @@ import com.simibubi.create.foundation.utility.CreateLang;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.SharedConstants;
@@ -53,6 +51,9 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ClipboardScreen extends AbstractSimiScreen {
 

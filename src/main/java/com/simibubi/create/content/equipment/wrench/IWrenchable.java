@@ -9,7 +9,6 @@ import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.createmod.catnip.utility.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,6 +20,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 
 public interface IWrenchable {
 

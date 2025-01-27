@@ -2,9 +2,6 @@ package com.simibubi.create.foundation.render;
 
 import static com.simibubi.create.Create.asResource;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 import org.lwjgl.system.MemoryUtil;
 
 import com.simibubi.create.content.contraptions.actors.ActorInstance;
@@ -17,6 +14,9 @@ import dev.engine_room.flywheel.api.layout.IntegerRepr;
 import dev.engine_room.flywheel.api.layout.LayoutBuilder;
 import dev.engine_room.flywheel.lib.instance.SimpleInstanceType;
 import dev.engine_room.flywheel.lib.util.ExtraMemoryOps;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public class AllInstanceTypes {

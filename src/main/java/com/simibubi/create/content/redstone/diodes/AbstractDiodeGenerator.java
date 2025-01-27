@@ -8,16 +8,16 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;
 
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile.ExistingModelFile;
-import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelProvider;
-import io.github.fabricators_of_create.porting_lib.models.generators.item.ItemModelBuilder;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile.ExistingModelFile;
+import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelProvider;
+import io.github.fabricators_of_create.porting_lib.models.generators.item.ItemModelBuilder;
 
 public abstract class AbstractDiodeGenerator extends SpecialBlockStateGen {
 

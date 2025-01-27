@@ -1,8 +1,5 @@
 package com.simibubi.create.foundation.gui.menu;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -10,6 +7,9 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public abstract class GhostItemMenu<T> extends MenuBase<T> implements IClearableMenu {
 
@@ -82,7 +82,7 @@ public abstract class GhostItemMenu<T> extends MenuBase<T> implements IClearable
 		ghostInventory.setStackInSlot(slot, insert);
 		getSlot(slotId).setChanged();
 	}
-	
+
 	@Override
 	protected boolean moveItemStackTo(ItemStack pStack, int pStartIndex, int pEndIndex, boolean pReverseDirection) {
 		return false;

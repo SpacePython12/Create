@@ -8,8 +8,6 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import net.createmod.catnip.command.CatnipCommands;
 import net.createmod.catnip.platform.CatnipServices;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.world.entity.player.Player;

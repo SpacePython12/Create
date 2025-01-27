@@ -1,11 +1,11 @@
 package com.simibubi.create.foundation.mixin.accessor;
 
-import net.minecraft.data.models.ItemModelGenerators;
+import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import java.util.List;
+import net.minecraft.data.models.ItemModelGenerators;
 
 @Mixin(ItemModelGenerators.class)
 public interface ItemModelGeneratorsAccessor {

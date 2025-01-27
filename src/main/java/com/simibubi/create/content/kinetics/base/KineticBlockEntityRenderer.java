@@ -1,7 +1,5 @@
 package com.simibubi.create.content.kinetics.base;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllBlocks;

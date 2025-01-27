@@ -10,9 +10,6 @@ import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.utility.BlockHelper;
 
-import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
-import io.github.fabricators_of_create.porting_lib.util.TagUtil;
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -41,6 +38,11 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
+
+import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
+import io.github.fabricators_of_create.porting_lib.util.TagUtil;
 
 public class ToolboxBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock, IBE<ToolboxBlockEntity> {
 

@@ -2,15 +2,15 @@ package com.simibubi.create.content.fluids.drain;
 
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
-import com.simibubi.create.foundation.item.ItemHelper;
+
+import net.minecraft.core.Direction;
+import net.minecraft.util.Unit;
+import net.minecraft.world.item.ItemStack;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
-import net.minecraft.core.Direction;
-import net.minecraft.util.Unit;
-import net.minecraft.world.item.ItemStack;
 
 public class ItemDrainItemHandler extends SnapshotParticipant<Unit> implements SingleSlotStorage<ItemVariant> {
 

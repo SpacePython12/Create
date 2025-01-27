@@ -21,10 +21,11 @@ import com.simibubi.create.content.schematics.SchematicExport.SchematicExportRes
 import com.simibubi.create.content.schematics.client.SchematicAndQuillHandler;
 
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerLevel;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 /**
  * This command allows for quick exporting of GameTests.

@@ -5,10 +5,11 @@ import java.util.Vector;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.simibubi.create.AllKeys;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
 public class ControlsUtil {
 

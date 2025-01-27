@@ -1,7 +1,5 @@
 package com.simibubi.create.content.logistics.chute;
 
-import java.util.function.Consumer;
-
 import javax.annotation.Nullable;
 
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
@@ -11,8 +9,8 @@ import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.item.ItemHelper;
+import com.simibubi.create.foundation.utility.AdventureUtil;
 
 import net.createmod.catnip.utility.Iterate;
 import net.minecraft.core.BlockPos;

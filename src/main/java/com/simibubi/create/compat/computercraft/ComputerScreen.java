@@ -1,10 +1,15 @@
 package com.simibubi.create.compat.computercraft;
 
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.utility.CreateLang;
+
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.element.GuiGameElement;
 import net.createmod.catnip.gui.widget.AbstractSimiWidget;
@@ -12,9 +17,6 @@ import net.createmod.catnip.gui.widget.ElementWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
 public class ComputerScreen extends AbstractSimiScreen {
 

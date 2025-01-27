@@ -6,7 +6,6 @@ import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
@@ -16,6 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class FluidReactions {
 

@@ -21,7 +21,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.Pair;
 import net.minecraft.core.BlockPos;
@@ -36,6 +35,8 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 
 public class FluidPropagator {
 

@@ -7,9 +7,10 @@ import java.util.Map;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.ModelPartAccessor;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.ModelPartAccessor;
 
 public record TrainHatInfo(String part, int cubeIndex, Vec3 offset, float scale) {
 	public static final Codec<TrainHatInfo> CODEC = RecordCodecBuilder.create(instance -> instance.group(

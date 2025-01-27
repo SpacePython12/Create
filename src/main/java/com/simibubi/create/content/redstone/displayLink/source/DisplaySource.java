@@ -17,6 +17,7 @@ import net.createmod.catnip.utility.NBTProcessors;
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -44,7 +45,7 @@ public abstract class DisplaySource extends DisplayBehaviour {
 			for (MutableComponent component : text)
 				if (NBTProcessors.textComponentHasClickEvent(component))
 					return; // Naughty
-		
+
 		activeTarget.acceptText(line, text, context);
 	}
 

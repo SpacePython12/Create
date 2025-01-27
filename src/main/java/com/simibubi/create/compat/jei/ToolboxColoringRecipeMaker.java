@@ -1,9 +1,10 @@
 package com.simibubi.create.compat.jei;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.Create;
-
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.TagValueAccessor;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +19,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.block.Block;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.TagValueAccessor;
 
 public final class ToolboxColoringRecipeMaker {
 

@@ -23,11 +23,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.edgeInteraction.Edge
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipulationBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
 
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.createmod.catnip.utility.BlockFace;
 import net.createmod.catnip.utility.Pointing;
 import net.createmod.catnip.utility.VecHelper;
@@ -45,6 +40,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 
 public class MechanicalCrafterBlockEntity extends KineticBlockEntity implements SidedStorageBlockEntity {
 
@@ -314,7 +316,7 @@ public class MechanicalCrafterBlockEntity extends KineticBlockEntity implements 
 				groupedItems = new GroupedItems();
 
 				float pitch = targetingCrafter.groupedItems.grid.size() * 1 / 16f + .5f;
-				
+
 				if (!empty)
 					AllSoundEvents.CRAFTER_CLICK.playOnServer(level, worldPosition, 1, pitch);
 

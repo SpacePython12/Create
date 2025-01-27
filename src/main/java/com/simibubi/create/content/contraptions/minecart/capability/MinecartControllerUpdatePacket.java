@@ -1,18 +1,17 @@
 package com.simibubi.create.content.contraptions.minecart.capability;
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class MinecartControllerUpdatePacket extends SimplePacketBase {
 

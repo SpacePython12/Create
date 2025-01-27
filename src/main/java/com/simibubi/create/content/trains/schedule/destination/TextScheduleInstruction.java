@@ -7,11 +7,12 @@ import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public abstract class TextScheduleInstruction extends ScheduleInstruction {
 

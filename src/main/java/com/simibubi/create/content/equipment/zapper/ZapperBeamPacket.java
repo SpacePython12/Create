@@ -3,11 +3,12 @@ package com.simibubi.create.content.equipment.zapper;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.equipment.zapper.ZapperRenderHandler.LaserBeam;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ZapperBeamPacket extends ShootGadgetPacket {
 

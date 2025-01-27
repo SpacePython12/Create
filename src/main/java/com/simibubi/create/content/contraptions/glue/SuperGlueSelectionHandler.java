@@ -5,12 +5,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.google.common.base.Objects;
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.AllSpecialTextures;
 import com.simibubi.create.content.contraptions.chassis.AbstractChassisBlock;
-import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.RaycastHelper;
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;

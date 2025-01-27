@@ -23,6 +23,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

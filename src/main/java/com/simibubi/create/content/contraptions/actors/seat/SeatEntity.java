@@ -3,10 +3,6 @@ package com.simibubi.create.content.contraptions.actors.seat;
 import com.simibubi.create.AllEntityTypes;
 import com.simibubi.create.content.logistics.box.PackageEntity;
 
-import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
-import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
-import net.fabricmc.fabric.api.entity.FakePlayer;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -32,6 +28,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
 
 public class SeatEntity extends Entity implements IEntityAdditionalSpawnData {
 

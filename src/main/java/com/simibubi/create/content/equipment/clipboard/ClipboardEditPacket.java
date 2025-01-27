@@ -1,8 +1,9 @@
 package com.simibubi.create.content.equipment.clipboard;
 
+import javax.annotation.Nullable;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-
 import com.simibubi.create.foundation.utility.CreateNBTProcessors;
 
 import net.minecraft.core.BlockPos;
@@ -11,8 +12,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-
-import javax.annotation.Nullable;
 
 public class ClipboardEditPacket extends SimplePacketBase {
 

@@ -8,21 +8,22 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.AllParticleTypes;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 public class AirParticleData implements ParticleOptions, ICustomParticleDataWithSprite<AirParticleData> {
 
-	public static final Codec<AirParticleData> CODEC = RecordCodecBuilder.create(i -> 
+	public static final Codec<AirParticleData> CODEC = RecordCodecBuilder.create(i ->
 		i.group(
 			Codec.FLOAT.fieldOf("drag").forGetter(p -> p.drag),
 			Codec.FLOAT.fieldOf("speed").forGetter(p -> p.speed))
 		.apply(i, AirParticleData::new));
-	
+
 	public static final ParticleOptions.Deserializer<AirParticleData> DESERIALIZER =
 		new ParticleOptions.Deserializer<AirParticleData>() {
 			public AirParticleData fromCommand(ParticleType<AirParticleData> particleTypeIn, StringReader reader)
@@ -39,7 +40,7 @@ public class AirParticleData implements ParticleOptions, ICustomParticleDataWith
 			}
 		};
 
-	float drag; 
+	float drag;
 	float speed;
 
 	public AirParticleData(float drag, float speed) {

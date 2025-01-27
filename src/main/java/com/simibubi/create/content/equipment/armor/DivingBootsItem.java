@@ -1,8 +1,6 @@
 package com.simibubi.create.content.equipment.armor;
 
 import net.createmod.catnip.utility.NBTHelper;
-
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.LivingEntityAccessor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
@@ -14,6 +12,8 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.LivingEntityAccessor;
 
 public class DivingBootsItem extends BaseArmorItem {
 	public static final EquipmentSlot SLOT = EquipmentSlot.FEET;

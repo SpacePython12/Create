@@ -1,8 +1,5 @@
 package com.simibubi.create.content.contraptions.sync;
 
-import java.util.function.Supplier;
-
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;

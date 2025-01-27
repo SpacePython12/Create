@@ -8,7 +8,6 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
-import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.lang.Lang;
 import net.minecraft.core.BlockPos;
@@ -31,6 +30,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+
+import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 
 public class ChainDriveBlock extends RotatedPillarKineticBlock
 	implements IBE<KineticBlockEntity>, ITransformableBlock, WeakPowerCheckingBlock {

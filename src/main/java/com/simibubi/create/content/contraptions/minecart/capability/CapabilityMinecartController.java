@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.contraptions.minecart.CouplingHandler;
 
-import io.github.fabricators_of_create.porting_lib.core.util.INBTSerializable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
 import net.createmod.catnip.utility.Iterate;
@@ -27,6 +26,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.core.util.INBTSerializable;
 
 public class CapabilityMinecartController implements INBTSerializable<CompoundTag> {
 

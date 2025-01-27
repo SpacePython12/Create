@@ -1,9 +1,10 @@
 package com.simibubi.create.content.kinetics.belt.transport;
 
+import net.minecraft.world.item.ItemStack;
+
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.world.item.ItemStack;
 
 public class ItemHandlerBeltSegment implements SingleSlotStorage<ItemVariant> {
 	private final BeltInventory beltInventory;

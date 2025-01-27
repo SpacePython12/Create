@@ -1,10 +1,10 @@
 package com.simibubi.create.foundation.utility;
 
-import io.github.fabricators_of_create.porting_lib.common.util.NonNullConsumer;
-
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
+
+import io.github.fabricators_of_create.porting_lib.common.util.NonNullConsumer;
 
 public class HashableNonNullConsumer<T, H> implements NonNullConsumer<T> {
 	private final NonNullConsumer<T> consumer;

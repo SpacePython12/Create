@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllSpriteShifts;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
 
 import dev.engine_room.flywheel.api.instance.Instance;

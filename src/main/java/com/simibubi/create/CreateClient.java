@@ -45,8 +45,6 @@ import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBufferCache;
 import net.createmod.catnip.utility.lang.Components;
 import net.createmod.ponder.foundation.PonderIndex;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
@@ -55,6 +53,9 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
+
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 
 public class CreateClient implements ClientModInitializer {
 

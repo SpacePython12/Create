@@ -1,7 +1,5 @@
 package com.simibubi.create.compat.emi.recipes;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -35,6 +33,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public abstract class CreateEmiRecipe<T extends Recipe<?>> implements EmiRecipe {
 	protected final EmiRecipeCategory category;

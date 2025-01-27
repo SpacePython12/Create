@@ -9,11 +9,12 @@ import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.logistics.tableCloth.TableClothModel;
 import com.simibubi.create.foundation.sound.SoundScapes;
 
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
 
 public class ClientResourceReloadListener implements ResourceManagerReloadListener, IdentifiableResourceReloadListener {
 	public static final ResourceLocation ID = Create.asResource("client_reload_listener");

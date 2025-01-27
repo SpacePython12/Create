@@ -1,5 +1,11 @@
 package com.simibubi.create.content.equipment.blueprint;
 
+import static com.simibubi.create.foundation.gui.AllGuiTextures.PLAYER_INVENTORY;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.AllPartialModels;
@@ -9,11 +15,8 @@ import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.PlayerAccessor;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.SlotAccessor;
-
 import com.simibubi.create.foundation.utility.CreateLang;
+
 import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,11 +24,8 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import static com.simibubi.create.foundation.gui.AllGuiTextures.PLAYER_INVENTORY;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.PlayerAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.SlotAccessor;
 
 public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintMenu> {
 

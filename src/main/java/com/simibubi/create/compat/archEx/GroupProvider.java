@@ -6,18 +6,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-import com.google.gson.JsonObject;
-
-import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
-
-import com.simibubi.create.content.decoration.palettes.PaletteBlockPattern;
-
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-
 import org.jetbrains.annotations.NotNull;
+
+import com.google.gson.JsonObject;
+import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
+import com.simibubi.create.content.decoration.palettes.PaletteBlockPattern;
 
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 public class GroupProvider implements DataProvider {
 	public static final Set<PaletteBlockPattern> EXTENDABLE_PATTERNS = Set.of(

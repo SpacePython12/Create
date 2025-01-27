@@ -6,8 +6,6 @@ import java.util.List;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.suggestion.Suggestion;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.CommandSuggestions$SuggestionsListAccessor;
-
 import net.createmod.catnip.utility.IntAttached;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -15,6 +13,8 @@ import net.minecraft.client.gui.components.CommandSuggestions;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.Mth;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.CommandSuggestions$SuggestionsListAccessor;
 
 public class DestinationSuggestions extends CommandSuggestions {
 

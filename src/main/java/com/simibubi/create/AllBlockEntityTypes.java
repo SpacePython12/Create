@@ -3,9 +3,6 @@ package com.simibubi.create;
 import static com.simibubi.create.Create.REGISTRATE;
 import static com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours.assignDataBehaviourBE;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import com.simibubi.create.content.contraptions.actors.contraptionControls.ContraptionControlsBlockEntity;
 import com.simibubi.create.content.contraptions.actors.contraptionControls.ContraptionControlsRenderer;
 import com.simibubi.create.content.contraptions.actors.harvester.HarvesterBlockEntity;
@@ -509,7 +506,7 @@ public class AllBlockEntityTypes {
 		.validBlocks(AllBlocks.PACKAGER)
 		.renderer(() -> PackagerRenderer::new)
 		.register();
-	
+
 	public static final BlockEntityEntry<RepackagerBlockEntity> REPACKAGER = REGISTRATE
 		.blockEntity("repackager", RepackagerBlockEntity::new)
 		.validBlocks(AllBlocks.REPACKAGER)

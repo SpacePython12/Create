@@ -4,7 +4,6 @@ import com.simibubi.create.Create;
 
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

@@ -18,7 +18,6 @@ import com.simibubi.create.foundation.gui.CustomLightingSettings;
 
 import dev.emi.emi.api.widget.WidgetHolder;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.createmod.catnip.gui.ILightingSettings;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.GuiGameElement;
@@ -35,6 +34,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class CreateEmiAnimations {
 	private static final BlockState WHEEL = AllBlocks.CRUSHING_WHEEL.getDefaultState().setValue(BlockStateProperties.AXIS, Axis.X);

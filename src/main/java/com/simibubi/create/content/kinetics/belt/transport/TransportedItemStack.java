@@ -6,10 +6,11 @@ import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.logistics.box.PackageItem;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class TransportedItemStack implements Comparable<TransportedItemStack> {
 

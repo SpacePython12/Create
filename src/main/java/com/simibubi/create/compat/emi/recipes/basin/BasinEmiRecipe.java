@@ -10,7 +10,6 @@ import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import dev.emi.emi.api.recipe.EmiRecipeCategory;

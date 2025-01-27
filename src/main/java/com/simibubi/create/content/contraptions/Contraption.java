@@ -76,12 +76,6 @@ import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.foundation.utility.ICoordinate;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.HashMapPaletteAccessor;
-import io.github.fabricators_of_create.porting_lib.util.StickinessUtil;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.createmod.catnip.utility.BBHelper;
 import net.createmod.catnip.utility.BlockFace;
 import net.createmod.catnip.utility.Iterate;
@@ -130,6 +124,14 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.HashMapPaletteAccessor;
+import io.github.fabricators_of_create.porting_lib.util.StickinessUtil;
 
 public abstract class Contraption {
 
@@ -342,7 +344,7 @@ public abstract class Contraption {
 					&& !BlockMovementChecks.isNotSupportive(world.getBlockState(attached), offset.getOpposite()))
 				frontier.add(attached);
 		}
-		
+
 		if (world.getBlockEntity(pos) instanceof ChainConveyorBlockEntity ccbe)
 			ccbe.notifyConnectedToValidate();
 

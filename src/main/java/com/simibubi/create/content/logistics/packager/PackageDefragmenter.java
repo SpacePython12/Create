@@ -14,6 +14,9 @@ import com.simibubi.create.content.logistics.stockTicker.PackageOrder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+
 public class PackageDefragmenter {
 
 	protected Map<Integer, List<ItemStack>> collectedPackages = new HashMap<>();

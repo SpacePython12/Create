@@ -1,7 +1,5 @@
 package com.simibubi.create.content.logistics.item.filter.attribute;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
-
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -30,8 +28,6 @@ import com.simibubi.create.content.logistics.item.filter.attribute.attributes.as
 import com.simibubi.create.content.logistics.item.filter.attribute.attributes.astralsorcery.AstralSorceryPerkGemAttribute;
 import com.simibubi.create.content.logistics.item.filter.attribute.legacydeserializers.AllItemAttributeLegacyDeserializers;
 
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.core.Registry;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -44,6 +40,11 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 
 // TODO - Documentation
 public class AllItemAttributeTypes {

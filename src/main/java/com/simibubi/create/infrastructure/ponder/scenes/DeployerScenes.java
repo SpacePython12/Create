@@ -6,7 +6,6 @@ import com.simibubi.create.content.kinetics.deployer.DeployerBlock;
 import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
 import com.simibubi.create.foundation.ponder.element.BeltItemElement;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 import net.createmod.catnip.utility.Pointing;
 import net.createmod.ponder.api.PonderPalette;
@@ -29,6 +28,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class DeployerScenes {
 

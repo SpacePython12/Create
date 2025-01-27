@@ -9,23 +9,17 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 import com.google.common.collect.Sets;
-import com.google.gson.JsonObject;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags.AllItemTags;
 import com.simibubi.create.foundation.advancement.CreateAdvancement.Builder;
-
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.data.CachedOutput;
@@ -36,6 +30,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 public class AllAdvancements implements DataProvider {
 

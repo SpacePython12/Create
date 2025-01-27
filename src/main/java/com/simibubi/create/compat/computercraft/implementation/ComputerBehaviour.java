@@ -1,5 +1,7 @@
 package com.simibubi.create.compat.computercraft.implementation;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.compat.computercraft.AbstractComputerBehaviour;
 import com.simibubi.create.compat.computercraft.implementation.peripherals.DisplayLinkPeripheral;
 import com.simibubi.create.compat.computercraft.implementation.peripherals.SequencedGearshiftPeripheral;
@@ -20,8 +22,6 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.Level;
-
-import org.jetbrains.annotations.Nullable;
 
 public class ComputerBehaviour extends AbstractComputerBehaviour {
 

@@ -12,17 +12,12 @@ import java.util.function.Supplier;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.DataProvider.Factory;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -32,6 +27,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 public class AllSoundEvents {
 
@@ -137,11 +134,11 @@ public class AllSoundEvents {
 		CARDBOARD_SWORD = create("cardboard_bonk").subtitle("Resonant bonk")
 			.category(SoundSource.PLAYERS)
 			.build(),
-			
+
 		FROGPORT_OPEN = create("frogport_open").subtitle("Frogport opens")
 			.category(SoundSource.BLOCKS)
 			.build(),
-			
+
 		FROGPORT_CLOSE = create("frogport_close").subtitle("Frogport shuts")
 			.category(SoundSource.BLOCKS)
 			.build(),

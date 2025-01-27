@@ -1,8 +1,5 @@
 package com.simibubi.create.content.equipment.armor;
 
-import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.LivingEntityEvents;
-
 import java.util.UUID;
 
 import com.simibubi.create.AllItems;
@@ -17,6 +14,9 @@ import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.player.Player;
+
+import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.LivingEntityEvents;
 
 public class CardboardArmorHandler {
 

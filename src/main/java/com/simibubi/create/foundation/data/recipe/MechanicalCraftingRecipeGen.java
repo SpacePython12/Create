@@ -8,12 +8,14 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
 
 import net.createmod.catnip.platform.CatnipServices;
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class MechanicalCraftingRecipeGen extends CreateRecipeProvider {
 

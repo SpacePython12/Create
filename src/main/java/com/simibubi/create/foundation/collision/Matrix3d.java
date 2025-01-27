@@ -2,10 +2,11 @@ package com.simibubi.create.foundation.collision;
 
 import org.joml.Matrix4f;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class Matrix3d {
 

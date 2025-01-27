@@ -13,8 +13,6 @@ import com.simibubi.create.foundation.render.fabric.DefaultLayerFilteringBakedMo
 
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
 import dev.engine_room.flywheel.lib.model.baked.VirtualEmptyBlockGetter;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.BlockRenderDispatcherAccessor;
-import io.github.fabricators_of_create.porting_lib.models.virtual.FixedLightBakedModel;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
@@ -33,6 +31,9 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.BlockRenderDispatcherAccessor;
+import io.github.fabricators_of_create.porting_lib.models.virtual.FixedLightBakedModel;
 
 public class SchematicannonRenderer extends SafeBlockEntityRenderer<SchematicannonBlockEntity> {
 

@@ -2,8 +2,6 @@ package com.simibubi.create.content.equipment.wrench;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.world.phys.BlockHitResult;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllItems;

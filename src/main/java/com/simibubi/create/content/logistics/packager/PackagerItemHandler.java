@@ -1,11 +1,12 @@
 package com.simibubi.create.content.logistics.packager;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-
 import com.simibubi.create.content.logistics.box.PackageItem;
 
-import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
 import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class PackagerItemHandler extends SingleStackStorage {
 

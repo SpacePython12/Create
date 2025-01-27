@@ -3,7 +3,6 @@ package com.simibubi.create.compat.rei.category;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.rei.category.BlockCuttingCategory.CondensedBlockCuttingRecipe;
 import com.simibubi.create.compat.rei.category.animations.AnimatedSaw;
 import com.simibubi.create.compat.rei.display.CreateDisplay;
@@ -13,7 +12,6 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import me.shedaniel.math.Point;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

@@ -1,9 +1,5 @@
 package com.simibubi.create.content.kinetics.fan.processing;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +55,10 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class AllFanProcessingTypes {
 	public static final Supplier<NoneType> NONE = register("none", new NoneType());

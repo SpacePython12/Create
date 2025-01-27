@@ -14,8 +14,6 @@ import com.simibubi.create.content.trains.bogey.StandardBogeyVisual;
 
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.resources.ResourceLocation;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
 
 public class AllBogeyStyles {
 	public static final Map<ResourceLocation, BogeyStyle> BOGEY_STYLES = new HashMap<>();

@@ -9,13 +9,6 @@ import java.util.Vector;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredModel;
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
-
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile.ExistingModelFile;
-import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelProvider;
-import io.github.fabricators_of_create.porting_lib.models.generators.block.MultiPartBlockStateBuilder;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableList;
@@ -50,6 +43,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.RailShape;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredModel;
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile.ExistingModelFile;
+import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelProvider;
+import io.github.fabricators_of_create.porting_lib.models.generators.block.MultiPartBlockStateBuilder;
 
 public class BlockStateGen {
 

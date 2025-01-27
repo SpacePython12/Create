@@ -5,11 +5,13 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
+
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 
 public class DeployerRecipeSearchEvent {
 	private boolean canceled = false;

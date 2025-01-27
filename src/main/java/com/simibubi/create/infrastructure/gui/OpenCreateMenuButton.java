@@ -11,7 +11,6 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import net.createmod.catnip.gui.ScreenOpener;
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,6 +21,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.fabric.api.client.screen.v1.Screens;
 
 public class OpenCreateMenuButton extends Button {
 

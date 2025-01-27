@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.EntityAccessor;
 import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Entity.RemovalReason;
@@ -24,6 +23,8 @@ import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.EntityAccessor;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {

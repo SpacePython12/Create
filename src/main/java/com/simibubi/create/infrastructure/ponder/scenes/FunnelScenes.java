@@ -6,7 +6,6 @@ import com.simibubi.create.content.logistics.funnel.BeltFunnelBlock;
 import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.content.logistics.funnel.FunnelBlockEntity;
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 import net.createmod.catnip.utility.Pointing;
 import net.createmod.ponder.api.PonderPalette;
@@ -28,6 +27,8 @@ import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class FunnelScenes {
 

@@ -10,7 +10,6 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.utility.AnimationTickHolder;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,6 +17,8 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.util.Mth;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class AnimatedSpout extends AnimatedKinetics {
 

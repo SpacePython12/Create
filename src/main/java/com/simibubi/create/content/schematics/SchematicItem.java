@@ -12,8 +12,6 @@ import java.util.zip.GZIPInputStream;
 
 import javax.annotation.Nonnull;
 
-import net.createmod.catnip.platform.CatnipServices;
-
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -25,9 +23,6 @@ import com.tterrag.registrate.fabric.EnvExecutor;
 import net.createmod.catnip.gui.ScreenOpener;
 import net.createmod.catnip.utility.NBTHelper;
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
@@ -50,6 +45,10 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class SchematicItem extends Item {
 

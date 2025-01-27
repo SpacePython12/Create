@@ -6,8 +6,8 @@ import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.logistics.box.PackageEntity;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.item.ItemHelper;
+import com.simibubi.create.foundation.utility.AdventureUtil;
 
 import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.core.BlockPos;

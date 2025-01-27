@@ -6,10 +6,11 @@ import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.createmod.catnip.utility.lang.LangBuilder;
 import net.minecraft.network.chat.MutableComponent;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class KineticStressDisplaySource extends PercentOrProgressBarDisplaySource {
 

@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

@@ -1,7 +1,5 @@
 package com.simibubi.create.content.logistics.stockTicker;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,6 +71,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.phys.AABB;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class StockKeeperRequestScreen extends AbstractSimiContainerScreen<StockKeeperRequestMenu>
 	implements ScreenWithStencils {

@@ -4,8 +4,6 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.CatnipClient;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -24,6 +22,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public abstract class ClickToLinkBlockItem extends BlockItem {
 

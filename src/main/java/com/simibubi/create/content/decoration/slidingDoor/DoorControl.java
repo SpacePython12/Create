@@ -14,6 +14,7 @@ import net.createmod.catnip.utility.lang.Lang;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

@@ -1,24 +1,5 @@
 package com.simibubi.create.foundation.events;
 
-import io.github.fabricators_of_create.porting_lib.client_events.event.client.RenderArmCallback;
-import io.github.fabricators_of_create.porting_lib.entity.events.EntityMountEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.PlayerTickEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.player.AttackEntityEvent;
-import io.github.fabricators_of_create.porting_lib.event.client.CameraSetupCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.CameraSetupCallback.CameraInfo;
-import io.github.fabricators_of_create.porting_lib.event.client.ClientWorldEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.DrawSelectionEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.FogEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.FogEvents.ColorData;
-import io.github.fabricators_of_create.porting_lib.event.client.InteractEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.ParticleManagerRegistrationCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderPlayerEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderTickStartCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderTooltipBorderColorCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.TextureStitchCallback;
-import io.github.fabricators_of_create.porting_lib.event.common.AttackAirCallback;
-
 import java.util.List;
 
 import com.mojang.blaze3d.shaders.FogShape;
@@ -106,21 +87,6 @@ import net.createmod.catnip.render.SuperRenderTypeBuffer;
 import net.createmod.catnip.utility.AnimationTickHolder;
 import net.createmod.catnip.utility.levelWrappers.WrappedClientLevel;
 import net.createmod.ponder.foundation.PonderTooltipHandler;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback.RegistrationHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -145,6 +111,41 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback.RegistrationHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+
+import io.github.fabricators_of_create.porting_lib.client_events.event.client.RenderArmCallback;
+import io.github.fabricators_of_create.porting_lib.entity.events.EntityMountEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.PlayerTickEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.player.AttackEntityEvent;
+import io.github.fabricators_of_create.porting_lib.event.client.CameraSetupCallback;
+import io.github.fabricators_of_create.porting_lib.event.client.CameraSetupCallback.CameraInfo;
+import io.github.fabricators_of_create.porting_lib.event.client.ClientWorldEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.DrawSelectionEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.FogEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.FogEvents.ColorData;
+import io.github.fabricators_of_create.porting_lib.event.client.InteractEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.ParticleManagerRegistrationCallback;
+import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback;
+import io.github.fabricators_of_create.porting_lib.event.client.RenderPlayerEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.RenderTickStartCallback;
+import io.github.fabricators_of_create.porting_lib.event.client.RenderTooltipBorderColorCallback;
+import io.github.fabricators_of_create.porting_lib.event.client.TextureStitchCallback;
+import io.github.fabricators_of_create.porting_lib.event.common.AttackAirCallback;
 
 public class ClientEvents {
 

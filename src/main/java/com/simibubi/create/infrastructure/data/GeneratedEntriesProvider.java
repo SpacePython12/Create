@@ -5,18 +5,16 @@ import java.util.concurrent.CompletableFuture;
 
 import com.simibubi.create.AllDamageTypes;
 import com.simibubi.create.Create;
-import com.simibubi.create.infrastructure.worldgen.AllBiomeModifiers;
 import com.simibubi.create.infrastructure.worldgen.AllConfiguredFeatures;
 import com.simibubi.create.infrastructure.worldgen.AllPlacedFeatures;
-
-import io.github.fabricators_of_create.porting_lib.data.DatapackBuiltinEntriesProvider;
 
 import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.core.RegistrySetBuilder.RegistryBootstrap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+
+import io.github.fabricators_of_create.porting_lib.data.DatapackBuiltinEntriesProvider;
 
 public class GeneratedEntriesProvider extends DatapackBuiltinEntriesProvider {
 

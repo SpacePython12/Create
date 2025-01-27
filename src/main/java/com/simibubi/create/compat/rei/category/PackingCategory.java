@@ -2,7 +2,6 @@ package com.simibubi.create.compat.rei.category;
 
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.rei.category.animations.AnimatedBlazeBurner;
 import com.simibubi.create.compat.rei.category.animations.AnimatedPress;
 import com.simibubi.create.compat.rei.display.CreateDisplay;

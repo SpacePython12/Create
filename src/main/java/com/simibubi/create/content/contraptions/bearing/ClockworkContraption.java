@@ -4,9 +4,6 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.simibubi.create.content.contraptions.AssemblyException;

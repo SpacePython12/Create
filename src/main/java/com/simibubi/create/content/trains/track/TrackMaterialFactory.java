@@ -9,13 +9,15 @@ import com.simibubi.create.AllTags;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.TagValueAccessor;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.TagValueAccessor;
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class TrackMaterialFactory {
 	private final ResourceLocation id;

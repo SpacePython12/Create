@@ -1,15 +1,14 @@
 package com.simibubi.create.api.event;
 
-import net.fabricmc.fabric.api.event.Event;
-
-import net.fabricmc.fabric.api.event.EventFactory;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
 /**
  * This Event is fired when two fluids meet in a pipe ({@link Flow})<br>

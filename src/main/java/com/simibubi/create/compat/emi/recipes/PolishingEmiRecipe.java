@@ -1,20 +1,19 @@
 package com.simibubi.create.compat.emi.recipes;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.compat.emi.CreateEmiPlugin;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import net.createmod.catnip.gui.element.GuiGameElement;
 
 import dev.emi.emi.api.widget.WidgetHolder;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class PolishingEmiRecipe extends CreateEmiRecipe<SandPaperPolishingRecipe> {
 

@@ -2,8 +2,6 @@ package com.simibubi.create.content.logistics.chute;
 
 import com.simibubi.create.foundation.item.ItemHelper;
 
-import com.simibubi.create.foundation.item.ItemHelper;
-
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;

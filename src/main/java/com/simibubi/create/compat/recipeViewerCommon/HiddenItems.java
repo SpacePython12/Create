@@ -1,17 +1,15 @@
 package com.simibubi.create.compat.recipeViewerCommon;
 
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.foundation.item.TagDependentIngredientItem;
-import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.world.item.Item;
-
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
 
 public class HiddenItems {
 	/**

@@ -1,14 +1,12 @@
 package com.simibubi.create.compat.rei.category;
 
-import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
-
 import org.jetbrains.annotations.NotNull;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.rei.category.animations.AnimatedKinetics;
+import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import net.createmod.catnip.gui.element.GuiGameElement;
 
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.level.block.Blocks;
 

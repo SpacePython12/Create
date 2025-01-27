@@ -8,7 +8,6 @@ import com.simibubi.create.compat.rei.category.animations.AnimatedKinetics;
 import com.simibubi.create.compat.rei.display.CreateDisplay;
 import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import net.createmod.catnip.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import me.shedaniel.math.Point;
@@ -17,6 +16,7 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.util.ClientEntryStacks;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.BlockItem;

@@ -2,12 +2,13 @@ package com.simibubi.create.content.logistics.filter;
 
 import com.simibubi.create.AllMenuTypes;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class PackageFilterMenu extends AbstractFilterMenu {
 

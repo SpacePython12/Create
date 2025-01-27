@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import com.simibubi.create.api.event.BlockEntityBehaviourEvent;
+import com.simibubi.create.api.schematic.nbt.IPartialSafeNBT;
 import com.simibubi.create.api.schematic.requirement.ISpecialBlockEntityItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
@@ -15,9 +16,7 @@ import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.IInteractionChecker;
-import com.simibubi.create.api.schematic.nbt.IPartialSafeNBT;
 
-import io.github.fabricators_of_create.porting_lib.block.ChunkUnloadListeningBlockEntity;
 import net.createmod.ponder.api.VirtualBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -25,6 +24,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.block.ChunkUnloadListeningBlockEntity;
 
 public abstract class SmartBlockEntity extends CachedRenderBBBlockEntity
 	implements IPartialSafeNBT, IInteractionChecker, ChunkUnloadListeningBlockEntity, ISpecialBlockEntityItemRequirement, VirtualBlockEntity {

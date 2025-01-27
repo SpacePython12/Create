@@ -1,16 +1,17 @@
 package com.simibubi.create.content.decoration.encasing;
 
-import com.tterrag.registrate.builders.BlockBuilder;
-import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.block.Block;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+
+import com.tterrag.registrate.builders.BlockBuilder;
+import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.Block;
 
 public class EncasingRegistry {
 	private static final Map<Block, List<Block>> ENCASED_VARIANTS = new HashMap<>();

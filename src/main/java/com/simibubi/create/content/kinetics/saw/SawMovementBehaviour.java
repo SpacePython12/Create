@@ -13,10 +13,6 @@ import com.simibubi.create.foundation.utility.AbstractBlockBreakQueue;
 import com.simibubi.create.foundation.utility.TreeCutter;
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,6 +25,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class SawMovementBehaviour extends BlockBreakingMovementBehaviour {
 

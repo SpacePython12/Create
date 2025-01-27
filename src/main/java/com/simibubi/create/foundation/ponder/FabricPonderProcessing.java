@@ -3,17 +3,13 @@ package com.simibubi.create.foundation.ponder;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mojang.serialization.Codec;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.Create;
-
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.mojang.serialization.Codec;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.Create;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -27,6 +23,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 /**
  * Processing for Ponder schematics to allow using the same ones on Forge and Fabric.

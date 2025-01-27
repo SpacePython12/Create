@@ -7,13 +7,14 @@ import com.simibubi.create.AllFluids;
 import com.simibubi.create.content.fluids.VirtualFluid;
 
 import net.createmod.catnip.platform.CatnipServices;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class PotionFluid extends VirtualFluid {
 

@@ -22,7 +22,6 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.createmod.catnip.utility.BlockFace;
 import net.createmod.catnip.utility.Couple;
 import net.createmod.catnip.utility.Iterate;
@@ -35,6 +34,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 
 public class PumpBlockEntity extends KineticBlockEntity implements PipeAttachmentBlockEntity {
 

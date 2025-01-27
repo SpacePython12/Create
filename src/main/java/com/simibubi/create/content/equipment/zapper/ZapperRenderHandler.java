@@ -2,7 +2,6 @@ package com.simibubi.create.content.equipment.zapper;
 
 import java.util.LinkedList;
 import java.util.List;
-import net.minecraft.util.RandomSource;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,6 +12,7 @@ import net.createmod.catnip.CatnipClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;

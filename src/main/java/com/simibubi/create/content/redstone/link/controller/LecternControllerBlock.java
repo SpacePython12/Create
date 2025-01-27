@@ -11,7 +11,6 @@ import com.simibubi.create.api.schematic.requirement.ISpecialBlockItemRequiremen
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
 
-import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,6 +25,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+
+import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 
 public class LecternControllerBlock extends LecternBlock
 	implements IBE<LecternControllerBlockEntity>, ISpecialBlockItemRequirement, BlockPickInteractionAware {

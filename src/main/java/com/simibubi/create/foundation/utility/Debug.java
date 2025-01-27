@@ -3,12 +3,13 @@ package com.simibubi.create.foundation.utility;
 import com.simibubi.create.Create;
 
 import net.createmod.catnip.utility.lang.Components;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 /** Deprecated so simi doensn't forget to remove debug calls **/
 @Environment(value = EnvType.CLIENT)

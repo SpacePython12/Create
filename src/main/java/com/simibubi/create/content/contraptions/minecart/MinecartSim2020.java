@@ -1,11 +1,11 @@
 package com.simibubi.create.content.contraptions.minecart;
 
+import java.util.Map;
+
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
-import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
-import net.createmod.catnip.utility.VecHelper;import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
+
+import net.createmod.catnip.utility.VecHelper;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.Map;
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
 /**
  * Useful methods for dealing with Minecarts

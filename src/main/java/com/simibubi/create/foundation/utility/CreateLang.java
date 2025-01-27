@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.simibubi.create.Create;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.createmod.catnip.utility.lang.Components;
 import net.createmod.catnip.utility.lang.Lang;
 import net.createmod.catnip.utility.lang.LangBuilder;
@@ -14,6 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class CreateLang extends Lang {
 

@@ -1,7 +1,5 @@
 package com.simibubi.create.content.trains.schedule;
 
-import com.simibubi.create.foundation.utility.AdventureUtil;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllItems;
@@ -10,6 +8,7 @@ import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
 import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
 import com.simibubi.create.content.trains.entity.Train;
+import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.utility.Couple;

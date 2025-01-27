@@ -39,15 +39,8 @@ import com.simibubi.create.foundation.mixin.accessor.ServerLevelAccessor;
 import com.simibubi.create.foundation.utility.AdventureUtil;
 
 import dev.engine_room.flywheel.api.backend.BackendManager;
-import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
-import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.EntityAccessor;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import net.createmod.catnip.utility.VecHelper;
 import net.createmod.catnip.utility.math.AngleHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -81,6 +74,15 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.EntityAccessor;
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public abstract class AbstractContraptionEntity extends Entity implements IEntityAdditionalSpawnData {
 

@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

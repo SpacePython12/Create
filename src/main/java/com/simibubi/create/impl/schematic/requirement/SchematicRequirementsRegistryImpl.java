@@ -1,12 +1,11 @@
 package com.simibubi.create.impl.schematic.requirement;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-
 import org.jetbrains.annotations.ApiStatus;
 
 import com.simibubi.create.api.schematic.requirement.SchematicRequirementsRegistry;
 import com.simibubi.create.foundation.utility.AttachedRegistry;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

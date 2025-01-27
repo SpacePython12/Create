@@ -1,7 +1,5 @@
 package com.simibubi.create.foundation.blockEntity.behaviour.inventory;
 
-import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
-
 import javax.annotation.Nullable;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -10,13 +8,16 @@ import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringB
 import com.simibubi.create.foundation.item.ItemHelper.ExtractionCountMode;
 
 import net.createmod.catnip.utility.BlockFace;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
 
 public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationBehaviourBase<?, ?>>
 	extends BlockEntityBehaviour {

@@ -1,12 +1,11 @@
 package com.simibubi.create.impl.schematic.nbt;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-
 import org.jetbrains.annotations.ApiStatus;
 
 import com.simibubi.create.api.schematic.nbt.SchematicSafeNBTRegistry;
 import com.simibubi.create.foundation.utility.AttachedRegistry;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 

@@ -1,8 +1,12 @@
 package com.simibubi.create.content.equipment.goggles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.simibubi.create.AllItems;
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
+
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.element.GuiGameElement;
 import net.createmod.catnip.utility.lang.Components;
@@ -12,9 +16,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GoggleConfigScreen extends AbstractSimiScreen {
 

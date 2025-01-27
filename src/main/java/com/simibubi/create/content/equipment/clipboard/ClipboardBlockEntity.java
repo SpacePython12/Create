@@ -8,10 +8,6 @@ import com.simibubi.create.content.logistics.AddressEditBoxHelper;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +15,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class ClipboardBlockEntity extends SmartBlockEntity {
 
@@ -41,7 +43,7 @@ public class ClipboardBlockEntity extends SmartBlockEntity {
 		notifyUpdate();
 		updateWrittenState();
 	}
-	
+
 	@Override
 	public void lazyTick() {
 		super.lazyTick();
@@ -96,7 +98,7 @@ public class ClipboardBlockEntity extends SmartBlockEntity {
 			return;
 		cs.reopenWith(dataContainer);
 	}
-	
+
 	@Environment(EnvType.CLIENT)
 	private void advertiseToAddressHelper() {
 		AddressEditBoxHelper.advertiseClipboard(this);

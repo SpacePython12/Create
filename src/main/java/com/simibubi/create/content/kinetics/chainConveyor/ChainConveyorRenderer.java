@@ -3,8 +3,6 @@ package com.simibubi.create.content.kinetics.chainConveyor;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -32,6 +30,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Con
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;

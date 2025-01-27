@@ -2,15 +2,16 @@ package com.simibubi.create.content.redstone.link.controller;
 
 import com.simibubi.create.AllMenuTypes;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 
 public class LinkedControllerMenu extends GhostItemMenu<ItemStack> {
 

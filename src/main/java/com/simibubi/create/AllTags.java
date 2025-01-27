@@ -7,7 +7,6 @@ import static com.simibubi.create.AllTags.NameSpace.TIC;
 import static com.simibubi.create.AllTags.NameSpace.TRINKETS;
 
 import net.createmod.catnip.utility.lang.Lang;
-
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;

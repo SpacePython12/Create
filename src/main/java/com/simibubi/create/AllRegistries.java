@@ -4,9 +4,10 @@ import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
 
-import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 
 public class AllRegistries {
 	public static final Registry<ArmInteractionPointType> ARM_INTERACTION_POINT_TYPES = registry(Keys.ARM_INTERACTION_POINT_TYPES);

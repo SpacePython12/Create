@@ -21,7 +21,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
 import net.createmod.catnip.utility.IntAttached;
 import net.createmod.catnip.utility.NBTHelper;
 import net.minecraft.ChatFormatting;

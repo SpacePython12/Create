@@ -8,12 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttributeTypes;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
-
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
-
-import io.github.fabricators_of_create.porting_lib.util.TagUtil;
 
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.resources.language.I18n;
@@ -25,7 +24,7 @@ import net.minecraft.world.item.FireworkStarItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import org.jetbrains.annotations.NotNull;
+import io.github.fabricators_of_create.porting_lib.util.TagUtil;
 
 public class ColorAttribute implements ItemAttribute {
 	private DyeColor color;

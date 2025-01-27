@@ -17,7 +17,6 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.Pointing;
 import net.minecraft.core.BlockPos;
@@ -33,6 +32,8 @@ import net.minecraft.world.item.crafting.FireworkRocketRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class RecipeGridHandler {
 

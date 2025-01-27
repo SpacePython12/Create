@@ -10,9 +10,6 @@ import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.terraformersmc.modmenu.gui.ModsScreen;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.ScreenAccessor;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.TitleScreenAccessor;
-
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.createmod.catnip.gui.AbstractSimiScreen;
@@ -38,6 +35,9 @@ import net.minecraft.client.renderer.PanoramaRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.ScreenAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.TitleScreenAccessor;
 
 public class CreateMainMenuScreen extends AbstractSimiScreen {
 

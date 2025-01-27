@@ -3,10 +3,10 @@ package com.simibubi.create.content.schematics.requirement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.api.schematic.requirement.ISpecialBlockEntityItemRequirement;
 import com.simibubi.create.api.schematic.requirement.ISpecialBlockItemRequirement;
@@ -14,10 +14,8 @@ import com.simibubi.create.api.schematic.requirement.ISpecialEntityItemRequireme
 import com.simibubi.create.api.schematic.requirement.SchematicRequirementsRegistry;
 import com.simibubi.create.compat.framedblocks.FramedBlocksInSchematics;
 import com.simibubi.create.foundation.data.recipe.Mods;
-
 import com.simibubi.create.impl.schematic.requirement.SchematicRequirementsRegistryImpl;
 
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.createmod.catnip.utility.NBTProcessors;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
@@ -40,7 +38,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-import org.jetbrains.annotations.Nullable;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 
 public class ItemRequirement {
 	public static final ItemRequirement NONE = new ItemRequirement(Collections.emptyList());

@@ -13,12 +13,10 @@ import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
 import com.simibubi.create.foundation.utility.BlockHelper;
 
-import io.github.fabricators_of_create.porting_lib.util.TagUtil;
 import net.createmod.catnip.utility.Iterate;
 import net.createmod.catnip.utility.placement.IPlacementHelper;
 import net.createmod.catnip.utility.placement.PlacementHelpers;
 import net.createmod.catnip.utility.placement.PlacementOffset;
-import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,6 +42,10 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
+
+import io.github.fabricators_of_create.porting_lib.util.TagUtil;
 
 public class SailBlock extends WrenchableDirectionalBlock implements BlockPickInteractionAware {
 

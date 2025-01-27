@@ -1,9 +1,12 @@
 package com.simibubi.create.foundation.data;
 
+import java.util.function.Predicate;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.simibubi.create.Create;
+import org.jetbrains.annotations.NotNull;
+
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.EntityBuilder;
@@ -11,14 +14,11 @@ import com.tterrag.registrate.fabric.EnvExecutor;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import dev.engine_room.flywheel.lib.visualization.SimpleEntityVisualizer;
-import net.fabricmc.api.EnvType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Predicate;
+import net.fabricmc.api.EnvType;
 
 @ParametersAreNonnullByDefault
 public class CreateEntityBuilder<T extends Entity, P> extends EntityBuilder<T, P> {

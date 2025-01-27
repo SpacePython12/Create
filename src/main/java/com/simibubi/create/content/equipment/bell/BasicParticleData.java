@@ -7,8 +7,6 @@ import com.mojang.serialization.Codec;
 import com.simibubi.create.foundation.particle.ICustomParticleDataWithSprite;
 
 import net.createmod.catnip.platform.CatnipServices;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -17,6 +15,9 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

@@ -15,13 +15,13 @@ import net.createmod.catnip.data.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -30,6 +30,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlottedStackStorage;
 
 public class ItemHelper {
 
@@ -323,13 +324,23 @@ public class ItemHelper {
 		return remainder;
 	}
 
-	public static void copyContents(IItemHandler from, IItemHandlerModifiable to) {
-		if (from.getSlots() != to.getSlots()) {
+	public static void copyContents(SlottedStackStorage from, SlottedStackStorage to) {
+		if (from.getSlotCount() != to.getSlotCount()) {
 			throw new IllegalArgumentException("Slot count mismatch");
 		}
 
-		for (int i = 0; i < from.getSlots(); i++) {
+		for (int i = 0; i < from.getSlotCount(); i++) {
 			to.setStackInSlot(i, from.getStackInSlot(i).copy());
+		}
+	}
+
+	public static void copyContents(SlottedStackStorage from, Container to) {
+		if (from.getSlotCount() != to.getContainerSize()) {
+			throw new IllegalArgumentException("Slot count mismatch");
+		}
+
+		for (int i = 0; i < from.getSlotCount(); i++) {
+			to.setItem(i, from.getStackInSlot(i).copy());
 		}
 	}
 }

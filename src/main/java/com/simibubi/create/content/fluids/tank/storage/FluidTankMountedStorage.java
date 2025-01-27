@@ -11,31 +11,32 @@ import com.simibubi.create.api.contraption.storage.fluid.WrapperMountedFluidStor
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.fluids.tank.storage.FluidTankMountedStorage.Handler;
+import com.simibubi.create.foundation.utility.CreateCodecs;
 
 import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 
 public class FluidTankMountedStorage extends WrapperMountedFluidStorage<Handler> implements SyncedMountedStorage {
 	public static final Codec<FluidTankMountedStorage> CODEC = RecordCodecBuilder.create(i -> i.group(
-		ExtraCodecs.NON_NEGATIVE_INT.fieldOf("capacity").forGetter(FluidTankMountedStorage::getCapacity),
+		CreateCodecs.NON_NEGATIVE_LONG.fieldOf("capacity").forGetter(FluidTankMountedStorage::getCapacity),
 		FluidStack.CODEC.fieldOf("fluid").forGetter(FluidTankMountedStorage::getFluid)
 	).apply(i, FluidTankMountedStorage::new));
 
 	private boolean dirty;
 
-	protected FluidTankMountedStorage(MountedFluidStorageType<?> type, int capacity, FluidStack stack) {
+	protected FluidTankMountedStorage(MountedFluidStorageType<?> type, long capacity, FluidStack stack) {
 		super(type, new Handler(capacity, stack));
 		this.wrapped.onChange = () -> this.dirty = true;
 	}
 
-	protected FluidTankMountedStorage(int capacity, FluidStack stack) {
+	protected FluidTankMountedStorage(long capacity, FluidStack stack) {
 		this(AllMountedStorageTypes.FLUID_TANK.get(), capacity, stack);
 	}
 
@@ -52,7 +53,7 @@ public class FluidTankMountedStorage extends WrapperMountedFluidStorage<Handler>
 		return this.wrapped.getFluid();
 	}
 
-	public int getCapacity() {
+	public long getCapacity() {
 		return this.wrapped.getCapacity();
 	}
 
@@ -96,7 +97,7 @@ public class FluidTankMountedStorage extends WrapperMountedFluidStorage<Handler>
 	public static final class Handler extends FluidTank {
 		private Runnable onChange = () -> {};
 
-		public Handler(int capacity, FluidStack stack) {
+		public Handler(long capacity, FluidStack stack) {
 			super(capacity);
 			this.setFluid(stack);
 		}

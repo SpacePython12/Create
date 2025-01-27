@@ -13,10 +13,10 @@ import com.simibubi.create.foundation.utility.CreateLang;
 
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.network.chat.Component;
 
 public class SequencedAssemblyEmiRecipe extends CreateEmiRecipe<SequencedAssemblyRecipe> {
 	public static final String[] ROMAN = {
@@ -55,7 +55,7 @@ public class SequencedAssemblyEmiRecipe extends CreateEmiRecipe<SequencedAssembl
 			addTexture(widgets, AllGuiTextures.JEI_CHANCE_SLOT, mid + 60 + xOff, 90)
 				.tooltip((mouseX, mouseY) -> List.of(
 					ClientTooltipComponent.create(CreateLang.translateDirect("recipe.assembly.junk").getVisualOrderText()),
-					ClientTooltipComponent.create(Components.translatable("tooltip.emi.chance.produce", chance > 0.99 ? "<1" : 100 - (int) (chance * 100))
+					ClientTooltipComponent.create(Component.translatable("tooltip.emi.chance.produce", chance > 0.99 ? "<1" : 100 - (int) (chance * 100))
 						.withStyle(ChatFormatting.GOLD).getVisualOrderText())
 				));
 		}

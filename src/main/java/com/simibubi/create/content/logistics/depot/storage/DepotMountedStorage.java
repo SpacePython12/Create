@@ -19,7 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
-import net.minecraftforge.items.ItemStackHandler;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class DepotMountedStorage extends WrapperMountedItemStorage<Handler> implements SyncedMountedStorage {
 	public static final Codec<DepotMountedStorage> CODEC = ItemStack.CODEC.xmap(
@@ -84,7 +85,7 @@ public class DepotMountedStorage extends WrapperMountedItemStorage<Handler> impl
 	public static DepotMountedStorage fromLegacy(CompoundTag nbt) {
 		ItemStackHandler handler = new ItemStackHandler();
 		handler.deserializeNBT(nbt);
-		if (handler.getSlots() == 1) {
+		if (handler.getSlotCount() == 1) {
 			ItemStack stack = handler.getStackInSlot(0);
 			return new DepotMountedStorage(stack);
 		} else {

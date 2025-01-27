@@ -12,12 +12,12 @@ import com.simibubi.create.Create;
 import com.simibubi.create.compat.Mods;
 
 import net.caffeinemc.mods.sodium.api.texture.SpriteUtil;
-import net.createmod.catnip.utility.lang.Components;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
@@ -84,16 +84,16 @@ public class SodiumCompat {
 		if (mc.player == null)
 			return;
 
-		MutableComponent text = ComponentUtils.wrapInSquareBrackets(Components.literal("WARN"))
+		MutableComponent text = ComponentUtils.wrapInSquareBrackets(Component.literal("WARN"))
 				.withStyle(ChatFormatting.GOLD)
-				.append(Components.literal(" Sodium is installed, but Indium is not. This will cause visual issues with Create!")
+				.append(Component.literal(" Sodium is installed, but Indium is not. This will cause visual issues with Create!")
 				)
 				.withStyle(style -> style
 						.withClickEvent(
 								new ClickEvent(ClickEvent.Action.OPEN_URL, "https://modrinth.com/mod/indium")
 						)
 						.withHoverEvent(
-								new HoverEvent(HoverEvent.Action.SHOW_TEXT, Components.literal("Click here to open Indium's mod page"))
+								new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click here to open Indium's mod page"))
 						)
 				);
 

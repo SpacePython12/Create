@@ -5,9 +5,15 @@ import com.mojang.serialization.DataResult;
 import com.simibubi.create.foundation.item.ItemSlots;
 
 import net.minecraft.util.ExtraCodecs;
-import net.minecraftforge.items.ItemStackHandler;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class CreateCodecs {
+	public static final Codec<Long> NON_NEGATIVE_LONG = ExtraCodecs.validate(
+		Codec.LONG,
+		value -> value < 0 ? DataResult.error(() -> "Value is negative: " + value) : DataResult.success(value)
+	);
+
 	public static final Codec<Integer> INT_STR = Codec.STRING.comapFlatMap(
 		string -> {
 			try {

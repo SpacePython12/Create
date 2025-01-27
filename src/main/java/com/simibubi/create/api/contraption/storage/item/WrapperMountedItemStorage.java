@@ -1,16 +1,28 @@
 package com.simibubi.create.api.contraption.storage.item;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Iterator;
+import java.util.List;
+
+import org.jetbrains.annotations.UnmodifiableView;
+
+import com.simibubi.create.foundation.item.ItemSlots;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlottedStackStorage;
 
 /**
  * Partial implementation of a MountedItemStorage that wraps an item handler.
  */
-public abstract class WrapperMountedItemStorage<T extends IItemHandlerModifiable> extends MountedItemStorage {
+public abstract class WrapperMountedItemStorage<T extends SlottedStackStorage> extends MountedItemStorage {
 	protected final T wrapped;
 
 	protected WrapperMountedItemStorage(MountedItemStorageType<?> type, T wrapped) {
@@ -19,31 +31,53 @@ public abstract class WrapperMountedItemStorage<T extends IItemHandlerModifiable
 	}
 
 	@Override
-	public void setStackInSlot(int slot, @NotNull ItemStack stack) {
-		this.wrapped.setStackInSlot(slot, stack);
+	public boolean supportsInsertion() {
+		return this.wrapped.supportsInsertion();
 	}
 
 	@Override
-	public int getSlots() {
-		return this.wrapped.getSlots();
+	public long insert(ItemVariant variant, long l, TransactionContext transactionContext) {
+		return this.wrapped.insert(variant, l, transactionContext);
 	}
 
 	@Override
-	@NotNull
+	public boolean supportsExtraction() {
+		return this.wrapped.supportsExtraction();
+	}
+
+	@Override
+	public long extract(ItemVariant variant, long l, TransactionContext transactionContext) {
+		return this.wrapped.extract(variant, l, transactionContext);
+	}
+
+	@Override
+	public Iterator<StorageView<ItemVariant>> iterator() {
+		return this.wrapped.iterator();
+	}
+
+	@Override
+	public Iterator<StorageView<ItemVariant>> nonEmptyIterator() {
+		return this.wrapped.nonEmptyIterator();
+	}
+
+	@Override
+	public Iterable<StorageView<ItemVariant>> nonEmptyViews() {
+		return this.wrapped.nonEmptyViews();
+	}
+
+	@Override
+	public long getVersion() {
+		return this.wrapped.getVersion();
+	}
+
+	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return this.wrapped.getStackInSlot(slot);
 	}
 
 	@Override
-	@NotNull
-	public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-		return this.wrapped.insertItem(slot, stack, simulate);
-	}
-
-	@Override
-	@NotNull
-	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		return this.wrapped.extractItem(slot, amount, simulate);
+	public void setStackInSlot(int slot, ItemStack stack) {
+		this.wrapped.setStackInSlot(slot, stack);
 	}
 
 	@Override
@@ -52,15 +86,48 @@ public abstract class WrapperMountedItemStorage<T extends IItemHandlerModifiable
 	}
 
 	@Override
-	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-		return this.wrapped.isItemValid(slot, stack);
+	public boolean isItemValid(int slot, ItemVariant resource, int count) {
+		return this.wrapped.isItemValid(slot, resource, count);
 	}
 
-	public static ItemStackHandler copyToItemStackHandler(IItemHandler handler) {
-		ItemStackHandler copy = new ItemStackHandler(handler.getSlots());
-		for (int i = 0; i < handler.getSlots(); i++) {
-			copy.setStackInSlot(i, handler.getStackInSlot(i).copy());
+	@Override
+	public long insertSlot(int slot, ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		return this.wrapped.insertSlot(slot, resource, maxAmount, transaction);
+	}
+
+	@Override
+	public long extractSlot(int slot, ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		return this.wrapped.extractSlot(slot, resource, maxAmount, transaction);
+	}
+
+	@Override
+	public int getSlotCount() {
+		return this.wrapped.getSlotCount();
+	}
+
+	@Override
+	public SingleSlotStorage<ItemVariant> getSlot(int i) {
+		return this.wrapped.getSlot(i);
+	}
+
+	@Override
+	@UnmodifiableView
+	public List<SingleSlotStorage<ItemVariant>> getSlots() {
+		return this.wrapped.getSlots();
+	}
+
+	public static ItemStackHandler copyToItemStackHandler(Storage<ItemVariant> storage) {
+		ItemSlots slots = new ItemSlots();
+		int i = 0;
+		for (StorageView<ItemVariant> view : storage) {
+			if (!view.isResourceBlank()) {
+				int amount = TransferUtil.truncateLong(view.getAmount());
+				ItemStack stack = view.getResource().toStack(amount);
+				slots.set(i, stack);
+			}
+			i++;
 		}
-		return copy;
+
+		return slots.toHandler(ItemStackHandler::new);
 	}
 }

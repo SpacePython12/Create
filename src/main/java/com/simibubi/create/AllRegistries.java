@@ -3,6 +3,7 @@ package com.simibubi.create;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
+import com.simibubi.create.impl.contraption.storage.MountedStorageTypeRegistryImpl;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -19,6 +20,8 @@ public class AllRegistries {
 	}
 
 	public static void register() {
+		// fabric: make sure other registries load too
+		MountedStorageTypeRegistryImpl.init();
 	}
 
 	public static final class Keys {

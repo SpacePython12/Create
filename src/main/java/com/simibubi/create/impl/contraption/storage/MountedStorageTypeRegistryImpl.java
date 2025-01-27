@@ -1,57 +1,30 @@
 package com.simibubi.create.impl.contraption.storage;
 
-import java.util.Objects;
-
 import org.jetbrains.annotations.ApiStatus;
 
-import com.simibubi.create.AllMountedStorageTypes;
-import com.simibubi.create.AllTags;
 import com.simibubi.create.api.contraption.storage.MountedStorageTypeRegistry;
 import com.simibubi.create.api.contraption.storage.fluid.MountedFluidStorageType;
 import com.simibubi.create.api.contraption.storage.item.MountedItemStorageType;
 import com.simibubi.create.api.lookup.BlockLookup;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.NewRegistryEvent;
-import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+
+// fabric: registries no longer lazy, fallback removed
 @ApiStatus.Internal
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MountedStorageTypeRegistryImpl {
-	public static final BlockLookup<MountedItemStorageType<?>> ITEM_LOOKUP = BlockLookup.create(MountedStorageTypeRegistryImpl::itemFallback);
+	public static final Registry<MountedItemStorageType<?>> ITEMS_REGISTRY = registry(MountedStorageTypeRegistry.ITEMS);
+	public static final Registry<MountedFluidStorageType<?>> FLUIDS_REGISTRY = registry(MountedStorageTypeRegistry.FLUIDS);
+
+	public static final BlockLookup<MountedItemStorageType<?>> ITEM_LOOKUP = BlockLookup.create();
 	public static final BlockLookup<MountedFluidStorageType<?>> FLUID_LOOKUP = BlockLookup.create();
 
-	private static IForgeRegistry<MountedItemStorageType<?>> itemsRegistry;
-	private static IForgeRegistry<MountedFluidStorageType<?>> fluidsRegistry;
-
-	public static IForgeRegistry<MountedItemStorageType<?>> getItemsRegistry() {
-		return Objects.requireNonNull(itemsRegistry, "Registry accessed too early");
+	private static <T> Registry<T> registry(ResourceKey<Registry<T>> key) {
+		return FabricRegistryBuilder.createSimple(key).buildAndRegister();
 	}
 
-	public static IForgeRegistry<MountedFluidStorageType<?>> getFluidsRegistry() {
-		return Objects.requireNonNull(fluidsRegistry, "Registry accessed too early");
-	}
-
-	@SubscribeEvent
-	public static void registerRegistries(NewRegistryEvent event) {
-		event.create(
-			new RegistryBuilder<MountedItemStorageType<?>>()
-				.setName(MountedStorageTypeRegistry.ITEMS.location()),
-			registry -> itemsRegistry = registry
-		);
-		event.create(
-			new RegistryBuilder<MountedFluidStorageType<?>>()
-				.setName(MountedStorageTypeRegistry.FLUIDS.location()),
-			registry -> fluidsRegistry = registry
-		);
-	}
-
-	private static MountedItemStorageType<?> itemFallback(Block block) {
-		return AllTags.AllBlockTags.FALLBACK_MOUNTED_STORAGE_BLACKLIST.matches(block)
-			? null
-			: AllMountedStorageTypes.FALLBACK.get();
+	public static void init() {
 	}
 }

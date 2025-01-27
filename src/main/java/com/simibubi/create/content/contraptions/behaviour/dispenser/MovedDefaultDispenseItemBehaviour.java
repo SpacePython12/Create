@@ -1,5 +1,8 @@
 package com.simibubi.create.content.contraptions.behaviour.dispenser;
 
+import java.util.Objects;
+
+import com.simibubi.create.api.contraption.storage.item.MountedItemStorage;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 
 import net.minecraft.core.BlockPos;
@@ -13,10 +16,10 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.phys.Vec3;
 
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class MovedDefaultDispenseItemBehaviour implements IMovedDispenseItemBehaviour {
 	public static final MovedDefaultDispenseItemBehaviour INSTANCE = new MovedDefaultDispenseItemBehaviour();
@@ -103,17 +106,21 @@ public class MovedDefaultDispenseItemBehaviour implements IMovedDispenseItemBeha
 		BlockPos pos, Vec3 facing) {
 		consumedFrom.shrink(1);
 
-		ItemStack toInsert = output.copy();
+		ItemVariant variant = ItemVariant.of(output);
+		long toInsert = output.getCount();
+
 		// try inserting into own inventory first
-		ItemStack remainder = ItemHandlerHelper.insertItem(context.getItemStorage(), toInsert, false);
-		if (!remainder.isEmpty()) {
+		MountedItemStorage storage = Objects.requireNonNull(context.getItemStorage());
+		toInsert -= TransferUtil.insert(storage, variant, toInsert);
+		if (toInsert > 0) {
 			// next, try the whole contraption inventory
 			// note that this contains the dispenser inventory. That's fine.
-			CombinedInvWrapper contraption = context.contraption.getStorage().getAllItems();
-			ItemStack newRemainder = ItemHandlerHelper.insertItem(contraption, remainder, false);
-			if (!newRemainder.isEmpty()) {
+			Storage<ItemVariant> contraption = context.contraption.getStorage().getAllItems();
+			toInsert -= TransferUtil.insert(storage, variant, toInsert);
+			if (toInsert > 0) {
 				// if there's *still* something left, dispense into world
-				INSTANCE.dispenseStack(remainder, context, pos, facing);
+				ItemStack stack = variant.toStack(TransferUtil.truncateLong(toInsert));
+				INSTANCE.dispenseStack(stack, context, pos, facing);
 			}
 		}
 

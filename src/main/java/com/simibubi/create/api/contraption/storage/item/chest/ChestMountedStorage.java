@@ -8,6 +8,7 @@ import com.simibubi.create.api.contraption.storage.item.MountedItemStorage;
 import com.simibubi.create.api.contraption.storage.item.MountedItemStorageType;
 import com.simibubi.create.api.contraption.storage.item.simple.SimpleMountedStorage;
 import com.simibubi.create.content.contraptions.Contraption;
+import com.simibubi.create.foundation.item.CombinedSlottedStackStorage;
 import com.simibubi.create.foundation.item.ItemHelper;
 
 import net.minecraft.core.BlockPos;
@@ -24,10 +25,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.items.wrapper.InvWrapper;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlottedStackStorage;
 
 /**
  * Mounted storage that handles opening a combined GUI for double chests.
@@ -35,24 +38,28 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 public class ChestMountedStorage extends SimpleMountedStorage {
 	public static final Codec<ChestMountedStorage> CODEC = SimpleMountedStorage.codec(ChestMountedStorage::new);
 
-	protected ChestMountedStorage(MountedItemStorageType<?> type, IItemHandler handler) {
+	protected ChestMountedStorage(MountedItemStorageType<?> type, ItemStackHandler handler) {
 		super(type, handler);
 	}
 
-	public ChestMountedStorage(IItemHandler handler) {
+	public ChestMountedStorage(ItemStackHandler handler) {
 		this(AllMountedStorageTypes.CHEST.get(), handler);
+	}
+
+	public ChestMountedStorage(Storage<ItemVariant> storage) {
+		this(copyToItemStackHandler(storage));
 	}
 
 	@Override
 	public void unmount(Level level, BlockState state, BlockPos pos, @Nullable BlockEntity be) {
 		// the capability will include both sides of chests, but mounted storage is 1:1
-		if (be instanceof Container container && this.getSlots() == container.getContainerSize()) {
-			ItemHelper.copyContents(this, new InvWrapper(container));
+		if (be instanceof Container container && this.getSlotCount() == container.getContainerSize()) {
+			ItemHelper.copyContents(this, container);
 		}
 	}
 
 	@Override
-	protected IItemHandlerModifiable getHandlerForMenu(StructureBlockInfo info, Contraption contraption) {
+	protected SlottedStackStorage getHandlerForMenu(StructureBlockInfo info, Contraption contraption) {
 		BlockState state = info.state();
 		ChestType type = state.getValue(ChestBlock.TYPE);
 		if (type == ChestType.SINGLE)
@@ -67,9 +74,9 @@ public class ChestMountedStorage extends SimpleMountedStorage {
 			return this;
 
 		if (type == ChestType.RIGHT) {
-			return new CombinedInvWrapper(this, otherHalf);
+			return new CombinedSlottedStackStorage<>(this, otherHalf);
 		} else {
-			return new CombinedInvWrapper(otherHalf, this);
+			return new CombinedSlottedStackStorage<>(otherHalf, this);
 		}
 	}
 

@@ -16,18 +16,26 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlottedStackStorage;
 
 public class DispenserMountedStorage extends SimpleMountedStorage {
 	public static final Codec<DispenserMountedStorage> CODEC = SimpleMountedStorage.codec(DispenserMountedStorage::new);
 
-	protected DispenserMountedStorage(MountedItemStorageType<?> type, IItemHandler handler) {
+	protected DispenserMountedStorage(MountedItemStorageType<?> type, ItemStackHandler handler) {
 		super(type, handler);
 	}
 
-	public DispenserMountedStorage(IItemHandler handler) {
+	public DispenserMountedStorage(ItemStackHandler handler) {
 		this(AllMountedStorageTypes.DISPENSER.get(), handler);
+	}
+
+	public DispenserMountedStorage(Storage<ItemVariant> storage) {
+		this(copyToItemStackHandler(storage));
 	}
 
 	@Override
@@ -37,7 +45,7 @@ public class DispenserMountedStorage extends SimpleMountedStorage {
 
 	@Override
 	@Nullable
-	protected MenuProvider createMenuProvider(Component name, IItemHandlerModifiable handler,
+	protected MenuProvider createMenuProvider(Component name, SlottedStackStorage handler,
 											  Predicate<Player> stillValid, Consumer<Player> onClose) {
 		return MountedStorageMenus.createGeneric9x9(name, handler, stillValid, onClose);
 	}

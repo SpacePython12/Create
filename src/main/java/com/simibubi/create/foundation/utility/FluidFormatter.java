@@ -12,11 +12,11 @@ import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 public class FluidFormatter {
 
 	public static String asString(long amount, boolean shorten, FluidUnit unit) {
-		net.createmod.catnip.utility.Couple<MutableComponent> couple = asComponents(amount, shorten, unit);
+		Couple<MutableComponent> couple = asComponents(amount, shorten, unit);
 		return couple.getFirst().getString() + " " + couple.getSecond().getString();
 	}
 
-	public static net.createmod.catnip.utility.Couple<MutableComponent> asComponents(long amount, boolean shorten, FluidUnit unit) {
+	public static Couple<MutableComponent> asComponents(long amount, boolean shorten, FluidUnit unit) {
 		if (shorten && amount >= FluidConstants.BUCKET && unit == FluidUnit.MILLIBUCKETS) {
 			return Couple.create(
 					Component.literal(String.format("%.1f" , amount / (double) FluidConstants.BUCKET)),

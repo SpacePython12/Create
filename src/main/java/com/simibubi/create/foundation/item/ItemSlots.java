@@ -13,8 +13,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlottedStackStorage;
 
 /**
  * Utility class representing non-empty slots in an item inventory.
@@ -63,16 +63,16 @@ public class ItemSlots {
 		return this.map.keySet().intStream().max().orElse(-1);
 	}
 
-	public <T extends IItemHandlerModifiable> T toHandler(IntFunction<T> factory) {
+	public <T extends SlottedStackStorage> T toHandler(IntFunction<T> factory) {
 		T handler = factory.apply(this.size);
 		this.forEach(handler::setStackInSlot);
 		return handler;
 	}
 
-	public static ItemSlots fromHandler(IItemHandler handler) {
+	public static ItemSlots fromHandler(SlottedStackStorage handler) {
 		ItemSlots slots = new ItemSlots();
-		slots.setSize(handler.getSlots());
-		for (int i = 0; i < handler.getSlots(); i++) {
+		slots.setSize(handler.getSlotCount());
+		for (int i = 0; i < handler.getSlotCount(); i++) {
 			ItemStack stack = handler.getStackInSlot(i);
 			if (!stack.isEmpty()) {
 				slots.set(i, stack.copy());

@@ -15,7 +15,6 @@ import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import net.createmod.catnip.math.AngleHelper;
-import net.createmod.ponder.render.VirtualRenderHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 

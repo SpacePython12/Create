@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import net.createmod.catnip.utility.Iterate;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;

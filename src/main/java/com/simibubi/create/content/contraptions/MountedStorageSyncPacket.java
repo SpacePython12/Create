@@ -13,8 +13,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 
-import net.minecraftforge.network.NetworkEvent.Context;
-
 public class MountedStorageSyncPacket extends SimplePacketBase {
 	public final int contraptionId;
 	public final Map<BlockPos, MountedItemStorage> items;

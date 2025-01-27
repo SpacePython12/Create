@@ -6,15 +6,12 @@ import com.mojang.serialization.Codec;
 import com.simibubi.create.api.contraption.storage.MountedStorageTypeRegistry;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class MountedFluidStorageType<T extends MountedFluidStorage> {
-	public static final Codec<MountedFluidStorageType<?>> CODEC = ExtraCodecs.lazyInitializedCodec(
-		() -> MountedStorageTypeRegistry.getFluidsRegistry().getCodec()
-	);
+	public static final Codec<MountedFluidStorageType<?>> CODEC = MountedStorageTypeRegistry.FLUIDS_REGISTRY.byNameCodec();
 
 	public final Codec<? extends T> codec;
 

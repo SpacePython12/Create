@@ -22,7 +22,7 @@ archivesBaseName = "create-fabric"
 repositories {
     maven { url = "https://maven.parchmentmc.org" } // Parchment
     maven { url = "https://maven.fabricmc.net" } // FAPI, Loader
-    maven { url = "https://maven.createmod.net" } // Catnip, Ponder
+    maven { url = "https://maven.createmod.net" } // Ponder, Flywheel
     maven { url = "https://mvn.devos.one/snapshots" } // Registrate, Forge Tags, Milk Lib
     maven { url = "https://mvn.devos.one/releases" } // Porting Lib
     maven { // for Porting Lib: Mixin Extras, Fabric ASM
@@ -30,9 +30,11 @@ repositories {
         content { includeGroupAndSubgroups("com.github") }
     }
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // Forge Config API Port
-    maven { url = "https://maven.tterrag.com" } // Flywheel
     maven { url = "https://maven.shedaniel.me" } // REI and deps
-    maven { url = "https://api.modrinth.com/maven" } // LazyDFU, Sodium, Sandwichable
+    maven { // LazyDFU, Sodium, Sandwichable
+        url = "https://api.modrinth.com/maven"
+        content { includeGroupAndSubgroups("maven.modrinth") }
+    }
     maven { url = "https://maven.terraformersmc.com" } // Mod Menu, Trinkets
     maven { url = "https://squiddev.cc/maven" } // CC:T
     maven { url = "https://modmaven.dev" } // Botania
@@ -74,7 +76,7 @@ def dependencies(DependencyHandler deps) {
     deps.modApi(deps.include("com.electronwill.night-config:core:$night_config_version"))
     deps.modApi(deps.include("com.electronwill.night-config:toml:$night_config_version"))
     deps.modApi(deps.include("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:$forge_config_api_port_version"))
-    deps.modApi(deps.include("dev.engine_room.flywheel:flywheel-fabric-$flywheel_minecraft_version:$flywheel_version"))
+    deps.modApi(deps.include("dev.engine-room.flywheel:flywheel-fabric-$flywheel_minecraft_version:$flywheel_version"))
     deps.modApi(deps.include("net.createmod.ponder:Ponder-Fabric-$minecraft_version:$ponder_version"))
     deps.modApi(deps.include("com.jamieswhiteshirt:reach-entity-attributes:$reach_entity_attributes_version"))
     deps.modApi(deps.include("io.github.tropheusj:milk-lib:$milk_lib_version"))

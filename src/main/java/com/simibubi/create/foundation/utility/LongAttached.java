@@ -3,8 +3,8 @@ package com.simibubi.create.foundation.utility;
 import java.util.Comparator;
 import java.util.function.Function;
 
-import net.createmod.catnip.utility.IntAttached;
-import net.createmod.catnip.utility.Pair;
+import net.createmod.catnip.data.IntAttached;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.nbt.CompoundTag;
 
 /**

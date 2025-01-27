@@ -1,7 +1,6 @@
 package com.simibubi.create.content.contraptions.pulley;
 
 
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.content.processing.burner.ScrollInstance;
@@ -13,7 +12,6 @@ import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
 import net.createmod.catnip.render.SpriteShiftEntry;
-import net.createmod.ponder.render.VirtualRenderHelper;
 
 public class RopePulleyVisual extends AbstractPulleyVisual<PulleyBlockEntity> {
 	public RopePulleyVisual(VisualizationContext context, PulleyBlockEntity blockEntity, float partialTick) {

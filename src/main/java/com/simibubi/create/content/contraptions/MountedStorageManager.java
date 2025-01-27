@@ -31,7 +31,6 @@ import com.simibubi.create.content.fluids.tank.storage.creative.CreativeFluidTan
 import com.simibubi.create.content.logistics.crate.CreativeCrateMountedStorage;
 import com.simibubi.create.content.logistics.depot.storage.DepotMountedStorage;
 import com.simibubi.create.content.logistics.vault.ItemVaultMountedStorage;
-import com.simibubi.create.impl.contraption.storage.FallbackMountedStorage;
 
 import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
@@ -48,10 +47,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.network.PacketDistributor;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.SlottedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
 
 public class MountedStorageManager {
 	// builders used during assembly, null afterward
@@ -72,8 +70,8 @@ public class MountedStorageManager {
 	private ImmutableMap<BlockPos, SyncedMountedStorage> syncedItems;
 	private ImmutableMap<BlockPos, SyncedMountedStorage> syncedFluids;
 
-	private List<IItemHandlerModifiable> externalHandlers;
-	private CombinedInvWrapper allItems;
+	private List<SlottedStorage<ItemVariant>> externalHandlers;
+	private CombinedSlottedStorage<ItemVariant, ? extends SlottedStorage<ItemVariant>> allItems;
 
 	// ticks until storage can sync again
 	private int syncCooldown;
@@ -200,7 +198,7 @@ public class MountedStorageManager {
 
 		if (!items.isEmpty() || !fluids.isEmpty()) {
 			MountedStorageSyncPacket packet = new MountedStorageSyncPacket(entity.getId(), items, fluids);
-			AllPackets.getChannel().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+			AllPackets.getChannel().sendToClientsTracking(packet, entity);
 			this.syncCooldown = 8;
 		}
 	}
@@ -338,22 +336,19 @@ public class MountedStorageManager {
 		}
 	}
 
-	public void attachExternal(IItemHandlerModifiable externalStorage) {
+	public void attachExternal(SlottedStorage<ItemVariant> externalStorage) {
 		this.externalHandlers.add(externalStorage);
-		IItemHandlerModifiable[] all = new IItemHandlerModifiable[this.externalHandlers.size() + 1];
-		all[0] = this.items;
-		for (int i = 0; i < this.externalHandlers.size(); i++) {
-			all[i + 1] = this.externalHandlers.get(i);
-		}
-
-		this.allItems = new CombinedInvWrapper(all);
+		List<SlottedStorage<ItemVariant>> all = new ArrayList<>(this.externalHandlers.size() + 1);
+		all.add(0, this.items);
+		all.addAll(this.externalHandlers);
+		this.allItems = new CombinedSlottedStorage<>(all);
 	}
 
 	/**
 	 * The primary way to access a contraption's inventory. Includes all
 	 * non-internal mounted storages as well as all external storage.
 	 */
-	public CombinedInvWrapper getAllItems() {
+	public CombinedSlottedStorage<ItemVariant, ? extends SlottedStorage<ItemVariant>> getAllItems() {
 		this.assertInitialized();
 		return this.allItems;
 	}
@@ -430,11 +425,6 @@ public class MountedStorageManager {
 				this.addStorage(new CreativeCrateMountedStorage(supplied), pos);
 			} else if (data.contains("Synced")) {
 				this.addStorage(DepotMountedStorage.fromLegacy(data), pos);
-			} else {
-				// we can create a fallback storage safely, it will be validated before unmounting
-				ItemStackHandler handler = new ItemStackHandler();
-				handler.deserializeNBT(data);
-				this.addStorage(new FallbackMountedStorage(handler), pos);
 			}
 		});
 

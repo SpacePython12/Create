@@ -9,14 +9,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent.Context;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class WiFiEffectPacket extends SimplePacketBase {
 
 	private BlockPos pos;
-	
+
 	public static void send(Level level, BlockPos pos) {
 		AllPackets.sendToNear(level, pos, 32, new WiFiEffectPacket(pos));
 	}
@@ -35,7 +35,7 @@ public class WiFiEffectPacket extends SimplePacketBase {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public boolean handle(Context context) {
 		context.enqueueWork(() -> {
 			BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(pos);

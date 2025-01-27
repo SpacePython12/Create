@@ -12,15 +12,18 @@ import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.IForgeRegistry;
 
+// fabric: registries no longer lazy
 public class MountedStorageTypeRegistry {
 	public static final ResourceKey<Registry<MountedItemStorageType<?>>> ITEMS = ResourceKey.createRegistryKey(
 		Create.asResource("mounted_item_storage_type")
 	);
+	public static final Registry<MountedItemStorageType<?>> ITEMS_REGISTRY = MountedStorageTypeRegistryImpl.ITEMS_REGISTRY;
+
 	public static final ResourceKey<Registry<MountedFluidStorageType<?>>> FLUIDS = ResourceKey.createRegistryKey(
 		Create.asResource("mounted_fluid_storage_type")
 	);
+	public static final Registry<MountedFluidStorageType<?>> FLUIDS_REGISTRY = MountedStorageTypeRegistryImpl.FLUIDS_REGISTRY;
 
 	/**
 	 * Lookup used for finding the item storage type associated with a block.
@@ -32,20 +35,6 @@ public class MountedStorageTypeRegistry {
 	 * @see BlockLookup
 	 */
 	public static final BlockLookup<MountedFluidStorageType<?>> FLUID_LOOKUP = MountedStorageTypeRegistryImpl.FLUID_LOOKUP;
-
-	/**
-	 * @throws NullPointerException if called before registry registration
-	 */
-	public static IForgeRegistry<MountedItemStorageType<?>> getItemsRegistry() {
-		return MountedStorageTypeRegistryImpl.getItemsRegistry();
-	}
-
-	/**
-	 * @throws NullPointerException if called before registry registration
-	 */
-	public static IForgeRegistry<MountedFluidStorageType<?>> getFluidsRegistry() {
-		return MountedStorageTypeRegistryImpl.getFluidsRegistry();
-	}
 
 	/**
 	 * Utility for use with Registrate builders. Creates a builder transformer

@@ -5,9 +5,9 @@ import com.simibubi.create.foundation.networking.SimplePacketBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent.Context;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class RedstoneRequesterEffectPacket extends SimplePacketBase {
 
@@ -31,7 +31,7 @@ public class RedstoneRequesterEffectPacket extends SimplePacketBase {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public boolean handle(Context context) {
 		context.enqueueWork(() -> {
 			if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof RedstoneRequesterBlockEntity plbe)

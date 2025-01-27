@@ -6,9 +6,9 @@ import com.simibubi.create.compat.rei.widgets.AnimatedKineticsWidget;
 import com.simibubi.create.foundation.gui.CustomLightingSettings;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.gui.ILightingSettings;
 import net.createmod.catnip.gui.element.GuiGameElement;
-import net.createmod.catnip.utility.AnimationTickHolder;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;

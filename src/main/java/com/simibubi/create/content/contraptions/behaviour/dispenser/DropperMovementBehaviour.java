@@ -16,7 +16,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
-import net.minecraftforge.items.IItemHandler;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
 public class DropperMovementBehaviour implements MovementBehaviour {
 	@Override
@@ -49,9 +51,9 @@ public class DropperMovementBehaviour implements MovementBehaviour {
 	/**
 	 * Finds a dispensable slot. Empty slots are skipped and nearly-empty slots are topped off.
 	 */
-	private static int getSlot(MountedItemStorage storage, RandomSource random, IItemHandler contraptionInventory) {
+	private static int getSlot(MountedItemStorage storage, RandomSource random, Storage<ItemVariant> contraptionInventory) {
 		IntList filledSlots = new IntArrayList();
-		for (int i = 0; i < storage.getSlots(); i++) {
+		for (int i = 0; i < storage.getSlotCount(); i++) {
 			ItemStack stack = storage.getStackInSlot(i);
 			if (stack.isEmpty())
 				continue;
@@ -74,7 +76,7 @@ public class DropperMovementBehaviour implements MovementBehaviour {
 	}
 
 	@Nullable
-	private static ItemStack tryTopOff(ItemStack stack, IItemHandler from) {
+	private static ItemStack tryTopOff(ItemStack stack, Storage<ItemVariant> from) {
 		Predicate<ItemStack> test = otherStack -> ItemStack.isSameItemSameTags(stack, otherStack);
 		int needed = stack.getMaxStackSize() - stack.getCount();
 

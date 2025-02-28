@@ -41,7 +41,6 @@ import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.content.logistics.box.PackageStyles.PackageStyle;
 import com.simibubi.create.content.logistics.packager.PackagerGenerator;
 import com.simibubi.create.content.logistics.tableCloth.TableClothBlockItem;
-import com.simibubi.create.content.logistics.tableCloth.TableClothModel;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelBlock;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelBlock.Shape;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelItem;
@@ -507,7 +506,7 @@ public class BuilderTransformers {
 				.blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
 					.withExistingParent(name + "_table_cloth", p.modLoc("block/table_cloth/block"))
 					.texture("0", p.modLoc("block/table_cloth/" + name))))
-				.onRegister(CreateRegistrate.blockModel(() -> TableClothModel::new))
+//				.onRegister(CreateRegistrate.blockModel(() -> TableClothModel::new))
 				.tag(AllBlockTags.TABLE_CLOTHS.tag, soundTag)
 				.onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.create.table_cloth"))
 				.item(TableClothBlockItem::new);

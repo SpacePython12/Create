@@ -2,7 +2,7 @@
   "damage": 6,
   "items": "minecraft:pumpkin",
   "knockback": 2.0,
-  "on_entity_hit": {
+  "on_block_hit": {
     "type": "create:place_block_on_ground",
     "block": "minecraft:pumpkin"
   },

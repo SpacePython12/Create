@@ -41,13 +41,17 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 
 public class AllPotatoProjectileEntityHitActions {
-	public static void init() {
+	
+	static {
 		register("set_on_fire", SetOnFire.CODEC);
 		register("potion_effect", PotionEffect.CODEC);
 		register("food_effects", FoodEffects.CODEC);
 		register("chorus_teleport", ChorusTeleport.CODEC);
 		register("cure_zombie_villager", CureZombieVillager.CODEC);
 		register("suspicious_stew", SuspiciousStew.CODEC);
+	}
+	
+	public static void init() {
 	}
 
 	private static void register(String name, Codec<? extends PotatoProjectileEntityHitAction> codec) {

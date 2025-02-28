@@ -47,7 +47,7 @@ public record PotatoCannonProjectileType(HolderSet<Item> items, int reloadTicks,
 		PotatoProjectileRenderMode.CODEC.optionalFieldOf("render_mode", Billboard.INSTANCE).forGetter(PotatoCannonProjectileType::renderMode),
 		PotatoProjectileEntityHitAction.CODEC.optionalFieldOf("pre_entity_hit").forGetter(p -> p.preEntityHit),
 		PotatoProjectileEntityHitAction.CODEC.optionalFieldOf("on_entity_hit").forGetter(p -> p.onEntityHit),
-		PotatoProjectileBlockHitAction.CODEC.optionalFieldOf("on_entity_hit").forGetter(p -> p.onBlockHit)
+		PotatoProjectileBlockHitAction.CODEC.optionalFieldOf("on_block_hit").forGetter(p -> p.onBlockHit)
 	).apply(i, PotatoCannonProjectileType::new));
 
 	public static Optional<Reference<PotatoCannonProjectileType>> getTypeForItem(RegistryAccess registryAccess, Item item) {

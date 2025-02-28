@@ -18,11 +18,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class AllPotatoProjectileRenderModes {
-	public static void init() {
+	
+	static {
 		register("billboard", Billboard.CODEC);
 		register("tumble", Tumble.CODEC);
 		register("toward_motion", TowardMotion.CODEC);
 		register("stuck_to_entity", StuckToEntity.CODEC);
+	}
+	
+	public static void init() {
 	}
 
 	private static void register(String name, Codec<? extends PotatoProjectileRenderMode> codec) {

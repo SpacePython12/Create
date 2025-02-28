@@ -2,7 +2,7 @@
   "damage": 8,
   "items": "minecraft:melon",
   "knockback": 2.0,
-  "on_entity_hit": {
+  "on_block_hit": {
     "type": "create:place_block_on_ground",
     "block": "minecraft:melon"
   },

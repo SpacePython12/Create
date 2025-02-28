@@ -23,9 +23,13 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class AllPotatoProjectileBlockHitActions {
-	public static void init() {
+	
+	static {
 		register("plant_crop", PlantCrop.CODEC);
 		register("place_block_on_ground", PlaceBlockOnGround.CODEC);
+	}
+	
+	public static void init() {
 	}
 
 	private static void register(String name, Codec<? extends PotatoProjectileBlockHitAction> codec) {

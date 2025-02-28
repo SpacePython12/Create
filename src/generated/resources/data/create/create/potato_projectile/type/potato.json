@@ -2,7 +2,7 @@
   "damage": 5,
   "items": "minecraft:potato",
   "knockback": 1.5,
-  "on_entity_hit": {
+  "on_block_hit": {
     "type": "create:plant_crop",
     "block": "minecraft:potatoes"
   },

@@ -83,6 +83,11 @@ public class AllItemAttributeTypes {
 		ASTRAL_CRYSTAL = register("astral_crystal", new AstralSorceryCrystalAttribute.Type()),
 		ASTRAL_PERK_GEM = register("astral_perk_gem", new AstralSorceryPerkGemAttribute.Type());
 
+	static {
+		// Register legacy deserializers to maintain backwards compatability
+		AllItemAttributeLegacyDeserializers.register();
+	}
+	
 	private static <T extends Recipe<Container>> boolean testRecipe(ItemStack s, Level w, RecipeType<T> type) {
 		RECIPE_WRAPPER.setItem(0, s.copy());
 		return w.getRecipeManager()
@@ -111,7 +116,6 @@ public class AllItemAttributeTypes {
 	}
 
 	public static void init() {
-		// Register legacy deserializers to maintain backwards compatability
-		AllItemAttributeLegacyDeserializers.register();
 	}
+	
 }

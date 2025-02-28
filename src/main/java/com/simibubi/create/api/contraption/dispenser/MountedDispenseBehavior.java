@@ -1,5 +1,6 @@
 package com.simibubi.create.api.contraption.dispenser;
 
+import com.simibubi.create.api.contraption.storage.item.MountedItemStorage;
 import com.simibubi.create.api.registry.SimpleRegistry;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.impl.contraption.dispenser.DispenserBehaviorConverter;
@@ -12,8 +13,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
 /**
  * A parallel to {@link DispenseItemBehavior}, for use by mounted dispensers.
@@ -62,16 +64,25 @@ public interface MountedDispenseBehavior {
 	 * @param pos the position given to the behavior
 	 */
 	static void placeItemInInventory(ItemStack stack, MovementContext context, BlockPos pos) {
-		ItemStack toInsert = stack.copy();
-		// try inserting into own inventory first
-		ItemStack remainder = ItemHandlerHelper.insertItem(context.getItemStorage(), toInsert, false);
-		if (!remainder.isEmpty()) {
-			// next, try the whole contraption inventory
-			CombinedInvWrapper contraption = context.contraption.getStorage().getAllItems();
-			ItemStack newRemainder = ItemHandlerHelper.insertItem(contraption, remainder, false);
-			if (!newRemainder.isEmpty()) {
-				// if there's *still* something left, dispense into world
-				DefaultMountedDispenseBehavior.INSTANCE.dispense(remainder, context, pos);
+		if (stack.isEmpty())
+			return;
+
+		ItemVariant variant = ItemVariant.of(stack);
+		long amount = stack.getCount();
+
+		try (Transaction t = Transaction.openOuter()) {
+			// try inserting into own inventory first
+			MountedItemStorage storage = context.getItemStorage();
+			long inserted = storage == null ? 0 : storage.insert(variant, amount, t);
+			if (inserted < amount) {
+				// next, try the whole contraption inventory
+				long newAmount = amount - inserted;
+				long newInserted = context.contraption.getStorage().getAllItems().insert(variant, newAmount, t);
+				if (newInserted < newAmount) {
+					// if there's *still* something left, dispense into world
+					ItemStack drop = variant.toStack((int) (newAmount - newInserted));
+					DefaultMountedDispenseBehavior.INSTANCE.dispense(drop, context, pos);
+				}
 			}
 		}
 	}

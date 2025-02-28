@@ -182,6 +182,7 @@ public class AllItems {
 	public static final ItemEntry<CardboardSwordItem> CARDBOARD_SWORD =
 		REGISTRATE.item("cardboard_sword", CardboardSwordItem::new)
 			.properties(p -> p.stacksTo(1))
+			.onRegister(i -> FuelRegistry.INSTANCE.add(i, 1000))
 			.model(AssetLookup.itemModelWithPartials())
 			.register();
 

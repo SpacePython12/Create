@@ -4,18 +4,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-
 import com.simibubi.create.Create;
 
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 
 /**
  * Utility for searching through a level's recipe collection.
@@ -27,7 +29,17 @@ public class RecipeFinder {
 
 	private static final Cache<Object, List<Recipe<?>>> CACHED_SEARCHES = CacheBuilder.newBuilder().build();
 
-	public static final ResourceManagerReloadListener LISTENER = resourceManager -> CACHED_SEARCHES.invalidateAll();
+	public static final IdentifiableResourceReloadListener LISTENER = new SimpleSynchronousResourceReloadListener() {
+		@Override
+		public ResourceLocation getFabricId() {
+			return Create.asResource("recipe_finder");
+		}
+
+		@Override
+		public void onResourceManagerReload(ResourceManager resourceManager) {
+			CACHED_SEARCHES.invalidateAll();
+		}
+	};
 
 	/**
 	 * Find all recipes matching the condition predicate.

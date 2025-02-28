@@ -16,6 +16,16 @@ import com.simibubi.create.content.contraptions.minecart.CouplingHandler;
 import com.simibubi.create.content.contraptions.minecart.CouplingPhysics;
 import com.simibubi.create.content.contraptions.minecart.MinecartCouplingItem;
 import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
+import com.simibubi.create.content.contraptions.mounted.MinecartContraptionItem;
+import com.simibubi.create.content.equipment.armor.CardboardArmorHandler;
+import com.simibubi.create.content.equipment.armor.DivingBootsItem;
+import com.simibubi.create.content.equipment.armor.DivingHelmetItem;
+import com.simibubi.create.content.equipment.armor.NetheriteDivingHandler;
+import com.simibubi.create.content.equipment.bell.HauntedBellPulser;
+import com.simibubi.create.content.equipment.clipboard.ClipboardValueSettingsHandler;
+import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripItem;
+import com.simibubi.create.content.equipment.symmetryWand.SymmetryHandler;
+import com.simibubi.create.content.equipment.tool.CardboardSwordItem;
 import com.simibubi.create.content.equipment.toolbox.ToolboxHandler;
 import com.simibubi.create.content.equipment.wrench.WrenchEventHandler;
 import com.simibubi.create.content.equipment.wrench.WrenchItem;
@@ -37,11 +47,11 @@ import com.simibubi.create.content.redstone.displayLink.ClickToLinkBlockItem;
 import com.simibubi.create.content.redstone.link.LinkHandler;
 import com.simibubi.create.content.redstone.link.controller.LinkedControllerServerHandler;
 import com.simibubi.create.content.trains.entity.CarriageEntityHandler;
-import com.simibubi.create.foundation.data.RuntimeDataGenerator;
 import com.simibubi.create.content.trains.schedule.ScheduleItemEntityInteraction;
 import com.simibubi.create.foundation.block.ItemUseOverrides;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsInputHandler;
 import com.simibubi.create.foundation.blockEntity.behaviour.edgeInteraction.EdgeInteractionHandler;
+import com.simibubi.create.foundation.data.RuntimeDataGenerator;
 import com.simibubi.create.foundation.pack.DynamicPack;
 import com.simibubi.create.foundation.pack.DynamicPackSource;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
@@ -53,7 +63,6 @@ import net.createmod.catnip.data.WorldAttached;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -84,15 +93,14 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityDataEvents;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityMountEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.LivingAttackEvent;
 import io.github.fabricators_of_create.porting_lib.entity.events.LivingEntityEvents;
 import io.github.fabricators_of_create.porting_lib.entity.events.LivingEntityEvents.LivingVisibilityEvent;
+import io.github.fabricators_of_create.porting_lib.event.common.AddPackFindersEvent;
 import io.github.fabricators_of_create.porting_lib.event.common.BlockEvents;
 
 public class CommonEvents {
@@ -205,7 +213,7 @@ public class CommonEvents {
 
 	}
 
-	public static void addPackFinders() {
+	public static void addPackFinders(AddPackFindersEvent event) {
 //		ModContainer create = FabricLoader.getInstance().getModContainer(Create.ID)
 //				.orElseThrow(() -> new IllegalStateException("Create's ModContainer couldn't be found!"));
 //		ResourceLocation packId = Create.asResource("legacy_copper");
@@ -232,13 +240,12 @@ public class CommonEvents {
 		EntityEvents.ENTERING_SECTION.register(CommonEvents::onEntityEnterSection);
 		LivingEntityEvents.TICK.register(CommonEvents::onUpdateLivingEntity);
 		ServerPlayConnectionEvents.JOIN.register(CommonEvents::playerLoggedIn);
-		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(CommonEvents::onDatapackSync);
+		AddPackFindersEvent.EVENT.register(CommonEvents::addPackFinders);
 		PipeCollisionEvent.FLOW.register(FluidReactions::handlePipeFlowCollisionFallback);
 		PipeCollisionEvent.SPILL.register(FluidReactions::handlePipeSpillCollisionFallback);
 		// fabric: some features using events on forge don't use events here.
 		// they've been left in this class for upstream compatibility.
 		CommonEvents.addReloadListeners();
-		CommonEvents.addPackFinders();
 
 		// External Events
 
@@ -284,5 +291,7 @@ public class CommonEvents {
 		EntityEvents.SIZE.register(CardboardArmorHandler::playerHitboxChangesWhenHidingAsBox);
 		LivingVisibilityEvent.VISIBILITY.register(CardboardArmorHandler::playersStealthWhenWearingCardboard);
 		LivingEntityEvents.TICK.register(CardboardArmorHandler::mobsMayLoseTargetWhenItIsWearingCardboard);
+		AttackBlockCallback.EVENT.register(CardboardSwordItem::cardboardSwordsMakeNoiseOnClick);
+		LivingAttackEvent.ATTACK.register(CardboardSwordItem::cardboardSwordsCannotHurtYou);
 	}
 }

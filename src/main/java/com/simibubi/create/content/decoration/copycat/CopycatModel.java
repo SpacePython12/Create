@@ -11,7 +11,6 @@ import net.createmod.catnip.data.Iterate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -53,12 +52,6 @@ public abstract class CopycatModel extends ForwardingBakedModel implements Custo
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand) {
-		return getCroppedQuads(state, side, rand, getMaterial(ModelData.EMPTY), ModelData.EMPTY,
-			RenderType.cutoutMipped());
-	}
-
-	@Override
 	public boolean isVanillaAdapter() {
 		return false;
 	}
@@ -80,7 +73,7 @@ public abstract class CopycatModel extends ForwardingBakedModel implements Custo
 
 		CullFaceRemovalData cullFaceRemovalData = new CullFaceRemovalData();
 		if (state.getBlock() instanceof CopycatBlock copycatBlock) {
-			for (Direction cullFace : net.createmod.catnip.utility.Iterate.directions) {
+			for (Direction cullFace : Iterate.directions) {
 				if (copycatBlock.shouldFaceAlwaysRender(state, cullFace)) {
 					cullFaceRemovalData.remove(cullFace);
 				}

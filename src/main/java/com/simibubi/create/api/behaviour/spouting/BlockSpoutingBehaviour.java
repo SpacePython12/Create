@@ -25,6 +25,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+
 /**
  * Interface for custom block-filling behavior for spouts.
  * <p>
@@ -74,7 +76,7 @@ public interface BlockSpoutingBehaviour {
 		for (String name : List.of("table", "basin")) {
 			ResourceLocation id = Mods.TCONSTRUCT.rl(name);
 			if (BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(id)) {
-				BlockEntityType<?> table = ForgeRegistries.BLOCK_ENTITY_TYPES.getValue(id);
+				BlockEntityType<?> table = BuiltInRegistries.BLOCK_ENTITY_TYPE.get(id);
 				BY_BLOCK_ENTITY.register(table, SpoutCasting.INSTANCE);
 			} else {
 				Create.LOGGER.warn("Block entity {} wasn't found. Outdated compat?", id);
@@ -97,5 +99,5 @@ public interface BlockSpoutingBehaviour {
 	 * @param simulate       Whether the spout is testing or actually performing this behaviour
 	 * @return The amount filled into the block, 0 to idle/cancel
 	 */
-	int fillBlock(Level level, BlockPos pos, SpoutBlockEntity spout, FluidStack availableFluid, boolean simulate);
+	long fillBlock(Level level, BlockPos pos, SpoutBlockEntity spout, FluidStack availableFluid, boolean simulate);
 }

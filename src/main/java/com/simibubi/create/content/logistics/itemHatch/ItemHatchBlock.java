@@ -14,6 +14,7 @@ import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
+import com.simibubi.create.infrastructure.fabric.SecondaryUseBypassingBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -46,7 +47,7 @@ import net.fabricmc.fabric.api.entity.FakePlayer;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 public class ItemHatchBlock extends HorizontalDirectionalBlock
-	implements IBE<ItemHatchBlockEntity>, IWrenchable, ProperWaterloggedBlock {
+	implements IBE<ItemHatchBlockEntity>, IWrenchable, ProperWaterloggedBlock, SecondaryUseBypassingBlock {
 
 	public static final BooleanProperty OPEN = BooleanProperty.create("open");
 
@@ -191,4 +192,8 @@ public class ItemHatchBlock extends HorizontalDirectionalBlock
 		return false;
 	}
 
+	@Override
+	public boolean shouldBypassSecondaryUse(Player player, InteractionHand hand, BlockState state) {
+		return true;
+	}
 }

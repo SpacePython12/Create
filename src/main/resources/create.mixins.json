@@ -47,7 +47,8 @@
     "fabric.ServerGamePacketListenerImplAccessor",
     "fabric.SortedArraySetAccessor",
     "fabric.StructureUtilsMixin",
-    "fabric.TagAppenderAccessor"
+    "fabric.TagAppenderAccessor",
+    "fabric.infra.ServerPlayerGameModeMixin"
   ],
   "client": [
     "accessor.AgeableListModelAccessor",
@@ -69,7 +70,8 @@
     "fabric.ClientTextTooltipAccessor",
     "fabric.GuiAccessor",
     "fabric.LivingEntityRendererAccessor",
-    "fabric.infra.GuiGraphicsMixin"
+    "fabric.infra.GuiGraphicsMixin",
+    "fabric.infra.MultiPlayerGameModeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

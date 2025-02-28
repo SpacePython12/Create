@@ -3,6 +3,8 @@ package com.simibubi.create.content.kinetics.chainConveyor;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.annotation.Nullable;
+
 import com.google.common.cache.Cache;
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -27,6 +29,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 
 public class ChainConveyorInteractionHandler {
 
@@ -160,12 +164,11 @@ public class ChainConveyorInteractionHandler {
 		ms.popPose();
 	}
 
-	@SubscribeEvent
-	public static void hideVanillaBlockSelection(RenderHighlightEvent.Block event) {
+	public static boolean hideVanillaBlockSelection(WorldRenderContext ctx, @Nullable HitResult hit) {
 		if (selectedLift == null || selectedShape == null)
-			return;
+			return true;
 
-		event.setCanceled(true);
+		return false;
 	}
 
 }

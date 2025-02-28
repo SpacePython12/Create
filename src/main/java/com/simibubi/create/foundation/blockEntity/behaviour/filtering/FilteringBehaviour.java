@@ -41,6 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
 
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
@@ -219,6 +220,10 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 
 	public boolean test(ItemStack stack) {
 		return !isActive() || filter.test(blockEntity.getLevel(), stack);
+	}
+
+	public boolean test(ItemVariant variant) {
+		return !isActive() || filter.test(blockEntity.getLevel(), variant.toStack());
 	}
 
 	public boolean test(FluidStack stack) {

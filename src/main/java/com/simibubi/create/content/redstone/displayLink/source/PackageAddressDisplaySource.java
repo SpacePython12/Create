@@ -13,9 +13,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipul
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.IItemHandler;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 
 public class PackageAddressDisplaySource extends SingleLineDisplaySource {
 
@@ -27,23 +29,23 @@ public class PackageAddressDisplaySource extends SingleLineDisplaySource {
 
 		InvManipulationBehaviour invManipulationBehaviour = cobe.getBehaviour(InvManipulationBehaviour.TYPE);
 		FilteringBehaviour filteringBehaviour = cobe.getBehaviour(FilteringBehaviour.TYPE);
-		IItemHandler handler = invManipulationBehaviour.getInventory();
+		Storage<ItemVariant> handler = invManipulationBehaviour.getInventory();
 
 		if (handler == null) {
 			BlockPos targetPos = cobe.getBlockPos().relative(SmartObserverBlock.getTargetDirection(cobe.getBlockState()));
-			
+
 			if (context.level().getBlockEntity(targetPos) instanceof ChainConveyorBlockEntity ccbe)
 				for (ChainConveyorPackage box : ccbe.getLoopingPackages())
 					if (filteringBehaviour.test(box.item))
 						return Component.literal(PackageItem.getAddress(box.item));
-			
+
 			return EMPTY_LINE;
 		}
 
-		for (int i = 0; i < handler.getSlots(); i++) {
-			ItemStack stack = handler.getStackInSlot(i);
-			if (PackageItem.isPackage(stack) && filteringBehaviour.test(stack))
-				return Component.literal(PackageItem.getAddress(stack));
+		for (StorageView<ItemVariant> view : handler.nonEmptyViews()) {
+			ItemVariant resource = view.getResource();
+			if (PackageItem.isPackage(resource) && filteringBehaviour.test(resource))
+				return Component.literal(PackageItem.getAddress(resource));
 		}
 
 		return EMPTY_LINE;

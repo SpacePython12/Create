@@ -3,15 +3,17 @@ package com.simibubi.create.content.equipment.tool;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.AllSoundEvents;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -23,10 +25,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStack.TooltipPart;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -41,11 +43,6 @@ public class CardboardSwordItem extends SwordItem implements CustomEnchantingBeh
 	}
 
 	@Override
-	public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
-		return 1000;
-	}
-
-	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
 		return enchantment == Enchantments.KNOCKBACK;
 	}
@@ -55,20 +52,22 @@ public class CardboardSwordItem extends SwordItem implements CustomEnchantingBeh
 		return TooltipPart.MODIFIERS.getMask();
 	}
 
-	@SubscribeEvent
-	public static void cardboardSwordsMakeNoiseOnClick(LeftClickBlock event) {
-		ItemStack itemStack = event.getItemStack();
+	public static InteractionResult cardboardSwordsMakeNoiseOnClick(Player player, Level level, InteractionHand hand, BlockPos pos, Direction direction) {
+		if (player.isSpectator())
+			return InteractionResult.PASS;
+
+		ItemStack itemStack = player.getItemInHand(hand);
 		if (!AllItems.CARDBOARD_SWORD.isIn(itemStack))
-			return;
-		if (event.getAction() != Action.START)
-			return;
-		if (event.getSide() == LogicalSide.CLIENT)
-			AllSoundEvents.CARDBOARD_SWORD.playAt(event.getLevel(), event.getPos(), 0.5f, 1.85f, false);
+			return InteractionResult.PASS;
+
+		if (level.isClientSide)
+			AllSoundEvents.CARDBOARD_SWORD.playAt(level, pos, 0.5f, 1.85f, false);
 		else
-			AllSoundEvents.CARDBOARD_SWORD.play(event.getLevel(), event.getEntity(), event.getPos(), 0.5f, 1.85f);
+			AllSoundEvents.CARDBOARD_SWORD.play(level, player, pos, 0.5f, 1.85f);
+
+		return InteractionResult.SUCCESS;
 	}
 
-	@SubscribeEvent
 	public static void cardboardSwordsCannotHurtYou(LivingAttackEvent event) {
 		Entity attacker = event.getSource()
 			.getEntity();
@@ -99,11 +98,11 @@ public class CardboardSwordItem extends SwordItem implements CustomEnchantingBeh
 		knockback(target, knockbackStrength, yRot);
 
 		boolean targetIsPlayer = target instanceof Player;
-		MobCategory targetType = target.getClassification(false);
+		MobCategory targetType = target.getType().getCategory();
 
 		if (target instanceof ServerPlayer sp)
 			AllPackets.getChannel()
-				.send(PacketDistributor.PLAYER.with(() -> sp), new KnockbackPacket(yRot, (float) knockbackStrength));
+				.sendToClient(new KnockbackPacket(yRot, (float) knockbackStrength), sp);
 
 		if ((targetType == MobCategory.MISC || targetType == MobCategory.CREATURE) && !targetIsPlayer)
 			target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 9, true, false, false));

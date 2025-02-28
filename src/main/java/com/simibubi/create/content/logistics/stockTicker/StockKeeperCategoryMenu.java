@@ -21,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlottedStackStorage;
 
 public class StockKeeperCategoryMenu extends MenuBase<StockTickerBlockEntity> {
 
@@ -92,8 +93,8 @@ public class StockKeeperCategoryMenu extends MenuBase<StockTickerBlockEntity> {
 
 	class InactiveItemHandlerSlot extends SlotItemHandler {
 
-		public InactiveItemHandlerSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-			super(itemHandler, index, xPosition, yPosition);
+		public InactiveItemHandlerSlot(SlottedStackStorage storage, int index, int xPosition, int yPosition) {
+			super(storage, index, xPosition, yPosition);
 		}
 
 		@Override

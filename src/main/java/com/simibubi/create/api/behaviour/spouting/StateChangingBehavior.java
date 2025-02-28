@@ -11,7 +11,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 /**
  * An implementation of {@link BlockSpoutingBehaviour} that allows for easily modifying a BlockState through spouting.
@@ -23,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 public record StateChangingBehavior(int amount, Predicate<Fluid> fluidTest, Predicate<BlockState> canFill,
 									UnaryOperator<BlockState> fillFunction) implements BlockSpoutingBehaviour {
 	@Override
-	public int fillBlock(Level level, BlockPos pos, SpoutBlockEntity spout, FluidStack availableFluid, boolean simulate) {
+	public long fillBlock(Level level, BlockPos pos, SpoutBlockEntity spout, FluidStack availableFluid, boolean simulate) {
 		if (availableFluid.getAmount() < this.amount || !this.fluidTest.test(availableFluid.getFluid()))
 			return 0;
 

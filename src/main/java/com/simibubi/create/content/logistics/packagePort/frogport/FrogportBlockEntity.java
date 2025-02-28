@@ -31,11 +31,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
 public class FrogportBlockEntity extends PackagePortBlockEntity implements IHaveHoveringInformation {
 
@@ -105,7 +108,7 @@ public class FrogportBlockEntity extends PackagePortBlockEntity implements IHave
 	public void sendAnticipate() {
 		if (isAnimationInProgress())
 			return;
-		for (int i = 0; i < inventory.getSlots(); i++)
+		for (int i = 0; i < inventory.getSlotCount(); i++)
 			if (inventory.getStackInSlot(i)
 				.isEmpty()) {
 				sendAnticipate = true;
@@ -267,7 +270,7 @@ public class FrogportBlockEntity extends PackagePortBlockEntity implements IHave
 		for (Direction side : Iterate.directions) {
 			if (side != Direction.DOWN)
 				continue;
-			IItemHandler handler = getAdjacentInventory(side);
+			Storage<ItemVariant> handler = getAdjacentInventory(side);
 			if (handler == null)
 				continue;
 			if (tryPullingFrom(handler))
@@ -275,7 +278,7 @@ public class FrogportBlockEntity extends PackagePortBlockEntity implements IHave
 		}
 	}
 
-	public boolean tryPullingFrom(IItemHandler handler) {
+	public boolean tryPullingFrom(Storage<ItemVariant> handler) {
 		ItemStack extract = ItemHelper.extract(handler, stack -> {
 			if (!PackageItem.isPackage(stack))
 				return false;
@@ -290,12 +293,8 @@ public class FrogportBlockEntity extends PackagePortBlockEntity implements IHave
 
 	}
 
-	protected IItemHandler getAdjacentInventory(Direction side) {
-		BlockEntity blockEntity = level.getBlockEntity(worldPosition.relative(side));
-		if (blockEntity == null || blockEntity instanceof FrogportBlockEntity)
-			return null;
-		return blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, side.getOpposite())
-			.orElse(null);
+	protected Storage<ItemVariant> getAdjacentInventory(Direction side) {
+		return ItemStorage.SIDED.find(this.level, this.worldPosition.relative(side), side.getOpposite());
 	}
 
 	@Override

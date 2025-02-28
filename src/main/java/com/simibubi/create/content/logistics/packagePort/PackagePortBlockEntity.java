@@ -3,7 +3,6 @@ package com.simibubi.create.content.logistics.packagePort;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlocks;
@@ -12,6 +11,7 @@ import com.simibubi.create.content.equipment.clipboard.ClipboardOverrides;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.animatedContainer.AnimatedContainerBehaviour;
+import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.utility.CreateLang;
 
@@ -33,11 +33,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
 
-public abstract class PackagePortBlockEntity extends SmartBlockEntity implements MenuProvider {
+public abstract class PackagePortBlockEntity extends SmartBlockEntity implements MenuProvider, SidedStorageBlockEntity {
 
 	public boolean acceptsPackages;
 	public String addressFilter;
@@ -57,7 +57,7 @@ public abstract class PackagePortBlockEntity extends SmartBlockEntity implements
 	}
 
 	public boolean isBackedUp() {
-		for (int i = 0; i < inventory.getSlots(); i++)
+		for (int i = 0; i < inventory.getSlotCount(); i++)
 			if (inventory.getStackInSlot(i)
 				.isEmpty())
 				return false;
@@ -105,16 +105,8 @@ public abstract class PackagePortBlockEntity extends SmartBlockEntity implements
 	}
 
 	@Override
-	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		if (isItemHandlerCap(cap))
-			return itemHandler.cast();
-		return super.getCapability(cap, side);
-	}
-
-	@Override
-	public void invalidate() {
-		itemHandler.invalidate();
-		super.invalidate();
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction side) {
+		return this.exposedInventory;
 	}
 
 	@Override
@@ -122,7 +114,7 @@ public abstract class PackagePortBlockEntity extends SmartBlockEntity implements
 		if (target != null)
 			target.deregister(this, level, worldPosition);
 		super.destroy();
-		for (int i = 0; i < inventory.getSlots(); i++)
+		for (int i = 0; i < inventory.getSlotCount(); i++)
 			drop(inventory.getStackInSlot(i));
 	}
 
@@ -213,7 +205,7 @@ public abstract class PackagePortBlockEntity extends SmartBlockEntity implements
 	}
 
 	public int getComparatorOutput() {
-		return ItemHandlerHelper.calcRedstoneFromInventory(inventory);
+		return ItemHelper.calcRedstoneFromInventory(inventory);
 	}
 
 }

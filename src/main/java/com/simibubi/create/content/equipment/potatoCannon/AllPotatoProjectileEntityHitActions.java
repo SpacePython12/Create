@@ -36,12 +36,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
 
 public class AllPotatoProjectileEntityHitActions {
-	
+
 	static {
 		register("set_on_fire", SetOnFire.CODEC);
 		register("potion_effect", PotionEffect.CODEC);
@@ -50,7 +49,7 @@ public class AllPotatoProjectileEntityHitActions {
 		register("cure_zombie_villager", CureZombieVillager.CODEC);
 		register("suspicious_stew", SuspiciousStew.CODEC);
 	}
-	
+
 	public static void init() {
 	}
 
@@ -192,7 +191,7 @@ public class AllPotatoProjectileEntityHitActions {
 		private static final GameProfile ZOMBIE_CONVERTER_NAME =
 			new GameProfile(UUID.fromString("be12d3dc-27d3-4992-8c97-66be53fd49c5"), "Converter");
 		private static final WorldAttached<FakePlayer> ZOMBIE_CONVERTERS =
-			new WorldAttached<>(w -> new FakePlayer((ServerLevel) w, ZOMBIE_CONVERTER_NAME));
+			new WorldAttached<>(w -> FakePlayer.get((ServerLevel) w, ZOMBIE_CONVERTER_NAME));
 
 		public static final Codec<CureZombieVillager> CODEC = Codec.unit(INSTANCE);
 

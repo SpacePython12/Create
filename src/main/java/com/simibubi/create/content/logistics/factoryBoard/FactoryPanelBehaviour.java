@@ -13,9 +13,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 import org.joml.Math;
 
 import com.google.common.collect.HashMultimap;
@@ -80,7 +77,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.minecraftforge.network.NetworkHooks;
+import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
 
 public class FactoryPanelBehaviour extends FilteringBehaviour implements MenuProvider {
 

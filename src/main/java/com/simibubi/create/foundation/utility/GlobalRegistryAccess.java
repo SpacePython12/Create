@@ -9,15 +9,16 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.MinecraftServer;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.fabricmc.api.EnvType;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
 public final class GlobalRegistryAccess {
 	private static Supplier<@Nullable RegistryAccess> supplier;
 
 	static {
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> supplier = () -> {
+		EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> supplier = () -> {
 			ClientPacketListener packetListener = Minecraft.getInstance().getConnection();
 			if (packetListener == null) {
 				return null;

@@ -80,12 +80,14 @@ import com.simibubi.create.foundation.utility.CameraAngleAnimationService;
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
 import com.simibubi.create.foundation.utility.TickBasedCache;
 import com.simibubi.create.infrastructure.config.AllConfigs;
+import com.simibubi.create.infrastructure.fabric.RenderItemDecorationsCallback;
 import com.simibubi.create.infrastructure.gui.OpenCreateMenuButton;
 
+import dev.engine_room.flywheel.api.event.ReloadLevelRendererCallback;
 import net.createmod.catnip.animation.AnimationTickHolder;
-import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.createmod.catnip.levelWrappers.WrappedClientLevel;
 import net.createmod.catnip.render.DefaultSuperRenderTypeBuffer;
+import net.createmod.catnip.render.StitchedSprite;
 import net.createmod.catnip.render.SuperRenderTypeBuffer;
 import net.createmod.ponder.foundation.PonderTooltipHandler;
 import net.minecraft.client.Camera;
@@ -113,13 +115,11 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
 
-
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback.RegistrationHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
@@ -146,7 +146,6 @@ import io.github.fabricators_of_create.porting_lib.event.client.ParticleManagerR
 import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback;
 import io.github.fabricators_of_create.porting_lib.event.client.RenderPlayerEvents;
 import io.github.fabricators_of_create.porting_lib.event.client.RenderTickStartCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderTooltipBorderColorCallback;
 import io.github.fabricators_of_create.porting_lib.event.client.TextureStitchCallback;
 import io.github.fabricators_of_create.porting_lib.event.common.AttackAirCallback;
 
@@ -303,7 +302,7 @@ public class ClientEvents {
 			modifier.modify(stack, player, iTooltipFlag, itemTooltip);
 		}
 
-		SequencedAssemblyRecipe.addToTooltip(event);
+		SequencedAssemblyRecipe.addToTooltip(stack, itemTooltip);
 	}
 
 	public static void onRenderTick() {
@@ -413,13 +412,13 @@ public class ClientEvents {
 		CreateHatArmorLayer.registerOn(entityRenderer, registrationHelper);
 	}
 
-	@SubscribeEvent
-	public static void registerItemDecorations(RegisterItemDecorationsEvent event) {
-		event.register(AllItems.POTATO_CANNON, PotatoCannonItemRenderer.DECORATOR);
+	public static void registerItemDecorations() {
+		RenderItemDecorationsCallback.EVENT.register(PotatoCannonItemRenderer.DECORATOR);
 	}
 
 	public static void register() {
-		ModBusEvents.registerClientReloadListeners();
+//		ModBusEvents.registerClientReloadListeners();
+		registerItemDecorations();
 
 		ClientTickEvents.END_CLIENT_TICK.register(ClientEvents::onTick);
 		ClientTickEvents.START_CLIENT_TICK.register(ClientEvents::onTickStart);
@@ -435,7 +434,6 @@ public class ClientEvents {
 		FogEvents.RENDER_FOG.register(ClientEvents::getFogDensity);
 		FogEvents.SET_COLOR.register(ClientEvents::getFogColor);
 		RenderTickStartCallback.EVENT.register(ClientEvents::onRenderTick);
-		RenderTooltipBorderColorCallback.EVENT.register(ClientEvents::getItemTooltipColor);
 		AttackAirCallback.EVENT.register(ClientEvents::leftClickEmpty);
 		UseBlockCallback.EVENT.register(TrackBlockItem::sendExtenderPacket);
 		EntityMountEvents.MOUNT.register(ClientEvents::onMount);

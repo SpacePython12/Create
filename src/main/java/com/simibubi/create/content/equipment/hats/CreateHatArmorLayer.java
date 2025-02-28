@@ -18,16 +18,16 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.ModelPart.Cube;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback.RegistrationHelper;
 
 public class CreateHatArmorLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
@@ -89,16 +89,9 @@ public class CreateHatArmorLayer<T extends LivingEntity, M extends EntityModel<T
 				ms.popPose();
 			}
 
-			public static void registerOnAll(EntityRenderDispatcher renderManager) {
-				for (EntityRenderer<? extends Player> renderer : renderManager.getSkinMap()
-					.values())
-					registerOn(renderer);
-				for (EntityRenderer<?> renderer : renderManager.renderers.values())
-					registerOn(renderer);
-			}
+			// fabric: remove registerOnAll, event is per-renderer
 
-			@SuppressWarnings({"rawtypes", "unchecked"})
-			public static void registerOn(EntityRenderer<?> entityRenderer) {
+			public static void registerOn(EntityRenderer<?> entityRenderer, RegistrationHelper helper) {
 				if (!(entityRenderer instanceof LivingEntityRenderer<?, ?> livingRenderer))
 					return;
 
@@ -108,7 +101,7 @@ public class CreateHatArmorLayer<T extends LivingEntity, M extends EntityModel<T
 					return;
 
 				CreateHatArmorLayer<?, ?> layer = new CreateHatArmorLayer<>(livingRenderer);
-				livingRenderer.addLayer((CreateHatArmorLayer) layer);
+				helper.register(layer);
 			}
 
 			private static ModelPart getHeadPart(AgeableListModel<?> model) {

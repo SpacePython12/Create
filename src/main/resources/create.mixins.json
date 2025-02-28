@@ -44,7 +44,6 @@
     "fabric.BlockableEventLoopAccessor",
     "fabric.EntityAccessor",
     "fabric.EntityMixin",
-    "fabric.RegistryMixin",
     "fabric.ServerGamePacketListenerImplAccessor",
     "fabric.SortedArraySetAccessor",
     "fabric.StructureUtilsMixin",
@@ -52,12 +51,10 @@
   ],
   "client": [
     "accessor.AgeableListModelAccessor",
-    "accessor.BufferBuilderAccessor",
     "accessor.FontAccessor",
     "accessor.HumanoidArmorLayerAccessor",
     "accessor.LevelRendererAccessor",
     "accessor.MouseHandlerAccessor",
-    "accessor.RenderSystemAccessor",
     "client.BlockDestructionProgressMixin",
     "client.CameraMixin",
     "client.EntityContraptionInteractionMixin",
@@ -71,7 +68,8 @@
     "compat.JourneyFullscreenMapMixin",
     "fabric.ClientTextTooltipAccessor",
     "fabric.GuiAccessor",
-    "fabric.LivingEntityRendererAccessor"
+    "fabric.LivingEntityRendererAccessor",
+    "fabric.infra.GuiGraphicsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

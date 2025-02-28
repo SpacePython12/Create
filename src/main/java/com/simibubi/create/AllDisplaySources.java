@@ -1,5 +1,12 @@
 package com.simibubi.create;
 
+import static com.simibubi.create.Create.REGISTRATE;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+
 import com.simibubi.create.api.behaviour.display.DisplaySource;
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.content.redstone.displayLink.source.AccumulatedItemCountDisplaySource;
@@ -29,20 +36,14 @@ import com.simibubi.create.content.redstone.displayLink.source.StopWatchDisplayS
 import com.simibubi.create.content.redstone.displayLink.source.TimeOfDayDisplaySource;
 import com.simibubi.create.content.redstone.displayLink.source.TrainStatusDisplaySource;
 import com.tterrag.registrate.util.entry.RegistryEntry;
+
 import net.minecraft.Util;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
-
-import static com.simibubi.create.Create.REGISTRATE;
 
 public class AllDisplaySources {
 	public static final RegistryEntry<DeathCounterDisplaySource> DEATH_COUNT = REGISTRATE.displaySource("death_count", DeathCounterDisplaySource::new)
@@ -90,8 +91,8 @@ public class AllDisplaySources {
 			List<String> types = List.of("wired_modem_full", "computer_normal", "computer_advanced", "computer_command");
 			for (String name : types) {
 				ResourceLocation id = Mods.COMPUTERCRAFT.rl(name);
-				if (ForgeRegistries.BLOCK_ENTITY_TYPES.containsKey(id)) {
-					BlockEntityType<?> type = ForgeRegistries.BLOCK_ENTITY_TYPES.getValue(id);
+				if (BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(id)) {
+					BlockEntityType<?> type = BuiltInRegistries.BLOCK_ENTITY_TYPE.get(id);
 					DisplaySource.BY_BLOCK_ENTITY.add(type, source);
 				} else {
 					Create.LOGGER.warn("Could not find block entity type {}. Outdated compat?", id);

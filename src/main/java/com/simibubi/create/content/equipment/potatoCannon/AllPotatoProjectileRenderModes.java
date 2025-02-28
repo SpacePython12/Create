@@ -14,18 +14,19 @@ import net.minecraft.core.Registry;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class AllPotatoProjectileRenderModes {
-	
+
 	static {
 		register("billboard", Billboard.CODEC);
 		register("tumble", Tumble.CODEC);
 		register("toward_motion", TowardMotion.CODEC);
 		register("stuck_to_entity", StuckToEntity.CODEC);
 	}
-	
+
 	public static void init() {
 	}
 
@@ -39,7 +40,7 @@ public class AllPotatoProjectileRenderModes {
 		public static final Codec<Billboard> CODEC = Codec.unit(INSTANCE);
 
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void transform(PoseStack ms, PotatoProjectileEntity entity, float pt) {
 			Minecraft mc = Minecraft.getInstance();
 			Vec3 p1 = mc.getCameraEntity()
@@ -65,7 +66,7 @@ public class AllPotatoProjectileRenderModes {
 		public static final Codec<Tumble> CODEC = Codec.unit(INSTANCE);
 
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void transform(PoseStack ms, PotatoProjectileEntity entity, float pt) {
 			Billboard.INSTANCE.transform(ms, entity, pt);
 			TransformStack.of(ms)
@@ -86,7 +87,7 @@ public class AllPotatoProjectileRenderModes {
 		).apply(instance, TowardMotion::new));
 
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void transform(PoseStack ms, PotatoProjectileEntity entity, float pt) {
 			Vec3 diff = entity.getDeltaMovement();
 			TransformStack.of(ms)
@@ -110,7 +111,7 @@ public class AllPotatoProjectileRenderModes {
 		).apply(instance, StuckToEntity::new));
 
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void transform(PoseStack ms, PotatoProjectileEntity entity, float pt) {
 			TransformStack.of(ms).rotateYDegrees(AngleHelper.deg(Mth.atan2(offset.x, offset.z)));
 		}

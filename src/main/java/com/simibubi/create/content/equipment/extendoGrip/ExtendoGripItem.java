@@ -3,6 +3,8 @@ package com.simibubi.create.content.equipment.extendoGrip;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;

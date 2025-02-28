@@ -9,6 +9,7 @@ import com.simibubi.create.content.equipment.potatoCannon.PotatoCannonItem.Ammo;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
+import com.simibubi.create.infrastructure.fabric.RenderItemDecorationsCallback;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.createmod.catnip.animation.AnimationTickHolder;
@@ -19,10 +20,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.IItemDecorator;
 
 public class PotatoCannonItemRenderer extends CustomRenderedItemModelRenderer {
-	public static final IItemDecorator DECORATOR = (guiGraphics, font, stack, xOffset, yOffset) -> {
+	public static final RenderItemDecorationsCallback DECORATOR = (guiGraphics, font, stack, xOffset, yOffset) -> {
 		LocalPlayer player = Minecraft.getInstance().player;
 		if (player == null) {
 			return false;

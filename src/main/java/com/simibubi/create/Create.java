@@ -37,7 +37,7 @@ import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import com.simibubi.create.foundation.ponder.FabricPonderProcessing;
 import com.simibubi.create.foundation.recipe.AllIngredients;
-import com.simibubi.create.foundation.utility.CreateNBTProcessors;
+import com.simibubi.create.impl.registry.CreateRegistriesImpl;
 import com.simibubi.create.infrastructure.command.ServerLagger;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.worldgen.AllBiomeModifiers;
@@ -123,7 +123,6 @@ public class Create implements ModInitializer {
 		AllMountedStorageTypes.register();
 
 		AllConfigs.register();
-		AllRegistries.register();
 
 		// FIXME: some of these registrations are not thread-safe
 		BogeySizes.init();
@@ -149,6 +148,7 @@ public class Create implements ModInitializer {
 		AllPackets.getChannel().initServerListener();
 		FabricPonderProcessing.init();
 		AllBiomeModifiers.bootstrap(); // moved out of datagen
+		CreateRegistriesImpl.registerDatapackRegistries();
 	}
 
 	public static void init() {
@@ -175,7 +175,7 @@ public class Create implements ModInitializer {
 //		});
 	}
 
-	public static void onRegister(final RegisterEvent event) {
+	public static void onRegister() {
 		AllArmInteractionPointTypes.init();
 		AllFanProcessingTypes.init();
 		AllItemAttributeTypes.init();

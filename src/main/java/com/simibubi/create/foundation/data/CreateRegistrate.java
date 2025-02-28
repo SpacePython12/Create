@@ -56,7 +56,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -202,16 +201,16 @@ public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
 	public <T extends SimpleFlowableFluid> FluidBuilder<T, CreateRegistrate> virtualFluid(String name,
 //		BiFunction<FluidAttributes.Builder, Fluid, FluidAttributes> attributesFactory,
 		NonNullFunction<SimpleFlowableFluid.Properties, T> sourceFactory,
-																						NonNullFunction<ForgeFlowingFluid.Properties, T> flowingFactory) {
+																						NonNullFunction<SimpleFlowableFluid.Properties, T> flowingFactory) {
 		return entry(name,
 			c -> new VirtualFluidBuilder<>(self(), self(), name, c, new ResourceLocation(getModid(), "fluid/" + name + "_still"),
-				new ResourceLocation(getModid(), "fluid/" + name + "_flow"), typeFactory, sourceFactory, flowingFactory));
+				new ResourceLocation(getModid(), "fluid/" + name + "_flow"), sourceFactory, flowingFactory));
 	}
 
 	public <T extends SimpleFlowableFluid> FluidBuilder<T, CreateRegistrate> virtualFluid(String name,
-																						ResourceLocation still, ResourceLocation flow, FluidBuilder.FluidTypeFactory typeFactory,
+																						ResourceLocation still, ResourceLocation flow,
 																						NonNullFunction<SimpleFlowableFluid.Properties, T> sourceFactory, NonNullFunction<SimpleFlowableFluid.Properties, T> flowingFactory) {
-		return entry(name, c -> new VirtualFluidBuilder<>(self(), self(), name, c, still, flow, typeFactory, sourceFactory, flowingFactory));
+		return entry(name, c -> new VirtualFluidBuilder<>(self(), self(), name, c, still, flow, sourceFactory, flowingFactory));
 	}
 
 	public FluidBuilder<VirtualFluid, CreateRegistrate> virtualFluid(String name) {

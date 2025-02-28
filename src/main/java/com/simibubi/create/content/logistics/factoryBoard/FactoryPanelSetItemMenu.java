@@ -11,10 +11,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 
 public class FactoryPanelSetItemMenu extends GhostItemMenu<FactoryPanelBehaviour> {
 
@@ -41,7 +43,7 @@ public class FactoryPanelSetItemMenu extends GhostItemMenu<FactoryPanelBehaviour
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	protected FactoryPanelBehaviour createOnClient(FriendlyByteBuf extraData) {
 		FactoryPanelPosition pos = FactoryPanelPosition.receive(extraData);
 		return FactoryPanelBehaviour.at(Minecraft.getInstance().level, pos);

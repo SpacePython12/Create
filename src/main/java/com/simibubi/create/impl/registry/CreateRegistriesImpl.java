@@ -5,20 +5,11 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import com.simibubi.create.api.equipment.potatoCannon.PotatoCannonProjectileType;
 import com.simibubi.create.api.registry.CreateRegistries;
 
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.registries.DataPackRegistryEvent;
+import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 
-@EventBusSubscriber(bus = Bus.MOD)
 public class CreateRegistriesImpl {
 	@Internal
-	@SubscribeEvent
-	public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-		event.dataPackRegistry(
-			CreateRegistries.POTATO_PROJECTILE_TYPE,
-			PotatoCannonProjectileType.CODEC,
-			PotatoCannonProjectileType.CODEC
-		);
+	public static void registerDatapackRegistries() {
+		DynamicRegistries.registerSynced(CreateRegistries.POTATO_PROJECTILE_TYPE, PotatoCannonProjectileType.CODEC);
 	}
 }

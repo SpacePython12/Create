@@ -12,6 +12,7 @@ import com.simibubi.create.content.contraptions.glue.SuperGlueEntity;
 import net.createmod.catnip.math.BlockFace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -25,8 +26,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.portal.PortalInfo;
 import net.minecraft.world.phys.AABB;
 
-import net.minecraftforge.common.util.ITeleporter;
-import net.minecraftforge.registries.ForgeRegistries;
+import io.github.fabricators_of_create.porting_lib.entity.ITeleporter;
 
 /**
  * Manages portal track integrations for various dimensions and mods within the Create mod.
@@ -44,8 +44,8 @@ public class AllPortalTracks {
 	 * @param provider The portal track provider for the block.
 	 */
 	public static void tryRegisterIntegration(ResourceLocation id, PortalTrackProvider provider) {
-		if (ForgeRegistries.BLOCKS.containsKey(id)) {
-			Block block = ForgeRegistries.BLOCKS.getValue(id);
+		if (BuiltInRegistries.BLOCK.containsKey(id)) {
+			Block block = BuiltInRegistries.BLOCK.get(id);
 			PortalTrackProvider.REGISTRY.register(block, provider);
 		} else {
 			Create.LOGGER.warn("Portal for integration wasn't found: {}. Compat outdated?", id);

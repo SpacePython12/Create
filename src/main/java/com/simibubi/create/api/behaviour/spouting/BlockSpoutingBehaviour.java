@@ -12,6 +12,7 @@ import com.simibubi.create.compat.tconstruct.SpoutCasting;
 import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,8 +24,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Interface for custom block-filling behavior for spouts.
@@ -74,7 +73,7 @@ public interface BlockSpoutingBehaviour {
 
 		for (String name : List.of("table", "basin")) {
 			ResourceLocation id = Mods.TCONSTRUCT.rl(name);
-			if (ForgeRegistries.BLOCK_ENTITY_TYPES.containsKey(id)) {
+			if (BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(id)) {
 				BlockEntityType<?> table = ForgeRegistries.BLOCK_ENTITY_TYPES.getValue(id);
 				BY_BLOCK_ENTITY.register(table, SpoutCasting.INSTANCE);
 			} else {

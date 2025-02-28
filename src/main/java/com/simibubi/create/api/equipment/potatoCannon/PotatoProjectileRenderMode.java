@@ -7,14 +7,14 @@ import com.mojang.serialization.Codec;
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.equipment.potatoCannon.PotatoProjectileEntity;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public interface PotatoProjectileRenderMode {
 	Codec<PotatoProjectileRenderMode> CODEC = CreateBuiltInRegistries.POTATO_PROJECTILE_RENDER_MODE.byNameCodec()
 		.dispatch(PotatoProjectileRenderMode::codec, Function.identity());
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	void transform(PoseStack ms, PotatoProjectileEntity entity, float pt);
 
 	Codec<? extends PotatoProjectileRenderMode> codec();

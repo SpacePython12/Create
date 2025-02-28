@@ -266,7 +266,6 @@ public class OpenEndedPipe extends FlowSource {
 			if (getFluidAmount() == 1000 || !hasBlockState)
 				if (provideFluidToSpace(containedFluidStack, false))
 					setFluid(FluidStack.EMPTY);
-			}
 			return fill;
 		}
 

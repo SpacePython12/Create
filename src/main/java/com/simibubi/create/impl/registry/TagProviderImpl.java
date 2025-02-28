@@ -7,12 +7,11 @@ import org.jetbrains.annotations.Nullable;
 import com.simibubi.create.api.registry.SimpleRegistry;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import io.github.fabricators_of_create.porting_lib.event.common.TagsUpdatedCallback;
 
 public class TagProviderImpl<K, V> implements SimpleRegistry.Provider<K, V> {
 	private final TagKey<K> tag;
@@ -34,17 +33,11 @@ public class TagProviderImpl<K, V> implements SimpleRegistry.Provider<K, V> {
 
 	@Override
 	public void onRegister(Runnable invalidate) {
-		MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent event) -> {
-			if (event.shouldUpdateStaticData()) {
-				invalidate.run();
-			}
-		});
+		TagsUpdatedCallback.EVENT.register(registries -> invalidate.run());
 	}
 
 	// eye of the beholder? check the nametag, buddy
 	public static Holder<BlockEntityType<?>> getBeHolder(BlockEntityType<?> type) {
-		return ForgeRegistries.BLOCK_ENTITY_TYPES.getHolder(type).orElseThrow(
-			() -> new IllegalStateException("Unregistered BlockEntityType: " + type)
-		);
+		return BuiltInRegistries.BLOCK_ENTITY_TYPE.wrapAsHolder(type);
 	}
 }

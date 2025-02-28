@@ -189,7 +189,7 @@ public class BacktankBlock extends HorizontalKineticBlock implements IBE<Backtan
 
 //		CompoundTag forgeCapsTag = blockEntityOptional.map(BacktankBlockEntity::getForgeCapsTag)
 	//			.map(CompoundTag::copy)
-			.orElse(null);
+//			.orElse(null);
 		CompoundTag vanillaTag = blockEntityOptional.map(BacktankBlockEntity::getVanillaTag)
 				.map(CompoundTag::copy)
 			.orElse(new CompoundTag());

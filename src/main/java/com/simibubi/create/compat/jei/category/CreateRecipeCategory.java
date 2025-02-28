@@ -180,7 +180,7 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements IReci
 
 			long amount = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
 			FluidUnit unit = AllConfigs.client().fluidUnitType.get();
-			String amountText = FluidTextUtil.getUnicodeMillibuckets(amountToUse, unit, AllConfigs.client().simplifyFluidUnit.get());
+			String amountText = FluidTextUtil.getUnicodeMillibuckets(amount, unit, AllConfigs.client().simplifyFluidUnit.get());
 			Component text = Component.literal(amountText).append(CreateLang.translateDirect(unit.getTranslationKey())).withStyle(ChatFormatting.GOLD);
 			tooltip.add(text);
 		};

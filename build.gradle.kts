@@ -30,7 +30,7 @@ val ccVersion = "1.106.1"
 // for CC - https://modrinth.com/mod/cloth-config/versions
 val clothVersion = "11.1.106+fabric"
 // https://modrinth.com/mod/jei/versions
-val jeiVersion = "15.2.0.22"
+val jeiVersion = "15.19.0.85"
 // https://modrinth.com/mod/rei/versions
 val reiVersion = "12.0.626"
 // https://modrinth.com/mod/emi/versions
@@ -49,6 +49,10 @@ val indiumVersion = "1.0.30+mc1.20.4"
 val trinketsVersion = "3.7.0"
 // for Trinkets - https://modrinth.com/mod/cardinal-components-api/versions
 val ccaVersion = "5.2.1"
+// https://modrinth.com/mod/journeymap
+val jmVersion = "1.20.1-5.10.3-fabric"
+// check the jm jar, it's JiJ
+val jmApiVersion = "1.20-1.9-SNAPSHOT"
 
 // dev stuff
 val ccRuntime = false
@@ -90,8 +94,7 @@ repositories {
     maven("https://maven.ladysnake.org/releases") // CCA, for Trinkets
     maven("https://maven.saps.dev/releases") // FTB
     maven("https://maven.architectury.dev") // Architectury API
-    // FIXME grab artifact from this maven for JM
-    //maven { url = "https://jm.gserv.me/repository/maven-public" } // Journey map
+    maven("https://jm.gserv.me/repository/maven-public/") // Journey map
 }
 
 dependencies {
@@ -139,7 +142,8 @@ dependencies {
     modCompileOnly("dev.ftb.mods:ftb-teams-fabric:2001.3.0")
     modCompileOnly("dev.ftb.mods:ftb-library-fabric:2001.2.4")
 
-    modCompileOnly("maven.modrinth:journeymap:1.20.1-5.10.3-fabric")
+    modCompileOnly("maven.modrinth:journeymap:$jmVersion")
+    modCompileOnly("info.journeymap:journeymap-api:$jmApiVersion")
 
     // EMI
     modCompileOnly("dev.emi:emi-fabric:$emiVersion:api") { isTransitive = false }

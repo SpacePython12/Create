@@ -169,7 +169,7 @@ public class ElevatorContraption extends PulleyContraption {
 
 	@Override
 	public ContraptionType getType() {
-		return AllContraptionTypes.ELEVATOR.get();
+		return AllContraptionTypes.ELEVATOR.value();
 	}
 
 	public void setClientYTarget(int clientYTarget) {

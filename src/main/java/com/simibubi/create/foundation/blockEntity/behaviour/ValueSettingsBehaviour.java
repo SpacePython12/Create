@@ -87,13 +87,13 @@ public interface ValueSettingsBehaviour extends ClipboardCloneable {
 	default boolean bypassesInput(ItemStack mainhandItem) {
 		return false;
 	}
-	
+
 	default boolean mayInteract(Player player) {
 		return true;
 	}
-	
+
 	default int netId() {
 		return 0;
 	}
-	
+
 }

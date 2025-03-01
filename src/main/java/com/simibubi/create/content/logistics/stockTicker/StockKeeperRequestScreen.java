@@ -1080,12 +1080,12 @@ public class StockKeeperRequestScreen extends AbstractSimiContainerScreen<StockK
 
 				if (!entry.hidden) {
 					hiddenCategories.add(indexOf);
-					playUiSound(SoundEvents.ITEM_FRAME_ROTATE_ITEM, 0.75f, 1.5f);
+					playUiSound(SoundEvents.ITEM_FRAME_ROTATE_ITEM, 1f, 1.5f);
 				}
 
 				else {
 					hiddenCategories.remove(indexOf);
-					playUiSound(SoundEvents.ITEM_FRAME_ROTATE_ITEM, 0.75f, 0.675f);
+					playUiSound(SoundEvents.ITEM_FRAME_ROTATE_ITEM, 1f, 0.675f);
 				}
 
 				refreshSearchNextTick = true;
@@ -1122,8 +1122,8 @@ public class StockKeeperRequestScreen extends AbstractSimiContainerScreen<StockK
 			if (itemsToOrder.size() >= cols || rmb)
 				return true;
 			itemsToOrder.add(existingOrder = new BigItemStack(itemStack.copyWithCount(1), 0));
-			playUiSound(SoundEvents.WOOL_STEP, 0.5f, 1.2f);
-			playUiSound(SoundEvents.BAMBOO_WOOD_STEP, 0.5f, 0.8f);
+			playUiSound(SoundEvents.WOOL_STEP, 0.75f, 1.2f);
+			playUiSound(SoundEvents.BAMBOO_WOOD_STEP, 0.75f, 0.8f);
 		}
 
 		int current = existingOrder.count;
@@ -1132,8 +1132,8 @@ public class StockKeeperRequestScreen extends AbstractSimiContainerScreen<StockK
 			existingOrder.count = current - transfer;
 			if (existingOrder.count <= 0) {
 				itemsToOrder.remove(existingOrder);
-				playUiSound(SoundEvents.WOOL_STEP, 0.5f, 1.8f);
-				playUiSound(SoundEvents.BAMBOO_WOOD_STEP, 0.5f, 1.8f);
+				playUiSound(SoundEvents.WOOL_STEP, 0.75f, 1.8f);
+				playUiSound(SoundEvents.BAMBOO_WOOD_STEP, 0.75f, 1.8f);
 			}
 			return true;
 		}
@@ -1189,8 +1189,8 @@ public class StockKeeperRequestScreen extends AbstractSimiContainerScreen<StockK
 			if (itemsToOrder.size() >= cols || remove)
 				return true;
 			itemsToOrder.add(existingOrder = new BigItemStack(entry.stack.copyWithCount(1), 0));
-			playUiSound(SoundEvents.WOOL_STEP, 0.5f, 1.2f);
-			playUiSound(SoundEvents.BAMBOO_WOOD_STEP, 0.5f, 0.8f);
+			playUiSound(SoundEvents.WOOL_STEP, 0.75f, 1.2f);
+			playUiSound(SoundEvents.BAMBOO_WOOD_STEP, 0.75f, 0.8f);
 		}
 
 		int current = existingOrder.count;
@@ -1199,8 +1199,8 @@ public class StockKeeperRequestScreen extends AbstractSimiContainerScreen<StockK
 			existingOrder.count = current - transfer;
 			if (existingOrder.count <= 0) {
 				itemsToOrder.remove(existingOrder);
-				playUiSound(SoundEvents.WOOL_STEP, 0.5f, 1.8f);
-				playUiSound(SoundEvents.BAMBOO_WOOD_STEP, 0.5f, 1.8f);
+				playUiSound(SoundEvents.WOOL_STEP, 0.75f, 1.8f);
+				playUiSound(SoundEvents.BAMBOO_WOOD_STEP, 0.75f, 1.8f);
 			} else if (existingOrder.count != current)
 				playUiSound(AllSoundEvents.SCROLL_VALUE.getMainEvent(), 0.25f, 1.2f);
 			return true;

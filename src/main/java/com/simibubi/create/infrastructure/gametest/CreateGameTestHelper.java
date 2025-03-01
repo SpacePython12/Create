@@ -15,7 +15,6 @@ import com.simibubi.create.content.contraptions.actors.contraptionControls.Contr
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.kinetics.gauge.SpeedGaugeBlockEntity;
 import com.simibubi.create.content.kinetics.gauge.StressGaugeBlockEntity;
-
 import com.simibubi.create.content.logistics.tunnel.BrassTunnelBlockEntity.SelectionMode;
 import com.simibubi.create.content.redstone.nixieTube.NixieTubeBlockEntity;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
@@ -25,19 +24,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOp
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.mixin.accessor.GameTestHelperAccessor;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import it.unimi.dsi.fastutil.objects.Object2LongArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap.Entry;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,6 +51,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 /**
  * A helper class expanding the functionality of {@link GameTestHelper}.
@@ -172,9 +173,9 @@ public class CreateGameTestHelper extends GameTestHelper {
 		BlockEntity be = getBlockEntity(pos);
 		BlockEntityType<?> actualType = be == null ? null : be.getType();
 		if (actualType != type) {
-			String actualId = actualType == null ? "null" : RegisteredObjects.getKeyOrThrow(actualType).toString();
+			String actualId = actualType == null ? "null" : CatnipServices.REGISTRIES.getKeyOrThrow(actualType).toString();
 			String error = "Expected block entity at pos [%s] with type [%s], got [%s]".formatted(
-					pos, RegisteredObjects.getKeyOrThrow(type), actualId
+					pos, CatnipServices.REGISTRIES.getKeyOrThrow(type), actualId
 			);
 			fail(error);
 		}
@@ -187,7 +188,7 @@ public class CreateGameTestHelper extends GameTestHelper {
 	public <T extends BlockEntity & IMultiBlockEntityContainer> T getControllerBlockEntity(BlockEntityType<T> type, BlockPos anySegment) {
 		T be = getBlockEntity(type, anySegment).getControllerBE();
 		if (be == null)
-			fail("Could not get block entity controller with type [%s] from pos [%s]".formatted(RegisteredObjects.getKeyOrThrow(type), anySegment));
+			fail("Could not get block entity controller with type [%s] from pos [%s]".formatted(CatnipServices.REGISTRIES.getKeyOrThrow(type), anySegment));
 		return be;
 	}
 

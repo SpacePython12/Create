@@ -1,18 +1,42 @@
 package com.simibubi.create.content.trains.station;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
+import com.simibubi.create.Create;
+import com.simibubi.create.content.logistics.box.PackageItem;
+import com.simibubi.create.content.logistics.packagePort.postbox.PostboxBlockEntity;
+import com.simibubi.create.content.trains.entity.Carriage;
+import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.graph.DimensionPalette;
 import com.simibubi.create.content.trains.graph.TrackNode;
 import com.simibubi.create.content.trains.signal.SingleBlockEntityEdgePoint;
 
+import net.createmod.catnip.nbt.NBTHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class GlobalStation extends SingleBlockEntityEdgePoint {
 
@@ -20,9 +44,12 @@ public class GlobalStation extends SingleBlockEntityEdgePoint {
 	public WeakReference<Train> nearestTrain;
 	public boolean assembling;
 
+	public Map<BlockPos, GlobalPackagePort> connectedPorts;
+
 	public GlobalStation() {
 		name = "Track Station";
-		nearestTrain = new WeakReference<Train>(null);
+		nearestTrain = new WeakReference<>(null);
+		connectedPorts = new HashMap<>();
 	}
 
 	@Override
@@ -38,7 +65,17 @@ public class GlobalStation extends SingleBlockEntityEdgePoint {
 		super.read(nbt, migration, dimensions);
 		name = nbt.getString("Name");
 		assembling = nbt.getBoolean("Assembling");
-		nearestTrain = new WeakReference<Train>(null);
+		nearestTrain = new WeakReference<>(null);
+
+		connectedPorts.clear();
+		ListTag portList = nbt.getList("Ports", Tag.TAG_COMPOUND);
+		NBTHelper.iterateCompoundList(portList, c -> {
+			GlobalPackagePort port = new GlobalPackagePort();
+			port.address = c.getString("Address");
+			port.offlineBuffer.deserializeNBT(c.getCompound("OfflineBuffer"));
+			port.primed = c.getBoolean("Primed");
+			connectedPorts.put(NbtUtils.readBlockPos(c.getCompound("Pos")), port);
+		});
 	}
 
 	@Override
@@ -55,6 +92,15 @@ public class GlobalStation extends SingleBlockEntityEdgePoint {
 		super.write(nbt, dimensions);
 		nbt.putString("Name", name);
 		nbt.putBoolean("Assembling", assembling);
+
+		nbt.put("Ports", NBTHelper.writeCompoundList(connectedPorts.entrySet(), e -> {
+			CompoundTag c = new CompoundTag();
+			c.putString("Address", e.getValue().address);
+			c.put("OfflineBuffer", e.getValue().offlineBuffer.serializeNBT());
+			c.putBoolean("Primed", e.getValue().primed);
+			c.put("Pos", NbtUtils.writeBlockPos(e.getKey()));
+			return c;
+		}));
 	}
 
 	@Override
@@ -117,6 +163,101 @@ public class GlobalStation extends SingleBlockEntityEdgePoint {
 	@Nullable
 	public Train getNearestTrain() {
 		return this.nearestTrain.get();
+	}
+
+	// Package Port integration
+	public static class GlobalPackagePort {
+		public String address = "";
+		public ItemStackHandler offlineBuffer = new ItemStackHandler(18);
+		public boolean primed = false;
+	}
+
+	public void runMailTransfer() {
+		Train train = getPresentTrain();
+		if (train == null || connectedPorts.isEmpty())
+			return;
+		Level level = null;
+
+		for (Carriage carriage : train.carriages) {
+			if (level == null) {
+				CarriageContraptionEntity entity = carriage.anyAvailableEntity();
+				if (entity != null && entity.level() instanceof ServerLevel sl)
+					level = sl.getServer()
+						.getLevel(getBlockEntityDimension());
+			}
+
+			Storage<ItemVariant> carriageInventory = carriage.storage.getAllItems();
+			if (carriageInventory == null)
+				continue;
+
+			// Import from station
+			for (Entry<BlockPos, GlobalPackagePort> entry : connectedPorts.entrySet()) {
+				GlobalPackagePort port = entry.getValue();
+				BlockPos pos = entry.getKey();
+				PostboxBlockEntity box = null;
+
+				ItemStackHandler postboxInventory = port.offlineBuffer;
+				if (level != null && level.isLoaded(pos)
+					&& level.getBlockEntity(pos) instanceof PostboxBlockEntity ppbe) {
+					postboxInventory = ppbe.inventory;
+					box = ppbe;
+				}
+
+				for (int slot = 0; slot < postboxInventory.getSlotCount(); slot++) {
+					ItemStack stack = postboxInventory.getStackInSlot(slot);
+					if (!PackageItem.isPackage(stack))
+						continue;
+					if (PackageItem.matchAddress(stack, port.address))
+						continue;
+
+					long inserted = TransferUtil.insertItem(carriageInventory, stack);
+					if (inserted == 0)
+						continue;
+
+					postboxInventory.setStackInSlot(slot, ItemStack.EMPTY);
+					Create.RAILWAYS.markTracksDirty();
+					if (box != null)
+						box.spawnParticles();
+				}
+			}
+
+			// Export to station
+			try (Transaction t = Transaction.openOuter()) {
+				for (StorageView<ItemVariant> view : carriageInventory.nonEmptyViews()) {
+					ItemVariant resource = view.getResource();
+					if (!PackageItem.isPackage(resource))
+						continue;
+
+					for (Entry<BlockPos, GlobalPackagePort> entry : connectedPorts.entrySet()) {
+						GlobalPackagePort port = entry.getValue();
+						BlockPos pos = entry.getKey();
+						PostboxBlockEntity box = null;
+
+						if (!PackageItem.matchAddress(resource, port.address))
+							continue;
+
+						ItemStackHandler postboxInventory = port.offlineBuffer;
+						if (level != null && level.isLoaded(pos)
+							&& level.getBlockEntity(pos) instanceof PostboxBlockEntity ppbe) {
+							postboxInventory = ppbe.inventory;
+							box = ppbe;
+						}
+
+						long inserted = postboxInventory.insert(resource, view.getAmount(), t);
+						if (inserted != 0)
+							continue;
+
+						Create.RAILWAYS.markTracksDirty();
+						view.extract(resource, view.getAmount(), t);
+						if (box != null)
+							box.spawnParticles();
+
+						break;
+					}
+				}
+				t.commit();
+			}
+		}
 	}
 
 }

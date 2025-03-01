@@ -26,14 +26,14 @@ public class SmartChuteBlock extends AbstractChuteBlock {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
 	@Override
-	public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos,
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
 		boolean isMoving) {
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		if (worldIn.isClientSide)
+		super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+		if (level.isClientSide)
 			return;
-		if (!worldIn.getBlockTicks()
+		if (!level.getBlockTicks()
 			.willTickThisTick(pos, this))
-			worldIn.scheduleTick(pos, this, 0);
+			level.scheduleTick(pos, this, 1);
 	}
 
 	@Override

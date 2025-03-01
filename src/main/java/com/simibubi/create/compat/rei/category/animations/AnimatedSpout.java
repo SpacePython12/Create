@@ -6,18 +6,19 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Axis;
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.gui.UIRenderHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.util.Mth;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class AnimatedSpout extends AnimatedKinetics {
 
@@ -75,7 +76,8 @@ public class AnimatedSpout extends AnimatedKinetics {
 		matrixStack.scale(16, 16, 16);
 		float from = 3f / 16f;
 		float to = 17f / 16f;
-		FluidRenderer.renderFluidBox(fluids.get(0), from, from, from, to, to, to, buffer, matrixStack, LightTexture.FULL_BRIGHT, false);
+		FluidStack fluidStack = fluids.get(0);
+		FluidRenderer.renderFluidBox(fluidStack.getFluid(), fluidStack.getAmount(), from, from, from, to, to, to, buffer, matrixStack, LightTexture.FULL_BRIGHT, false);
 		matrixStack.popPose();
 
 		float width = 1 / 128f * squeeze;
@@ -85,8 +87,7 @@ public class AnimatedSpout extends AnimatedKinetics {
 		matrixStack.translate(-0.5f, 0, -0.5f);
 		from = -width / 2 + 0.5f;
 		to = width / 2 + 0.5f;
-		FluidRenderer.renderFluidBox(fluids.get(0), from, 0, from, to, 2, to, buffer, matrixStack, LightTexture.FULL_BRIGHT,
-			false);
+		FluidRenderer.renderFluidBox(fluidStack.getFluid(), fluidStack.getAmount(), from, 0, from, to, 2, to, buffer, matrixStack, LightTexture.FULL_BRIGHT, false);
 		buffer.endBatch();
 		Lighting.setupFor3DItems();
 

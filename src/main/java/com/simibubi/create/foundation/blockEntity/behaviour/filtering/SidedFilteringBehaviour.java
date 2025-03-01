@@ -11,13 +11,15 @@ import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform.Sided;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.NBTHelper;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.nbt.NBTHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -111,38 +113,36 @@ public class SidedFilteringBehaviour extends FilteringBehaviour {
 		if (!sidedFilters.containsKey(side))
 			return true;
 		return sidedFilters.get(side)
-				.test(stack);
+			.test(stack);
 	}
 
 	@Override
 	public void destroy() {
 		sidedFilters.values()
-				.forEach(FilteringBehaviour::destroy);
+			.forEach(FilteringBehaviour::destroy);
 		super.destroy();
 	}
 
 	@Override
 	public ItemRequirement getRequiredItems() {
-		return sidedFilters.values().stream().reduce(
-				ItemRequirement.NONE,
-				(a, b) -> a.union(b.getRequiredItems()),
-				(a, b) -> a.union(b)
-		);
+		return sidedFilters.values()
+			.stream()
+			.reduce(ItemRequirement.NONE, (a, b) -> a.union(b.getRequiredItems()), (a, b) -> a.union(b));
 	}
 
 	public void removeFilter(Direction side) {
 		if (!sidedFilters.containsKey(side))
 			return;
 		sidedFilters.remove(side)
-				.destroy();
+			.destroy();
 	}
 
-	public boolean testHit(Direction direction, Vec3 hit) {
+	public boolean testHit(LevelAccessor level, BlockPos pos, Direction direction, Vec3 hit) {
 		ValueBoxTransform.Sided sidedPositioning = (Sided) slotPositioning;
 		BlockState state = blockEntity.getBlockState();
 		Vec3 localHit = hit.subtract(Vec3.atLowerCornerOf(blockEntity.getBlockPos()));
 		return sidedPositioning.fromSide(direction)
-			.testHit(state, localHit);
+			.testHit(level, pos, state, localHit);
 	}
 
 }

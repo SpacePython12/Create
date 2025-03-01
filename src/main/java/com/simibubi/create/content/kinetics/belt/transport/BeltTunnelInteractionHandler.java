@@ -13,9 +13,8 @@ import com.simibubi.create.content.logistics.tunnel.BrassTunnelBlockEntity;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlock;
 import com.simibubi.create.content.redstone.displayLink.source.AccumulatedItemCountDisplaySource;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Iterate;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -23,10 +22,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+
 public class BeltTunnelInteractionHandler {
 
 	public static boolean flapTunnelsAndCheckIfStuck(BeltInventory beltInventory, TransportedItemStack current,
-		float nextOffset) {
+													 float nextOffset) {
 
 		int currentSegment = (int) current.beltPosition;
 		int upcomingSegment = (int) nextOffset;
@@ -48,8 +49,7 @@ public class BeltTunnelInteractionHandler {
 		BeltTunnelBlockEntity nextTunnel = getTunnelOnSegment(beltInventory, upcomingSegment);
 		int transferred = current.stack.getCount();
 
-		if (nextTunnel instanceof BrassTunnelBlockEntity) {
-			BrassTunnelBlockEntity brassTunnel = (BrassTunnelBlockEntity) nextTunnel;
+		if (nextTunnel instanceof BrassTunnelBlockEntity brassTunnel) {
 			if (brassTunnel.hasDistributionBehaviour()) {
 				if (!brassTunnel.canTakeItems())
 					return true;
@@ -115,7 +115,7 @@ public class BeltTunnelInteractionHandler {
 	}
 
 	public static boolean stuckAtTunnel(BeltInventory beltInventory, int offset, ItemStack stack,
-		Direction movementDirection) {
+										Direction movementDirection) {
 		BeltBlockEntity belt = beltInventory.belt;
 		BlockPos pos = BeltHelper.getPositionForOffset(belt, offset)
 			.above();
@@ -125,9 +125,8 @@ public class BeltTunnelInteractionHandler {
 			return false;
 		BlockEntity be = belt.getLevel()
 			.getBlockEntity(pos);
-		if (be == null || !(be instanceof BrassTunnelBlockEntity))
+		if (be == null || !(be instanceof BrassTunnelBlockEntity tunnel))
 			return false;
-		BrassTunnelBlockEntity tunnel = (BrassTunnelBlockEntity) be;
 		return !tunnel.canInsert(movementDirection.getOpposite(), stack);
 	}
 

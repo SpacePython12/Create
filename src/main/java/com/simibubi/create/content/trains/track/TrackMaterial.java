@@ -8,19 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
-
-import net.fabricmc.api.Environment;
-
 import org.jetbrains.annotations.Nullable;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.Create;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -28,6 +23,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class TrackMaterial {
 	public static final Map<ResourceLocation, TrackMaterial> ALL = new HashMap<>();
@@ -165,7 +165,7 @@ public class TrackMaterial {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public record TrackModelHolder(PartialModel tie, PartialModel segment_left, PartialModel segment_right) {
+	public record TrackModelHolder(PartialModel tie, PartialModel leftSegment, PartialModel rightSegment) {
 		static final TrackModelHolder DEFAULT = new TrackModelHolder(AllPartialModels.TRACK_TIE,
 			AllPartialModels.TRACK_SEGMENT_LEFT, AllPartialModels.TRACK_SEGMENT_RIGHT);
 	}

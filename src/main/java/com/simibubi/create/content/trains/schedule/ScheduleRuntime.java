@@ -4,27 +4,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.PatternSyntaxException;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.trains.display.GlobalTrainDisplayData.TrainDeparturePrediction;
 import com.simibubi.create.content.trains.entity.Carriage;
-import com.simibubi.create.content.trains.entity.Navigation;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.graph.DiscoveredPath;
-import com.simibubi.create.content.trains.graph.EdgePointType;
 import com.simibubi.create.content.trains.schedule.condition.ScheduleWaitCondition;
 import com.simibubi.create.content.trains.schedule.condition.ScheduledDelay;
-import com.simibubi.create.content.trains.schedule.destination.ChangeThrottleInstruction;
 import com.simibubi.create.content.trains.schedule.destination.ChangeTitleInstruction;
 import com.simibubi.create.content.trains.schedule.destination.DestinationInstruction;
 import com.simibubi.create.content.trains.schedule.destination.ScheduleInstruction;
 import com.simibubi.create.content.trains.station.GlobalStation;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.NBTHelper;
 
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -39,8 +36,8 @@ public class ScheduleRuntime {
 		PRE_TRANSIT, IN_TRANSIT, POST_TRANSIT
 	}
 
-	Train train;
-	Schedule schedule;
+	public Train train;
+	public Schedule schedule;
 
 	public boolean isAutoSchedule;
 	public boolean paused;
@@ -48,20 +45,25 @@ public class ScheduleRuntime {
 	public int currentEntry;
 	public State state;
 
-	static final int INTERVAL = 40;
-	int cooldown;
-	List<Integer> conditionProgress;
-	List<CompoundTag> conditionContext;
-	String currentTitle;
+	public List<Integer> conditionProgress;
+	public List<CompoundTag> conditionContext;
+	public String currentTitle;
 
-	int ticksInTransit;
-	List<Integer> predictionTicks;
+	public int ticksInTransit;
+	public List<Integer> predictionTicks;
 
 	public boolean displayLinkUpdateRequested;
+
+	private static final int INTERVAL = 40;
+	private int cooldown;
 
 	public ScheduleRuntime(Train train) {
 		this.train = train;
 		reset();
+	}
+
+	public void startCooldown() {
+		cooldown = INTERVAL;
 	}
 
 	public void destinationReached() {
@@ -69,6 +71,7 @@ public class ScheduleRuntime {
 			return;
 		state = State.POST_TRANSIT;
 		conditionProgress.clear();
+		conditionContext.clear();
 		displayLinkUpdateRequested = true;
 		for (Carriage carriage : train.carriages)
 			carriage.storage.resetIdleCargoTracker();
@@ -125,7 +128,7 @@ public class ScheduleRuntime {
 			return;
 		}
 
-		DiscoveredPath nextPath = startCurrentInstruction();
+		DiscoveredPath nextPath = startCurrentInstruction(level);
 		if (nextPath == null)
 			return;
 
@@ -142,7 +145,15 @@ public class ScheduleRuntime {
 	}
 
 	public void tickConditions(Level level) {
-		List<List<ScheduleWaitCondition>> conditions = schedule.entries.get(currentEntry).conditions;
+		ScheduleEntry entry = schedule.entries.get(currentEntry);
+		List<List<ScheduleWaitCondition>> conditions = entry.conditions;
+
+		if (!entry.instruction.supportsConditions()) {
+			state = State.PRE_TRANSIT;
+			currentEntry++;
+			return;
+		}
+
 		for (int i = 0; i < conditions.size(); i++) {
 			List<ScheduleWaitCondition> list = conditions.get(i);
 			int progress = conditionProgress.get(i);
@@ -170,58 +181,10 @@ public class ScheduleRuntime {
 			carriage.storage.tickIdleCargoTracker();
 	}
 
-	public DiscoveredPath startCurrentInstruction() {
+	public DiscoveredPath startCurrentInstruction(Level level) {
 		ScheduleEntry entry = schedule.entries.get(currentEntry);
 		ScheduleInstruction instruction = entry.instruction;
-
-		if (instruction instanceof DestinationInstruction destination) {
-			String regex = destination.getFilterForRegex();
-			boolean anyMatch = false;
-			ArrayList<GlobalStation> validStations = new ArrayList<>();
-
-			if (!train.hasForwardConductor() && !train.hasBackwardConductor()) {
-				train.status.missingConductor();
-				cooldown = INTERVAL;
-				return null;
-			}
-			
-			try {
-				for (GlobalStation globalStation : train.graph.getPoints(EdgePointType.STATION)) {
-					if (!globalStation.name.matches(regex))
-						continue;
-					anyMatch = true;
-					validStations.add(globalStation);
-				}
-			} catch (PatternSyntaxException ignored) {}
-			
-			DiscoveredPath best = train.navigation.findPathTo(validStations, Double.MAX_VALUE);
-			if (best == null) {
-				if (anyMatch)
-					train.status.failedNavigation();
-				else
-					train.status.failedNavigationNoTarget(destination.getFilter());
-				cooldown = INTERVAL;
-				return null;
-			}
-
-			return best;
-		}
-
-		if (instruction instanceof ChangeTitleInstruction title) {
-			currentTitle = title.getScheduleTitle();
-			state = State.PRE_TRANSIT;
-			currentEntry++;
-			return null;
-		}
-
-		if (instruction instanceof ChangeThrottleInstruction throttle) {
-			train.throttle = throttle.getThrottle();
-			state = State.PRE_TRANSIT;
-			currentEntry++;
-			return null;
-		}
-
-		return null;
+		return instruction.start(this, level);
 	}
 
 	public void setSchedule(Schedule schedule, boolean auto) {
@@ -324,15 +287,15 @@ public class ScheduleRuntime {
 	}
 
 	private int predictForEntry(int index, String currentTitle, int accumulatedTime,
-		Collection<TrainDeparturePrediction> predictions) {
+								Collection<TrainDeparturePrediction> predictions) {
 		ScheduleEntry entry = schedule.entries.get(index);
 		if (!(entry.instruction instanceof DestinationInstruction filter))
 			return accumulatedTime;
 		if (predictionTicks.size() <= currentEntry)
 			return accumulatedTime;
-		
+
 		int departureTime = estimateStayDuration(index);
-		
+
 		if (accumulatedTime < 0) {
 			predictions.add(createPrediction(index, filter.getFilter(), currentTitle, accumulatedTime));
 			return Math.min(accumulatedTime, departureTime);
@@ -348,10 +311,10 @@ public class ScheduleRuntime {
 
 		if (accumulatedTime != TBD)
 			accumulatedTime += departureTime;
-		
+
 		if (departureTime == INVALID)
 			accumulatedTime = INVALID;
-		
+
 		return accumulatedTime;
 	}
 
@@ -363,7 +326,8 @@ public class ScheduleRuntime {
 		}
 
 		ScheduleEntry scheduleEntry = schedule.entries.get(index);
-		Columns: for (List<ScheduleWaitCondition> list : scheduleEntry.conditions) {
+		Columns:
+		for (List<ScheduleWaitCondition> list : scheduleEntry.conditions) {
 			int total = 0;
 			for (ScheduleWaitCondition condition : list) {
 				if (!(condition instanceof ScheduledDelay wait))
@@ -379,11 +343,12 @@ public class ScheduleRuntime {
 	private TrainDeparturePrediction createPrediction(int index, String destination, String currentTitle, int time) {
 		if (time == INVALID)
 			return null;
-		
+
 		int size = schedule.entries.size();
 		if (index >= size) {
-			if (!schedule.cyclic)
-				return new TrainDeparturePrediction(train, time, Components.literal(" "), destination);
+			if (!schedule.cyclic) {
+				return new TrainDeparturePrediction(train, time, CommonComponents.space(), destination);
+			}
 			index %= size;
 		}
 
@@ -401,7 +366,7 @@ public class ScheduleRuntime {
 			}
 		}
 
-		return new TrainDeparturePrediction(train, time, Components.literal(text), destination);
+		return new TrainDeparturePrediction(train, time, Component.literal(text), destination);
 	}
 
 	public CompoundTag write() {
@@ -460,12 +425,12 @@ public class ScheduleRuntime {
 	public MutableComponent getWaitingStatus(Level level) {
 		List<List<ScheduleWaitCondition>> conditions = schedule.entries.get(currentEntry).conditions;
 		if (conditions.isEmpty() || conditionProgress.isEmpty() || conditionContext.isEmpty())
-			return Components.empty();
+			return Component.empty();
 
 		List<ScheduleWaitCondition> list = conditions.get(0);
 		int progress = conditionProgress.get(0);
 		if (progress >= list.size())
-			return Components.empty();
+			return Component.empty();
 
 		CompoundTag tag = conditionContext.get(0);
 		ScheduleWaitCondition condition = list.get(progress);

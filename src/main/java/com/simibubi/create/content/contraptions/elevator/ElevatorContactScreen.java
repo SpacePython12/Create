@@ -6,22 +6,22 @@ import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.content.decoration.slidingDoor.DoorControl;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.gui.widget.TooltipArea;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -40,7 +40,7 @@ public class ElevatorContactScreen extends AbstractSimiScreen {
 	private BlockPos pos;
 
 	public ElevatorContactScreen(BlockPos pos, String prevShortName, String prevLongName, DoorControl prevDoorControl) {
-		super(Lang.translateDirect("elevator_contact.title"));
+		super(CreateLang.translateDirect("elevator_contact.title"));
 		this.pos = pos;
 		this.doorControl = prevDoorControl;
 		background = AllGuiTextures.ELEVATOR_CONTACT;
@@ -50,7 +50,7 @@ public class ElevatorContactScreen extends AbstractSimiScreen {
 
 	@Override
 	public void init() {
-		setWindowSize(background.width + 30, background.height);
+		setWindowSize(background.getWidth() + 30, background.getHeight());
 		super.init();
 
 		int x = guiLeft;
@@ -75,21 +75,21 @@ public class ElevatorContactScreen extends AbstractSimiScreen {
 		longNameInput.setValue(longName);
 		longNameInput.setResponder(s -> longName = s);
 
-		MutableComponent rmbToEdit = Lang.translate("gui.schedule.lmb_edit")
+		MutableComponent rmbToEdit = CreateLang.translate("gui.schedule.lmb_edit")
 			.style(ChatFormatting.DARK_GRAY)
 			.style(ChatFormatting.ITALIC)
 			.component();
 
 		addRenderableOnly(new TooltipArea(x + 21, y + 23, 30, 18)
-			.withTooltip(ImmutableList.of(Lang.translate("elevator_contact.floor_identifier")
+			.withTooltip(ImmutableList.of(CreateLang.translate("elevator_contact.floor_identifier")
 				.color(0x5391E1)
 				.component(), rmbToEdit)));
 
 		addRenderableOnly(new TooltipArea(x + 57, y + 23, 147, 18).withTooltip(ImmutableList.of(
-			Lang.translate("elevator_contact.floor_description")
+			CreateLang.translate("elevator_contact.floor_description")
 				.color(0x5391E1)
 				.component(),
-			Lang.translate("crafting_blueprint.optional")
+			CreateLang.translate("crafting_blueprint.optional")
 				.style(ChatFormatting.GRAY)
 				.component(),
 			rmbToEdit)));
@@ -107,7 +107,7 @@ public class ElevatorContactScreen extends AbstractSimiScreen {
 	}
 
 	private EditBox editBox(int x, int width, int chars) {
-		EditBox editBox = new EditBox(font, guiLeft + x, guiTop + 30, width, 10, Components.immutableEmpty());
+		EditBox editBox = new EditBox(font, guiLeft + x, guiTop + 30, width, 10, CommonComponents.EMPTY);
 		editBox.setTextColor(-1);
 		editBox.setTextColorUneditable(-1);
 		editBox.setBordered(false);
@@ -127,10 +127,10 @@ public class ElevatorContactScreen extends AbstractSimiScreen {
 
 		FormattedCharSequence formattedcharsequence = title.getVisualOrderText();
 		graphics.drawString(font, formattedcharsequence,
-			x + (background.width - 8) / 2 - font.width(formattedcharsequence) / 2, y + 6, 0x2F3738, false);
+			x + (background.getWidth() - 8) / 2 - font.width(formattedcharsequence) / 2, y + 6, 0x2F3738, false);
 
 		GuiGameElement.of(AllBlocks.ELEVATOR_CONTACT.asStack()).<GuiGameElement
-			.GuiRenderBuilder>at(x + background.width + 6, y + background.height - 56, -200)
+				.GuiRenderBuilder>at(x + background.getWidth() + 6, y + background.getHeight() - 56, -200)
 			.scale(5)
 			.render(graphics);
 

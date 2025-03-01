@@ -13,12 +13,13 @@ import com.simibubi.create.foundation.gui.menu.GhostItemSubmitPacket;
 import dev.emi.emi.api.EmiDragDropHandler;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.AbstractContainerScreenAccessor;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.AbstractContainerScreenAccessor;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault

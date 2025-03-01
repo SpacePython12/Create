@@ -15,10 +15,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
 
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -54,7 +55,7 @@ public class ClockworkBearingBlockEntity extends KineticBlockEntity
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		super.addBehaviours(behaviours);
 		operationMode = new ScrollOptionBehaviour<>(ClockHands.class,
-			Lang.translateDirect("contraptions.clockwork.clock_hands"), this, getMovementModeSlot());
+			CreateLang.translateDirect("contraptions.clockwork.clock_hands"), this, getMovementModeSlot());
 		behaviours.add(operationMode);
 		registerAwardables(behaviours, AllAdvancements.CLOCKWORK_BEARING);
 	}
@@ -240,7 +241,7 @@ public class ClockworkBearingBlockEntity extends KineticBlockEntity
 		hourHand.setPos(anchor.getX(), anchor.getY(), anchor.getZ());
 		hourHand.setRotationAxis(direction.getAxis());
 		level.addFreshEntity(hourHand);
-		
+
 		if (contraption.getLeft()
 			.containsBlockBreakers())
 			award(AllAdvancements.CONTRAPTION_ACTORS);
@@ -253,12 +254,12 @@ public class ClockworkBearingBlockEntity extends KineticBlockEntity
 			minuteHand.setPos(anchor.getX(), anchor.getY(), anchor.getZ());
 			minuteHand.setRotationAxis(direction.getAxis());
 			level.addFreshEntity(minuteHand);
-			
+
 			if (contraption.getRight()
 				.containsBlockBreakers())
 				award(AllAdvancements.CONTRAPTION_ACTORS);
 		}
-		
+
 		award(AllAdvancements.CLOCKWORK_BEARING);
 
 		// Run
@@ -290,10 +291,9 @@ public class ClockworkBearingBlockEntity extends KineticBlockEntity
 
 	@Override
 	public void attach(ControlledContraptionEntity contraption) {
-		if (!(contraption.getContraption() instanceof ClockworkContraption))
+		if (!(contraption.getContraption() instanceof ClockworkContraption cc))
 			return;
 
-		ClockworkContraption cc = (ClockworkContraption) contraption.getContraption();
 		setChanged();
 		Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
 		BlockPos anchor = worldPosition.relative(facing, cc.offset + 1);
@@ -379,9 +379,8 @@ public class ClockworkBearingBlockEntity extends KineticBlockEntity
 
 	@Override
 	public boolean isAttachedTo(AbstractContraptionEntity contraption) {
-		if (!(contraption.getContraption() instanceof ClockworkContraption))
+		if (!(contraption.getContraption() instanceof ClockworkContraption cc))
 			return false;
-		ClockworkContraption cc = (ClockworkContraption) contraption.getContraption();
 		if (cc.handType == HandType.HOUR)
 			return this.hourHand == contraption;
 		else

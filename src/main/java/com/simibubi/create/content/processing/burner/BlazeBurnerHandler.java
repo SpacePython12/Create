@@ -4,7 +4,6 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity.FuelType;
 
-import io.github.fabricators_of_create.porting_lib.entity.events.ProjectileImpactEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -24,9 +23,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import io.github.fabricators_of_create.porting_lib.entity.events.ProjectileImpactEvent;
+
 public class BlazeBurnerHandler {
 
-	public static boolean onThrowableImpact(ProjectileImpactEvent event) {
+	public static boolean onThrowableImpact(io.github.fabricators_of_create.porting_lib.entity.events.ProjectileImpactEvent event) {
 		splashExtinguishesBurner(event.getProjectile(), event.getRayTraceResult());
 		return thrownEggsGetEatenByBurner(event.getProjectile(), event.getRayTraceResult());
 	}
@@ -43,7 +44,7 @@ public class BlazeBurnerHandler {
 		BlockEntity blockEntity = projectile.level()
 			.getBlockEntity(BlockPos.containing(hitResult
 				.getLocation()));
-		if (!(blockEntity instanceof BlazeBurnerBlockEntity)) {
+		if (!(blockEntity instanceof BlazeBurnerBlockEntity heater)) {
 			return false;
 		}
 
@@ -55,7 +56,6 @@ public class BlazeBurnerHandler {
 		if (world.isClientSide)
 			return false;
 
-		BlazeBurnerBlockEntity heater = (BlazeBurnerBlockEntity) blockEntity;
 		if (!heater.isCreative()) {
 			if (heater.activeFuel != FuelType.SPECIAL) {
 				heater.activeFuel = FuelType.NORMAL;
@@ -74,9 +74,8 @@ public class BlazeBurnerHandler {
 //		Projectile projectile = event.getProjectile();
 		if (projectile.level().isClientSide)
 			return;
-		if (!(projectile instanceof ThrownPotion))
+		if (!(projectile instanceof ThrownPotion entity))
 			return;
-		ThrownPotion entity = (ThrownPotion) projectile;
 
 		if (hitResult
 			.getType() != HitResult.Type.BLOCK)

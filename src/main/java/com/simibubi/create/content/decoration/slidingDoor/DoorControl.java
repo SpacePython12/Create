@@ -6,13 +6,15 @@ import java.util.function.Consumer;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -57,17 +59,17 @@ public enum DoorControl {
 				playerFacing = SOUTH;
 		}
 
-		Label label = new Label(x + 4, y + 6, Components.empty()).withShadow();
+        Label label = new Label(x + 4, y + 6, Component.empty()).withShadow();
 		ScrollInput input = new SelectionScrollInput(x, y, 53, 16)
-			.forOptions(Lang.translatedOptions("contraption.door_control", valuesAsString()))
-			.titled(Lang.translateDirect("contraption.door_control"))
+			.forOptions(CreateLang.translatedOptions("contraption.door_control", valuesAsString()))
+			.titled(CreateLang.translateDirect("contraption.door_control"))
 			.calling(s -> {
 				DoorControl mode = values()[s];
-				label.text = Lang.translateDirect("contraption.door_control." + Lang.asId(mode.name()) + ".short");
+				label.text = CreateLang.translateDirect("contraption.door_control." + Lang.asId(mode.name()) + ".short");
 				callback.accept(mode);
 			})
-			.addHint(Lang.translateDirect("contraption.door_control.player_facing",
-				Lang.translateDirect("contraption.door_control." + Lang.asId(playerFacing.name()) + ".short")))
+			.addHint(CreateLang.translateDirect("contraption.door_control.player_facing",
+				CreateLang.translateDirect("contraption.door_control." + Lang.asId(playerFacing.name()) + ".short")))
 			.setState(initial.ordinal());
 		input.onChanged();
 		return Pair.of(input, label);

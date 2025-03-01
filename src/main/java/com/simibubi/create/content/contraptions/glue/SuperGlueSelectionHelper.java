@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
-import com.simibubi.create.foundation.utility.Iterate;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -74,6 +74,8 @@ public class SuperGlueSelectionHelper {
 			ItemStack stack = items.get(slot);
 			if (stack.isEmpty())
 				continue;
+			if (stack.getTag() != null && stack.getTag().contains("Unbreakable"))
+				return true;
 			if (!stack.isDamageableItem())
 				continue;
 			if (!(stack.getItem() instanceof SuperGlueItem))

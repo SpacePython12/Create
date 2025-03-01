@@ -12,17 +12,12 @@ import java.util.function.Supplier;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.DataProvider.Factory;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -33,7 +28,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-//@EventBusSubscriber(bus = Bus.FORGE)
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+
 public class AllSoundEvents {
 
 	public static final Map<ResourceLocation, SoundEntry> ALL = new HashMap<>();
@@ -63,6 +59,11 @@ public class AllSoundEvents {
 		FUNNEL_FLAP = create("funnel_flap").subtitle("Funnel flaps")
 			.playExisting(SoundEvents.ITEM_FRAME_ROTATE_ITEM, .125f, 1.5f)
 			.playExisting(SoundEvents.WOOL_BREAK, .0425f, .75f)
+			.category(SoundSource.BLOCKS)
+			.build(),
+			
+		PACKAGER = create("packager").subtitle("Packager packages")
+			.playExisting(SoundEvents.SHULKER_OPEN, 0.5f, 0.75f)
 			.category(SoundSource.BLOCKS)
 			.build(),
 
@@ -118,6 +119,10 @@ public class AllSoundEvents {
 			.category(SoundSource.PLAYERS)
 			.build(),
 
+		CONFIRM_2 = create("confirm_2").subtitle("Affirmative ding")
+			.category(SoundSource.PLAYERS)
+			.build(),
+
 		DENY = create("deny").subtitle("Declining boop")
 			.playExisting(SoundEvents.NOTE_BLOCK_BASS, 1f, 0.5f)
 			.category(SoundSource.PLAYERS)
@@ -127,8 +132,37 @@ public class AllSoundEvents {
 			.category(SoundSource.BLOCKS)
 			.build(),
 
-		FWOOMP = create("fwoomp").subtitle("Potato Launcher fwoomps")
+		FWOOMP = create("fwoomp").subtitle("Resonant fwoomp")
 			.category(SoundSource.PLAYERS)
+			.build(),
+
+		CARDBOARD_SWORD = create("cardboard_bonk").subtitle("Resonant bonk")
+			.category(SoundSource.PLAYERS)
+			.build(),
+
+		FROGPORT_OPEN = create("frogport_open").subtitle("Frogport opens")
+			.playExisting(SoundEvents.WARDEN_TENDRIL_CLICKS, 1f, 2f)
+			.category(SoundSource.BLOCKS)
+			.build(),
+
+		FROGPORT_CLOSE = create("frogport_close").subtitle("Frogport shuts")
+			.category(SoundSource.BLOCKS)
+			.build(),
+
+		FROGPORT_CATCH = create("frogport_catch").subtitle("Frogport catches package")
+			.addVariant("frogport_catch_1")
+			.addVariant("frogport_catch_2")
+			.addVariant("frogport_catch_3")
+			.category(SoundSource.BLOCKS)
+			.build(),
+			
+		STOCK_LINK = create("stock_link").subtitle("Stock link reacts")
+			.category(SoundSource.BLOCKS)
+			.build(),
+
+		FROGPORT_DEPOSIT = create("frogport_deposit").subtitle("Frogport places package")
+			.playExisting(SoundEvents.FROG_TONGUE, 1f, 1f)
+			.category(SoundSource.BLOCKS)
 			.build(),
 
 		POTATO_HIT = create("potato_hit").subtitle("Vegetable impacts")
@@ -156,6 +190,12 @@ public class AllSoundEvents {
 		WRENCH_REMOVE = create("wrench_remove").subtitle("Component breaks")
 			.playExisting(SoundEvents.ITEM_PICKUP, .25f, .75f)
 			.playExisting(SoundEvents.NETHERITE_BLOCK_HIT, .25f, .75f)
+			.category(SoundSource.BLOCKS)
+			.build(),
+
+		PACKAGE_POP = create("package_pop").subtitle("Package breaks")
+			.playExisting(SoundEvents.CHISELED_BOOKSHELF_BREAK, .75f, 1f)
+			.playExisting(SoundEvents.WOOL_BREAK, .25f, 1.15f)
 			.category(SoundSource.BLOCKS)
 			.build(),
 
@@ -214,6 +254,12 @@ public class AllSoundEvents {
 			.category(SoundSource.BLOCKS)
 			.build(),
 
+		ITEM_HATCH = create("item_hatch").subtitle("Item Hatch opens")
+			.playExisting(SoundEvents.BARREL_OPEN, .25f, 1.4f)
+			.playExisting(SoundEvents.NETHERITE_BLOCK_PLACE, .75f, 1.15f)
+			.category(SoundSource.BLOCKS)
+			.build(),
+
 		CRUSHING_1 = create("crushing_1").subtitle("Crushing noises")
 			.playExisting(SoundEvents.NETHERRACK_HIT)
 			.category(SoundSource.BLOCKS)
@@ -232,6 +278,11 @@ public class AllSoundEvents {
 		PECULIAR_BELL_USE = create("peculiar_bell_use").subtitle("Peculiar Bell tolls")
 			.playExisting(SoundEvents.BELL_BLOCK)
 			.category(SoundSource.BLOCKS)
+			.build(),
+
+		DESK_BELL_USE = create("desk_bell").subtitle("Reception bell dings")
+			.category(SoundSource.BLOCKS)
+			.attenuationDistance(64)
 			.build(),
 
 		WHISTLE_HIGH = create("whistle_high").subtitle("High whistling")
@@ -307,7 +358,15 @@ public class AllSoundEvents {
 
 		HAUNTED_BELL_USE = create("haunted_bell_use").subtitle("Haunted Bell tolls")
 			.category(SoundSource.BLOCKS)
-				.build(),
+			.build(),
+
+		STOCK_TICKER_REQUEST = create("stock_ticker_request").subtitle("Stock ticker requests")
+			.category(SoundSource.BLOCKS)
+			.build(),
+
+		STOCK_TICKER_TRADE = create("stock_ticker_trade").subtitle("Stock ticker goes 'ka-ching!'")
+			.category(SoundSource.BLOCKS)
+			.build(),
 
 		CLIPBOARD_CHECKMARK = create("clipboard_check").noSubtitle()
 			.category(SoundSource.BLOCKS)
@@ -346,8 +405,9 @@ public class AllSoundEvents {
 	}
 
 	public static void playItemPickup(Player player) {
-		player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f,
-			1f + Create.RANDOM.nextFloat());
+		player.level()
+			.playSound(null, player.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, .2f,
+				1f + player.level().random.nextFloat());
 	}
 
 //	@SubscribeEvent
@@ -360,7 +420,7 @@ public class AllSoundEvents {
 //
 //	}
 
-	private static class SoundEntryProvider implements DataProvider {
+	public static class SoundEntryProvider implements DataProvider {
 
 		private PackOutput output;
 

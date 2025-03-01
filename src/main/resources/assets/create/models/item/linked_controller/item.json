@@ -15,10 +15,10 @@
 			"faces": {
 				"north": {"uv": [13, 0, 15, 8], "rotation": 90, "texture": "#redstone_bridge"},
 				"east": {"uv": [0, 8, 13, 10], "texture": "#redstone_bridge"},
-				"south": {"uv": [13, 0, 15, 8], "rotation": 90, "texture": "#redstone_bridge"},
+				"south": {"uv": [13, 8, 15, 0], "rotation": 90, "texture": "#redstone_bridge"},
 				"west": {"uv": [0, 8, 13, 10], "texture": "#redstone_bridge"},
 				"up": {"uv": [0, 0, 13, 8], "rotation": 270, "texture": "#redstone_bridge"},
-				"down": {"uv": [0, 0, 13, 8], "rotation": 90, "texture": "#redstone_bridge"}
+				"down": {"uv": [0, 8, 13, 0], "rotation": 90, "texture": "#redstone_bridge"}
 			}
 		},
 		{
@@ -57,7 +57,7 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
 			"faces": {
 				"north": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
-				"east": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
+				"east": {"uv": [2, 13, 4, 14], "texture": "#redstone_bridge"},
 				"south": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"west": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"up": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"}
@@ -69,7 +69,7 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
 			"faces": {
 				"north": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
-				"east": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
+				"east": {"uv": [2, 13, 4, 14], "texture": "#redstone_bridge"},
 				"south": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"west": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"up": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"}
@@ -81,7 +81,7 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
 			"faces": {
 				"north": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
-				"east": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
+				"east": {"uv": [2, 13, 4, 14], "texture": "#redstone_bridge"},
 				"south": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"west": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"up": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"}
@@ -93,7 +93,7 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
 			"faces": {
 				"north": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
-				"east": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
+				"east": {"uv": [2, 13, 4, 14], "texture": "#redstone_bridge"},
 				"south": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"west": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"up": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"}
@@ -105,7 +105,7 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
 			"faces": {
 				"north": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
-				"east": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
+				"east": {"uv": [2, 13, 4, 14], "texture": "#redstone_bridge"},
 				"south": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"west": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"up": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"}
@@ -117,7 +117,7 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
 			"faces": {
 				"north": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
-				"east": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
+				"east": {"uv": [2, 13, 4, 14], "texture": "#redstone_bridge"},
 				"south": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"west": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"up": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"}

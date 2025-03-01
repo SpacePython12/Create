@@ -15,6 +15,7 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

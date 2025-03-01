@@ -3,12 +3,15 @@ package com.simibubi.create.compat.jei;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -56,22 +59,21 @@ import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
-import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
+import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelSetItemScreen;
 import com.simibubi.create.content.logistics.filter.AbstractFilterScreen;
+import com.simibubi.create.content.logistics.redstoneRequester.RedstoneRequesterScreen;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.content.redstone.link.controller.LinkedControllerScreen;
 import com.simibubi.create.content.trains.schedule.ScheduleScreen;
-import com.simibubi.create.foundation.config.ConfigBase.ConfigBool;
 import com.simibubi.create.foundation.data.recipe.LogStrippingFakeRecipes;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.RecipeManagerAccessor;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -79,6 +81,7 @@ import mezz.jei.api.fabric.constants.FabricTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.registration.IExtraIngredientRegistration;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -87,12 +90,14 @@ import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.fabric.ingredients.fluid.JeiFluidIngredient;
-import net.fabricmc.loader.api.FabricLoader;
+import net.createmod.catnip.config.ConfigBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -101,6 +106,8 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.RecipeManagerAccessor;
 
 @JeiPlugin
 @SuppressWarnings("unused")
@@ -236,15 +243,6 @@ public class CreateJEI implements IModPlugin {
 				.emptyBackground(177, 70)
 				.build("block_cutting", BlockCuttingCategory::new),
 
-		woodCutting = builder(CondensedBlockCuttingRecipe.class)
-				.enableIf(c -> c.allowWoodcuttingOnSaw.get() && FabricLoader.getInstance()
-						.isModLoaded("druidcraft"))
-				.addRecipes(() -> BlockCuttingCategory.condenseRecipes(getTypedRecipesExcluding(SawBlockEntity.woodcuttingRecipeType.get(), AllRecipeTypes::shouldIgnoreInAutomation)))
-				.catalyst(AllBlocks.MECHANICAL_SAW::get)
-				.doubleItemIcon(AllBlocks.MECHANICAL_SAW.get(), Items.OAK_STAIRS)
-				.emptyBackground(177, 70)
-				.build("wood_cutting", BlockCuttingCategory::new),
-
 		polishing = builder(SandPaperPolishingRecipe.class)
 				.addTypedRecipes(AllRecipeTypes.SANDPAPER_POLISHING)
 				.catalyst(AllItems.SAND_PAPER::get)
@@ -366,6 +364,7 @@ public class CreateJEI implements IModPlugin {
 	@Override
 	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
 		registration.addRecipeTransferHandler(new BlueprintTransferHandler(), RecipeTypes.CRAFTING);
+		registration.addUniversalRecipeTransferHandler(new StockKeeperTransferHandler(registration.getJeiHelpers()));
 	}
 
 	@Override
@@ -374,6 +373,30 @@ public class CreateJEI implements IModPlugin {
 		PotionFluid potionFluid = AllFluids.POTION.get();
 		registration.registerSubtypeInterpreter(FabricTypes.FLUID_STACK, potionFluid.getSource(), interpreter);
 		registration.registerSubtypeInterpreter(FabricTypes.FLUID_STACK, potionFluid.getFlowing(), interpreter);
+	}
+
+	@Override
+	public void registerExtraIngredients(IExtraIngredientRegistration registration) {
+		Collection<Potion> potions = ForgeRegistries.POTIONS.getValues();
+		Collection<FluidStack> potionFluids = new ArrayList<>(potions.size() * 3);
+		Set<Set<MobEffect>> visitedEffects = new HashSet<>();
+		for (Potion potion : potions) {
+			// @goshante: Ingame potion fluids always have Bottle tag that specifies
+			// to what bottle type this potion belongs
+			// Potion fluid without this tag wouldn't be recognized by other mods
+
+//			for (PotionFluid.BottleType bottleType : PotionFluid.BottleType.values()) {
+//				FluidStack potionFluid = PotionFluid.of(1000, potion, bottleType);
+//				potionFluids.add(potionFluid);
+//			}
+
+			if (!potion.getEffects().isEmpty())
+				if (!visitedEffects.add(potion.getEffects().stream().map(mei -> mei.getEffect()).collect(Collectors.toSet())))
+					continue;
+
+			potionFluids.add(PotionFluid.of(1000, potion, PotionFluid.BottleType.REGULAR));
+		}
+		registration.addExtraIngredients(ForgeTypes.FLUID_STACK, potionFluids);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -385,6 +408,8 @@ public class CreateJEI implements IModPlugin {
 		registration.addGhostIngredientHandler(BlueprintScreen.class, new GhostIngredientHandler());
 		registration.addGhostIngredientHandler(LinkedControllerScreen.class, new GhostIngredientHandler());
 		registration.addGhostIngredientHandler(ScheduleScreen.class, new GhostIngredientHandler());
+		registration.addGhostIngredientHandler(RedstoneRequesterScreen.class, new GhostIngredientHandler());
+		registration.addGhostIngredientHandler(FactoryPanelSetItemScreen.class, new GhostIngredientHandler());
 	}
 
 	private class CategoryBuilder<T extends Recipe<?>> {
@@ -406,7 +431,7 @@ public class CreateJEI implements IModPlugin {
 			return this;
 		}
 
-		public CategoryBuilder<T> enableWhen(Function<CRecipes, ConfigBool> configValue) {
+		public CategoryBuilder<T> enableWhen(Function<CRecipes, ConfigBase.ConfigBool> configValue) {
 			predicate = c -> configValue.apply(c).get();
 			return this;
 		}
@@ -420,11 +445,11 @@ public class CreateJEI implements IModPlugin {
 			return addRecipeListConsumer(recipes -> recipes.addAll(collection.get()));
 		}
 
+		@SuppressWarnings("unchecked")
 		public CategoryBuilder<T> addAllRecipesIf(Predicate<Recipe<?>> pred) {
 			return addRecipeListConsumer(recipes -> consumeAllRecipes(recipe -> {
-				if (pred.test(recipe)) {
+				if (pred.test(recipe))
 					recipes.add((T) recipe);
-				}
 			}));
 		}
 
@@ -537,7 +562,7 @@ public class CreateJEI implements IModPlugin {
 
 			CreateRecipeCategory.Info<T> info = new CreateRecipeCategory.Info<>(
 					new mezz.jei.api.recipe.RecipeType<>(Create.asResource(name), recipeClass),
-					Lang.translateDirect("recipe." + name), background, icon, recipesSupplier, catalysts);
+					CreateLang.translateDirect("recipe." + name), background, icon, recipesSupplier, catalysts);
 			CreateRecipeCategory<T> category = factory.create(info);
 			allCategories.add(category);
 			return category;
@@ -552,13 +577,13 @@ public class CreateJEI implements IModPlugin {
 			.forEach(consumer);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends Recipe<?>> void consumeTypedRecipes(Consumer<T> consumer, RecipeType<?> type) {
 		Map<ResourceLocation, Recipe<?>> map = ((RecipeManagerAccessor) Minecraft.getInstance()
 			.getConnection()
 			.getRecipeManager()).port_lib$getRecipes().get(type);
-		if (map != null) {
+		if (map != null)
 			map.values().forEach(recipe -> consumer.accept((T) recipe));
-		}
 	}
 
 	public static List<Recipe<?>> getTypedRecipes(RecipeType<?> type) {

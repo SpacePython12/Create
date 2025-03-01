@@ -21,29 +21,27 @@
 			}
 		},
 		{
-			"name": "magnet",
-			"from": [3, 0, 3],
-			"to": [13, 3, 13],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 23, 8]},
+			"from": [3.05, -2.95, 3.05],
+			"to": [12.95, 1.95, 12.95],
 			"faces": {
-				"north": {"uv": [0, 10, 10, 13], "texture": "#6"},
-				"east": {"uv": [0, 10, 10, 13], "texture": "#6"},
-				"south": {"uv": [0, 10, 10, 13], "texture": "#6"},
-				"west": {"uv": [0, 10, 10, 13], "texture": "#6"},
+				"north": {"uv": [0, 10, 10, 15], "texture": "#6"},
+				"east": {"uv": [0, 10, 10, 15], "texture": "#6"},
+				"south": {"uv": [0, 10, 10, 15], "texture": "#6"},
+				"west": {"uv": [0, 10, 10, 15], "texture": "#6"},
 				"up": {"uv": [0, 0, 10, 10], "texture": "#6"},
 				"down": {"uv": [0, 0, 10, 10], "texture": "#6"}
 			}
 		},
 		{
 			"name": "magnet",
-			"from": [4.95, 3, 4.95],
-			"to": [11.05, 5, 11.05],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 23, 8]},
+			"from": [4.95, 1.9, 4.95],
+			"to": [11.05, 4, 11.05],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 22, 8]},
 			"faces": {
-				"north": {"uv": [0, 13, 6, 15], "texture": "#6"},
-				"east": {"uv": [0, 13, 6, 15], "texture": "#6"},
-				"south": {"uv": [0, 13, 6, 15], "texture": "#6"},
-				"west": {"uv": [0, 13, 6, 15], "texture": "#6"},
+				"north": {"uv": [10, 12, 16, 14], "texture": "#6"},
+				"east": {"uv": [10, 12, 16, 14], "texture": "#6"},
+				"south": {"uv": [10, 12, 16, 14], "texture": "#6"},
+				"west": {"uv": [10, 12, 16, 14], "texture": "#6"},
 				"up": {"uv": [10.5, 11, 13.5, 14], "texture": "#1"}
 			}
 		}

@@ -1,8 +1,5 @@
 package com.simibubi.create.content.kinetics.base;
 
-import javax.annotation.Nullable;
-
-import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,7 +9,8 @@ import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.PushReaction;
+
+import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 
 @MethodsReturnNonnullByDefault
 public abstract class AbstractEncasedShaftBlock extends RotatedPillarKineticBlock implements WeakPowerCheckingBlock {

@@ -12,12 +12,12 @@ import static com.simibubi.create.foundation.data.recipe.CompatMetals.URANIUM;
 
 import java.util.function.Supplier;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.content.decoration.palettes.AllPaletteBlocks;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
@@ -26,6 +26,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class WashingRecipeGen extends ProcessingRecipeGen {
 
@@ -46,6 +50,13 @@ public class WashingRecipeGen extends ProcessingRecipeGen {
 		RED_SAND = create(() -> Blocks.RED_SAND, b -> b.output(.125f, Items.GOLD_NUGGET, 3)
 			.output(.05f, Items.DEAD_BUSH)),
 		SAND = create(() -> Blocks.SAND, b -> b.output(.25f, Items.CLAY_BALL)),
+
+		WEATHERED_IRON_BLOCK =
+			create(AllBlocks.INDUSTRIAL_IRON_BLOCK::get, b -> b.output(AllBlocks.WEATHERED_IRON_BLOCK)),
+		WEATHERED_IRON_WINDOW =
+			create(AllPaletteBlocks.INDUSTRIAL_IRON_WINDOW::get, b -> b.output(AllPaletteBlocks.WEATHERED_IRON_WINDOW)),
+		WEATHERED_IRON_WINDOW_PANE = create(AllPaletteBlocks.INDUSTRIAL_IRON_WINDOW_PANE::get,
+			b -> b.output(AllPaletteBlocks.WEATHERED_IRON_WINDOW_PANE)),
 
 		CRUSHED_COPPER = crushedOre(AllItems.CRUSHED_COPPER, AllItems.COPPER_NUGGET::get, () -> Items.CLAY_BALL, .5f),
 		CRUSHED_ZINC = crushedOre(AllItems.CRUSHED_ZINC, AllItems.ZINC_NUGGET::get, () -> Items.GUNPOWDER, .25f),

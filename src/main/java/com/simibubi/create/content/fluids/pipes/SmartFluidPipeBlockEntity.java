@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.PipeAttachmentBlockEntity;
@@ -13,18 +12,21 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class SmartFluidPipeBlockEntity extends SmartBlockEntity implements PipeAttachmentBlockEntity {
 
@@ -49,7 +51,7 @@ public class SmartFluidPipeBlockEntity extends SmartBlockEntity implements PipeA
 
 	@Override
 	@Nullable
-	public Object getRenderAttachmentData() {
+	public Object getRenderData() {
 		return PipeAttachmentBlockEntity.getAttachments(this);
 	}
 
@@ -77,7 +79,7 @@ public class SmartFluidPipeBlockEntity extends SmartBlockEntity implements PipeA
 	class SmartPipeFilterSlot extends ValueBoxTransform {
 
 		@Override
-		public Vec3 getLocalOffset(BlockState state) {
+		public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
 			AttachFace face = state.getValue(SmartFluidPipeBlock.FACE);
 			float y = face == AttachFace.CEILING ? 0.55f : face == AttachFace.WALL ? 11.4f : 15.45f;
 			float z = face == AttachFace.CEILING ? 4.6f : face == AttachFace.WALL ? 0.55f : 4.625f;
@@ -90,11 +92,11 @@ public class SmartFluidPipeBlockEntity extends SmartBlockEntity implements PipeA
 		}
 
 		@Override
-		public void rotate(BlockState state, PoseStack ms) {
+		public void rotate(LevelAccessor level, BlockPos pos, BlockState state, PoseStack ms) {
 			AttachFace face = state.getValue(SmartFluidPipeBlock.FACE);
-			TransformStack.cast(ms)
-				.rotateY(angleY(state))
-				.rotateX(face == AttachFace.CEILING ? -45 : 45);
+			TransformStack.of(ms)
+				.rotateYDegrees(angleY(state))
+				.rotateXDegrees(face == AttachFace.CEILING ? -45 : 45);
 		}
 
 		protected float angleY(BlockState state) {

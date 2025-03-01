@@ -9,7 +9,7 @@ import com.simibubi.create.compat.jei.category.animations.AnimatedSpout;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import mezz.jei.api.fabric.constants.FabricTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -76,7 +76,7 @@ public abstract class JeiSequencedAssemblySubCategory {
 					.addSlot(RecipeIngredientRole.INPUT, x + 4, 15)
 					.setBackground(CreateRecipeCategory.getRenderedSlot(), -1, -1)
 					.addIngredients(FabricTypes.FLUID_STACK, CreateRecipeCategory.toJei(CreateRecipeCategory.withImprovedVisibility(fluidIngredient.getMatchingFluidStacks())))
-					.addTooltipCallback(CreateRecipeCategory.addFluidTooltip(fluidIngredient.getRequiredAmount()));
+					.addRichTooltipCallback(CreateRecipeCategory.addFluidTooltip(fluidIngredient.getRequiredAmount()));
 		}
 
 		@Override
@@ -114,7 +114,7 @@ public abstract class JeiSequencedAssemblySubCategory {
 
 			if (recipe.getAsAssemblyRecipe() instanceof DeployerApplicationRecipe deployerRecipe && deployerRecipe.shouldKeepHeldItem()) {
 				slot.addTooltipCallback(
-						(recipeSlotView, tooltip) -> tooltip.add(1, Lang.translateDirect("recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD))
+						(recipeSlotView, tooltip) -> tooltip.add(1, CreateLang.translateDirect("recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD))
 				);
 			}
 		}

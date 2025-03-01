@@ -3,9 +3,9 @@ package com.simibubi.create.content.trains.schedule.condition;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.station.GlobalStation;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.data.Pair;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 public class StationUnloadedCondition extends ScheduleWaitCondition {
 	@Override
 	public Pair<ItemStack, Component> getSummary() {
-		return Pair.of(ItemStack.EMPTY, Lang.translateDirect("schedule.condition.unloaded"));
+		return Pair.of(ItemStack.EMPTY, CreateLang.translateDirect("schedule.condition.unloaded"));
 	}
 
 	@Override
@@ -51,6 +51,6 @@ public class StationUnloadedCondition extends ScheduleWaitCondition {
 
 	@Override
 	public MutableComponent getWaitingStatus(Level level, Train train, CompoundTag tag) {
-		return Lang.translateDirect("schedule.condition.unloaded.status");
+		return CreateLang.translateDirect("schedule.condition.unloaded.status");
 	}
 }

@@ -13,7 +13,7 @@ import static com.simibubi.create.foundation.data.recipe.Mods.OREGANIZED;
 import static com.simibubi.create.foundation.data.recipe.Mods.TH;
 import static com.simibubi.create.foundation.data.recipe.Mods.TR;
 
-import com.simibubi.create.foundation.utility.Lang;
+import net.createmod.catnip.lang.Lang;
 
 public enum CompatMetals {
 	ALUMINUM(IE, IC2),

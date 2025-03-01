@@ -2,7 +2,6 @@ package com.simibubi.create.content.kinetics.belt.item;
 
 import java.util.LinkedList;
 import java.util.List;
-import net.minecraft.util.RandomSource;
 
 import org.joml.Vector3f;
 
@@ -16,6 +15,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

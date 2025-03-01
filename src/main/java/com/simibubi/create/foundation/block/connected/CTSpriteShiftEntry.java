@@ -1,6 +1,6 @@
 package com.simibubi.create.foundation.block.connected;
 
-import com.simibubi.create.foundation.block.render.SpriteShiftEntry;
+import net.createmod.catnip.render.SpriteShiftEntry;
 
 public class CTSpriteShiftEntry extends SpriteShiftEntry {
 

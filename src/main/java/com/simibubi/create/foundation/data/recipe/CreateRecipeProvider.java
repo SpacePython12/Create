@@ -9,15 +9,17 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.Create;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public abstract class CreateRecipeProvider extends FabricRecipeProvider {
 
@@ -92,6 +94,14 @@ public abstract class CreateRecipeProvider extends FabricRecipeProvider {
 			return AllBlocks.ANDESITE_CASING.get();
 		}
 
+		static ItemLike vault() {
+			return AllBlocks.ITEM_VAULT.get();
+		}
+
+		static ItemLike stockLink() {
+			return AllBlocks.STOCK_LINK.get();
+		}
+
 		static TagKey<Item> brass() {
 			return AllTags.forgeItemTag("brass_ingots");
 		}
@@ -122,6 +132,10 @@ public abstract class CreateRecipeProvider extends FabricRecipeProvider {
 
 		static ItemLike brassCasing() {
 			return AllBlocks.BRASS_CASING.get();
+		}
+
+		static ItemLike cardboard() {
+			return AllItems.CARDBOARD.get();
 		}
 
 		static ItemLike railwayCasing() {

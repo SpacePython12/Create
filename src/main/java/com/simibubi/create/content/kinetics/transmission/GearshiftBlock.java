@@ -38,12 +38,12 @@ public class GearshiftBlock extends AbstractEncasedShaftBlock implements IBE<Spl
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return super.getStateForPlacement(context).setValue(POWERED,
-				context.getLevel().hasNeighborSignal(context.getClickedPos()));
+			context.getLevel().hasNeighborSignal(context.getClickedPos()));
 	}
 
 	@Override
 	public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos,
-			boolean isMoving) {
+								boolean isMoving) {
 		if (worldIn.isClientSide)
 			return;
 
@@ -72,15 +72,14 @@ public class GearshiftBlock extends AbstractEncasedShaftBlock implements IBE<Spl
 
 		// Re-attach next tick
 		if (reAttachNextTick)
-			worldIn.scheduleTick(pos, this, 0, TickPriority.EXTREMELY_HIGH);
+			worldIn.scheduleTick(pos, this, 1, TickPriority.EXTREMELY_HIGH);
 	}
 
 	@Override
 	public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
 		BlockEntity be = worldIn.getBlockEntity(pos);
-		if (be == null || !(be instanceof KineticBlockEntity))
+		if (be == null || !(be instanceof KineticBlockEntity kte))
 			return;
-		KineticBlockEntity kte = (KineticBlockEntity) be;
 		RotationPropagator.handleAdded(worldIn, pos, kte);
 	}
 }

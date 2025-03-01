@@ -1,7 +1,5 @@
 package com.simibubi.create.compat.rei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import net.minecraft.client.gui.GuiGraphics;

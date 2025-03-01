@@ -5,15 +5,15 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import com.simibubi.create.compat.Mods;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
-import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
-import com.simibubi.create.foundation.gui.widget.ElementWidget;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.element.GuiGameElement;
+import net.createmod.catnip.gui.widget.AbstractSimiWidget;
+import net.createmod.catnip.gui.widget.ElementWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -52,7 +52,7 @@ public class ComputerScreen extends AbstractSimiScreen {
 
 	@Override
 	protected void init() {
-		setWindowSize(background.width, background.height);
+		setWindowSize(background.getWidth(), background.getHeight());
 		super.init();
 
 		int x = guiLeft;
@@ -61,11 +61,11 @@ public class ComputerScreen extends AbstractSimiScreen {
 		Mods.COMPUTERCRAFT.executeIfInstalled(() -> () -> {
 			computerWidget = new ElementWidget(x + 33, y + 38)
 					.showingElement(GuiGameElement.of(Mods.COMPUTERCRAFT.getBlock("computer_advanced")));
-			computerWidget.getToolTip().add(Lang.translate("gui.attached_computer.hint").component());
+			computerWidget.getToolTip().add(CreateLang.translate("gui.attached_computer.hint").component());
 			addRenderableWidget(computerWidget);
 		});
 
-		confirmButton = new IconButton(x + background.width - 33, y + background.height - 24, AllIcons.I_CONFIRM);
+		confirmButton = new IconButton(x + background.getWidth() - 33, y + background.getHeight() - 24, AllIcons.I_CONFIRM);
 		confirmButton.withCallback(this::onClose);
 		addRenderableWidget(confirmButton);
 	}
@@ -80,8 +80,8 @@ public class ComputerScreen extends AbstractSimiScreen {
 		background.render(graphics, x, y);
 
 		graphics.drawString(font, displayTitle.get(),
-			Math.round(x + background.width / 2.0F - font.width(displayTitle.get()) / 2.0F), y + 4, 0x442000, false);
-		graphics.drawWordWrap(font, Lang.translate("gui.attached_computer.controlled")
+			Math.round(x + background.getWidth() / 2.0F - font.width(displayTitle.get()) / 2.0F), y + 4, 0x442000, false);
+		graphics.drawWordWrap(font, CreateLang.translate("gui.attached_computer.controlled")
 			.component(), x + 55, y + 32, 111, 0x7A7A7A);
 
 		if (additional != null)

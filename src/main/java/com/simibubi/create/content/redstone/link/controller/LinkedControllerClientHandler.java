@@ -15,16 +15,15 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.redstone.link.LinkBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.ControlsUtil;
-import com.simibubi.create.foundation.utility.Lang;
-import io.github.fabricators_of_create.porting_lib.util.KeyBindingHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.lang.FontHelper.Palette;
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.outliner.Outliner;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -32,6 +31,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -187,8 +187,8 @@ public class LinkedControllerClientHandler {
 			VoxelShape shape = mc.level.getBlockState(selectedLocation)
 				.getShape(mc.level, selectedLocation);
 			if (!shape.isEmpty())
-				CreateClient.OUTLINER.showAABB("controller", shape.bounds()
-					.move(selectedLocation))
+				Outliner.getInstance().showAABB("controller", shape.bounds()
+						.move(selectedLocation))
 					.colored(0xB73C2D)
 					.lineWidth(1 / 16f);
 
@@ -196,9 +196,9 @@ public class LinkedControllerClientHandler {
 				LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(mc.level, selectedLocation, LinkBehaviour.TYPE);
 				if (linkBehaviour != null) {
 					AllPackets.getChannel().sendToServer(new LinkedControllerBindPacket(integer, selectedLocation));
-					Lang.translate("linked_controller.key_bound", controls.get(integer)
-						.getTranslatedKeyMessage()
-						.getString())
+					CreateLang.translate("linked_controller.key_bound", controls.get(integer)
+							.getTranslatedKeyMessage()
+							.getString())
 						.sendStatus(mc.player);
 				}
 				MODE = Mode.IDLE;
@@ -219,7 +219,7 @@ public class LinkedControllerClientHandler {
 
 		PoseStack poseStack = graphics.pose();
 		poseStack.pushPose();
-		Screen tooltipScreen = new Screen(Components.immutableEmpty()) {
+		Screen tooltipScreen = new Screen(CommonComponents.EMPTY) {
 		};
 		tooltipScreen.init(mc, window.getGuiScaledWidth(), window.getGuiScaledHeight());
 
@@ -232,9 +232,9 @@ public class LinkedControllerClientHandler {
 		}
 
 		List<Component> list = new ArrayList<>();
-		list.add(Lang.translateDirect("linked_controller.bind_mode")
+		list.add(CreateLang.translateDirect("linked_controller.bind_mode")
 			.withStyle(ChatFormatting.GOLD));
-		list.addAll(TooltipHelper.cutTextComponent(Lang.translateDirect("linked_controller.press_keybind", keys),
+		list.addAll(TooltipHelper.cutTextComponent(CreateLang.translateDirect("linked_controller.press_keybind", keys),
 			Palette.ALL_GRAY));
 
 		int width = 0;

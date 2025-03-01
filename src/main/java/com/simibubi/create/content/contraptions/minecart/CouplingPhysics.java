@@ -1,11 +1,10 @@
 package com.simibubi.create.content.contraptions.minecart;
 
 import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
@@ -17,6 +16,8 @@ import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
 public class CouplingPhysics {
 
@@ -42,7 +43,7 @@ public class CouplingPhysics {
 		Couple<Float> maxSpeed = carts.map(cart -> (float) MinecartAndRailUtil.getMaximumSpeed(cart));
 
 		boolean firstLoop = true;
-		for (boolean current : new boolean[] { true, false, true }) {
+		for (boolean current : new boolean[]{true, false, true}) {
 			AbstractMinecart cart = carts.get(current);
 			AbstractMinecart otherCart = carts.get(!current);
 
@@ -56,8 +57,7 @@ public class CouplingPhysics {
 			BlockPos railPosition = cart.getCurrentRailPos();
 			BlockState railState = world.getBlockState(railPosition.above());
 
-			if (railState.getBlock() instanceof BaseRailBlock) {
-				BaseRailBlock block = (BaseRailBlock) railState.getBlock();
+			if (railState.getBlock() instanceof BaseRailBlock block) {
 				shape = MinecartAndRailUtil.getDirectionOfRail(railState, world, railPosition, block);
 			}
 
@@ -73,7 +73,7 @@ public class CouplingPhysics {
 			correction = shape != null
 				? followLinkOnRail(link, pos, correctionMagnitude, MinecartSim2020.getRailVec(shape)).subtract(pos)
 				: link.normalize()
-					.scale(correctionMagnitude);
+				.scale(correctionMagnitude);
 
 			float maxResolveSpeed = 1.75f;
 			correction = VecHelper.clamp(correction, Math.min(maxResolveSpeed, maxSpeed.get(current)));
@@ -104,15 +104,14 @@ public class CouplingPhysics {
 		Couple<RailShape> shapes = carts.mapWithContext((minecart, current) -> {
 			Vec3 vec = nextPositions.get(current);
 			int x = Mth.floor(vec.x());
-	        int y = Mth.floor(vec.y());
-	        int z = Mth.floor(vec.z());
-	        BlockPos pos = new BlockPos(x, y - 1, z);
-	        if (minecart.level().getBlockState(pos).is(BlockTags.RAILS)) pos = pos.below();
+			int y = Mth.floor(vec.y());
+			int z = Mth.floor(vec.z());
+			BlockPos pos = new BlockPos(x, y - 1, z);
+			if (minecart.level().getBlockState(pos).is(BlockTags.RAILS)) pos = pos.below();
 			BlockPos railPosition = pos;
 			BlockState railState = world.getBlockState(railPosition.above());
-			if (!(railState.getBlock() instanceof BaseRailBlock))
+			if (!(railState.getBlock() instanceof BaseRailBlock block))
 				return null;
-			BaseRailBlock block = (BaseRailBlock) railState.getBlock();
 			return MinecartAndRailUtil.getDirectionOfRail(railState, world, railPosition, block);
 		});
 

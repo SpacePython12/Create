@@ -15,18 +15,20 @@ import javax.annotation.Nullable;
 import com.simibubi.create.content.contraptions.actors.psi.PortableFluidInterfaceBlockEntity.InterfaceFluidHandler;
 import com.simibubi.create.content.fluids.PipeConnection.Flow;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.BlockFace;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Pair;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.createmod.catnip.math.BlockFace;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class FluidNetwork {
 
@@ -198,9 +200,8 @@ public class FluidNetwork {
 				if (transfer.isEmpty())
 					return;
 				test.abort();
-			}
+}
 			List<Pair<BlockFace, Storage<FluidVariant>>> availableOutputs = new ArrayList<>(targets);
-
 			while (!availableOutputs.isEmpty() && transfer.getAmount() > 0) {
 				long dividedTransfer = transfer.getAmount() / availableOutputs.size();
 				long remainder = transfer.getAmount() % availableOutputs.size();
@@ -221,11 +222,9 @@ public class FluidNetwork {
 						iterator.remove();
 						continue;
 					}
-
 					FluidStack divided = transfer.copy();
 					divided.setAmount(toTransfer);
 					long fill = targetHandler.insert(divided.getType(), divided.getAmount(), t);
-
 					transfer.setAmount(transfer.getAmount() - fill);
 					transferredAmount += fill;
 					if (fill < toTransfer)

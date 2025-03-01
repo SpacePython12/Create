@@ -1,15 +1,13 @@
 package com.simibubi.create.content.equipment.extendoGrip;
 
-import com.jozufozu.flywheel.core.PartialModel;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback.RenderHandEvent;
-import io.github.fabricators_of_create.porting_lib.util.FirstPersonRendererHelper;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
@@ -21,6 +19,9 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback.RenderHandEvent;
+import io.github.fabricators_of_create.porting_lib.util.FirstPersonRendererHelper;
 
 public class ExtendoGripRenderHandler {
 
@@ -60,7 +61,7 @@ public class ExtendoGripRenderHandler {
 			return;
 
 		PoseStack ms = event.getPoseStack();
-		TransformStack msr = TransformStack.cast(ms);
+		var msr = TransformStack.of(ms);
 		AbstractClientPlayer abstractclientplayerentity = mc.player;
 		RenderSystem.setShaderTexture(0, abstractclientplayerentity.getSkinTextureLocation());
 
@@ -82,13 +83,13 @@ public class ExtendoGripRenderHandler {
 			ms.translate(flip * (0.64000005F - .1f), -0.4F + equipProgress * -0.6F, -0.71999997F + .3f);
 
 			ms.pushPose();
-			msr.rotateY(flip * 75.0F);
+			msr.rotateYDegrees(flip * 75.0F);
 			ms.translate(flip * -1.0F, 3.6F, 3.5F);
-			msr.rotateZ(flip * 120)
-				.rotateX(200)
-				.rotateY(flip * -135.0F);
+			msr.rotateZDegrees(flip * 120)
+				.rotateXDegrees(200)
+				.rotateYDegrees(flip * -135.0F);
 			ms.translate(flip * 5.6F, 0.0F, 0.0F);
-			msr.rotateY(flip * 40.0F);
+			msr.rotateYDegrees(flip * 40.0F);
 			ms.translate(flip * 0.05f, -0.3f, -0.3f);
 
 			PlayerRenderer playerrenderer = (PlayerRenderer) mc.getEntityRenderDispatcher()
@@ -117,7 +118,7 @@ public class ExtendoGripRenderHandler {
 				if (blockItem && mc.getItemRenderer()
 					.getModel(heldItem, null, null, 0)
 					.isGui3d()) {
-					msr.rotateY(flip * 45);
+					msr.rotateYDegrees(flip * 45);
 					ms.translate(flip * 0.15f, -0.15f, -.05f);
 					ms.scale(1.25f, 1.25f, 1.25f);
 				}

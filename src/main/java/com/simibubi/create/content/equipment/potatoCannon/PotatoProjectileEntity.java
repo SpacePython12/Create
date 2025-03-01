@@ -1,21 +1,19 @@
 package com.simibubi.create.content.equipment.potatoCannon;
 
-import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
-
-import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllEnchantments;
 import com.simibubi.create.AllSoundEvents;
+import com.simibubi.create.api.equipment.potatoCannon.PotatoCannonProjectileType;
+import com.simibubi.create.api.equipment.potatoCannon.PotatoProjectileRenderMode;
+import com.simibubi.create.api.registry.CreateRegistries;
+import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileRenderModes.StuckToEntity;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
 import com.simibubi.create.foundation.particle.AirParticleData;
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -23,7 +21,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,6 +42,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+
 public class PotatoProjectileEntity extends AbstractHurtingProjectile implements IEntityAdditionalSpawnData {
 
 	protected PotatoCannonProjectileType type;
@@ -59,23 +63,17 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 	protected float additionalKnockback = 0;
 	protected float recoveryChance = 0;
 
-	public PotatoProjectileEntity(EntityType<? extends AbstractHurtingProjectile> type, Level world) {
-		super(type, world);
-	}
-
-	public ItemStack getItem() {
-		return stack;
+	public PotatoProjectileEntity(EntityType<? extends AbstractHurtingProjectile> type, Level level) {
+		super(type, level);
 	}
 
 	public void setItem(ItemStack stack) {
 		this.stack = stack;
-	}
-
-	public PotatoCannonProjectileType getProjectileType() {
-		if (type == null)
-			type = PotatoProjectileTypeManager.getTypeForStack(stack)
-				.orElse(BuiltinPotatoProjectileTypes.FALLBACK);
-		return type;
+		type = PotatoCannonProjectileType.getTypeForItem(level().registryAccess(), stack.getItem())
+			.orElseGet(() -> level().registryAccess()
+				.registryOrThrow(CreateRegistries.POTATO_PROJECTILE_TYPE)
+				.getHolderOrThrow(AllPotatoProjectileTypes.FALLBACK))
+			.value();
 	}
 
 	public void setEnchantmentEffectsFromCannon(ItemStack cannon) {
@@ -94,9 +92,18 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 			recoveryChance = .125f + recovery * .125f;
 	}
 
+	public ItemStack getItem() {
+		return stack;
+	}
+
+	@Nullable
+	public PotatoCannonProjectileType getProjectileType() {
+		return type;
+	}
+
 	@Override
 	public void readAdditionalSaveData(CompoundTag nbt) {
-		stack = ItemStack.of(nbt.getCompound("Item"));
+		setItem(ItemStack.of(nbt.getCompound("Item")));
 		additionalDamageMult = nbt.getFloat("AdditionalDamage");
 		additionalKnockback = nbt.getFloat("AdditionalKnockback");
 		recoveryChance = nbt.getFloat("Recovery");
@@ -112,6 +119,7 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 		super.addAdditionalSaveData(nbt);
 	}
 
+	@Nullable
 	public Entity getStuckEntity() {
 		if (stuckEntity == null)
 			return null;
@@ -123,7 +131,7 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 	public void setStuckEntity(Entity stuckEntity) {
 		this.stuckEntity = stuckEntity;
 		this.stuckOffset = position().subtract(stuckEntity.position());
-		this.stuckRenderer = new PotatoProjectileRenderMode.StuckToEntity(stuckOffset);
+		this.stuckRenderer = new StuckToEntity(stuckOffset);
 		this.stuckFallSpeed = 0.0;
 		setDeltaMovement(Vec3.ZERO);
 	}
@@ -132,27 +140,26 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 		if (getStuckEntity() != null)
 			return stuckRenderer;
 
-		return getProjectileType().getRenderMode();
+		return type.renderMode();
 	}
 
+	@Override
 	public void tick() {
-		PotatoCannonProjectileType projectileType = getProjectileType();
-
 		Entity stuckEntity = getStuckEntity();
 		if (stuckEntity != null) {
 			if (getY() < stuckEntity.getY() - 0.1) {
 				pop(position());
 				kill();
 			} else {
-				stuckFallSpeed += 0.007 * projectileType.getGravityMultiplier();
+				stuckFallSpeed += 0.007 * type.gravityMultiplier();
 				stuckOffset = stuckOffset.add(0, -stuckFallSpeed, 0);
 				Vec3 pos = stuckEntity.position()
 					.add(stuckOffset);
 				setPos(pos.x, pos.y, pos.z);
 			}
 		} else {
-			setDeltaMovement(getDeltaMovement().add(0, -0.05 * projectileType.getGravityMultiplier(), 0)
-				.scale(projectileType.getDrag()));
+			setDeltaMovement(getDeltaMovement().add(0, -0.05 * type.gravityMultiplier(), 0)
+				.scale(type.drag()));
 		}
 
 		super.tick();
@@ -182,9 +189,8 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 
 		Vec3 hit = ray.getLocation();
 		Entity target = ray.getEntity();
-		PotatoCannonProjectileType projectileType = getProjectileType();
-		float damage = projectileType.getDamage() * additionalDamageMult;
-		float knockback = projectileType.getKnockback() + additionalKnockback;
+		float damage = type.damage() * additionalDamageMult;
+		float knockback = type.knockback() + additionalKnockback;
 		Entity owner = this.getOwner();
 
 		if (!target.isAlive())
@@ -207,7 +213,7 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 
 		if (target instanceof WitherBoss && ((WitherBoss) target).isPowered())
 			return;
-		if (projectileType.preEntityHit(ray))
+		if (type.preEntityHit(stack, ray))
 			return;
 
 		boolean targetIsEnderman = target.getType() == EntityType.ENDERMAN;
@@ -225,20 +231,22 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 		if (targetIsEnderman)
 			return;
 
-		if (!projectileType.onEntityHit(ray) && onServer)
-			if (random.nextDouble() <= recoveryChance)
+		if (!type.onEntityHit(stack, ray) && onServer) {
+			if (random.nextDouble() <= recoveryChance) {
 				recoverItem();
+			} else {
+				spawnAtLocation(type.dropStack());
+			}
+		}
 
-		if (!(target instanceof LivingEntity)) {
+		if (!(target instanceof LivingEntity livingentity)) {
 			playHitSound(level(), position());
 			kill();
 			return;
 		}
 
-		LivingEntity livingentity = (LivingEntity) target;
-
-		if (type.getReloadTicks() < 10)
-			livingentity.invulnerableTime = type.getReloadTicks() + 10;
+		if (type.reloadTicks() < 10)
+			livingentity.invulnerableTime = type.reloadTicks() + 10;
 
 		if (onServer && knockback > 0) {
 			Vec3 appliedMotion = this.getDeltaMovement()
@@ -260,14 +268,13 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 				.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 		}
 
-		if (onServer && owner instanceof ServerPlayer) {
-			ServerPlayer serverplayerentity = (ServerPlayer) owner;
+		if (onServer && owner instanceof ServerPlayer serverplayerentity) {
 			if (!target.isAlive() && target.getType()
 				.getCategory() == MobCategory.MONSTER || (target instanceof Player && target != owner))
 				AllAdvancements.POTATO_CANNON.awardTo(serverplayerentity);
 		}
 
-		if (type.isSticky() && target.isAlive()) {
+		if (type.sticky() && target.isAlive()) {
 			setStuckEntity(target);
 		} else {
 			kill();
@@ -292,9 +299,14 @@ public class PotatoProjectileEntity extends AbstractHurtingProjectile implements
 	protected void onHitBlock(BlockHitResult ray) {
 		Vec3 hit = ray.getLocation();
 		pop(hit);
-		if (!getProjectileType().onBlockHit(level(), ray) && !level().isClientSide)
-			if (random.nextDouble() <= recoveryChance)
+		if (!type.onBlockHit(level(), stack, ray) && !level().isClientSide) {
+			if (random.nextDouble() <= recoveryChance) {
 				recoverItem();
+			} else {
+				spawnAtLocation(getProjectileType().dropStack());
+			}
+		}
+
 		super.onHitBlock(ray);
 		kill();
 	}

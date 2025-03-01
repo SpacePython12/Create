@@ -1,8 +1,8 @@
 package com.simibubi.create.compat.thresholdSwitch;
 
 //import com.simibubi.create.compat.Mods;
-//import com.simibubi.create.foundation.utility.RegisteredObjects;
 //
+//import net.createmod.catnip.platform.CatnipServices;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraftforge.items.IItemHandler;
 //
@@ -11,7 +11,7 @@ package com.simibubi.create.compat.thresholdSwitch;
 //	@Override
 //	public boolean isFromThisMod(BlockEntity blockEntity) {
 //		return blockEntity != null && Mods.STORAGEDRAWERS.id()
-//			.equals(RegisteredObjects.getKeyOrThrow(blockEntity.getType())
+//			.equals(CatnipServices.REGISTRIES.getKeyOrThrow(blockEntity.getType())
 //				.getNamespace());
 //	}
 //

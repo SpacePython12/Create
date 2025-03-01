@@ -9,21 +9,31 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
-import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.content.logistics.box.PackageEntity;
+import com.simibubi.create.foundation.block.IBE;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import net.createmod.catnip.data.Pair;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.util.Mth;
-import net.minecraft.world.Containers;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlottedStackStorage;
 
 public class ItemHelper {
 
@@ -81,6 +91,10 @@ public class ItemHelper {
 //		return true;
 //	}
 
+	public static <T extends IBE<? extends BlockEntity>> int calcRedstoneFromBlockEntity(T ibe, Level level, BlockPos pos) {
+		return calcRedstoneFromInventory(ItemStorage.SIDED.find(level, pos, null));
+	}
+
 	public static int calcRedstoneFromInventory(@Nullable Storage<ItemVariant> inv) {
 		if (inv == null)
 			return 0;
@@ -111,7 +125,8 @@ public class ItemHelper {
 
 	public static List<Pair<Ingredient, MutableInt>> condenseIngredients(NonNullList<Ingredient> recipeIngredients) {
 		List<Pair<Ingredient, MutableInt>> actualIngredients = new ArrayList<>();
-		Ingredients: for (Ingredient igd : recipeIngredients) {
+		Ingredients:
+		for (Ingredient igd : recipeIngredients) {
 			for (Pair<Ingredient, MutableInt> pair : actualIngredients) {
 				ItemStack[] stacks1 = pair.getFirst()
 					.getItems();
@@ -172,7 +187,7 @@ public class ItemHelper {
 	}
 
 	public static ItemStack extract(Storage<ItemVariant> inv, Predicate<ItemStack> test, ExtractionCountMode mode, int amount,
-		boolean simulate) {
+									boolean simulate) {
 		int extracted = 0;
 		ItemVariant extracting = null;
 		List<ItemVariant> otherTargets = null;
@@ -241,7 +256,7 @@ public class ItemHelper {
 	}
 
 	public static ItemStack extract(Storage<ItemVariant> inv, Predicate<ItemStack> test,
-		Function<ItemStack, Integer> amountFunction, boolean simulate) {
+									Function<ItemStack, Integer> amountFunction, boolean simulate) {
 		ItemStack extracting = ItemStack.EMPTY;
 		int maxExtractionCount = 64;
 
@@ -296,13 +311,14 @@ public class ItemHelper {
 		}
 	}
 
-//	public static ItemStack findFirstMatch(Storage<ItemVariant> inv, Predicate<ItemStack> test) {
-//		int slot = findFirstMatchingSlotIndex(inv, test);
-//		if (slot == -1)
-//			return ItemStack.EMPTY;
-//		else
-//			return inv.getStackInSlot(slot);
-//	}
+	public static ItemStack fromItemEntity(Entity entityIn) {
+		if (!entityIn.isAlive())
+			return ItemStack.EMPTY;
+		if (entityIn instanceof PackageEntity packageEntity) {
+			return packageEntity.getBox();
+		}
+		return entityIn instanceof ItemEntity ? ((ItemEntity) entityIn).getItem() : ItemStack.EMPTY;
+	}
 
 	public static ItemStack limitCountToMaxStackSize(ItemStack stack, boolean simulate) {
 		int count = stack.getCount();
@@ -315,4 +331,23 @@ public class ItemHelper {
 		return remainder;
 	}
 
+	public static void copyContents(SlottedStackStorage from, SlottedStackStorage to) {
+		if (from.getSlotCount() != to.getSlotCount()) {
+			throw new IllegalArgumentException("Slot count mismatch");
+		}
+
+		for (int i = 0; i < from.getSlotCount(); i++) {
+			to.setStackInSlot(i, from.getStackInSlot(i).copy());
+		}
+	}
+
+	public static void copyContents(SlottedStackStorage from, Container to) {
+		if (from.getSlotCount() != to.getContainerSize()) {
+			throw new IllegalArgumentException("Slot count mismatch");
+		}
+
+		for (int i = 0; i < from.getSlotCount(); i++) {
+			to.setItem(i, from.getStackInSlot(i).copy());
+		}
+	}
 }

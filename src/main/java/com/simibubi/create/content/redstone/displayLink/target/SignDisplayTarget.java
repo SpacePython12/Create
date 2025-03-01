@@ -2,9 +2,10 @@ package com.simibubi.create.content.redstone.displayLink.target;
 
 import java.util.List;
 
+import com.simibubi.create.api.behaviour.display.DisplayTarget;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
@@ -41,7 +42,7 @@ public class SignDisplayTarget extends DisplayTarget {
 	public DisplayTargetStats provideStats(DisplayLinkContext context) {
 		return new DisplayTargetStats(4, 15, this);
 	}
-	
+
 	@Override
 	public boolean requiresComponentSanitization() {
 		return true;

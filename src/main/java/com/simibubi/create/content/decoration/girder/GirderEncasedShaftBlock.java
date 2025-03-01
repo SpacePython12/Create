@@ -5,10 +5,10 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllShapes;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.HorizontalAxisKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -37,7 +37,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class GirderEncasedShaftBlock extends HorizontalAxisKineticBlock
-	implements IBE<KineticBlockEntity>, SimpleWaterloggedBlock, IWrenchable, ISpecialBlockItemRequirement {
+	implements IBE<KineticBlockEntity>, SimpleWaterloggedBlock, IWrenchable, SpecialBlockItemRequirement {
 
 	public static final BooleanProperty TOP = GirderBlock.TOP;
 	public static final BooleanProperty BOTTOM = GirderBlock.BOTTOM;

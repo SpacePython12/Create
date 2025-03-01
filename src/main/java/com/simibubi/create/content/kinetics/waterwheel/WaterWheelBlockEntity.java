@@ -11,9 +11,9 @@ import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.fluid.FluidHelper;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -199,6 +199,12 @@ public class WaterWheelBlockEntity extends GeneratingKineticBlockEntity {
 			redraw();
 	}
 
+	@Override
+	public void writeSafe(CompoundTag tag) {
+		super.writeSafe(tag);
+		tag.put("Material", NbtUtils.writeBlockState(material));
+	}
+	
 	@Override
 	public void write(CompoundTag compound, boolean clientPacket) {
 		super.write(compound, clientPacket);

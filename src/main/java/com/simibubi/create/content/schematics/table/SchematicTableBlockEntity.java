@@ -4,9 +4,8 @@ import java.util.List;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.IInteractionChecker;
-import com.simibubi.create.foundation.utility.Lang;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +18,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 
 public class SchematicTableBlockEntity extends SmartBlockEntity implements MenuProvider, IInteractionChecker {
@@ -57,6 +58,7 @@ public class SchematicTableBlockEntity extends SmartBlockEntity implements MenuP
 	protected void read(CompoundTag compound, boolean clientPacket) {
 		inventory.deserializeNBT(compound.getCompound("Inventory"));
 		super.read(compound, clientPacket);
+
 		if (!clientPacket)
 			return;
 		if (compound.contains("Uploading")) {
@@ -113,7 +115,7 @@ public class SchematicTableBlockEntity extends SmartBlockEntity implements MenuP
 
 	@Override
 	public Component getDisplayName() {
-		return Lang.translateDirect("gui.schematicTable.title");
+		return CreateLang.translateDirect("gui.schematicTable.title");
 	}
 
 	@Override

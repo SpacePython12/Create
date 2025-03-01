@@ -12,8 +12,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import com.simibubi.create.AllPackets;
@@ -34,8 +32,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class GlobalRailwayManager {
 
@@ -48,6 +49,8 @@ public class GlobalRailwayManager {
 	private List<Train> waitingTrains;
 
 	private RailwaySavedData savedData;
+
+	public int version;
 
 	public GlobalRailwayManager() {
 		cleanUp();

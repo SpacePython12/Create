@@ -8,13 +8,13 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.simibubi.create.content.contraptions.glue.SuperGlueEntity;
-import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.level.block.Blocks;
@@ -29,7 +29,7 @@ import net.minecraft.world.phys.Vec3;
 public class CloneCommand {
 
 	private static final Dynamic2CommandExceptionType CLONE_TOO_BIG_EXCEPTION = new Dynamic2CommandExceptionType(
-		(arg1, arg2) -> Components.translatable("commands.clone.toobig", arg1, arg2));
+		(arg1, arg2) -> Component.translatable("commands.clone.toobig", arg1, arg2));
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return Commands.literal("clone")
@@ -46,8 +46,10 @@ public class CloneCommand {
 							BlockPosArgument.getLoadedBlockPos(ctx, "destination"), true)))))
 			.executes(ctx -> {
 				ctx.getSource()
-					.sendSuccess(() -> Components.literal(
-						"Clones all blocks as well as super glue from the specified area to the target destination"),
+					.sendSuccess(() -> {
+                                return Component.literal(
+                                    "Clones all blocks as well as super glue from the specified area to the target destination");
+                            },
 						true);
 
 				return Command.SINGLE_SUCCESS;
@@ -77,9 +79,13 @@ public class CloneCommand {
 		int gluePastes = cloneGlue(sourceArea, world, diffToTarget);
 
 		if (cloneBlocks)
-			source.sendSuccess(() -> Components.literal("Successfully cloned " + blockPastes + " Blocks"), true);
+			source.sendSuccess(() -> {
+                return Component.literal("Successfully cloned " + blockPastes + " Blocks");
+            }, true);
 
-		source.sendSuccess(() -> Components.literal("Successfully applied glue " + gluePastes + " times"), true);
+		source.sendSuccess(() -> {
+            return Component.literal("Successfully applied glue " + gluePastes + " times");
+        }, true);
 		return blockPastes + gluePastes;
 
 	}

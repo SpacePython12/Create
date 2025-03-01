@@ -13,7 +13,7 @@ import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -34,7 +34,7 @@ public abstract class ProcessingViaFanCategory<T extends Recipe<?>> extends Crea
 
 	public static Supplier<ItemStack> getFan(String name) {
 		return () -> AllBlocks.ENCASED_FAN.asStack()
-			.setHoverName(Lang.translateDirect("recipe." + name + ".fan").withStyle(style -> style.withItalic(false)));
+			.setHoverName(CreateLang.translateDirect("recipe." + name + ".fan").withStyle(style -> style.withItalic(false)));
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public abstract class ProcessingViaFanCategory<T extends Recipe<?>> extends Crea
 	@Override
 	public void draw(T recipe, IRecipeSlotsView iRecipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
 		renderWidgets(graphics, recipe, mouseX, mouseY);
-		
+
 		PoseStack matrixStack = graphics.pose();
 
 		matrixStack.pushPose();
@@ -117,7 +117,7 @@ public abstract class ProcessingViaFanCategory<T extends Recipe<?>> extends Crea
 						.addSlot(RecipeIngredientRole.OUTPUT, 141 + xOffset, 48 + yOffset)
 						.setBackground(getRenderedSlot(output), -1, -1)
 						.addItemStack(output.getStack())
-						.addTooltipCallback(addStochasticTooltip(output));
+						.addRichTooltipCallback(addStochasticTooltip(output));
 				i++;
 			}
 		}

@@ -21,18 +21,9 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.createmod.catnip.nbt.NBTHelper;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -44,6 +35,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class DepotBehaviour extends BlockEntityBehaviour {
 
@@ -85,7 +86,7 @@ public class DepotBehaviour extends BlockEntityBehaviour {
 
 	public DepotBehaviour(SmartBlockEntity be) {
 		super(be);
-		maxStackSize = () -> 64;
+		maxStackSize = () -> heldItem != null ? heldItem.stack.getMaxStackSize() : 64;
 		canAcceptItems = () -> true;
 		canFunnelsPullFrom = $ -> true;
 		acceptedItems = $ -> true;
@@ -300,8 +301,9 @@ public class DepotBehaviour extends BlockEntityBehaviour {
 		int cumulativeStackSize = getPresentStackSize();
 		for (TransportedItemStack transportedItemStack : incoming)
 			cumulativeStackSize += transportedItemStack.stack.getCount();
-		int fromGetter = maxStackSize.get();
-		return (fromGetter == 0 ? 64 : fromGetter) - cumulativeStackSize;
+		int fromGetter =
+			Math.min(maxStackSize.get() == 0 ? 64 : maxStackSize.get(), getHeldItemStack().getMaxStackSize());
+		return (fromGetter) - cumulativeStackSize;
 	}
 
 	public ItemStack insert(TransportedItemStack heldItem, TransactionContext ctx) {

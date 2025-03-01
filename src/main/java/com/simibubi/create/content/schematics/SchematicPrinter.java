@@ -1,18 +1,22 @@
 package com.simibubi.create.content.schematics;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.Create;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.schematics.cannon.MaterialChecklist;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.blockEntity.IMergeableBE;
-import com.simibubi.create.foundation.utility.BBHelper;
 import com.simibubi.create.foundation.utility.BlockHelper;
 
+import net.createmod.catnip.levelWrappers.SchematicLevel;
+import net.createmod.catnip.math.BBHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -28,10 +32,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
+import net.minecraft.world.level.material.Fluids;
 
 public class SchematicPrinter {
 
@@ -41,7 +42,7 @@ public class SchematicPrinter {
 
 	private boolean schematicLoaded;
 	private boolean isErrored;
-	private SchematicWorld blockReader;
+	private SchematicLevel blockReader;
 	private BlockPos schematicAnchor;
 
 	private BlockPos currentPos;
@@ -92,12 +93,12 @@ public class SchematicPrinter {
 			return;
 
 		StructureTemplate activeTemplate =
-			SchematicItem.loadSchematic(originalWorld.holderLookup(Registries.BLOCK), blueprint);
+			SchematicItem.loadSchematic(originalWorld, blueprint);
 		StructurePlaceSettings settings = SchematicItem.getSettings(blueprint, processNBT);
 
 		schematicAnchor = NbtUtils.readBlockPos(blueprint.getTag()
 				.getCompound("Anchor"));
-		blockReader = new SchematicWorld(schematicAnchor, originalWorld);
+		blockReader = new SchematicLevel(schematicAnchor, originalWorld);
 
 		try {
 			activeTemplate.placeInWorld(blockReader, schematicAnchor, schematicAnchor, settings,
@@ -111,7 +112,7 @@ public class SchematicPrinter {
 
 		BlockPos extraBounds = StructureTemplate.calculateRelativePosition(settings, new BlockPos(activeTemplate.getSize())
 				.offset(-1, -1, -1));
-		blockReader.bounds = BBHelper.encapsulate(blockReader.bounds, extraBounds);
+		blockReader.setBounds(BBHelper.encapsulate(blockReader.getBounds(), extraBounds));
 
 		StructureTransform transform = new StructureTransform(settings.getRotationPivot(), Direction.Axis.Y,
 				settings.getRotation(), settings.getMirror());
@@ -178,8 +179,7 @@ public class SchematicPrinter {
 		BlockPos target = getCurrentTarget();
 
 		if (printStage == PrintStage.ENTITIES) {
-			Entity entity = blockReader.getEntityStream()
-					.collect(Collectors.toList())
+			Entity entity = blockReader.getEntityList()
 					.get(printingEntityIndex);
 			entityHandler.handle(target, entity);
 		} else {
@@ -243,8 +243,7 @@ public class SchematicPrinter {
 
 	public ItemRequirement getCurrentRequirement() {
 		if (printStage == PrintStage.ENTITIES)
-			return ItemRequirement.of(blockReader.getEntityStream()
-					.collect(Collectors.toList())
+			return ItemRequirement.of(blockReader.getEntityList()
 					.get(printingEntityIndex));
 
 		BlockPos target = getCurrentTarget();
@@ -278,19 +277,18 @@ public class SchematicPrinter {
 	}
 
 	public void markAllEntityRequirements(MaterialChecklist checklist) {
-		blockReader.getEntityStream()
-				.forEach(entity -> {
+		for (Entity entity : blockReader.getEntityList()) {
 					ItemRequirement requirement = ItemRequirement.of(entity);
 					if (requirement.isEmpty())
 						return;
 					if (requirement.isInvalid())
 						return;
 					checklist.require(requirement);
-				});
+				}
 	}
 
 	public boolean advanceCurrentPos() {
-		List<Entity> entities = blockReader.getEntityStream().collect(Collectors.toList());
+		List<Entity> entities = blockReader.getEntityList();
 
 		do {
 			if (printStage == PrintStage.BLOCKS) {
@@ -344,6 +342,17 @@ public class SchematicPrinter {
 	public static boolean shouldDeferBlock(BlockState state) {
 		return AllBlocks.GANTRY_CARRIAGE.has(state) || AllBlocks.MECHANICAL_ARM.has(state)
 				|| BlockMovementChecks.isBrittle(state);
+	}
+
+	public void sendBlockUpdates(Level level) {
+		BoundingBox bounds = blockReader.getBounds();
+		BlockPos.betweenClosedStream(bounds.inflatedBy(1))
+			.filter(pos -> !bounds.isInside(pos))
+			.filter(
+				pos -> level.isLoaded(pos.offset(schematicAnchor)) && level.getFluidState(pos.offset(schematicAnchor))
+					.is(Fluids.WATER))
+			.forEach(
+				pos -> level.scheduleTick(pos.offset(schematicAnchor), Fluids.WATER, Fluids.WATER.getTickDelay(level)));
 	}
 
 }

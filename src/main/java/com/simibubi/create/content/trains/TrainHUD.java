@@ -9,13 +9,13 @@ import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.placement.PlacementHelpers;
-import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.ControlsUtil;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.placement.PlacementClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -130,11 +130,11 @@ public class TrainHUD {
 		AllGuiTextures.TRAIN_HUD_FRAME.render(graphics, -2, 1);
 		AllGuiTextures.TRAIN_HUD_SPEED_BG.render(graphics, 0, 0);
 
-		int w = (int) (AllGuiTextures.TRAIN_HUD_SPEED.width * displayedSpeed.getValue(partialTicks));
-		int h = AllGuiTextures.TRAIN_HUD_SPEED.height;
+		int w = (int) (AllGuiTextures.TRAIN_HUD_SPEED.getWidth() * displayedSpeed.getValue(partialTicks));
+		int h = AllGuiTextures.TRAIN_HUD_SPEED.getHeight();
 
-		graphics.blit(AllGuiTextures.TRAIN_HUD_SPEED.location, 0, 0, 0, AllGuiTextures.TRAIN_HUD_SPEED.startX,
-			AllGuiTextures.TRAIN_HUD_SPEED.startY, w, h, 256, 256);
+		graphics.blit(AllGuiTextures.TRAIN_HUD_SPEED.location, 0, 0, 0, AllGuiTextures.TRAIN_HUD_SPEED.getStartX(),
+			AllGuiTextures.TRAIN_HUD_SPEED.getStartY(), w, h, 256, 256);
 
 		int promptSize = (int) displayedPromptSize.getValue(partialTicks);
 		if (promptSize > 1) {
@@ -144,8 +144,8 @@ public class TrainHUD {
 
 			AllGuiTextures.TRAIN_PROMPT_L.render(graphics, -3, 0);
 			AllGuiTextures.TRAIN_PROMPT_R.render(graphics, promptSize, 0);
-			graphics.blit(AllGuiTextures.TRAIN_PROMPT.location, 0, 0, 0, AllGuiTextures.TRAIN_PROMPT.startX + (128 - promptSize / 2f),
-				AllGuiTextures.TRAIN_PROMPT.startY, promptSize, AllGuiTextures.TRAIN_PROMPT.height, 256, 256);
+			graphics.blit(AllGuiTextures.TRAIN_PROMPT.location, 0, 0, 0, AllGuiTextures.TRAIN_PROMPT.getStartX() + (128 - promptSize / 2f),
+				AllGuiTextures.TRAIN_PROMPT.getStartY(), promptSize, AllGuiTextures.TRAIN_PROMPT.getHeight(), 256, 256);
 
 			poseStack.popPose();
 
@@ -163,12 +163,12 @@ public class TrainHUD {
 
 		AllGuiTextures.TRAIN_HUD_DIRECTION.render(graphics, 77, -20);
 
-		w = (int) (AllGuiTextures.TRAIN_HUD_THROTTLE.width * (1 - displayedThrottle.getValue(partialTicks)));
-		int invW = AllGuiTextures.TRAIN_HUD_THROTTLE.width - w;
-		graphics.blit(AllGuiTextures.TRAIN_HUD_THROTTLE.location, invW, 0, 0, AllGuiTextures.TRAIN_HUD_THROTTLE.startX + invW,
-			AllGuiTextures.TRAIN_HUD_THROTTLE.startY, w, h, 256, 256);
+		w = (int) (AllGuiTextures.TRAIN_HUD_THROTTLE.getWidth() * (1 - displayedThrottle.getValue(partialTicks)));
+		int invW = AllGuiTextures.TRAIN_HUD_THROTTLE.getWidth() - w;
+		graphics.blit(AllGuiTextures.TRAIN_HUD_THROTTLE.location, invW, 0, 0, AllGuiTextures.TRAIN_HUD_THROTTLE.getStartX() + invW,
+			AllGuiTextures.TRAIN_HUD_THROTTLE.getStartY(), w, h, 256, 256);
 		AllGuiTextures.TRAIN_HUD_THROTTLE_POINTER.render(graphics,
-			Math.max(1, AllGuiTextures.TRAIN_HUD_THROTTLE.width - w) - 3, -2);
+			Math.max(1, AllGuiTextures.TRAIN_HUD_THROTTLE.getWidth() - w) - 3, -2);
 
 		// Direction
 
@@ -199,7 +199,7 @@ public class TrainHUD {
 
 		poseStack.translate(91, -9, 0);
 		poseStack.scale(0.925f, 0.925f, 1);
-		PlacementHelpers.textured(poseStack, 0, 0, 1, snappedAngle);
+		PlacementClient.textured(poseStack, 0, 0, 1, snappedAngle);
 
 		poseStack.popPose();
 	}

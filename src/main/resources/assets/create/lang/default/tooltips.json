@@ -47,6 +47,10 @@
 	"item.create.attribute_filter.tooltip.condition1": "When R-Clicked",
 	"item.create.attribute_filter.tooltip.behaviour1": "Opens the _configuration interface_.",
 
+	"item.create.package_filter.tooltip.summary": "_Matches packaged items_ by their targeted _address_. Can be used in _Filter Slots_ of Create's Components",
+	"item.create.package_filter.tooltip.condition1": "When R-Clicked",
+	"item.create.package_filter.tooltip.behaviour1": "Opens the _configuration interface_.",
+
 	"item.create.empty_schematic.tooltip.summary": "Used as a recipe ingredient and for writing at the _Schematic Table_.",
 
 	"item.create.schematic.tooltip.summary": "Holds a structure to be positioned and placed into the world. Position the Hologram as desired and use a _Schematicannon_ to build it.",
@@ -143,6 +147,12 @@
 	"item.create.netherite_backtank.tooltip.condition2": "When placed, Powered by Kinetics",
 	"item.create.netherite_backtank.tooltip.behaviour2": "_Collects_ _Pressurized_ _Air_ at a rate depending on the Rotational Speed.",
 
+	"item.create.cardboard_armor.tooltip.summary": "_Wearable_ _equipment_ for increased _style_ and _stealth_.",
+	"item.create.cardboard_armor.tooltip.condition1": "When full set equipped",
+	"item.create.cardboard_armor.tooltip.behaviour1": "_Sneak_ to activate an inconspicuous _disguise_.",
+
+	"item.create.cardboard_sword.tooltip.summary": "Bonk. A _mostly_ _harmless_, yet powerful weapon of choice.",
+
 	"block.create.placard.tooltip.summary": "_Frame_ your _items_ in brass using this fancy wall panel. Safe for contraptions!",
 	"block.create.placard.tooltip.condition1": "When R-Clicked with Item",
 	"block.create.placard.tooltip.behaviour1": "_Adds_ the held _item_ to the Placard. _Emits_ a brief _Redstone_ signal if a matching item was present already.",
@@ -174,6 +184,10 @@
 	"item.create.experience_nugget.tooltip.behaviour1": "_Redeems_ _Experience_ points contained within.",
 
 	"block.create.peculiar_bell.tooltip.summary": "A decorative _Brass Bell_. Placing it right above open _Soul Fire_ may have side-effects...",
+	
+	"block.create.desk_bell.tooltip.summary": "Ring for Service! Emits a _redstone signal_ when activated.",
+	"block.create.desk_bell.tooltip.condition1": "When attached to Elevator Contraption",
+	"block.create.desk_bell.tooltip.behaviour1": "_Plays a sound_ when arriving at the _target floor_.",
 
 	"block.create.haunted_bell.tooltip.summary": "A _Cursed Bell_ haunted by lost souls of the Nether.",
 	"block.create.haunted_bell.tooltip.condition1": "When Held or Rang",
@@ -186,6 +200,10 @@
 	"block.create.copycat_step.tooltip.summary": "_Converts_ any _full block_ into a decorative step.",
 	"block.create.copycat_step.tooltip.condition1": "When R-Clicked",
 	"block.create.copycat_step.tooltip.behaviour1": "Applies _held item_ as its _material_ if possible. _Click again_ to cycle _orientation_ or _powered_ state. Use a _Wrench_ to _reset_ the material.",
+
+	"block.create.item_hatch.tooltip.summary": "_Quickly solves_ your _inventory_ clutter and makes it someone else's problem.",
+	"block.create.item_hatch.tooltip.condition1": "When R-Clicked",
+	"block.create.item_hatch.tooltip.behaviour1": "_Deposits_ your _held item_ into the _container_ it is placed on. _Sneak-click_ to _deposit_ _everything_ except Hotbar items.",
 
 	"block.create.clipboard.tooltip.summary": "_Keeps your notes_ and makes you look more professional.",
 	"block.create.clipboard.tooltip.condition1": "When R-Clicked",

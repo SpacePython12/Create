@@ -6,13 +6,13 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
 public class TrackGraphMergeEvent {
-	public static final Event<Callback> EVENT = EventFactory.createArrayBacked(Callback.class, callbacks -> event -> {
+	public static final Event <Callback> EVENT = EventFactory.createArrayBacked(Callback.class, callbacks -> event -> {
 		for (Callback callback : callbacks)
 			callback.onMerge(event);
 	});
 
-	private TrackGraph mergedInto, mergedFrom;
-
+	private final TrackGraph mergedInto;
+	private final TrackGraph mergedFrom;
 	public TrackGraphMergeEvent(TrackGraph from, TrackGraph into) {
 		mergedInto = into;
 		mergedFrom = from;

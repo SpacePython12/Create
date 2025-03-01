@@ -1,7 +1,9 @@
 package com.simibubi.create.infrastructure.config;
 
-import com.simibubi.create.foundation.config.ConfigBase;
-import com.simibubi.create.foundation.config.ui.ConfigAnnotations;
+
+import net.createmod.catnip.config.ConfigBase;
+import net.createmod.catnip.config.ui.ConfigAnnotations;
+
 import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 
 public class CClient extends ConfigBase {
@@ -21,8 +23,6 @@ public class CClient extends ConfigBase {
 	public final ConfigFloat filterItemRenderDistance = f(10f, 1, "filterItemRenderDistance", Comments.filterItemRenderDistance);
 	public final ConfigBool rainbowDebug = b(false, "enableRainbowDebug",
 			Comments.rainbowDebug);
-	public final ConfigInt maxContraptionLightVolume = i(16384, 0, Integer.MAX_VALUE, "maximumContraptionLightVolume",
-			Comments.maxContraptionLightVolume);
 	// no group
 	public final ConfigInt mainMenuConfigButtonRow = i(2, 0, 4, "mainMenuConfigButtonRow",
 			Comments.mainMenuConfigButtonRow);
@@ -67,22 +67,6 @@ public class CClient extends ConfigBase {
 	public final ConfigInt overlayBorderColorBot = i(0x50_28007f, Integer.MIN_VALUE, Integer.MAX_VALUE, "customBorderBotOverlay",
 			Comments.overlayBorderColorBot);
 
-	//placement assist group
-	public final ConfigGroup placementAssist = group(1, "placementAssist",
-			Comments.placementAssist);
-	public final ConfigEnum<PlacementIndicatorSetting> placementIndicator = e(PlacementIndicatorSetting.TEXTURE, "indicatorType",
-			Comments.placementIndicator);
-	public final ConfigFloat indicatorScale = f(1.0f, 0f, "indicatorScale",
-			Comments.indicatorScale);
-
-	//ponder group
-	public final ConfigGroup ponder = group(1, "ponder",
-			Comments.ponder);
-	public final ConfigBool comfyReading = b(false, "comfyReading",
-			Comments.comfyReading);
-	public final ConfigBool editingMode = b(false, "editingMode",
-		Comments.editingMode);
-
 	//sound group
 	public final ConfigGroup sound = group(1, "sound",
 			Comments.sound);
@@ -96,6 +80,9 @@ public class CClient extends ConfigBase {
 	public final ConfigFloat mountedZoomMultiplier = f(3, 0, "mountedZoomMultiplier", Comments.mountedZoomMultiplier);
 	public final ConfigBool showTrackGraphOnF3 = b(false, "showTrackGraphOnF3", Comments.showTrackGraphOnF3);
 	public final ConfigBool showExtendedTrackGraphOnF3 = b(false, "showExtendedTrackGraphOnF3", Comments.showExtendedTrackGraphOnF3);
+	public final ConfigBool showTrainMapOverlay = b(true, "showTrainMapOverlay", Comments.showTrainMapOverlay);
+	public final ConfigEnum<TrainMapTheme> trainMapColorTheme =
+		e(TrainMapTheme.RED, "trainMapColorTheme", Comments.trainMapColorTheme);
 
 	@Override
 	public String getName() {
@@ -104,6 +91,10 @@ public class CClient extends ConfigBase {
 
 	public enum PlacementIndicatorSetting {
 		TEXTURE, TRIANGLE, NONE
+	}
+
+	public enum TrainMapTheme {
+		RED, GREY, WHITE
 	}
 
 	private static class Comments {
@@ -117,7 +108,6 @@ public class CClient extends ConfigBase {
 				"Maximum Distance to the player at which items in Blocks' filter slots will be displayed"
 		};
 		static String rainbowDebug = "Show kinetic debug information on blocks while the F3-Menu is open.";
-		static String maxContraptionLightVolume = "The maximum amount of blocks for which to try and calculate dynamic contraption lighting. Decrease if large contraption cause too much lag";
 		static String[] mainMenuConfigButtonRow = new String[]{
 				"Choose the menu row that the Create config button appears on in the main menu",
 				"Set to 0 to disable the button altogether"
@@ -159,20 +149,13 @@ public class CClient extends ConfigBase {
 				"Determines if the fluid unit should be simplified"
 		};
 		static String toolboxHotbarOverlayOffset = "Vertical offset for the Toolbox Hotbar overlay.";
-		static String placementAssist = "Settings for the Placement Assist";
-		static String[] placementIndicator = new String[]{
-				"What indicator should be used when showing where the assisted placement ends up relative to your crosshair",
-				"Choose 'NONE' to disable the Indicator altogether"
-		};
-		static String indicatorScale = "Change the size of the Indicator by this multiplier";
-		static String ponder = "Ponder settings";
-		static String comfyReading = "Slow down a ponder scene whenever there is text on screen.";
-		static String editingMode = "Show additional info in the ponder view and reload scene scripts more frequently.";
 		static String sound = "Sound settings";
 		static String enableAmbientSounds = "Make cogs rumble and machines clatter.";
 		static String ambientVolumeCap = "Maximum volume modifier of Ambient noise";
 
 		static String trains = "Railway related settings";
+		static String showTrainMapOverlay = "Display Track Networks and Trains on supported map mods";
+		static String trainMapColorTheme = "Track Network Color on maps";
 		static String mountedZoomMultiplier = "How far away the Camera should zoom when seated on a train";
 		static String showTrackGraphOnF3 = "Display nodes and edges of a Railway Network while f3 debug mode is active";
 		static String showExtendedTrackGraphOnF3 = "Additionally display materials of a Rail Network while f3 debug mode is active";

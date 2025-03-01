@@ -3,15 +3,21 @@ package com.simibubi.create.content.fluids.tank;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import com.simibubi.create.foundation.utility.CreateCodecs;
 
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 
 public class CreativeFluidTankBlockEntity extends FluidTankBlockEntity {
 
@@ -30,6 +36,14 @@ public class CreativeFluidTankBlockEntity extends FluidTankBlockEntity {
 	}
 
 	public static class CreativeSmartFluidTank extends SmartFluidTank {
+		public static final Codec<CreativeSmartFluidTank> CODEC = RecordCodecBuilder.create(i -> i.group(
+			FluidStack.CODEC.fieldOf("fluid").forGetter(FluidTank::getFluid),
+			CreateCodecs.NON_NEGATIVE_LONG.fieldOf("capacity").forGetter(FluidTank::getCapacity)
+		).apply(i, (fluid, capacity) -> {
+			CreativeSmartFluidTank tank = new CreativeSmartFluidTank(capacity, $ -> {});
+			tank.setFluid(fluid);
+			return tank;
+		}));
 
 		public CreativeSmartFluidTank(long capacity, Consumer<FluidStack> updateCallback) {
 			super(capacity, updateCallback);

@@ -3,11 +3,13 @@ package com.simibubi.create.content.logistics.funnel;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllShapes;
+import com.simibubi.create.content.logistics.box.PackageEntity;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
+import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.utility.AdventureUtil;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;
@@ -117,31 +119,31 @@ public abstract class FunnelBlock extends AbstractDirectionalFunnelBlock {
 	public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
 		if (worldIn.isClientSide)
 			return;
-		if (!(entityIn instanceof ItemEntity))
+		ItemStack stack = ItemHelper.fromItemEntity(entityIn);
+		if (stack.isEmpty())
 			return;
 		if (!canInsertIntoFunnel(state))
 			return;
-		if (!entityIn.isAlive())
-			return;
-		ItemEntity itemEntity = (ItemEntity) entityIn;
 
 		Direction direction = getFunnelFacing(state);
+		Vec3 openPos = VecHelper.getCenterOf(pos)
+			.add(Vec3.atLowerCornerOf(direction.getNormal())
+				.scale(entityIn instanceof ItemEntity ? -.25f : -.125f));
 		Vec3 diff = entityIn.position()
-			.subtract(VecHelper.getCenterOf(pos)
-				.add(Vec3.atLowerCornerOf(direction.getNormal())
-					.scale(-.325f)));
+			.subtract(openPos);
 		double projectedDiff = direction.getAxis()
 			.choose(diff.x, diff.y, diff.z);
 		if (projectedDiff < 0 == (direction.getAxisDirection() == AxisDirection.POSITIVE))
 			return;
+		float yOffset = direction == Direction.UP ? 0.25f : direction == Direction.DOWN ? -0.5f : -0.5f;
+		if (!PackageEntity.centerPackage(entityIn, openPos.add(0, yOffset, 0)))
+			return;
 
-		ItemStack toInsert = itemEntity.getItem();
-		ItemStack remainder = tryInsert(worldIn, pos, toInsert, false);
-
+		ItemStack remainder = tryInsert(worldIn, pos, stack, false);
 		if (remainder.isEmpty())
-			itemEntity.discard();
-		if (remainder.getCount() < toInsert.getCount())
-			itemEntity.setItem(remainder);
+			entityIn.discard();
+		if (remainder.getCount() < stack.getCount() && entityIn instanceof ItemEntity)
+			((ItemEntity) entityIn).setItem(remainder);
 	}
 
 	protected boolean canInsertIntoFunnel(BlockState state) {

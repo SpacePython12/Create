@@ -7,11 +7,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import com.simibubi.create.foundation.utility.Couple;
 
-import io.github.fabricators_of_create.porting_lib.util.TagUtil;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,24 +22,24 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import io.github.fabricators_of_create.porting_lib.util.TagUtil;
+
 @ParametersAreNonnullByDefault
 public class ValveHandleBlock extends HandCrankBlock {
 
-	private final DyeColor color;
-	private final boolean inCreativeTab;
+	public final DyeColor color;
 
 	public static ValveHandleBlock copper(Properties properties) {
-		return new ValveHandleBlock(properties, null, true);
+		return new ValveHandleBlock(properties, null);
 	}
 
 	public static ValveHandleBlock dyed(Properties properties, DyeColor color) {
-		return new ValveHandleBlock(properties, color, false);
+		return new ValveHandleBlock(properties, color);
 	}
 
-	private ValveHandleBlock(Properties properties, DyeColor color, boolean inCreativeTab) {
+	private ValveHandleBlock(Properties properties, DyeColor color) {
 		super(properties);
 		this.color = color;
-		this.inCreativeTab = inCreativeTab;
 	}
 
 	@Override
@@ -107,9 +103,4 @@ public class ValveHandleBlock extends HandCrankBlock {
 	public int getRotationSpeed() {
 		return 32;
 	}
-
-	public static Couple<Integer> getSpeedRange() {
-		return Couple.create(32, 32);
-	}
-
 }

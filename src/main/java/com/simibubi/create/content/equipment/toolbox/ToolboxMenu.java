@@ -3,9 +3,10 @@ package com.simibubi.create.content.equipment.toolbox;
 import static com.simibubi.create.content.equipment.toolbox.ToolboxInventory.STACKS_PER_COMPARTMENT;
 
 import com.simibubi.create.AllMenuTypes;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.animatedContainer.AnimatedContainerBehaviour;
 import com.simibubi.create.foundation.gui.menu.MenuBase;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
+
 public class ToolboxMenu extends MenuBase<ToolboxBlockEntity> {
 
 	public ToolboxMenu(MenuType<?> type, int id, Inventory inv, FriendlyByteBuf extraData) {
@@ -27,7 +30,8 @@ public class ToolboxMenu extends MenuBase<ToolboxBlockEntity> {
 
 	public ToolboxMenu(MenuType<?> type, int id, Inventory inv, ToolboxBlockEntity be) {
 		super(type, id, inv, be);
-		be.startOpen(player);
+		BlockEntityBehaviour.get(be, AnimatedContainerBehaviour.TYPE)
+			.startOpen(player);
 	}
 
 	public static ToolboxMenu create(int id, Inventory inv, ToolboxBlockEntity be) {
@@ -41,8 +45,7 @@ public class ToolboxMenu extends MenuBase<ToolboxBlockEntity> {
 
 		ClientLevel world = Minecraft.getInstance().level;
 		BlockEntity blockEntity = world.getBlockEntity(readBlockPos);
-		if (blockEntity instanceof ToolboxBlockEntity) {
-			ToolboxBlockEntity toolbox = (ToolboxBlockEntity) blockEntity;
+		if (blockEntity instanceof ToolboxBlockEntity toolbox) {
 			toolbox.readClient(readNbt);
 			return toolbox;
 		}
@@ -127,8 +130,8 @@ public class ToolboxMenu extends MenuBase<ToolboxBlockEntity> {
 		int x = 79;
 		int y = 37;
 
-		int[] xOffsets = { x, x + 33, x + 66, x + 66 + 6, x + 66, x + 33, x, x - 6 };
-		int[] yOffsets = { y, y - 6, y, y + 33, y + 66, y + 66 + 6, y + 66, y + 33 };
+		int[] xOffsets = {x, x + 33, x + 66, x + 66 + 6, x + 66, x + 33, x, x - 6};
+		int[] yOffsets = {y, y - 6, y, y + 33, y + 66, y + 66 + 6, y + 66, y + 33};
 
 		for (int compartment = 0; compartment < 8; compartment++) {
 			int baseIndex = compartment * STACKS_PER_COMPARTMENT;
@@ -153,7 +156,8 @@ public class ToolboxMenu extends MenuBase<ToolboxBlockEntity> {
 	public void removed(Player playerIn) {
 		super.removed(playerIn);
 		if (!playerIn.level().isClientSide)
-			contentHolder.stopOpen(playerIn);
+			BlockEntityBehaviour.get(contentHolder, AnimatedContainerBehaviour.TYPE)
+				.stopOpen(playerIn);
 	}
 
 }

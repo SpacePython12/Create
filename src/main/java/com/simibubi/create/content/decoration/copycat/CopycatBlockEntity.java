@@ -3,32 +3,35 @@ package com.simibubi.create.content.decoration.copycat;
 import java.util.List;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
+import com.simibubi.create.api.contraption.transformable.TransformableBlockEntity;
+import com.simibubi.create.api.schematic.nbt.PartialSafeNBT;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockEntityItemRequirement;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.redstone.RoseQuartzLampBlock;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockEntityItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.IPartialSafeNBT;
-import com.simibubi.create.foundation.utility.Iterate;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
+import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+
 public class CopycatBlockEntity extends SmartBlockEntity
-	implements ISpecialBlockEntityItemRequirement, ITransformableBlockEntity, IPartialSafeNBT, RenderAttachmentBlockEntity {
+	implements SpecialBlockEntityItemRequirement, TransformableBlockEntity, PartialSafeNBT, RenderDataBlockEntity {
 
 	private BlockState material;
 	private ItemStack consumedItem;
@@ -127,7 +130,7 @@ public class CopycatBlockEntity extends SmartBlockEntity
 	}
 
 	@Override
-	public void transform(StructureTransform transform) {
+	public void transform(BlockEntity be, StructureTransform transform) {
 		material = transform.apply(material);
 		notifyUpdate();
 	}
@@ -186,7 +189,7 @@ public class CopycatBlockEntity extends SmartBlockEntity
 	}
 
 	@Override
-	public BlockState getRenderAttachmentData() {
+	public BlockState getRenderData() {
 		return material;
 	}
 

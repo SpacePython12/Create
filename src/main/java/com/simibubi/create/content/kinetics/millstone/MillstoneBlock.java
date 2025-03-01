@@ -5,14 +5,8 @@ import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Iterate;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -32,6 +26,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+
 public class MillstoneBlock extends KineticBlock implements IBE<MillstoneBlockEntity>, ICogWheel {
 
 	public MillstoneBlock(Properties properties) {
@@ -50,7 +52,7 @@ public class MillstoneBlock extends KineticBlock implements IBE<MillstoneBlockEn
 
 	@Override
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
-		BlockHitResult hit) {
+								 BlockHitResult hit) {
 		if (!player.getItemInHand(handIn)
 			.isEmpty())
 			return InteractionResult.PASS;
@@ -91,7 +93,7 @@ public class MillstoneBlock extends KineticBlock implements IBE<MillstoneBlockEn
 
 		if (entityIn.level().isClientSide)
 			return;
-		if (!(entityIn instanceof ItemEntity))
+		if (!(entityIn instanceof ItemEntity itemEntity))
 			return;
 		if (!entityIn.isAlive())
 			return;
@@ -104,7 +106,6 @@ public class MillstoneBlock extends KineticBlock implements IBE<MillstoneBlockEn
 		if (millstone == null)
 			return;
 
-		ItemEntity itemEntity = (ItemEntity) entityIn;
 		Storage<ItemVariant> handler = millstone.getItemStorage(null);
 		if (handler == null)
 			return;

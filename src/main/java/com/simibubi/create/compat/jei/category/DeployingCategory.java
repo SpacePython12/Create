@@ -8,7 +8,7 @@ import com.simibubi.create.compat.jei.category.animations.AnimatedDeployer;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -37,7 +37,7 @@ public class DeployingCategory extends CreateRecipeCategory<DeployerApplicationR
 				.addSlot(RecipeIngredientRole.INPUT, 51, 5)
 				.setBackground(getRenderedSlot(), -1, -1)
 				.addIngredients(recipe.getRequiredHeldItem());
-		
+
 		List<ProcessingOutput> results = recipe.getRollableResults();
 		boolean single = results.size() == 1;
 		for (int i = 0; i < results.size(); i++) {
@@ -47,11 +47,11 @@ public class DeployingCategory extends CreateRecipeCategory<DeployerApplicationR
 			builder.addSlot(RecipeIngredientRole.OUTPUT, single ? 132 : 132 + xOffset, 51 + yOffset)
 				.setBackground(getRenderedSlot(output), -1, -1)
 				.addItemStack(output.getStack())
-				.addTooltipCallback(addStochasticTooltip(output));
+				.addRichTooltipCallback(addStochasticTooltip(output));
 		}
 
 		if (recipe.shouldKeepHeldItem())
-			handItemSlot.addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(1, Lang.translateDirect("recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD)));
+			handItemSlot.addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(1, CreateLang.translateDirect("recipe.deploying.not_consumed").withStyle(ChatFormatting.GOLD)));
 
 	}
 

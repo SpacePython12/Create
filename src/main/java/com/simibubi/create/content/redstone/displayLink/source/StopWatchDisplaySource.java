@@ -4,8 +4,8 @@ import com.simibubi.create.content.kinetics.clock.CuckooClockBlockEntity;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.content.trains.display.FlapDisplaySection;
-import com.simibubi.create.foundation.utility.Components;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public class StopWatchDisplaySource extends SingleLineDisplaySource {
@@ -32,7 +32,7 @@ public class StopWatchDisplaySource extends SingleLineDisplaySource {
 		int minutes = (diff / 60 / 20) % 60;
 		int seconds = (diff / 20) % 60;
 
-		MutableComponent component = Components.literal((hours == 0 ? "" : (hours < 10 ? " " : "") + hours + ":")
+		MutableComponent component = Component.literal((hours == 0 ? "" : (hours < 10 ? " " : "") + hours + ":")
 			+ (minutes < 10 ? hours == 0 ? " " : "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
 
 		return component;

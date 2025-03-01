@@ -1,10 +1,12 @@
 package com.simibubi.create.foundation.data;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.simibubi.create.AllTags;
-import com.simibubi.create.Create;
 import com.simibubi.create.foundation.data.recipe.Mods;
 import com.simibubi.create.foundation.mixin.fabric.TagAppenderAccessor;
 import com.tterrag.registrate.builders.BlockBuilder;
@@ -12,30 +14,17 @@ import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-
-import net.minecraft.core.HolderLookup;
-
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.core.Holder;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.data.tags.TagsProvider.TagAppender;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 
-import java.util.List;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 public class TagGen {
 	public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> axeOrPickaxe() {
@@ -88,7 +77,7 @@ public class TagGen {
 		public CreateTagAppender<T> tag(TagKey<T> tag) {
 			return new CreateTagAppender<>(provider.addTag(tag), keyExtractor);
 		}
-		
+
 		// fabric: this is just used to force datagen of tags
 		public void getOrCreateRawBuilder(TagKey<T> tag) {
 			this.tag(tag);

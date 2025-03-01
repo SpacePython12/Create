@@ -7,10 +7,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.CreateClient;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -71,9 +71,9 @@ public class CarriageCouplingRenderer {
 				{
 					ms.pushPose();
 					ms.translate(anchor.x - camera.x, anchor.y - camera.y, anchor.z - camera.z);
-					CachedBufferer.partial(AllPartialModels.TRAIN_COUPLING_HEAD, air)
-						.rotateY(-yRot)
-						.rotateX(xRot)
+					CachedBuffers.partial(AllPartialModels.TRAIN_COUPLING_HEAD, air)
+						.rotateYDegrees(-yRot)
+						.rotateXDegrees(xRot)
 						.light(lightCoords)
 						.renderInto(ms, vb);
 
@@ -83,9 +83,9 @@ public class CarriageCouplingRenderer {
 					int couplingSegments = (int) Math.round(couplingDistance * 4);
 					double stretch = ((anchor2.distanceTo(anchor) - 2 * margin) * 4) / couplingSegments;
 					for (int j = 0; j < couplingSegments; j++) {
-						CachedBufferer.partial(AllPartialModels.TRAIN_COUPLING_CABLE, air)
-							.rotateY(-yRot + 180)
-							.rotateX(-xRot)
+						CachedBuffers.partial(AllPartialModels.TRAIN_COUPLING_CABLE, air)
+							.rotateYDegrees(-yRot + 180)
+							.rotateXDegrees(-xRot)
 							.translate(0, 0, margin + 2 / 16f)
 							.scale(1, 1, (float) stretch)
 							.translate(0, 0, j / 4f)
@@ -101,9 +101,9 @@ public class CarriageCouplingRenderer {
 						.add(anchor2)
 						.subtract(camera);
 					ms.translate(translation.x, translation.y, translation.z);
-					CachedBufferer.partial(AllPartialModels.TRAIN_COUPLING_HEAD, air)
-						.rotateY(-yRot + 180)
-						.rotateX(-xRot)
+					CachedBuffers.partial(AllPartialModels.TRAIN_COUPLING_HEAD, air)
+						.rotateYDegrees(-yRot + 180)
+						.rotateXDegrees(-xRot)
 						.light(lightCoords2)
 						.renderInto(ms, vb);
 					ms.popPose();

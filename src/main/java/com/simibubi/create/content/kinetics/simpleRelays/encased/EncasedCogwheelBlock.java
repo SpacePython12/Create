@@ -6,22 +6,22 @@ import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.contraptions.ITransformableBlock;
+import com.simibubi.create.api.contraption.transformable.TransformableBlock;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.encasing.EncasedBlock;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.content.kinetics.simpleRelays.SimpleKineticBlockEntity;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 
-import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -46,8 +46,10 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
+import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
+
 public class EncasedCogwheelBlock extends RotatedPillarKineticBlock
-	implements ICogWheel, IBE<SimpleKineticBlockEntity>, ISpecialBlockItemRequirement, ITransformableBlock, BlockPickInteractionAware, EncasedBlock {
+	implements ICogWheel, IBE<SimpleKineticBlockEntity>, SpecialBlockItemRequirement, TransformableBlock, BlockPickInteractionAware, EncasedBlock {
 
 	public static final BooleanProperty TOP_SHAFT = BooleanProperty.create("top_shaft");
 	public static final BooleanProperty BOTTOM_SHAFT = BooleanProperty.create("bottom_shaft");
@@ -73,8 +75,8 @@ public class EncasedCogwheelBlock extends RotatedPillarKineticBlock
 		if (target instanceof BlockHitResult)
 			return ((BlockHitResult) target).getDirection()
 				.getAxis() != getRotationAxis(state)
-					? isLarge ? AllBlocks.LARGE_COGWHEEL.asStack() : AllBlocks.COGWHEEL.asStack()
-					: getCasing().asItem().getDefaultInstance();
+				? isLarge ? AllBlocks.LARGE_COGWHEEL.asStack() : AllBlocks.COGWHEEL.asStack()
+				: getCasing().asItem().getDefaultInstance();
 		return ItemStack.EMPTY;
 	}
 
@@ -110,7 +112,7 @@ public class EncasedCogwheelBlock extends RotatedPillarKineticBlock
 		BlockPos pos = context.getClickedPos();
 		KineticBlockEntity.switchToBlockState(level, pos, state.cycle(context.getClickedFace()
 			.getAxisDirection() == AxisDirection.POSITIVE ? TOP_SHAFT : BOTTOM_SHAFT));
-		playRotateSound(level, pos);
+		IWrenchable.playRotateSound(level, pos);
 		return InteractionResult.SUCCESS;
 	}
 
@@ -199,18 +201,18 @@ public class EncasedCogwheelBlock extends RotatedPillarKineticBlock
 		boolean clockwise = rotation == Rotation.CLOCKWISE_90;
 
 		if (rotationAxis == Direction.Axis.X) {
-			if (	   axis == Direction.Axis.Z && !clockwise
-					|| axis == Direction.Axis.Y && clockwise) {
+			if (axis == Direction.Axis.Z && !clockwise
+				|| axis == Direction.Axis.Y && clockwise) {
 				return swapShafts(state);
 			}
 		} else if (rotationAxis == Direction.Axis.Y) {
-			if (	   axis == Direction.Axis.X && !clockwise
-					|| axis == Direction.Axis.Z && clockwise) {
+			if (axis == Direction.Axis.X && !clockwise
+				|| axis == Direction.Axis.Z && clockwise) {
 				return swapShafts(state);
 			}
 		} else if (rotationAxis == Direction.Axis.Z) {
-			if (	   axis == Direction.Axis.Y && !clockwise
-					|| axis == Direction.Axis.X && clockwise) {
+			if (axis == Direction.Axis.Y && !clockwise
+				|| axis == Direction.Axis.X && clockwise) {
 				return swapShafts(state);
 			}
 		}
@@ -222,7 +224,7 @@ public class EncasedCogwheelBlock extends RotatedPillarKineticBlock
 	public BlockState mirror(BlockState state, Mirror mirror) {
 		Direction.Axis axis = state.getValue(AXIS);
 		if (axis == Direction.Axis.X && mirror == Mirror.FRONT_BACK
-				|| axis == Direction.Axis.Z && mirror == Mirror.LEFT_RIGHT) {
+			|| axis == Direction.Axis.Z && mirror == Mirror.LEFT_RIGHT) {
 			return swapShafts(state);
 		}
 		return state;
@@ -272,20 +274,19 @@ public class EncasedCogwheelBlock extends RotatedPillarKineticBlock
 
 	@Override
 	public void handleEncasing(BlockState state, Level level, BlockPos pos, ItemStack heldItem, Player player, InteractionHand hand,
-	    BlockHitResult ray) {
+							   BlockHitResult ray) {
 		BlockState encasedState = defaultBlockState()
-				.setValue(AXIS, state.getValue(AXIS));
+			.setValue(AXIS, state.getValue(AXIS));
 
 		for (Direction d : Iterate.directionsInAxis(state.getValue(AXIS))) {
 			BlockState adjacentState = level.getBlockState(pos.relative(d));
-			if (!(adjacentState.getBlock() instanceof IRotate))
+			if (!(adjacentState.getBlock() instanceof IRotate def))
 				continue;
-			IRotate def = (IRotate) adjacentState.getBlock();
 			if (!def.hasShaftTowards(level, pos.relative(d), adjacentState, d.getOpposite()))
 				continue;
 			encasedState =
 				encasedState.cycle(d.getAxisDirection() == AxisDirection.POSITIVE ? EncasedCogwheelBlock.TOP_SHAFT
-						: EncasedCogwheelBlock.BOTTOM_SHAFT);
+					: EncasedCogwheelBlock.BOTTOM_SHAFT);
 		}
 
 		KineticBlockEntity.switchToBlockState(level, pos, encasedState);

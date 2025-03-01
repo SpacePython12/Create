@@ -7,9 +7,6 @@ import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllTags;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +15,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 @SuppressWarnings("unused")
 public class MillingRecipeGen extends ProcessingRecipeGen {
@@ -63,8 +65,7 @@ public class MillingRecipeGen extends ProcessingRecipeGen {
 
 		CACTUS = create(() -> Blocks.CACTUS, b -> b.duration(50)
 			.output(Items.GREEN_DYE, 2)
-			.output(.1f, Items.GREEN_DYE, 1)
-			.whenModMissing("quark")),
+			.output(.1f, Items.GREEN_DYE, 1)),
 
 		SEA_PICKLE = create(() -> Blocks.SEA_PICKLE, b -> b.duration(50)
 			.output(Items.LIME_DYE, 2)

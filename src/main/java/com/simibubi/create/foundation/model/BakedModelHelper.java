@@ -1,7 +1,7 @@
 package com.simibubi.create.foundation.model;
 
-import static com.simibubi.create.foundation.block.render.SpriteShiftEntry.getUnInterpolatedU;
-import static com.simibubi.create.foundation.block.render.SpriteShiftEntry.getUnInterpolatedV;
+import static net.createmod.catnip.render.SpriteShiftEntry.getUnInterpolatedU;
+import static net.createmod.catnip.render.SpriteShiftEntry.getUnInterpolatedV;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VecHelper;
-
-import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -22,6 +20,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 
 public class BakedModelHelper {
 

@@ -5,13 +5,14 @@ import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlockEntity;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.MutableComponent;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -43,7 +44,7 @@ public class ItemThroughputDisplaySource extends AccumulatedItemCountDisplaySour
 			}
 		}
 
-		return Lang.number(rate)
+		return CreateLang.number(rate)
 			.component();
 	}
 
@@ -107,8 +108,8 @@ public class ItemThroughputDisplaySource extends AccumulatedItemCountDisplaySour
 			return;
 
 		builder.addSelectionScrollInput(0, 80, (si, l) -> {
-			si.forOptions(Lang.translatedOptions("display_source.item_throughput.interval", "second", "minute", "hour"))
-				.titled(Lang.translateDirect("display_source.item_throughput.interval"));
+			si.forOptions(CreateLang.translatedOptions("display_source.item_throughput.interval", "second", "minute", "hour"))
+				.titled(CreateLang.translateDirect("display_source.item_throughput.interval"));
 		}, "Interval");
 	}
 

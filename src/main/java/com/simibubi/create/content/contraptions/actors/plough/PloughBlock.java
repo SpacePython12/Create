@@ -5,8 +5,9 @@ import java.util.UUID;
 import com.mojang.authlib.GameProfile;
 import com.simibubi.create.content.contraptions.actors.AttachedActorBlock;
 
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.server.level.ServerLevel;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
 
 public class PloughBlock extends AttachedActorBlock {
 

@@ -51,6 +51,12 @@ public class ContraptionControlsBlock extends ControlsBlock implements IBE<Contr
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
 		return AllShapes.CONTRAPTION_CONTROLS.get(pState.getValue(FACING));
 	}
+	
+	@Override
+	public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos,
+		CollisionContext pContext) {
+		return AllShapes.CONTRAPTION_CONTROLS_COLLISION.get(pState.getValue(FACING));
+	}
 
 	@Override
 	public Class<ContraptionControlsBlockEntity> getBlockEntityClass() {

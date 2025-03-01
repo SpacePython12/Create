@@ -12,7 +12,7 @@ import com.simibubi.create.compat.rei.display.CreateDisplay;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import me.shedaniel.math.Point;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -34,7 +34,7 @@ public abstract class ProcessingViaFanCategory<T extends Recipe<?>> extends Crea
 
 	public static Supplier<ItemStack> getFan(String name) {
 		return () -> AllBlocks.ENCASED_FAN.asStack()
-			.setHoverName(Lang.translateDirect("recipe." + name + ".fan").withStyle(style -> style.withItalic(false)));
+			.setHoverName(CreateLang.translateDirect("recipe." + name + ".fan").withStyle(style -> style.withItalic(false)));
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public abstract class ProcessingViaFanCategory<T extends Recipe<?>> extends Crea
 				float chance = output.getChance();
 
 				if (chance != 1) {
-					Component component = Lang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
+					Component component = CreateLang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
 							.withStyle(ChatFormatting.GOLD);
 					stack.tooltip(component);
 				}

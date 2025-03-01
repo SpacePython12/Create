@@ -8,10 +8,10 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.create.Create;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
-import net.minecraft.core.Registry;
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.data.Pair;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
@@ -62,7 +62,7 @@ public class ProcessingOutput {
 
 	public JsonElement serialize() {
 		JsonObject json = new JsonObject();
-		ResourceLocation resourceLocation = compatDatagenOutput == null ? RegisteredObjects.getKeyOrThrow(stack
+		ResourceLocation resourceLocation = compatDatagenOutput == null ? CatnipServices.REGISTRIES.getKeyOrThrow(stack
 			.getItem()) : compatDatagenOutput.getFirst();
 		json.addProperty("item", resourceLocation.toString());
 		int count = compatDatagenOutput == null ? stack.getCount() : compatDatagenOutput.getSecond();

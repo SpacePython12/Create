@@ -12,7 +12,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.utility.ControlsUtil;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -37,11 +37,11 @@ public class ControlsHandler {
 	}
 
 	public static void startControlling(AbstractContraptionEntity entity, BlockPos controllerLocalPos) {
-		entityRef = new WeakReference<AbstractContraptionEntity>(entity);
+		entityRef = new WeakReference<>(entity);
 		controlsPos = controllerLocalPos;
 
 		Minecraft.getInstance().player.displayClientMessage(
-			Lang.translateDirect("contraption.controls.start_controlling", entity.getContraptionName()), true);
+			CreateLang.translateDirect("contraption.controls.start_controlling", entity.getContraptionName()), true);
 	}
 
 	public static void stopControlling() {
@@ -58,7 +58,7 @@ public class ControlsHandler {
 		controlsPos = null;
 		currentlyPressed.clear();
 
-		Minecraft.getInstance().player.displayClientMessage(Lang.translateDirect("contraption.controls.stop_controlling"),
+		Minecraft.getInstance().player.displayClientMessage(CreateLang.translateDirect("contraption.controls.stop_controlling"),
 			true);
 	}
 
@@ -108,9 +108,9 @@ public class ControlsHandler {
 		// Keepalive Pressed Keys
 		if (packetCooldown == 0) {
 //			if (!pressedKeys.isEmpty()) {
-				AllPackets.getChannel()
-					.sendToServer(new ControlsInputPacket(pressedKeys, true, entity.getId(), controlsPos, false));
-				packetCooldown = PACKET_RATE;
+			AllPackets.getChannel()
+				.sendToServer(new ControlsInputPacket(pressedKeys, true, entity.getId(), controlsPos, false));
+			packetCooldown = PACKET_RATE;
 //			}
 		}
 

@@ -5,13 +5,11 @@ import java.util.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.LongAttached;
-import com.simibubi.create.foundation.utility.Lang;
-
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.LongAttached;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -42,7 +40,7 @@ public class ScoreboardDisplaySource extends ValueListDisplaySource {
 		return sLevel.getScoreboard()
 			.getPlayerScores(objective)
 			.stream()
-			.map(score -> LongAttached.with(score.getScore(), Components.literal(score.getOwner())
+			.map(score -> LongAttached.with(score.getScore(), Component.literal(score.getOwner())
 				.copy()))
 			.sorted(LongAttached.comparator())
 			.limit(maxRows);
@@ -50,7 +48,7 @@ public class ScoreboardDisplaySource extends ValueListDisplaySource {
 
 	private ImmutableList<LongAttached<MutableComponent>> notFound(String objective) {
 		return ImmutableList
-			.of(LongAttached.with(404, Lang.translateDirect("display_source.scoreboard.objective_not_found", objective)));
+			.of(LongAttached.with(404, CreateLang.translateDirect("display_source.scoreboard.objective_not_found", objective)));
 	}
 
 	@Override
@@ -63,9 +61,9 @@ public class ScoreboardDisplaySource extends ValueListDisplaySource {
 		if (isFirstLine)
 			builder.addTextInput(0, 137, (e, t) -> {
 				e.setValue("");
-				t.withTooltip(ImmutableList.of(Lang.translateDirect("display_source.scoreboard.objective")
+				t.withTooltip(ImmutableList.of(CreateLang.translateDirect("display_source.scoreboard.objective")
 					.withStyle(s -> s.withColor(0x5391E1)),
-					Lang.translateDirect("gui.schedule.lmb_edit")
+					CreateLang.translateDirect("gui.schedule.lmb_edit")
 						.withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)));
 			}, "Objective");
 		else

@@ -2,20 +2,20 @@ package com.simibubi.create.content.contraptions.minecart;
 
 import static net.minecraft.util.Mth.lerp;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
 import com.simibubi.create.content.kinetics.KineticDebugger;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.outliner.Outliner;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -65,9 +65,9 @@ public class CouplingRenderer {
 
 		BlockState renderState = Blocks.AIR.defaultBlockState();
 		VertexConsumer builder = buffer.getBuffer(RenderType.solid());
-		SuperByteBuffer attachment = CachedBufferer.partial(AllPartialModels.COUPLING_ATTACHMENT, renderState);
-		SuperByteBuffer ring = CachedBufferer.partial(AllPartialModels.COUPLING_RING, renderState);
-		SuperByteBuffer connector = CachedBufferer.partial(AllPartialModels.COUPLING_CONNECTOR, renderState);
+		SuperByteBuffer attachment = CachedBuffers.partial(AllPartialModels.COUPLING_ATTACHMENT, renderState);
+		SuperByteBuffer ring = CachedBuffers.partial(AllPartialModels.COUPLING_RING, renderState);
+		SuperByteBuffer connector = CachedBuffers.partial(AllPartialModels.COUPLING_CONNECTOR, renderState);
 
 		Vec3 zero = Vec3.ZERO;
 		Vec3 firstEndpoint = transforms.getFirst()
@@ -79,7 +79,7 @@ public class CouplingRenderer {
 		double connectorPitch = Math.atan2(endPointDiff.y, endPointDiff.multiply(1, 0, 1)
 			.length()) * 180 / Math.PI;
 
-		TransformStack msr = TransformStack.cast(ms);
+		var msr = TransformStack.of(ms);
 		carts.forEachWithContext((cart, isFirst) -> {
 			CartEndpoint cartTransform = transforms.get(isFirst);
 
@@ -87,7 +87,7 @@ public class CouplingRenderer {
 			cartTransform.apply(ms, camera);
 			attachment.light(lightValues.get(isFirst))
 				.renderInto(ms, builder);
-			msr.rotateY(connectorYaw - cartTransform.yaw);
+			msr.rotateYDegrees((float) connectorYaw - cartTransform.yaw);
 			ring.light(lightValues.get(isFirst))
 				.renderInto(ms, builder);
 			ms.popPose();
@@ -100,8 +100,8 @@ public class CouplingRenderer {
 
 		ms.pushPose();
 		msr.translate(firstEndpoint.subtract(camera))
-			.rotateY(connectorYaw)
-			.rotateZ(connectorPitch);
+			.rotateYDegrees((float) connectorYaw)
+			.rotateZDegrees((float) connectorPitch);
 		ms.scale((float) endPointDiff.length(), 1, 1);
 
 		connector.light(meanSkyLight << 20 | meanBlockLight << 4)
@@ -201,14 +201,14 @@ public class CouplingRenderer {
 		}
 
 		public void apply(PoseStack ms, Vec3 camera) {
-			TransformStack.cast(ms)
+			TransformStack.of(ms)
 				.translate(camera.scale(-1)
 					.add(x, y, z))
-				.rotateY(yaw)
-				.rotateZ(pitch)
-				.rotateX(roll)
+				.rotateYDegrees(yaw)
+				.rotateZDegrees(pitch)
+				.rotateXDegrees(roll)
 				.translate(offset, 0, 0)
-				.rotateY(flip ? 180 : 0);
+				.rotateYDegrees(flip ? 180 : 0);
 		}
 
 	}
@@ -227,13 +227,13 @@ public class CouplingRenderer {
 		int color = Color.mixColors(0xabf0e9, 0xee8572, (float) Mth
 			.clamp(Math.abs(first.getCouplingLength(true) - connectedCenter.distanceTo(mainCenter)) * 8, 0, 1));
 
-		CreateClient.OUTLINER.showLine(mainCart.getId() + "", mainCenter, connectedCenter)
+		Outliner.getInstance().showLine(mainCart.getId() + "", mainCenter, connectedCenter)
 			.colored(color)
 			.lineWidth(1 / 8f);
 
 		Vec3 point = mainCart.position()
 			.add(0, yOffset, 0);
-		CreateClient.OUTLINER.showLine(mainCart.getId() + "_dot", point, point.add(0, 1 / 128f, 0))
+		Outliner.getInstance().showLine(mainCart.getId() + "_dot", point, point.add(0, 1 / 128f, 0))
 			.colored(0xffffff)
 			.lineWidth(1 / 4f);
 	}

@@ -4,12 +4,12 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BaseCommandBlock;
 import net.minecraft.world.level.block.CommandBlock;
@@ -37,7 +37,7 @@ public class ReplaceInCommandBlocksCommand {
 	}
 
 	private static void doReplace(CommandSourceStack source, BlockPos from, BlockPos to, String toReplace,
-		String replaceWith) {
+								  String replaceWith) {
 		ServerLevel world = source.getLevel();
 		MutableInt blocks = new MutableInt(0);
 		BlockPos.betweenClosedStream(from, to)
@@ -46,9 +46,8 @@ public class ReplaceInCommandBlocksCommand {
 				if (!(blockState.getBlock() instanceof CommandBlock))
 					return;
 				BlockEntity blockEntity = world.getBlockEntity(pos);
-				if (!(blockEntity instanceof CommandBlockEntity))
+				if (!(blockEntity instanceof CommandBlockEntity cb))
 					return;
-				CommandBlockEntity cb = (CommandBlockEntity) blockEntity;
 				BaseCommandBlock commandBlockLogic = cb.getCommandBlock();
 				String command = commandBlockLogic.getCommand();
 				if (command.indexOf(toReplace) != -1)
@@ -59,10 +58,14 @@ public class ReplaceInCommandBlocksCommand {
 			});
 		int intValue = blocks.intValue();
 		if (intValue == 0) {
-			source.sendSuccess(() -> Components.literal("Couldn't find \"" + toReplace + "\" anywhere."), true);
+			source.sendSuccess(() -> {
+				return Component.literal("Couldn't find \"" + toReplace + "\" anywhere.");
+			}, true);
 			return;
 		}
-		source.sendSuccess(() -> Components.literal("Replaced occurrences in " + intValue + " blocks."), true);
+		source.sendSuccess(() -> {
+			return Component.literal("Replaced occurrences in " + intValue + " blocks.");
+		}, true);
 	}
 
 }

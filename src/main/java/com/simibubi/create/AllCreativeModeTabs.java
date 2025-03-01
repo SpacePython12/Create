@@ -15,23 +15,21 @@ import com.simibubi.create.content.decoration.palettes.AllPaletteBlocks;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.equipment.toolbox.ToolboxBlock;
 import com.simibubi.create.content.kinetics.crank.ValveHandleBlock;
+import com.simibubi.create.content.logistics.box.PackageStyles;
+import com.simibubi.create.content.logistics.packagePort.postbox.PostboxBlock;
+import com.simibubi.create.content.logistics.tableCloth.TableClothBlock;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.TagDependentIngredientItem;
-import com.simibubi.create.foundation.utility.Components;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import it.unimi.dsi.fastutil.objects.ReferenceLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
@@ -53,20 +51,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
-import org.apache.commons.lang3.mutable.MutableObject;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class AllCreativeModeTabs {
 
 	public static final TabInfo BASE_CREATIVE_TAB = register("base",
 		() -> FabricItemGroup.builder()
-			.title(Components.translatable("itemGroup.create.base"))
+			.title(Component.translatable("itemGroup.create.base"))
 			.icon(() -> AllBlocks.COGWHEEL.asStack())
 			.displayItems(new RegistrateDisplayItemsGenerator(true, () -> AllCreativeModeTabs.BASE_CREATIVE_TAB))
 			.build());
 
 	public static final TabInfo PALETTES_CREATIVE_TAB = register("palettes",
 		() -> FabricItemGroup.builder()
-			.title(Components.translatable("itemGroup.create.palettes"))
+			.title(Component.translatable("itemGroup.create.palettes"))
 			.icon(() -> AllPaletteBlocks.ORNATE_IRON_WINDOW.asStack())
 			.displayItems(new RegistrateDisplayItemsGenerator(false, () -> AllCreativeModeTabs.PALETTES_CREATIVE_TAB))
 			.build());
@@ -133,6 +135,7 @@ public class AllCreativeModeTabs {
 					AllItems.FURNACE_MINECART_CONTRAPTION,
 					AllItems.CHEST_MINECART_CONTRAPTION,
 					AllItems.SCHEMATIC,
+					AllItems.SHOPPING_LIST,
 					AllBlocks.ANDESITE_ENCASED_SHAFT,
 					AllBlocks.BRASS_ENCASED_SHAFT,
 					AllBlocks.ANDESITE_ENCASED_COGWHEEL,
@@ -156,6 +159,8 @@ public class AllCreativeModeTabs {
 					AllItems.CRUSHED_URANIUM,
 					AllItems.CRUSHED_NICKEL
 			);
+
+			exclusions.addAll(PackageStyles.RARE_BOXES);
 
 			for (ItemProviderEntry<?> entry : simpleExclusions) {
 				exclusions.add(entry.asItem());
@@ -191,6 +196,10 @@ public class AllCreativeModeTabs {
 
 			simpleAfterOrderings.forEach((entry, otherEntry) -> {
 				orderings.add(ItemOrdering.after(entry.asItem(), otherEntry.asItem()));
+			});
+
+			PackageStyles.STANDARD_BOXES.forEach(item -> {
+				orderings.add(ItemOrdering.after(item, AllBlocks.PACKAGER.asItem()));
 			});
 
 			return orderings;
@@ -243,6 +252,20 @@ public class AllCreativeModeTabs {
 			for (BlockEntry<SeatBlock> entry : AllBlocks.SEATS) {
 				SeatBlock block = entry.get();
 				if (block.getColor() != DyeColor.RED) {
+					visibilities.put(entry.asItem(), TabVisibility.SEARCH_TAB_ONLY);
+				}
+			}
+
+			for (BlockEntry<TableClothBlock> entry : AllBlocks.TABLE_CLOTHS) {
+				TableClothBlock block = entry.get();
+				if (block.getColor() != DyeColor.RED) {
+					visibilities.put(entry.asItem(), TabVisibility.SEARCH_TAB_ONLY);
+				}
+			}
+
+			for (BlockEntry<PostboxBlock> entry : AllBlocks.PACKAGE_POSTBOXES) {
+				PostboxBlock block = entry.get();
+				if (block.getColor() != DyeColor.WHITE) {
 					visibilities.put(entry.asItem(), TabVisibility.SEARCH_TAB_ONLY);
 				}
 			}

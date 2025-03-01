@@ -11,16 +11,15 @@ import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.content.logistics.depot.EjectorBlockEntity.State;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
+import com.simibubi.create.foundation.item.ItemHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -37,6 +36,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
 
 public class EjectorBlock extends HorizontalKineticBlock implements IBE<EjectorBlockEntity>, ProperWaterloggedBlock, CustomFrictionBlock {
 
@@ -107,7 +108,7 @@ public class EjectorBlock extends HorizontalKineticBlock implements IBE<EjectorB
 			return;
 		if (entityIn.isSuppressingBounce())
 			return;
-		if (entityIn instanceof ItemEntity) {
+		if (!ItemHelper.fromItemEntity(entityIn).isEmpty()) {
 			SharedDepotBlockMethods.onLanded(worldIn, entityIn);
 			return;
 		}

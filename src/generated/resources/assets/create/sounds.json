@@ -8,6 +8,15 @@
     ],
     "subtitle": "create.subtitle.blaze_munch"
   },
+  "cardboard_bonk": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "create:cardboard_bonk"
+      }
+    ],
+    "subtitle": "create.subtitle.cardboard_bonk"
+  },
   "chiff": {
     "sounds": [
       {
@@ -49,6 +58,15 @@
       }
     ],
     "subtitle": "create.subtitle.confirm"
+  },
+  "confirm_2": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "create:confirm_2"
+      }
+    ],
+    "subtitle": "create.subtitle.confirm_2"
   },
   "contraption_assemble": {
     "sounds": [
@@ -207,6 +225,64 @@
     ],
     "subtitle": "create.subtitle.depot_slide"
   },
+  "desk_bell": {
+    "sounds": [
+      {
+        "type": "file",
+        "attenuation_distance": 64,
+        "name": "create:desk_bell"
+      }
+    ],
+    "subtitle": "create.subtitle.desk_bell"
+  },
+  "frogport_catch": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "create:frogport_catch"
+      },
+      {
+        "type": "file",
+        "name": "create:frogport_catch_1"
+      },
+      {
+        "type": "file",
+        "name": "create:frogport_catch_2"
+      },
+      {
+        "type": "file",
+        "name": "create:frogport_catch_3"
+      }
+    ],
+    "subtitle": "create.subtitle.frogport_catch"
+  },
+  "frogport_close": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "create:frogport_close"
+      }
+    ],
+    "subtitle": "create.subtitle.frogport_close"
+  },
+  "frogport_deposit": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:entity.frog.tongue"
+      }
+    ],
+    "subtitle": "create.subtitle.frogport_deposit"
+  },
+  "frogport_open": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:entity.warden.tendril_clicks"
+      }
+    ],
+    "subtitle": "create.subtitle.frogport_open"
+  },
   "funnel_flap": {
     "sounds": [
       {
@@ -250,6 +326,23 @@
       }
     ],
     "subtitle": "create.subtitle.haunted_bell_use"
+  },
+  "item_hatch": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.barrel.open"
+      }
+    ],
+    "subtitle": "create.subtitle.item_hatch"
+  },
+  "item_hatch_compounded_1": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.netherite_block.place"
+      }
+    ]
   },
   "mechanical_press_activation": {
     "sounds": [
@@ -301,6 +394,32 @@
         "name": "minecraft:block.netherrack.break"
       }
     ]
+  },
+  "package_pop": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.chiseled_bookshelf.break"
+      }
+    ],
+    "subtitle": "create.subtitle.package_pop"
+  },
+  "package_pop_compounded_1": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:block.wool.break"
+      }
+    ]
+  },
+  "packager": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:entity.shulker.open"
+      }
+    ],
+    "subtitle": "create.subtitle.packager"
   },
   "peculiar_bell_use": {
     "sounds": [
@@ -434,6 +553,33 @@
       }
     ],
     "subtitle": "create.subtitle.steam"
+  },
+  "stock_link": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "create:stock_link"
+      }
+    ],
+    "subtitle": "create.subtitle.stock_link"
+  },
+  "stock_ticker_request": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "create:stock_ticker_request"
+      }
+    ],
+    "subtitle": "create.subtitle.stock_ticker_request"
+  },
+  "stock_ticker_trade": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "create:stock_ticker_trade"
+      }
+    ],
+    "subtitle": "create.subtitle.stock_ticker_trade"
   },
   "train": {
     "sounds": [

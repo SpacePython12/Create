@@ -1,7 +1,6 @@
 package com.simibubi.create.content.contraptions;
 
-import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
-
+import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -11,7 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
-public class ContraptionWorld extends WrappedWorld {
+public class ContraptionWorld extends WrappedLevel {
     final Contraption contraption;
 	private final int minY;
 	private final int height;
@@ -44,7 +43,7 @@ public class ContraptionWorld extends WrappedWorld {
 
     @Override
     public void playLocalSound(double x, double y, double z, SoundEvent sound, SoundSource category, float volume, float pitch, boolean distanceDelay) {
-        world.playLocalSound(x, y, z, sound, category, volume, pitch, distanceDelay);
+        level.playLocalSound(x, y, z, sound, category, volume, pitch, distanceDelay);
     }
 
 	// Ensure that we provide accurate information about ContraptionWorld height to mods (such as Starlight) which

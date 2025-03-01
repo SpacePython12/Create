@@ -13,10 +13,10 @@ import com.simibubi.create.content.trains.GlobalRailwayManager;
 import com.simibubi.create.content.trains.signal.TrackEdgePoint;
 import com.simibubi.create.content.trains.track.BezierConnection;
 import com.simibubi.create.content.trains.track.TrackMaterial;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 
@@ -171,6 +171,8 @@ public class TrackGraphSyncPacket extends TrackGraphPacket {
 
 	@Override
 	protected void handle(GlobalRailwayManager manager, TrackGraph graph) {
+		manager.version++;
+
 		if (packetDeletesGraph) {
 			manager.removeGraph(graph);
 			return;

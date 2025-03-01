@@ -6,13 +6,14 @@ import com.google.common.collect.Iterators;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.foundation.item.ItemHelper;
 
+import net.minecraft.util.Unit;
+import net.minecraft.world.item.ItemStack;
+
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
-import net.minecraft.util.Unit;
-import net.minecraft.world.item.ItemStack;
 
 public class DepotItemHandler extends SnapshotParticipant<Unit> implements Storage<ItemVariant> {
 

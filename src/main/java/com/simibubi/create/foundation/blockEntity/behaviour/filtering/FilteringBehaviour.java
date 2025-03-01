@@ -18,22 +18,16 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehavio
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
-
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
-
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -47,6 +41,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+
 public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSettingsBehaviour {
 
 	public static final BehaviourType<FilteringBehaviour> TYPE = new BehaviourType<>();
@@ -55,8 +56,7 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 	ValueBoxTransform slotPositioning;
 	boolean showCount;
 
-	private FilterItemStack filter;
-
+	protected FilterItemStack filter;
 	public int count;
 	public boolean upTo;
 	private Predicate<ItemStack> predicate;
@@ -222,6 +222,10 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 		return !isActive() || filter.test(blockEntity.getLevel(), stack);
 	}
 
+	public boolean test(ItemVariant variant) {
+		return !isActive() || filter.test(blockEntity.getLevel(), variant.toStack());
+	}
+
 	public boolean test(FluidStack stack) {
 		return !isActive() || filter.test(blockEntity.getLevel(), stack);
 	}
@@ -235,7 +239,7 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 	public boolean testHit(Vec3 hit) {
 		BlockState state = blockEntity.getBlockState();
 		Vec3 localHit = hit.subtract(Vec3.atLowerCornerOf(blockEntity.getBlockPos()));
-		return slotPositioning.testHit(state, localHit);
+		return slotPositioning.testHit(getWorld(), getPos(), state, localHit);
 	}
 
 	public int getAmount() {
@@ -265,28 +269,26 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 	public ValueSettingsBoard createBoard(Player player, BlockHitResult hitResult) {
 		ItemStack filter = getFilter(hitResult.getDirection());
 		int maxAmount = (filter.getItem() instanceof FilterItem) ? 64 : filter.getMaxStackSize();
-		return new ValueSettingsBoard(Lang.translateDirect("logistics.filter.extracted_amount"), maxAmount, 16,
-			Lang.translatedOptions("logistics.filter", "up_to", "exactly"),
+		return new ValueSettingsBoard(CreateLang.translateDirect("logistics.filter.extracted_amount"), maxAmount, 16,
+			CreateLang.translatedOptions("logistics.filter", "up_to", "exactly"),
 			new ValueSettingsFormatter(this::formatValue));
 	}
 
 	public MutableComponent formatValue(ValueSettings value) {
 		if (value.row() == 0 && value.value() == filter.item()
 			.getMaxStackSize())
-			return Lang.translateDirect("logistics.filter.any_amount_short");
-		return Components.literal(((value.row() == 0) ? "\u2264" : "=") + Math.max(1, value.value()));
-	}
+			return CreateLang.translateDirect("logistics.filter.any_amount_short");
+        return Component.literal(((value.row() == 0) ? "\u2264" : "=") + Math.max(1, value.value()));
+    }
 
 	@Override
-	public void onShortInteract(Player player, InteractionHand hand, Direction side) {
+	public void onShortInteract(Player player, InteractionHand hand, Direction side, BlockHitResult hitResult) {
 		Level level = getWorld();
 		BlockPos pos = getPos();
 		ItemStack itemInHand = player.getItemInHand(hand);
 		ItemStack toApply = itemInHand.copy();
 
-		if (AllItems.WRENCH.isIn(toApply))
-			return;
-		if (AllBlocks.MECHANICAL_ARM.isIn(toApply))
+		if (!canShortInteract(toApply))
 			return;
 		if (level.isClientSide())
 			return;
@@ -304,7 +306,7 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 			toApply.setCount(1);
 
 		if (!setFilter(side, toApply)) {
-			player.displayClientMessage(Lang.translateDirect("logistics.filter.invalid_item"), true);
+			player.displayClientMessage(CreateLang.translateDirect("logistics.filter.invalid_item"), true);
 			AllSoundEvents.DENY.playOnServer(player.level(), player.blockPosition(), 1, 1);
 			return;
 		}
@@ -321,12 +323,34 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 		level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, .25f, .1f);
 	}
 
+	public boolean canShortInteract(ItemStack toApply) {
+		if (AllItems.WRENCH.isIn(toApply))
+			return false;
+		if (AllBlocks.MECHANICAL_ARM.isIn(toApply))
+			return false;
+		return true;
+	}
+
 	public MutableComponent getLabel() {
 		if (customLabel != null)
 			return customLabel;
-		return Lang.translateDirect(
+		return CreateLang.translateDirect(
 			recipeFilter ? "logistics.recipe_filter" : fluidFilter ? "logistics.fluid_filter" : "logistics.filter");
 	}
+
+	public MutableComponent getTip() {
+		return CreateLang
+			.translateDirect(filter.isEmpty() ? "logistics.filter.click_to_set" : "logistics.filter.click_to_replace");
+	}
+
+	public MutableComponent getAmountTip() {
+		return CreateLang.translateDirect("logistics.filter.hold_to_set_amount");
+	}
+
+	public MutableComponent getCountLabelForValueBox() {
+        return Component.literal(isCountVisible() ? upTo && filter.item()
+            .getMaxStackSize() == count ? "*" : String.valueOf(count) : "");
+    }
 
 	@Override
 	public String getClipboardKey() {
@@ -343,6 +367,8 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 
 	@Override
 	public boolean readFromClipboard(CompoundTag tag, Player player, Direction side, boolean simulate) {
+		if (!mayInteract(player))
+			return false;
 		boolean upstreamResult = ValueSettingsBehaviour.super.readFromClipboard(tag, player, side, simulate);
 		if (!tag.contains("Filter"))
 			return upstreamResult;
@@ -375,7 +401,7 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 				return true;
 			}
 
-			player.displayClientMessage(Lang
+			player.displayClientMessage(CreateLang
 				.translate("logistics.filter.requires_item_in_inventory", copied.getHoverName()
 					.copy()
 					.withStyle(ChatFormatting.WHITE))
@@ -394,6 +420,20 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 
 	public boolean isRecipeFilter() {
 		return recipeFilter;
+	}
+
+	@Override
+	public boolean bypassesInput(ItemStack mainhandItem) {
+		return false;
+	}
+
+	@Override
+	public int netId() {
+		return 1;
+	}
+
+	public float getRenderDistance() {
+		return AllConfigs.client().filterItemRenderDistance.getF();
 	}
 
 }

@@ -12,23 +12,20 @@ import java.util.zip.GZIPInputStream;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.core.registries.Registries;
+
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.schematics.client.SchematicEditScreen;
-import com.simibubi.create.foundation.gui.ScreenOpener;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
+import net.createmod.catnip.gui.ScreenOpener;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
@@ -43,11 +40,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class SchematicItem extends Item {
 
@@ -57,7 +57,7 @@ public class SchematicItem extends Item {
 		super(properties);
 	}
 
-	public static ItemStack create(HolderGetter<Block> lookup, String schematic, String owner) {
+	public static ItemStack create(Level level, String schematic, String owner) {
 		ItemStack blueprint = AllItems.SCHEMATIC.asStack();
 
 		CompoundTag tag = new CompoundTag();
@@ -69,7 +69,7 @@ public class SchematicItem extends Item {
 		tag.putString("Mirror", Mirror.NONE.name());
 		blueprint.setTag(tag);
 
-		writeSize(lookup, blueprint);
+		writeSize(level, blueprint);
 		return blueprint;
 	}
 
@@ -78,18 +78,19 @@ public class SchematicItem extends Item {
 	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		if (stack.hasTag()) {
 			if (stack.getTag()
-				.contains("File"))
-				tooltip.add(Components.literal(ChatFormatting.GOLD + stack.getTag()
-					.getString("File")));
+				.contains("File")) {
+                tooltip.add(Component.literal(ChatFormatting.GOLD + stack.getTag()
+                    .getString("File")));
+            }
 		} else {
-			tooltip.add(Lang.translateDirect("schematic.invalid").withStyle(ChatFormatting.RED));
+			tooltip.add(CreateLang.translateDirect("schematic.invalid").withStyle(ChatFormatting.RED));
 		}
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
-	public static void writeSize(HolderGetter<Block> lookup, ItemStack blueprint) {
+	public static void writeSize(Level level, ItemStack blueprint) {
 		CompoundTag tag = blueprint.getTag();
-		StructureTemplate t = loadSchematic(lookup, blueprint);
+		StructureTemplate t = loadSchematic(level, blueprint);
 		tag.put("Bounds", NBTHelper.writeVec3i(t.getSize()));
 		blueprint.setTag(tag);
 		SchematicInstances.clearHash(blueprint);
@@ -109,7 +110,7 @@ public class SchematicItem extends Item {
 		return settings;
 	}
 
-	public static StructureTemplate loadSchematic(HolderGetter<Block> lookup, ItemStack blueprint) {
+	public static StructureTemplate loadSchematic(Level level, ItemStack blueprint) {
 		StructureTemplate t = new StructureTemplate();
 		String owner = blueprint.getTag()
 			.getString("Owner");
@@ -122,7 +123,7 @@ public class SchematicItem extends Item {
 		Path dir;
 		Path file;
 
-//		if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER) {
+//		if (!level.isClientSide()) {
 //			dir = Paths.get("schematics", "uploaded").toAbsolutePath();
 //			file = Paths.get(owner, schematic);
 //		} else {
@@ -144,7 +145,7 @@ public class SchematicItem extends Item {
 		try (DataInputStream stream = new DataInputStream(new BufferedInputStream(
 				new GZIPInputStream(Files.newInputStream(path, StandardOpenOption.READ))))) {
 			CompoundTag nbt = NbtIo.read(stream, new NbtAccounter(0x20000000L));
-			t.load(lookup, nbt);
+			t.load(level.holderLookup(Registries.BLOCK), nbt);
 		} catch (IOException e) {
 			LOGGER.warn("Failed to read schematic", e);
 		}

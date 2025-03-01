@@ -7,9 +7,9 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -73,7 +73,7 @@ public class ChuteBlock extends AbstractChuteBlock implements ProperWaterloggedB
 	public boolean isTransparent(BlockState state) {
 		return state.getValue(SHAPE) == Shape.WINDOW;
 	}
-	
+
 	@Override
 	public FluidState getFluidState(BlockState pState) {
 		return fluidState(pState);
@@ -128,7 +128,7 @@ public class ChuteBlock extends AbstractChuteBlock implements ProperWaterloggedB
 		}
 		return state;
 	}
-	
+
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState above, LevelAccessor world,
 		BlockPos pos, BlockPos p_196271_6_) {

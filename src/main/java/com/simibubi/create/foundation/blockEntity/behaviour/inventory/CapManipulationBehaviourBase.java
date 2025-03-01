@@ -2,20 +2,23 @@ package com.simibubi.create.foundation.blockEntity.behaviour.inventory;
 
 import javax.annotation.Nullable;
 
+import com.simibubi.create.content.logistics.packager.fabric.InventoryIdentifier;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper.ExtractionCountMode;
-import com.simibubi.create.foundation.utility.BlockFace;
 
-import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.createmod.catnip.math.BlockFace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
 
 public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationBehaviourBase<?, ?>>
 	extends BlockEntityBehaviour {
@@ -24,9 +27,10 @@ public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationB
 
 	protected InterfaceProvider target;
 	protected StorageProvider<T> targetStorageProvider;
-	protected Direction side;
+	protected Filter<T> filter;
 	protected boolean simulateNext;
 	protected boolean bypassSided;
+	protected Direction side;
 	private boolean findNewNextTick;
 
 	public CapManipulationBehaviourBase(SmartBlockEntity be, InterfaceProvider target) {
@@ -36,6 +40,7 @@ public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationB
 		targetStorageProvider = null;
 		simulateNext = false;
 		bypassSided = false;
+		filter = (storage, provider) -> true;
 	}
 
 	protected abstract StorageProvider<T> getProvider(BlockPos pos, boolean bypassSided);
@@ -46,11 +51,15 @@ public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationB
 		findNewNextTick = true;
 	}
 
+	public BlockFace getTarget() {
+		return this.target.getTarget(getWorld(), blockEntity.getBlockPos(), blockEntity.getBlockState());
+	}
+
 	@Override
 	public void onNeighborChanged(BlockPos neighborPos) {
 		BlockFace targetBlockFace = target.getTarget(getWorld(), blockEntity.getBlockPos(), blockEntity.getBlockState());
 		if (targetBlockFace.getConnectedPos()
-				.equals(neighborPos))
+			.equals(neighborPos))
 			onHandlerInvalidated();
 	}
 
@@ -69,6 +78,12 @@ public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationB
 		return (S) this;
 	}
 
+	@SuppressWarnings("unchecked")
+	public S withFilter(Filter<T> filter) {
+		this.filter = filter;
+		return (S) this;
+	}
+
 	public boolean hasInventory() {
 		return getInventory() != null;
 	}
@@ -77,7 +92,13 @@ public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationB
 	public Storage<T> getInventory() {
 		if (targetStorageProvider == null || side == null)
 			return null;
-		return targetStorageProvider.get(side);
+		Storage<T> storage = targetStorageProvider.get(side);
+		return this.filter.test(storage, this.targetStorageProvider) ? storage : null;
+	}
+
+	@Nullable
+	public InventoryIdentifier getIdentifier() {
+		return !this.hasInventory() ? null : InventoryIdentifier.get(getWorld(), blockEntity.getBlockPos(), side);
 	}
 
 	protected void onHandlerInvalidated() {
@@ -122,12 +143,9 @@ public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationB
 		BlockFace targetBlockFace = target.getTarget(world, blockEntity.getBlockPos(), blockEntity.getBlockState())
 			.getOpposite();
 		BlockPos pos = targetBlockFace.getPos();
-
 		this.setProvider(null, null);
-
 		if (!world.isLoaded(pos))
 			return;
-
 		StorageProvider<T> provider = this.getProvider(pos, this.bypassSided);
 		Direction side = targetBlockFace.getFace();
 		this.setProvider(provider, side);
@@ -154,6 +172,11 @@ public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationB
 		}
 
 		public BlockFace getTarget(Level world, BlockPos pos, BlockState blockState);
+	}
+
+	@FunctionalInterface
+	public interface Filter<T> {
+		boolean test(Storage<T> storage, StorageProvider<T> provider);
 	}
 
 	public abstract static class UnsidedStorageProvider<T> extends StorageProvider<T> {

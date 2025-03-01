@@ -2,20 +2,30 @@ package com.simibubi.create.foundation.events;
 
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.contraptions.elevator.ElevatorControlsHandler;
+import com.simibubi.create.content.contraptions.wrench.RadialWrenchHandler;
 import com.simibubi.create.content.equipment.toolbox.ToolboxHandlerClient;
+import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorConnectionHandler;
+import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler;
+import com.simibubi.create.content.kinetics.chainConveyor.ChainPackageInteractionHandler;
+import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelConnectionHandler;
+import com.simibubi.create.content.logistics.packagePort.PackagePortTargetSelectionHandler;
 import com.simibubi.create.content.redstone.link.controller.LinkedControllerClientHandler;
 import com.simibubi.create.content.trains.TrainHUD;
 import com.simibubi.create.content.trains.entity.TrainRelocator;
 import com.simibubi.create.content.trains.track.CurvedTrackInteraction;
 
-import io.github.fabricators_of_create.porting_lib.event.client.InteractEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.KeyInputCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.MouseInputEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.MouseInputEvents.Action;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.phys.HitResult;
+
+import net.fabricmc.api.EnvType;
+
+import io.github.fabricators_of_create.porting_lib.event.client.InteractEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.KeyInputCallback;
+import io.github.fabricators_of_create.porting_lib.event.client.MouseInputEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.MouseInputEvents.Action;
 
 public class InputEvents {
 
@@ -27,6 +37,7 @@ public class InputEvents {
 
 		CreateClient.SCHEMATIC_HANDLER.onKeyInput(key, pressed);
 		ToolboxHandlerClient.onKeyInput(key, pressed);
+		RadialWrenchHandler.onKeyInput(key, pressed);
 	}
 
 	public static boolean onMouseScrolled(double deltaX, double delta /* Y */) {
@@ -58,16 +69,32 @@ public class InputEvents {
 		if (mc.screen != null)
 			return InteractionResult.PASS;
 
+		if (CurvedTrackInteraction.onClickInput(event)) {
+			return InteractionResult.SUCCESS;
+		}
+
+		KeyMapping key = event.getKeyMapping();
+
+		if (key == mc.options.keyUse || key == mc.options.keyAttack) {
+			if (CreateClient.GLUE_HANDLER.onMouseInput(key == mc.options.keyAttack))
+				return InteractionResult.SUCCESS;
+		}
+
+		if (key == mc.options.keyUse
+			&& (FactoryPanelConnectionHandler.onRightClick() || ChainConveyorConnectionHandler.onRightClick())) {
+			return InteractionResult.SUCCESS;
+		}
+
 		if (CurvedTrackInteraction.onClickInput(true, false)) {
 			return InteractionResult.SUCCESS;
 		}
 
-
 		boolean glueCancelled = CreateClient.GLUE_HANDLER.onMouseInput(false);
 		LinkedControllerClientHandler.deactivateInLectern();
 		boolean relocatorCancelled = TrainRelocator.onClicked();
+		boolean factoryPanelCancelled = FactoryPanelConnectionHandler.onRightClick();
 
-		return glueCancelled || relocatorCancelled
+		return glueCancelled || relocatorCancelled || factoryPanelCancelled
 				? InteractionResult.SUCCESS
 				: InteractionResult.PASS;
 	}
@@ -99,6 +126,19 @@ public class InputEvents {
 		InteractEvents.USE.register(InputEvents::onUse);
 		InteractEvents.ATTACK.register(InputEvents::onAttack);
 		InteractEvents.PICK.register(InputEvents::onPick);
+
+		if (ChainConveyorInteractionHandler.onUse()) {
+			event.setCanceled(true);
+			return;
+		} else if (PackagePortTargetSelectionHandler.onUse()) {
+			event.setCanceled(true);
+			return;
+		}
+
+		DistExecutor.unsafeRunWhenOn(EnvType.CLIENT, () -> () -> {
+			if (ChainPackageInteractionHandler.onUse())
+				event.setCanceled(true);
+		});
 	}
 
 }

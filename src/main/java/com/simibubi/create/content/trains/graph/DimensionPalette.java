@@ -3,8 +3,7 @@ package com.simibubi.create.content.trains.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.simibubi.create.foundation.utility.NBTHelper;
-
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;

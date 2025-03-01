@@ -99,7 +99,7 @@ public class BlockCuttingCategory extends CreateRecipeCategory<CondensedBlockCut
 		}
 
 	}
-	
+
 	public static List<CondensedBlockCuttingRecipe> condenseRecipes(List<Recipe<?>> stoneCuttingRecipes) {
 		List<CondensedBlockCuttingRecipe> condensed = new ArrayList<>();
 		Recipes: for (Recipe<?> recipe : stoneCuttingRecipes) {

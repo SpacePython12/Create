@@ -6,11 +6,9 @@ import com.simibubi.create.AllShapes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags.Items;
-
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -34,6 +32,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags.Items;
 
 public class MechanicalPistonBlock extends DirectionalAxisKineticBlock implements IBE<MechanicalPistonBlockEntity> {
 
@@ -100,14 +100,14 @@ public class MechanicalPistonBlock extends DirectionalAxisKineticBlock implement
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block p_220069_4_, BlockPos fromPos,
-		boolean p_220069_6_) {
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
+		boolean isMoving) {
 		Direction direction = state.getValue(FACING);
 		if (!fromPos.equals(pos.relative(direction.getOpposite())))
 			return;
-		if (!world.isClientSide && !world.getBlockTicks()
+		if (!level.isClientSide && !level.getBlockTicks()
 			.willTickThisTick(pos, this))
-			world.scheduleTick(pos, this, 0);
+			level.scheduleTick(pos, this, 1);
 	}
 
 	@Override

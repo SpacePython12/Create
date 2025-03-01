@@ -4,11 +4,13 @@
 		"1": "create:block/roller_metal",
 		"particle": "create:block/roller_casing"
 	},
+  "render_type": "minecraft:cutout",
 	"elements": [
 		{
 			"name": "Axle left",
 			"from": [-2, -8, -5],
 			"to": [2, 0, 3],
+			"forge_data": {"calculate_normals": true},
 			"rotation": {"angle": 45, "axis": "x", "origin": [4, -4, -1]},
 			"faces": {
 				"north": {"uv": [0, 4, 4, 6], "rotation": 90, "texture": "#1"},
@@ -23,6 +25,7 @@
 			"name": "Axle right",
 			"from": [14, -8, -5],
 			"to": [18, 0, 3],
+			"forge_data": {"calculate_normals": true},
 			"rotation": {"angle": 45, "axis": "x", "origin": [4, -4, -1]},
 			"faces": {
 				"north": {"uv": [0, 4, 4, 6], "rotation": 90, "texture": "#1"},
@@ -37,6 +40,7 @@
 			"name": "Chute",
 			"from": [1, -4, -8],
 			"to": [15, 12, 6],
+			"forge_data": {"calculate_normals": true},
 			"rotation": {"angle": 45, "axis": "x", "origin": [4, -4, -1]},
 			"faces": {
 				"north": {"uv": [0.5, 8, 7.5, 16], "texture": "#1"},
@@ -50,6 +54,7 @@
 			"name": "Chute top",
 			"from": [1, 5, -14],
 			"to": [15, 11, -8],
+			"forge_data": {"calculate_normals": true},
 			"rotation": {"angle": 45, "axis": "x", "origin": [4, -4, -1]},
 			"faces": {
 				"north": {"uv": [9, 1, 16, 4], "texture": "#1"},
@@ -62,6 +67,7 @@
 			"name": "Cage",
 			"from": [1, -2, -14],
 			"to": [15, 5, -8],
+			"forge_data": {"calculate_normals": true},
 			"rotation": {"angle": 45, "axis": "x", "origin": [4, -4, -1]},
 			"faces": {
 				"north": {"uv": [9, 4, 16, 8], "texture": "#1"},

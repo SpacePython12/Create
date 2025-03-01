@@ -3,7 +3,6 @@ package com.simibubi.create.content.redstone.link;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
-import java.util.function.Predicate;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -14,9 +13,8 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
-import com.simibubi.create.foundation.utility.Couple;
 
+import net.createmod.catnip.data.Couple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -206,7 +204,7 @@ public class LinkBehaviour extends BlockEntityBehaviour implements IRedstoneLink
 	public boolean testHit(Boolean first, Vec3 hit) {
 		BlockState state = blockEntity.getBlockState();
 		Vec3 localHit = hit.subtract(Vec3.atLowerCornerOf(blockEntity.getBlockPos()));
-		return (first ? firstSlot : secondSlot).testHit(state, localHit);
+		return (first ? firstSlot : secondSlot).testHit(getWorld(), getPos(), state, localHit);
 	}
 
 	@Override

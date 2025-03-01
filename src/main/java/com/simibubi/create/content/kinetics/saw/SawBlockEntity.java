@@ -18,6 +18,7 @@ import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
+import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
@@ -27,24 +28,12 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeConditions;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
 import com.simibubi.create.foundation.utility.AbstractBlockBreakQueue;
-import com.simibubi.create.foundation.utility.TreeCutter;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -75,6 +64,18 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -328,6 +329,22 @@ public class SawBlockEntity extends BlockBreakingKineticBlockEntity implements S
 	}
 
 	private void applyRecipe() {
+		ItemStack input = inventory.getStackInSlot(0);
+		List<ItemStack> list = new ArrayList<>();
+
+		if (PackageItem.isPackage(input)) {
+			inventory.clear();
+			ItemStackHandler results = PackageItem.getContents(input);
+			for (int i = 0; i < results.getSlots(); i++) {
+				ItemStack stack = results.getStackInSlot(i);
+				if (!stack.isEmpty())
+					ItemHelper.addToList(stack, list);
+			}
+			for (int slot = 0; slot < list.size() && slot + 1 < inventory.getSlots(); slot++)
+				inventory.setStackInSlot(slot + 1, list.get(slot));
+			return;
+		}
+
 		List<? extends Recipe<?>> recipes = getRecipes();
 		if (recipes.isEmpty())
 			return;
@@ -336,21 +353,18 @@ public class SawBlockEntity extends BlockBreakingKineticBlockEntity implements S
 
 		Recipe<?> recipe = recipes.get(recipeIndex);
 
-		int rolls = inventory.getStackInSlot(0)
-			.getCount();
+		int rolls = input.getCount();
 		inventory.clear();
 
-		List<ItemStack> list = new ArrayList<>();
 		for (int roll = 0; roll < rolls; roll++) {
-			List<ItemStack> results = new LinkedList<ItemStack>();
+			List<ItemStack> results = new LinkedList<>();
 			if (recipe instanceof CuttingRecipe)
 				results = ((CuttingRecipe) recipe).rollResults();
 			else if (recipe instanceof StonecutterRecipe || recipe.getType() == woodcuttingRecipeType.get())
 				results.add(recipe.getResultItem(level.registryAccess())
 					.copy());
 
-			for (int i = 0; i < results.size(); i++) {
-				ItemStack stack = results.get(i);
+			for (ItemStack stack : results) {
 				ItemHelper.addToList(stack, list);
 			}
 		}
@@ -369,8 +383,7 @@ public class SawBlockEntity extends BlockBreakingKineticBlockEntity implements S
 			return ImmutableList.of(assemblyRecipe.get());
 
 		Predicate<Recipe<?>> types = RecipeConditions.isOfType(AllRecipeTypes.CUTTING.getType(),
-			AllConfigs.server().recipes.allowStonecuttingOnSaw.get() ? RecipeType.STONECUTTING : null,
-			AllConfigs.server().recipes.allowWoodcuttingOnSaw.get() ? woodcuttingRecipeType.get() : null);
+			AllConfigs.server().recipes.allowStonecuttingOnSaw.get() ? RecipeType.STONECUTTING : null);
 
 		List<Recipe<?>> startedSearch = RecipeFinder.get(cuttingRecipesKey, level, types);
 		return startedSearch.stream()

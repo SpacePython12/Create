@@ -8,12 +8,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class ConnectedTextureBehaviour {
 
+	@Nullable
+	public CTSpriteShiftEntry getShift(BlockState state, RandomSource rand, Direction direction,
+		@NotNull TextureAtlasSprite sprite) {
+		return getShift(state, direction, sprite);
+	}
+	
 	@Nullable
 	public abstract CTSpriteShiftEntry getShift(BlockState state, Direction direction,
 		@NotNull TextureAtlasSprite sprite);

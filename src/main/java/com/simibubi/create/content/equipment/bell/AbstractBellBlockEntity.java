@@ -2,17 +2,18 @@ package com.simibubi.create.content.equipment.bell;
 
 import java.util.List;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.NBTHelper;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -52,7 +53,7 @@ public abstract class AbstractBellBlockEntity extends SmartBlockEntity {
 			ringingTicks = 0;
 		}
 	}
-	
+
 	@Override
 	protected void write(CompoundTag tag, boolean clientPacket) {
 		super.write(tag, clientPacket);
@@ -60,7 +61,7 @@ public abstract class AbstractBellBlockEntity extends SmartBlockEntity {
 			return;
 		NBTHelper.writeEnum(tag, "Ringing", ringDirection);
 	}
-	
+
 	@Override
 	protected void read(CompoundTag tag, boolean clientPacket) {
 		super.read(tag, clientPacket);

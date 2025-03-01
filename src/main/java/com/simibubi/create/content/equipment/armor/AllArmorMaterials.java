@@ -3,10 +3,12 @@ package com.simibubi.create.content.equipment.armor;
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.Create;
 
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
@@ -15,7 +17,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 public enum AllArmorMaterials implements ArmorMaterial {
 
 	COPPER(Create.asResource("copper").toString(), 7, new int[] { 2, 4, 3, 1 }, 25, () -> AllSoundEvents.COPPER_ARMOR_EQUIP.getMainEvent(), 0.0F, 0.0F,
-		() -> Ingredient.of(Items.COPPER_INGOT))
+		() -> Ingredient.of(Items.COPPER_INGOT)),
+
+	CARDBOARD(Create.asResource("cardboard")
+		.toString(), 4, new int[] { 1, 1, 1, 1 }, 25, () -> SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F,
+		() -> Ingredient.of(AllItems.CARDBOARD))
 
 	;
 

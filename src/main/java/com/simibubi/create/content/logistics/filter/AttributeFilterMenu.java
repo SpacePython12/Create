@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.simibubi.create.AllMenuTypes;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Pair;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
+import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
 
+import net.createmod.catnip.data.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -21,6 +20,9 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 
 public class AttributeFilterMenu extends AbstractFilterMenu {
 
@@ -52,7 +54,7 @@ public class AttributeFilterMenu extends AbstractFilterMenu {
 		super.init(inv, contentHolder);
 		ItemStack stack = new ItemStack(Items.NAME_TAG);
 		stack.setHoverName(
-				Components.literal("Selected Tags").withStyle(ChatFormatting.RESET, ChatFormatting.BLUE));
+				Component.literal("Selected Tags").withStyle(ChatFormatting.RESET, ChatFormatting.BLUE));
 		ghostInventory.setStackInSlot(1, stack);
 	}
 
@@ -68,8 +70,8 @@ public class AttributeFilterMenu extends AbstractFilterMenu {
 
 	@Override
 	protected void addFilterSlots() {
-		this.addSlot(new SlotItemHandler(ghostInventory, 0, 16, 24));
-		this.addSlot(new SlotItemHandler(ghostInventory, 1, 22, 59) {
+		this.addSlot(new SlotItemHandler(ghostInventory, 0, 16, 27));
+		this.addSlot(new SlotItemHandler(ghostInventory, 1, 16, 62) {
 			@Override
 			public boolean mayPickup(Player playerIn) {
 				return false;
@@ -135,7 +137,9 @@ public class AttributeFilterMenu extends AbstractFilterMenu {
 			.getList("MatchedAttributes", Tag.TAG_COMPOUND);
 		attributes.forEach(inbt -> {
 			CompoundTag compound = (CompoundTag) inbt;
-			selectedAttributes.add(Pair.of(ItemAttribute.fromNBT(compound), compound.getBoolean("Inverted")));
+			ItemAttribute attribute = ItemAttribute.loadStatic(compound);
+			if (attribute != null)
+				selectedAttributes.add(Pair.of(attribute, compound.getBoolean("Inverted")));
 		});
 	}
 
@@ -147,15 +151,14 @@ public class AttributeFilterMenu extends AbstractFilterMenu {
 		selectedAttributes.forEach(at -> {
 			if (at == null)
 				return;
-			CompoundTag compoundNBT = new CompoundTag();
-			at.getFirst()
-					.serializeNBT(compoundNBT);
+
+			CompoundTag compoundNBT = ItemAttribute.saveStatic(at.getFirst());
 			compoundNBT.putBoolean("Inverted", at.getSecond());
 			attributes.add(compoundNBT);
 		});
 		filterItem.getOrCreateTag()
 			.put("MatchedAttributes", attributes);
-		
+
 		if (attributes.isEmpty() && whitelistMode == WhitelistMode.WHITELIST_DISJ)
 			filterItem.setTag(null);
 	}

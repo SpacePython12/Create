@@ -2,10 +2,10 @@ package com.simibubi.create.content.equipment.bell;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AngleHelper;
 
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -26,15 +26,15 @@ public class BellRenderer<BE extends AbstractBellBlockEntity> extends SafeBlockE
 		Direction facing = state.getValue(BellBlock.FACING);
 		BellAttachType attachment = state.getValue(BellBlock.ATTACHMENT);
 
-		SuperByteBuffer bell = CachedBufferer.partial(be.getBellModel(), state);
+		SuperByteBuffer bell = CachedBuffers.partial(be.getBellModel(), state);
 
 		if (be.isRinging)
-			bell.rotateCentered(be.ringDirection.getCounterClockWise(), getSwingAngle(be.ringingTicks + partialTicks));
+			bell.rotateCentered(getSwingAngle(be.ringingTicks + partialTicks), be.ringDirection.getCounterClockWise());
 
 		float rY = AngleHelper.horizontalAngle(facing);
 		if (attachment == BellAttachType.SINGLE_WALL || attachment == BellAttachType.DOUBLE_WALL)
 			rY += 90;
-		bell.rotateCentered(Direction.UP, AngleHelper.rad(rY));
+		bell.rotateCentered(AngleHelper.rad(rY), Direction.UP);
 
 		bell.light(light)
 			.renderInto(ms, buffer.getBuffer(RenderType.cutout()));

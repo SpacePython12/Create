@@ -16,6 +16,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.simibubi.create.Create;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.nbt.CompoundTag;
 
 public class FilesHelper {

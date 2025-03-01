@@ -8,8 +8,8 @@
 	"elements": [
 		{
 			"name": "Pole1Core",
-			"from": [6, 6, 4],
-			"to": [10, 10, 12],
+			"from": [5.995, 5.995, 4],
+			"to": [10.005, 10.005, 12],
 			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 10]},
 			"faces": {
 				"east": {"uv": [1, 6, 5, 14], "rotation": 90, "texture": "#mechanical_press_pole"},
@@ -20,8 +20,8 @@
 		},
 		{
 			"name": "Pole2Core",
-			"from": [6, 6, -9],
-			"to": [10, 10, 4],
+			"from": [5.995, 5.995, -9],
+			"to": [10.005, 10.005, 4],
 			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 10]},
 			"faces": {
 				"north": {"uv": [11, 6, 15, 10], "rotation": 270, "texture": "#mechanical_press_pole"},

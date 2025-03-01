@@ -4,20 +4,18 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.jozufozu.flywheel.api.MaterialManager;
-import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
-import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
-import com.simibubi.create.content.contraptions.render.ActorInstance;
+import com.simibubi.create.content.contraptions.render.ActorVisual;
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
-import com.simibubi.create.content.contraptions.render.ContraptionRenderDispatcher;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import dev.engine_room.flywheel.api.visualization.VisualizationContext;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,6 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class PortableStorageInterfaceMovement implements MovementBehaviour {
 
@@ -40,22 +41,22 @@ public class PortableStorageInterfaceMovement implements MovementBehaviour {
 	}
 
 	@Override
-	public boolean hasSpecialInstancedRendering() {
+	public boolean disableBlockEntityRendering() {
 		return true;
 	}
 
 	@Nullable
 	@Override
-	public ActorInstance createInstance(MaterialManager materialManager, VirtualRenderWorld simulationWorld,
-		MovementContext context) {
-		return new PSIActorInstance(materialManager, simulationWorld, context);
+	public ActorVisual createVisual(VisualizationContext visualizationContext, VirtualRenderWorld simulationWorld,
+		MovementContext movementContext) {
+		return new PSIActorVisual(visualizationContext, simulationWorld, movementContext);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void renderInContraption(MovementContext context, VirtualRenderWorld renderWorld,
 		ContraptionMatrices matrices, MultiBufferSource buffer) {
-		if (!ContraptionRenderDispatcher.canInstance())
+		if (!VisualizationManager.supportsVisualization(context.world))
 			PortableStorageInterfaceRenderer.renderInContraption(context, renderWorld, matrices, buffer);
 	}
 

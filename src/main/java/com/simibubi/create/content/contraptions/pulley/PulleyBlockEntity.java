@@ -7,9 +7,9 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.AssemblyException;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
 import com.simibubi.create.content.contraptions.ContraptionCollider;
 import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
 import com.simibubi.create.content.contraptions.piston.LinearActuatorBlockEntity;
@@ -18,15 +18,17 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,9 +76,9 @@ public class PulleyBlockEntity extends LinearActuatorBlockEntity implements Thre
 		if (level.isClientSide() && mirrorParent != null)
 			if (sharedMirrorContraption == null || sharedMirrorContraption.get() == null
 				|| !sharedMirrorContraption.get()
-					.isAlive()) {
+				.isAlive()) {
 				sharedMirrorContraption = null;
-				if (level.getBlockEntity(mirrorParent)instanceof PulleyBlockEntity pte && pte.movedContraption != null)
+				if (level.getBlockEntity(mirrorParent) instanceof PulleyBlockEntity pte && pte.movedContraption != null)
 					sharedMirrorContraption = new WeakReference<>(pte.movedContraption);
 			}
 
@@ -202,8 +204,8 @@ public class PulleyBlockEntity extends LinearActuatorBlockEntity implements Thre
 							.getCollisionShape(level, magnetPos)
 							.isEmpty());
 						level.setBlock(magnetPos, AllBlocks.PULLEY_MAGNET.getDefaultState()
-							.setValue(BlockStateProperties.WATERLOGGED,
-								Boolean.valueOf(ifluidstate.getType() == Fluids.WATER)),
+								.setValue(BlockStateProperties.WATERLOGGED,
+									Boolean.valueOf(ifluidstate.getType() == Fluids.WATER)),
 							66);
 					}
 				}
@@ -230,7 +232,7 @@ public class PulleyBlockEntity extends LinearActuatorBlockEntity implements Thre
 							.setValue(BlockStateProperties.WATERLOGGED, waterlog[i]), 66);
 					}
 				}
-				
+
 			}
 
 			if (movedContraption != null && mirrorParent == null)
@@ -253,8 +255,7 @@ public class PulleyBlockEntity extends LinearActuatorBlockEntity implements Thre
 
 	@Override
 	protected Vec3 toPosition(float offset) {
-		if (movedContraption.getContraption() instanceof PulleyContraption) {
-			PulleyContraption contraption = (PulleyContraption) movedContraption.getContraption();
+		if (movedContraption.getContraption() instanceof PulleyContraption contraption) {
 			return Vec3.atLowerCornerOf(contraption.anchor)
 				.add(0, contraption.getInitialOffset() - offset, 0);
 
@@ -387,15 +388,30 @@ public class PulleyBlockEntity extends LinearActuatorBlockEntity implements Thre
 		offset = forcedOffset;
 	}
 
-	@Override
-	public float getPercent() {
-		int distance = worldPosition.getY() - level.getMinBuildHeight();
-		if (distance <= 0)
-			return 100;
-		return 100 * getInterpolatedOffset(.5f) / distance;
-	}
-
 	public BlockPos getMirrorParent() {
 		return mirrorParent;
 	}
+
+	// Threshold switch
+
+	@Override
+	public int getCurrentValue() {
+		return worldPosition.getY() - (int) getInterpolatedOffset(.5f);
+	}
+
+	@Override
+	public int getMinValue() {
+		return level.getMinBuildHeight();
+	}
+
+	@Override
+	public int getMaxValue() {
+		return worldPosition.getY();
+	}
+
+	@Override
+	public MutableComponent format(int value) {
+		return CreateLang.translateDirect("gui.threshold_switch.pulley_y_level", value);
+	}
+
 }

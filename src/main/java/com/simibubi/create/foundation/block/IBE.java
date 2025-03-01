@@ -38,7 +38,7 @@ public interface IBE<T extends BlockEntity> extends EntityBlock {
 	 * if the IBE is bound to a SmartBlockEntity, which implements destroy(),<br>
 	 * call this method in BlockBehaviour::onRemove (replace super call)
 	 */
-	public static void onRemove(BlockState blockState, Level level, BlockPos pos, BlockState newBlockState) {
+	static void onRemove(BlockState blockState, Level level, BlockPos pos, BlockState newBlockState) {
 		if (!blockState.hasBlockEntity())
 			return;
 		if (blockState.is(newBlockState.getBlock()) && newBlockState.hasBlockEntity())

@@ -1,21 +1,13 @@
 package com.simibubi.create.content.contraptions.minecart;
 
-import com.simibubi.create.AllTags;
-
-import com.simibubi.create.foundation.utility.AdventureUtil;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllItems;
-import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
 import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
-import com.simibubi.create.foundation.utility.Iterate;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
+import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +17,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class MinecartCouplingItem extends Item {
 
@@ -37,9 +32,8 @@ public class MinecartCouplingItem extends Item {
 			return InteractionResult.PASS;
 		if (AdventureUtil.isAdventure(player))
 			return InteractionResult.PASS;
-		if (!(interacted instanceof AbstractMinecart))
+		if (!(interacted instanceof AbstractMinecart minecart))
 			return InteractionResult.PASS;
-		AbstractMinecart minecart = (AbstractMinecart) interacted;
 		if (player == null)
 			return InteractionResult.PASS;
 		MinecartController controller = minecart.create$getController();
@@ -58,7 +52,7 @@ public class MinecartCouplingItem extends Item {
 	}
 
 	protected static boolean onCouplingInteractOnMinecart(Level world,
-		AbstractMinecart minecart, Player player, MinecartController controller) {
+														  AbstractMinecart minecart, Player player, MinecartController controller) {
 		if (controller.isFullyCoupled()) {
 			if (world.isClientSide) // fabric: on forge this only runs on server, here we only run
 				// on client to avoid an incorrect message due to differences in timing across loaders.
@@ -73,7 +67,7 @@ public class MinecartCouplingItem extends Item {
 	}
 
 	private static boolean onWrenchInteractOnMinecart(Level world, AbstractMinecart minecart, Player player,
-		MinecartController controller) {
+													  MinecartController controller) {
 		int couplings = (controller.isConnectedToCoupling() ? 1 : 0) + (controller.isLeadingCoupling() ? 1 : 0);
 		if (couplings == 0)
 			return false;

@@ -8,17 +8,19 @@ import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.foundation.utility.fabric.ListeningStorageView;
 import com.simibubi.create.foundation.utility.fabric.ProcessingIterator;
 
-import io.github.fabricators_of_create.porting_lib.transfer.WrappedStorage;
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.transfer.WrappedStorage;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 
 public class PortableFluidInterfaceBlockEntity extends PortableStorageInterfaceBlockEntity implements SidedStorageBlockEntity {
 
@@ -31,7 +33,7 @@ public class PortableFluidInterfaceBlockEntity extends PortableStorageInterfaceB
 
 	@Override
 	public void startTransferringTo(Contraption contraption, float distance) {
-		capability.setWrapped(contraption.getSharedFluidTanks());
+		capability.setWrapped(contraption.getStorage().getFluids());
 		super.startTransferringTo(contraption, distance);
 	}
 

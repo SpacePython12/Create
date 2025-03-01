@@ -4,26 +4,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllBogeyStyles;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.CarriageBogey;
@@ -32,15 +28,12 @@ import com.simibubi.create.content.trains.graph.TrackEdge;
 import com.simibubi.create.content.trains.track.TrackMaterial;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -63,11 +56,10 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> extends Block implements IBE<T>, ProperWaterloggedBlock, ISpecialBlockItemRequirement, IWrenchable {
+public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> extends Block implements IBE<T>, ProperWaterloggedBlock, SpecialBlockItemRequirement, IWrenchable {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 	static final List<ResourceLocation> BOGEYS = new ArrayList<>();
 	public BogeySizes.BogeySize size;
-
 
 	public AbstractBogeyBlock(Properties pProperties, BogeySizes.BogeySize size) {
 		super(pProperties);
@@ -93,7 +85,7 @@ public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> ext
 	/**
 	 * Only for internal Create use. If you have your own style set, do not call this method
 	 */
-	@Deprecated
+	@ApiStatus.Internal
 	public static void registerStandardBogey(ResourceLocation block) {
 		BOGEYS.add(block);
 	}
@@ -149,30 +141,6 @@ public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> ext
 		return false;
 	}
 
-	@Environment(EnvType.CLIENT)
-	public void render(@Nullable BlockState state, float wheelAngle, PoseStack ms, float partialTicks,
-		MultiBufferSource buffers, int light, int overlay, BogeyStyle style, CompoundTag bogeyData) {
-		if (style == null)
-			style = getDefaultStyle();
-
-		final Optional<BogeyRenderer.CommonRenderer> commonRenderer
-				= style.getInWorldCommonRenderInstance();
-		final BogeyRenderer renderer = style.getInWorldRenderInstance(this.getSize());
-		if (state != null) {
-			ms.translate(.5f, .5f, .5f);
-			if (state.getValue(AXIS) == Direction.Axis.X)
-				ms.mulPose(Axis.YP.rotationDegrees(90));
-		}
-		ms.translate(0, -1.5 - 1 / 128f, 0);
-		VertexConsumer vb = buffers.getBuffer(RenderType.cutoutMipped());
-		if (bogeyData == null)
-			bogeyData = new CompoundTag();
-		renderer.render(bogeyData, wheelAngle, ms, light, vb, state == null);
-		CompoundTag finalBogeyData = bogeyData;
-		commonRenderer.ifPresent(common ->
-				common.render(finalBogeyData, wheelAngle, ms, light, vb, state == null));
-	}
-
 	public BogeySizes.BogeySize getSize() {
 		return this.size;
 	}
@@ -218,9 +186,9 @@ public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> ext
 
 			Set<BogeySizes.BogeySize> validSizes = style.validSizes();
 
-			for (int i = 0; i < BogeySizes.count(); i++) {
+			for (int i = 0; i < BogeySizes.all().size(); i++) {
 				if (validSizes.contains(size)) break;
-				size = size.increment();
+				size = size.nextBySize();
 			}
 
 			sbbe.setBogeyStyle(style);
@@ -229,14 +197,14 @@ public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> ext
 			sbbe.setBogeyData(sbbe.getBogeyData().merge(defaultData));
 
 			if (size == getSize()) {
-				if (state.getBlock() != style.getBlockOfSize(size)) {
+				if (state.getBlock() != style.getBlockForSize(size)) {
 					CompoundTag oldData = sbbe.getBogeyData();
 					level.setBlock(pos, copyProperties(state, getStateOfSize(sbbe, size)), Block.UPDATE_ALL);
 					if (!(level.getBlockEntity(pos) instanceof AbstractBogeyBlockEntity bogeyBlockEntity))
 						return InteractionResult.FAIL;
 					bogeyBlockEntity.setBogeyData(oldData);
 				}
-				player.displayClientMessage(Lang.translateDirect("bogey.style.updated_style")
+				player.displayClientMessage(CreateLang.translateDirect("bogey.style.updated_style")
 						.append(": ").append(style.displayName), true);
 			} else {
 				CompoundTag oldData = sbbe.getBogeyData();
@@ -244,7 +212,7 @@ public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> ext
 				if (!(level.getBlockEntity(pos) instanceof AbstractBogeyBlockEntity bogeyBlockEntity))
 					return InteractionResult.FAIL;
 				bogeyBlockEntity.setBogeyData(oldData);
-				player.displayClientMessage(Lang.translateDirect("bogey.style.updated_style_and_size")
+				player.displayClientMessage(CreateLang.translateDirect("bogey.style.updated_style_and_size")
 						.append(": ").append(style.displayName), true);
 			}
 
@@ -271,7 +239,7 @@ public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> ext
 	public BlockState getRotatedBlockState(BlockState state, Direction targetedFace) {
 		Block block = state.getBlock();
 		List<ResourceLocation> bogeyCycle = getBogeyBlockCycle();
-		int indexOf = bogeyCycle.indexOf(RegisteredObjects.getKeyOrThrow(block));
+		int indexOf = bogeyCycle.indexOf(CatnipServices.REGISTRIES.getKeyOrThrow(block));
 		if (indexOf == -1)
 			return state;
 		int index = (indexOf + 1) % bogeyCycle.size();
@@ -330,7 +298,7 @@ public abstract class AbstractBogeyBlock<T extends AbstractBogeyBlockEntity> ext
 
 	public BlockState getStateOfSize(AbstractBogeyBlockEntity sbbe, BogeySizes.BogeySize size) {
 		BogeyStyle style = sbbe.getStyle();
-		BlockState state = style.getBlockOfSize(size).defaultBlockState();
+		BlockState state = style.getBlockForSize(size).defaultBlockState();
 		return copyProperties(sbbe.getBlockState(), state);
 	}
 

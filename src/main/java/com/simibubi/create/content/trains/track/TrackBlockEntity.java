@@ -8,13 +8,16 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
+import net.fabricmc.api.EnvType;
+
+import net.fabricmc.api.Environment;
+
 import org.jetbrains.annotations.Nullable;
 
-import com.jozufozu.flywheel.backend.instancing.InstancedRenderDispatcher;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.AllTags;
-import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
+import com.simibubi.create.api.contraption.transformable.TransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.trains.graph.TrackNodeLocation;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
@@ -22,13 +25,10 @@ import com.simibubi.create.foundation.blockEntity.IMergeableBE;
 import com.simibubi.create.foundation.blockEntity.RemoveBlockEntityPacket;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
+import dev.engine_room.flywheel.lib.visualization.VisualizationHelper;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.registries.Registries;
@@ -49,7 +49,11 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class TrackBlockEntity extends SmartBlockEntity implements ITransformableBlockEntity, IMergeableBE, RenderAttachmentBlockEntity {
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
+
+public class TrackBlockEntity extends SmartBlockEntity implements TransformableBlockEntity, IMergeableBE, RenderDataBlockEntity {
 
 	Map<BlockPos, BezierConnection> connections;
 	boolean cancelDrops;
@@ -95,7 +99,7 @@ public class TrackBlockEntity extends SmartBlockEntity implements ITransformable
 			BlockPos key = entry.getKey();
 			BezierConnection bc = entry.getValue();
 
-			if (!key.equals(bc.getKey()) || !worldPosition.equals(bc.tePositions.getFirst())) {
+			if (!key.equals(bc.getKey()) || !worldPosition.equals(bc.bePositions.getFirst())) {
 				invalid.add(key);
 				continue;
 			}
@@ -162,7 +166,7 @@ public class TrackBlockEntity extends SmartBlockEntity implements ITransformable
 		for (BezierConnection bezierConnection : connections.values()) {
 			if (!(level.getBlockEntity(bezierConnection.getKey())instanceof TrackBlockEntity tbe))
 				return;
-			tbe.removeConnection(bezierConnection.tePositions.getFirst());
+			tbe.removeConnection(bezierConnection.bePositions.getFirst());
 			if (!dropAndDiscard)
 				continue;
 			if (!cancelDrops)
@@ -228,7 +232,7 @@ public class TrackBlockEntity extends SmartBlockEntity implements ITransformable
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 16);
 		}
 
-		EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> InstancedRenderDispatcher.enqueueUpdate(this));
+		EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> VisualizationHelper.queueUpdate(this));
 
 		if (hasInteractableConnections())
 			registerToCurveInteraction();
@@ -266,7 +270,7 @@ public class TrackBlockEntity extends SmartBlockEntity implements ITransformable
 	}
 
 	@Override
-	public void transform(StructureTransform transform) {
+	public void transform(BlockEntity be, StructureTransform transform) {
 		Map<BlockPos, BezierConnection> restoredConnections = new HashMap<>();
 		for (Entry<BlockPos, BezierConnection> entry : connections.entrySet())
 			restoredConnections.put(entry.getKey(),
@@ -285,10 +289,10 @@ public class TrackBlockEntity extends SmartBlockEntity implements ITransformable
 			newConnection.normals.replace(transform::applyWithoutOffsetUncentered);
 			newConnection.axes.replace(transform::applyWithoutOffsetUncentered);
 
-			BlockPos diff = newConnection.tePositions.getSecond()
-				.subtract(newConnection.tePositions.getFirst());
-			newConnection.tePositions
-				.setSecond(BlockPos.containing(Vec3.atCenterOf(newConnection.tePositions.getFirst())
+			BlockPos diff = newConnection.bePositions.getSecond()
+				.subtract(newConnection.bePositions.getFirst());
+			newConnection.bePositions
+				.setSecond(BlockPos.containing(Vec3.atCenterOf(newConnection.bePositions.getFirst())
 					.add(transform.applyWithoutOffsetUncentered(Vec3.atLowerCornerOf(diff)))));
 
 			Vec3 beVec = Vec3.atLowerCornerOf(worldPosition);
@@ -346,7 +350,7 @@ public class TrackBlockEntity extends SmartBlockEntity implements ITransformable
 
 	@Override
 	@Nullable
-	public Double getRenderAttachmentData() {
+	public Double getRenderData() {
 		if (!isTilted())
 			return null;
 		return tilt.smoothingAngle.get();
@@ -365,54 +369,7 @@ public class TrackBlockEntity extends SmartBlockEntity implements ITransformable
 	}
 
 	public void manageFakeTracksAlong(BezierConnection bc, boolean remove) {
-		Map<Pair<Integer, Integer>, Double> yLevels = new HashMap<>();
-		BlockPos tePosition = bc.tePositions.getFirst();
-		Vec3 end1 = bc.starts.getFirst()
-			.subtract(Vec3.atLowerCornerOf(tePosition))
-			.add(0, 3 / 16f, 0);
-		Vec3 end2 = bc.starts.getSecond()
-			.subtract(Vec3.atLowerCornerOf(tePosition))
-			.add(0, 3 / 16f, 0);
-		Vec3 axis1 = bc.axes.getFirst();
-		Vec3 axis2 = bc.axes.getSecond();
-
-		double handleLength = bc.getHandleLength();
-
-		Vec3 finish1 = axis1.scale(handleLength)
-			.add(end1);
-		Vec3 finish2 = axis2.scale(handleLength)
-			.add(end2);
-
-		Vec3 faceNormal1 = bc.normals.getFirst();
-		Vec3 faceNormal2 = bc.normals.getSecond();
-
-		int segCount = bc.getSegmentCount();
-		float[] lut = bc.getStepLUT();
-
-		for (int i = 0; i < segCount; i++) {
-			float t = i == segCount ? 1 : i * lut[i] / segCount;
-			t += 0.5f / segCount;
-
-			Vec3 result = VecHelper.bezier(end1, end2, finish1, finish2, t);
-			Vec3 derivative = VecHelper.bezierDerivative(end1, end2, finish1, finish2, t)
-				.normalize();
-			Vec3 faceNormal =
-				faceNormal1.equals(faceNormal2) ? faceNormal1 : VecHelper.slerp(t, faceNormal1, faceNormal2);
-			Vec3 normal = faceNormal.cross(derivative)
-				.normalize();
-			Vec3 below = result.add(faceNormal.scale(-.25f));
-			Vec3 rail1 = below.add(normal.scale(.05f));
-			Vec3 rail2 = below.subtract(normal.scale(.05f));
-			Vec3 railMiddle = rail1.add(rail2)
-				.scale(.5);
-
-			for (Vec3 vec : new Vec3[] { railMiddle }) {
-				BlockPos pos = BlockPos.containing(vec);
-				Pair<Integer, Integer> key = Pair.of(pos.getX(), pos.getZ());
-				if (!yLevels.containsKey(key) || yLevels.get(key) > vec.y)
-					yLevels.put(key, vec.y);
-			}
-		}
+		Map<Pair<Integer, Integer>, Double> yLevels = bc.rasterise();
 
 		for (Entry<Pair<Integer, Integer>, Double> entry : yLevels.entrySet()) {
 			double yValue = entry.getValue();
@@ -421,7 +378,7 @@ public class TrackBlockEntity extends SmartBlockEntity implements ITransformable
 				.getFirst(), floor,
 				entry.getKey()
 					.getSecond());
-			targetPos = targetPos.offset(tePosition)
+			targetPos = targetPos.offset(bc.bePositions.getFirst())
 				.above(1);
 
 			BlockState stateAtPos = level.getBlockState(targetPos);

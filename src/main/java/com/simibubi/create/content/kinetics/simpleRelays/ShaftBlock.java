@@ -9,11 +9,11 @@ import com.simibubi.create.content.decoration.encasing.EncasableBlock;
 import com.simibubi.create.content.decoration.girder.GirderEncasedShaftBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.steamEngine.PoweredShaftBlock;
-import com.simibubi.create.foundation.placement.IPlacementHelper;
-import com.simibubi.create.foundation.placement.PlacementHelpers;
-import com.simibubi.create.foundation.placement.PlacementOffset;
 import com.simibubi.create.foundation.placement.PoleHelper;
 
+import net.createmod.catnip.placement.IPlacementHelper;
+import net.createmod.catnip.placement.PlacementHelpers;
+import net.createmod.catnip.placement.PlacementOffset;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -124,11 +124,12 @@ public class ShaftBlock extends AbstractSimpleShaftBlock implements EncasableBlo
 
 		@Override
 		public PlacementOffset getOffset(Player player, Level world, BlockState state, BlockPos pos,
-			BlockHitResult ray) {
+										 BlockHitResult ray) {
 			PlacementOffset offset = super.getOffset(player, world, state, pos, ray);
 			if (offset.isSuccessful())
 				offset.withTransform(offset.getTransform()
-					.andThen(s -> ShaftBlock.pickCorrectShaftType(s, world, offset.getBlockPos())));
+					.andThen(s -> world.isClientSide() ? s
+						: ShaftBlock.pickCorrectShaftType(s, world, offset.getBlockPos())));
 			return offset;
 		}
 

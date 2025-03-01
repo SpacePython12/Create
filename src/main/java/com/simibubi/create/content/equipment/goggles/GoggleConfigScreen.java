@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.simibubi.create.AllItems;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.Mth;
@@ -24,30 +24,30 @@ public class GoggleConfigScreen extends AbstractSimiScreen {
 	private final List<Component> tooltip;
 
 	public GoggleConfigScreen() {
-		Component componentSpacing = Components.literal("    ");
+		Component componentSpacing = Component.literal("    ");
 		tooltip = new ArrayList<>();
 		tooltip.add(componentSpacing.plainCopy()
-			.append(Lang.translateDirect("gui.config.overlay1")));
+			.append(CreateLang.translateDirect("gui.config.overlay1")));
 		tooltip.add(componentSpacing.plainCopy()
-			.append(Lang.translateDirect("gui.config.overlay2")
+			.append(CreateLang.translateDirect("gui.config.overlay2")
 				.withStyle(ChatFormatting.GRAY)));
-		tooltip.add(Components.immutableEmpty());
+		tooltip.add(CommonComponents.EMPTY);
 		tooltip.add(componentSpacing.plainCopy()
-			.append(Lang.translateDirect("gui.config.overlay3")));
+			.append(CreateLang.translateDirect("gui.config.overlay3")));
 		tooltip.add(componentSpacing.plainCopy()
-			.append(Lang.translateDirect("gui.config.overlay4")));
-		tooltip.add(Components.immutableEmpty());
+			.append(CreateLang.translateDirect("gui.config.overlay4")));
+		tooltip.add(CommonComponents.EMPTY);
 		tooltip.add(componentSpacing.plainCopy()
-			.append(Lang.translateDirect("gui.config.overlay5")
+			.append(CreateLang.translateDirect("gui.config.overlay5")
 				.withStyle(ChatFormatting.GRAY)));
 		tooltip.add(componentSpacing.plainCopy()
-			.append(Lang.translateDirect("gui.config.overlay6")
+			.append(CreateLang.translateDirect("gui.config.overlay6")
 				.withStyle(ChatFormatting.GRAY)));
-		tooltip.add(Components.immutableEmpty());
+		tooltip.add(CommonComponents.EMPTY);
 		tooltip.add(componentSpacing.plainCopy()
-			.append(Lang.translateDirect("gui.config.overlay7")));
+			.append(CreateLang.translateDirect("gui.config.overlay7")));
 		tooltip.add(componentSpacing.plainCopy()
-			.append(Lang.translateDirect("gui.config.overlay8")));
+			.append(CreateLang.translateDirect("gui.config.overlay8")));
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class GoggleConfigScreen extends AbstractSimiScreen {
 
 	@Override
 	public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_,
-		double p_mouseDragged_6_, double p_mouseDragged_8_) {
+								double p_mouseDragged_6_, double p_mouseDragged_8_) {
 		updateOffset(p_mouseDragged_1_, p_mouseDragged_3_);
 
 		return true;

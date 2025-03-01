@@ -8,38 +8,31 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.jozufozu.flywheel.api.MaterialManager;
-import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
-import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.mounted.MountedContraption;
-import com.simibubi.create.content.contraptions.render.ActorInstance;
+import com.simibubi.create.content.contraptions.render.ActorVisual;
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
-import com.simibubi.create.content.contraptions.render.ContraptionRenderDispatcher;
 import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity.Mode;
 import com.simibubi.create.content.logistics.filter.FilterItemStack;
 import com.simibubi.create.content.schematics.SchematicInstances;
-import com.simibubi.create.content.schematics.SchematicWorld;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.content.trains.entity.CarriageContraption;
 import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.item.ItemHelper.ExtractionCountMode;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import dev.engine_room.flywheel.api.visualization.VisualizationContext;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.levelWrappers.SchematicLevel;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
@@ -53,6 +46,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class DeployerMovementBehaviour implements MovementBehaviour {
 
@@ -129,7 +130,7 @@ public class DeployerMovementBehaviour implements MovementBehaviour {
 		CompoundTag tag = filter.getTag();
 		if (!tag.getBoolean("Deployed"))
 			return;
-		SchematicWorld schematicWorld = SchematicInstances.get(world, filter);
+		SchematicLevel schematicWorld = SchematicInstances.get(world, filter);
 		if (schematicWorld == null)
 			return;
 		if (!schematicWorld.getBounds()
@@ -146,7 +147,7 @@ public class DeployerMovementBehaviour implements MovementBehaviour {
 		ItemStack contextStack = requiredItems.isEmpty() ? ItemStack.EMPTY : requiredItems.get(0).stack;
 
 		if (!context.contraption.hasUniversalCreativeCrate) {
-			Storage<ItemVariant> itemHandler = context.contraption.getSharedInventory();
+			Storage<ItemVariant> itemHandler = context.contraption.getStorage().getAllItems();
 			try (Transaction t = TransferUtil.getTransaction()) {
 				for (ItemRequirement.StackRequirement required : requiredItems) {
 					int count = required.stack.getCount();
@@ -235,7 +236,7 @@ public class DeployerMovementBehaviour implements MovementBehaviour {
 			FilterItemStack filter = context.getFilterFromBE();
 			if (AllItems.SCHEMATIC.isIn(filter.item()))
 				return;
-			ItemStack held = ItemHelper.extract(context.contraption.getSharedInventory(),
+			ItemStack held = ItemHelper.extract(context.contraption.getStorage().getAllItems(),
 				stack -> filter.test(context.world, stack), 1, false);
 			player.setItemInHand(InteractionHand.MAIN_HAND, held);
 		}
@@ -292,21 +293,21 @@ public class DeployerMovementBehaviour implements MovementBehaviour {
 	}
 
 	@Override
-	public void renderInContraption(MovementContext context, VirtualRenderWorld renderWorld,
-		ContraptionMatrices matrices, MultiBufferSource buffers) {
-		if (!ContraptionRenderDispatcher.canInstance())
-			DeployerRenderer.renderInContraption(context, renderWorld, matrices, buffers);
+	public boolean disableBlockEntityRendering() {
+		return true;
 	}
 
 	@Override
-	public boolean hasSpecialInstancedRendering() {
-		return true;
+	public void renderInContraption(MovementContext context, VirtualRenderWorld renderWorld,
+		ContraptionMatrices matrices, MultiBufferSource buffers) {
+		if (!VisualizationManager.supportsVisualization(context.world))
+			DeployerRenderer.renderInContraption(context, renderWorld, matrices, buffers);
 	}
 
 	@Nullable
 	@Override
-	public ActorInstance createInstance(MaterialManager materialManager, VirtualRenderWorld simulationWorld,
-		MovementContext context) {
-		return new DeployerActorInstance(materialManager, simulationWorld, context);
+	public ActorVisual createVisual(VisualizationContext visualizationContext, VirtualRenderWorld simulationWorld,
+		MovementContext movementContext) {
+		return new DeployerActorVisual(visualizationContext, simulationWorld, movementContext);
 	}
 }

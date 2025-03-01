@@ -5,10 +5,10 @@ import com.simibubi.create.AllPackets;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.trains.track.TrackPlacement.PlacementInfo;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -59,14 +60,14 @@ public class TrackBlockItem extends BlockItem {
 			if (state.getBlock() instanceof TrackBlock track && track.getTrackAxes(level, pos, state)
 				.size() > 1) {
 				if (!level.isClientSide)
-					player.displayClientMessage(Lang.translateDirect("track.junction_start")
+					player.displayClientMessage(CreateLang.translateDirect("track.junction_start")
 						.withStyle(ChatFormatting.RED), true);
 				return InteractionResult.SUCCESS;
 			}
 
 			if (level.getBlockEntity(pos) instanceof TrackBlockEntity tbe && tbe.isTilted()) {
 				if (!level.isClientSide)
-					player.displayClientMessage(Lang.translateDirect("track.turn_start")
+					player.displayClientMessage(CreateLang.translateDirect("track.turn_start")
 						.withStyle(ChatFormatting.RED), true);
 				return InteractionResult.SUCCESS;
 			}
@@ -79,7 +80,7 @@ public class TrackBlockItem extends BlockItem {
 
 		} else if (player.isShiftKeyDown()) {
 			if (!level.isClientSide) {
-				player.displayClientMessage(Lang.translateDirect("track.selection_cleared"), true);
+				player.displayClientMessage(CreateLang.translateDirect("track.selection_cleared"), true);
 				stack.setTag(null);
 			} else
 				level.playSound(player, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 0.75f, 1);
@@ -104,7 +105,7 @@ public class TrackBlockItem extends BlockItem {
 		PlacementInfo info = TrackPlacement.tryConnect(level, player, pos, state, stack, hasGirder, extend);
 
 		if (info.message != null && !level.isClientSide)
-			player.displayClientMessage(Lang.translateDirect(info.message), true);
+			player.displayClientMessage(CreateLang.translateDirect(info.message), true);
 		if (!info.valid) {
 			AllSoundEvents.DENY.playFrom(player, 1, 1);
 			return InteractionResult.FAIL;
@@ -134,10 +135,9 @@ public class TrackBlockItem extends BlockItem {
 	public static boolean select(LevelAccessor world, BlockPos pos, Vec3 lookVec, ItemStack heldItem) {
 		BlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (!(block instanceof ITrackBlock))
+		if (!(block instanceof ITrackBlock track))
 			return false;
 
-		ITrackBlock track = (ITrackBlock) block;
 		Pair<Vec3, AxisDirection> nearestTrackAxis = track.getNearestTrackAxis(world, pos, blockState, lookVec);
 		Vec3 axis = nearestTrackAxis.getFirst()
 			.scale(nearestTrackAxis.getSecond() == AxisDirection.POSITIVE ? -1 : 1);

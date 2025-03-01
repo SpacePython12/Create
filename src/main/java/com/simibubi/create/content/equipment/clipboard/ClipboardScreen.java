@@ -6,12 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.simibubi.create.AllSoundEvents;
-
-import net.minecraft.client.Minecraft;
-
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -25,20 +19,19 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPackets;
+import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.clipboard.ClipboardOverrides.ClipboardType;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.StringSplitter;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -48,13 +41,18 @@ import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ClipboardScreen extends AbstractSimiScreen {
 
@@ -103,7 +101,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
 		currentEntries = pages.get(currentPage);
 		boolean startEmpty = currentEntries.isEmpty();
 		if (startEmpty)
-			currentEntries.add(new ClipboardEntry(false, Components.empty()));
+            currentEntries.add(new ClipboardEntry(false, Component.empty()));
 		editingIndex = 0;
 		editContext = new TextFieldHelper(this::getCurrentEntryText, this::setCurrentEntryText, this::getClipboard,
 			this::setClipboard, this::validateTextForEntry);
@@ -130,13 +128,13 @@ public class ClipboardScreen extends AbstractSimiScreen {
 			editingIndex = -1;
 			currentEntries.removeIf(ce -> ce.checked);
 			if (currentEntries.isEmpty())
-				currentEntries.add(new ClipboardEntry(false, Components.empty()));
+                currentEntries.add(new ClipboardEntry(false, Component.empty()));
 			sendIfEditingBlock();
 		});
-		clearBtn.setToolTip(Lang.translateDirect("gui.clipboard.erase_checked"));
+		clearBtn.setToolTip(CreateLang.translateDirect("gui.clipboard.erase_checked"));
 		closeBtn = new IconButton(x + 234, y + 175, AllIcons.I_PRIORITY_VERY_LOW)
 			.withCallback(() -> minecraft.setScreen(null));
-		closeBtn.setToolTip(Lang.translateDirect("station.close"));
+		closeBtn.setToolTip(CreateLang.translateDirect("station.close"));
 		addRenderableWidget(closeBtn);
 		addRenderableWidget(clearBtn);
 
@@ -189,7 +187,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
 				ClipboardEntry clipboardEntry = currentEntries.get(i);
 				String text = clipboardEntry.text.getString();
 				totalHeight +=
-					Math.max(12, font.split(Components.literal(text), clipboardEntry.icon.isEmpty() ? 150 : 130)
+					Math.max(12, font.split(Component.literal(text), clipboardEntry.icon.isEmpty() ? 150 : 130)
 						.size() * 9 + 3);
 
 				if (totalHeight > my) {
@@ -206,7 +204,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
 	}
 
 	private void setCurrentEntryText(String text) {
-		currentEntries.get(editingIndex).text = Components.literal(text);
+		currentEntries.get(editingIndex).text = Component.literal(text);
 		sendIfEditingBlock();
 	}
 
@@ -224,7 +222,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
 		for (int i = 0; i < currentEntries.size(); i++) {
 			ClipboardEntry clipboardEntry = currentEntries.get(i);
 			String text = i == editingIndex ? newText : clipboardEntry.text.getString();
-			totalHeight += Math.max(12, font.split(Components.literal(text), 150)
+			totalHeight += Math.max(12, font.split(Component.literal(text), 150)
 				.size() * 9 + 3);
 		}
 		return totalHeight < 185;
@@ -257,7 +255,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
 		}
 		currentEntries = pages.get(currentPage);
 		if (currentEntries.isEmpty()) {
-			currentEntries.add(new ClipboardEntry(false, Components.empty()));
+            currentEntries.add(new ClipboardEntry(false, Component.empty()));
 			if (!readonly) {
 				editingIndex = 0;
 				editContext.setCursorToEnd();
@@ -283,19 +281,32 @@ public class ClipboardScreen extends AbstractSimiScreen {
 		int y = guiTop - 8;
 
 		AllGuiTextures.CLIPBOARD.render(graphics, x, y);
-		graphics.drawString(font, Components.translatable("book.pageIndicator", currentPage + 1, getNumPages()), x + 150, y + 9,
-			0x43ffffff, false);
+		graphics.drawString(font, Component.translatable("book.pageIndicator", currentPage + 1, getNumPages()),
+			x + 150, y + 9, 0x43ffffff, false);
 
 		for (int i = 0; i < currentEntries.size(); i++) {
 			ClipboardEntry clipboardEntry = currentEntries.get(i);
 			boolean checked = clipboardEntry.checked;
 			int iconOffset = clipboardEntry.icon.isEmpty() ? 0 : 16;
 
-			graphics.drawString(font, "\u25A1", x + 45, y + 51, checked ? 0x668D7F6B : 0xff8D7F6B, false);
-			if (checked)
-				graphics.drawString(font, "\u2714", x + 45, y + 50, 0x31B25D, false);
+			MutableComponent text = clipboardEntry.text;
+			String string = text.getString();
+			boolean isAddress = string.startsWith("#") && !string.substring(1)
+				.isBlank();
 
-			List<FormattedCharSequence> split = font.split(clipboardEntry.text, 150 - iconOffset);
+			if (isAddress) {
+				RenderSystem.enableBlend();
+				(checked ? AllGuiTextures.CLIPBOARD_ADDRESS_INACTIVE : AllGuiTextures.CLIPBOARD_ADDRESS)
+					.render(graphics, x + 44, y + 50);
+				text = Component.literal(string.substring(1)
+					.stripLeading());
+			} else {
+				graphics.drawString(font, "\u25A1", x + 45, y + 51, checked ? 0x668D7F6B : 0xff8D7F6B, false);
+				if (checked)
+					graphics.drawString(font, "\u2714", x + 45, y + 50, 0x31B25D, false);
+			}
+
+			List<FormattedCharSequence> split = font.split(text, 150 - iconOffset);
 			if (split.isEmpty()) {
 				y += 12;
 				continue;
@@ -306,7 +317,8 @@ public class ClipboardScreen extends AbstractSimiScreen {
 
 			for (FormattedCharSequence sequence : split) {
 				if (i != editingIndex)
-					graphics.drawString(font, sequence, x + 58 + iconOffset, y + 50, checked ? 0x31B25D : 0x311A00, false);
+					graphics.drawString(font, sequence, x + 58 + iconOffset, y + 50,
+						checked ? isAddress ? 0x668D7F6B : 0x31B25D : 0x311A00, false);
 				y += 9;
 			}
 			y += 3;
@@ -315,13 +327,11 @@ public class ClipboardScreen extends AbstractSimiScreen {
 		if (editingIndex == -1)
 			return;
 
-		boolean checked = currentEntries.get(editingIndex).checked;
-
 		setFocused(null);
 		DisplayCache cache = getDisplayCache();
 
 		for (LineInfo line : cache.lines)
-			graphics.drawString(font, line.asComponent, line.x, line.y, checked ? 0x31B25D : 0x311A00, false);
+			graphics.drawString(font, line.asComponent, line.x, line.y, 0x311A00, false);
 
 		renderHighlight(cache.selection);
 		renderCursor(graphics, cache.cursor, cache.cursorAtEnd);
@@ -427,7 +437,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
 					if (currentEntries.size() <= editingIndex + 1
 						|| !currentEntries.get(editingIndex + 1).text.getString()
 							.isEmpty())
-						currentEntries.add(editingIndex + 1, new ClipboardEntry(false, Components.empty()));
+                        currentEntries.add(editingIndex + 1, new ClipboardEntry(false, Component.empty()));
 					editingIndex += 1;
 					editContext.setCursorToEnd();
 					if (validateTextForEntry(" "))
@@ -586,8 +596,16 @@ public class ClipboardScreen extends AbstractSimiScreen {
 				editingIndex = -1;
 				if (hoveredEntry < currentEntries.size()) {
 					currentEntries.get(hoveredEntry).checked ^= true;
-					if (currentEntries.get(hoveredEntry).checked == true) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(AllSoundEvents.CLIPBOARD_CHECKMARK.getMainEvent(), 0.95f + (float)Math.random() * 0.05f));
-					else Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(AllSoundEvents.CLIPBOARD_ERASE.getMainEvent(), 0.90f + (float)Math.random() * 0.2f));
+					if (currentEntries.get(hoveredEntry).checked == true)
+						Minecraft.getInstance()
+							.getSoundManager()
+							.play(SimpleSoundInstance.forUI(AllSoundEvents.CLIPBOARD_CHECKMARK.getMainEvent(),
+								0.95f + (float) Math.random() * 0.05f));
+					else
+						Minecraft.getInstance()
+							.getSoundManager()
+							.play(SimpleSoundInstance.forUI(AllSoundEvents.CLIPBOARD_ERASE.getMainEvent(),
+								0.90f + (float) Math.random() * 0.2f));
 				}
 				sendIfEditingBlock();
 				return true;
@@ -596,7 +614,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
 			if (hoveredEntry != editingIndex && !readonly) {
 				editingIndex = hoveredEntry;
 				if (hoveredEntry >= currentEntries.size()) {
-					currentEntries.add(new ClipboardEntry(false, Components.empty()));
+                    currentEntries.add(new ClipboardEntry(false, Component.empty()));
 					if (!validateTextForEntry(" ")) {
 						currentEntries.remove(hoveredEntry);
 						editingIndex = -1;
@@ -676,12 +694,27 @@ public class ClipboardScreen extends AbstractSimiScreen {
 	}
 
 	private DisplayCache rebuildDisplayCache() {
-		String s = getCurrentEntryText();
-		if (s.isEmpty())
+		String current = getCurrentEntryText();
+		boolean address = current.startsWith("#") && !current.substring(1)
+			.isBlank();
+		int offset = 0;
+
+		if (address) {
+			String stripped = current.substring(1)
+				.stripLeading();
+			offset = current.length() - stripped.length();
+			current = stripped;
+		}
+
+		if (current.isEmpty())
 			return DisplayCache.EMPTY;
 
+		String s = current;
 		int i = editContext.getCursorPos();
 		int j = editContext.getSelectionPos();
+		i = Mth.clamp(i - offset, 0, s.length());
+		j = Mth.clamp(j - offset, 0, s.length());
+
 		IntList intlist = new IntArrayList();
 		List<LineInfo> list = Lists.newArrayList();
 		MutableInt mutableint = new MutableInt();
@@ -832,7 +865,7 @@ public class ClipboardScreen extends AbstractSimiScreen {
 			contents = pContents;
 			x = pX;
 			y = pY;
-			asComponent = Components.literal(pContents)
+			asComponent = Component.literal(pContents)
 				.setStyle(pStyle);
 		}
 	}

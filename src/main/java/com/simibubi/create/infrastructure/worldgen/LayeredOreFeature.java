@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import com.simibubi.create.Create;
 import com.simibubi.create.infrastructure.worldgen.LayerPattern.Layer;
 
 import net.minecraft.core.BlockPos;

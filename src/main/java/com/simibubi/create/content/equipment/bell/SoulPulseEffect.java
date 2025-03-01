@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.Streams;
 import com.simibubi.create.content.equipment.bell.SoulParticle.ExpandingPerimeterData;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;

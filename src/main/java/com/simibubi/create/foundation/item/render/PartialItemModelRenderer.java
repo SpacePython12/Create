@@ -3,18 +3,20 @@ package com.simibubi.create.foundation.item.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.render.RenderTypes;
-import com.simibubi.create.foundation.utility.Iterate;
 
-import io.github.fabricators_of_create.porting_lib.util.ItemRendererHelper;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.util.ItemRendererHelper;
 
 public class PartialItemModelRenderer {
 
@@ -40,19 +42,19 @@ public class PartialItemModelRenderer {
 	}
 
 	public void render(BakedModel model, int light) {
-		render(model, RenderTypes.getItemPartialTranslucent(), light);
+		render(model, Sheets.translucentCullBlockSheet(), light);
 	}
 
 	public void renderSolid(BakedModel model, int light) {
-		render(model, RenderTypes.getItemPartialSolid(), light);
-	}
-
-	public void renderSolidGlowing(BakedModel model, int light) {
-		render(model, RenderTypes.getGlowingSolid(), light);
+		render(model, Sheets.solidBlockSheet(), light);
 	}
 
 	public void renderGlowing(BakedModel model, int light) {
-		render(model, RenderTypes.getGlowingTranslucent(), light);
+		render(model, RenderTypes.itemGlowingTranslucent(), light);
+	}
+
+	public void renderSolidGlowing(BakedModel model, int light) {
+		render(model, RenderTypes.itemGlowingSolid(), light);
 	}
 
 	public void render(BakedModel model, RenderType type, int light) {

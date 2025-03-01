@@ -21,12 +21,11 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.BlockFace;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Pair;
 
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.BlockFace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -35,6 +34,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 
 public class PumpBlockEntity extends KineticBlockEntity implements PipeAttachmentBlockEntity {
 
@@ -274,8 +275,7 @@ public class PumpBlockEntity extends KineticBlockEntity implements PipeAttachmen
 
 		// facing a pump
 		if (PumpBlock.isPump(connectedState) && connectedState.getValue(PumpBlock.FACING)
-				.getAxis() == face.getAxis() && blockEntity instanceof PumpBlockEntity) {
-			PumpBlockEntity pumpBE = (PumpBlockEntity) blockEntity;
+			.getAxis() == face.getAxis() && blockEntity instanceof PumpBlockEntity pumpBE) {
 			return pumpBE.isPullingOnSide(pumpBE.isFront(blockFace.getOppositeFace())) != pull;
 		}
 
@@ -335,7 +335,7 @@ public class PumpBlockEntity extends KineticBlockEntity implements PipeAttachmen
 
 	@Override
 	@Nullable
-	public Object getRenderAttachmentData() {
+	public Object getRenderData() {
 		return PipeAttachmentBlockEntity.getAttachments(this);
 	}
 

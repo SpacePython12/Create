@@ -9,16 +9,9 @@ import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -27,8 +20,16 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class FluidThresholdCondition extends CargoThresholdCondition {
 
@@ -36,7 +37,7 @@ public class FluidThresholdCondition extends CargoThresholdCondition {
 
 	@Override
 	protected Component getUnit() {
-		return Components.literal("b");
+		return Component.literal("b");
 	}
 
 	@Override
@@ -92,13 +93,13 @@ public class FluidThresholdCondition extends CargoThresholdCondition {
 	@Override
 	public List<Component> getTitleAs(String type) {
 		return ImmutableList.of(
-			Lang.translateDirect("schedule.condition.threshold.train_holds",
-				Lang.translateDirect("schedule.condition.threshold." + Lang.asId(getOperator().name()))),
-			Lang.translateDirect("schedule.condition.threshold.x_units_of_item", getThreshold(),
-				Lang.translateDirect("schedule.condition.threshold.buckets"),
-				compareStack.isEmpty() ? Lang.translateDirect("schedule.condition.threshold.anything")
+			CreateLang.translateDirect("schedule.condition.threshold.train_holds",
+				CreateLang.translateDirect("schedule.condition.threshold." + Lang.asId(getOperator().name()))),
+			CreateLang.translateDirect("schedule.condition.threshold.x_units_of_item", getThreshold(),
+				CreateLang.translateDirect("schedule.condition.threshold.buckets"),
+				compareStack.isEmpty() ? CreateLang.translateDirect("schedule.condition.threshold.anything")
 					: compareStack.isFilterItem()
-						? Lang.translateDirect("schedule.condition.threshold.matching_content")
+						? CreateLang.translateDirect("schedule.condition.threshold.matching_content")
 						: loadFluid().getDisplayName())
 				.withStyle(ChatFormatting.DARK_AQUA));
 	}
@@ -123,7 +124,7 @@ public class FluidThresholdCondition extends CargoThresholdCondition {
 	public void initConfigurationWidgets(ModularGuiLineBuilder builder) {
 		super.initConfigurationWidgets(builder);
 		builder.addSelectionScrollInput(71, 50, (i, l) -> {
-			i.forOptions(ImmutableList.of(Lang.translateDirect("schedule.condition.threshold.buckets")))
+			i.forOptions(ImmutableList.of(CreateLang.translateDirect("schedule.condition.threshold.buckets")))
 				.titled(null);
 		}, "Measure");
 	}
@@ -132,10 +133,10 @@ public class FluidThresholdCondition extends CargoThresholdCondition {
 	public MutableComponent getWaitingStatus(Level level, Train train, CompoundTag tag) {
 		long lastDisplaySnapshot = getLastDisplaySnapshot(tag);
 		if (lastDisplaySnapshot == -1)
-			return Components.empty();
+            return Component.empty();
 		int offset = getOperator() == Ops.LESS ? -1 : getOperator() == Ops.GREATER ? 1 : 0;
-		return Lang.translateDirect("schedule.condition.threshold.status", lastDisplaySnapshot,
-			Math.max(0, getThreshold() + offset), Lang.translateDirect("schedule.condition.threshold.buckets"));
+		return CreateLang.translateDirect("schedule.condition.threshold.status", lastDisplaySnapshot,
+			Math.max(0, getThreshold() + offset), CreateLang.translateDirect("schedule.condition.threshold.buckets"));
 	}
 
 }

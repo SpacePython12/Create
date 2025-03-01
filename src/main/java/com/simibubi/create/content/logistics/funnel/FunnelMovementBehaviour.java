@@ -2,13 +2,15 @@ package com.simibubi.create.content.logistics.funnel;
 
 import java.util.List;
 
-import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.logistics.filter.FilterItemStack;
 import com.simibubi.create.foundation.item.ItemHelper;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -18,6 +20,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class FunnelMovementBehaviour implements MovementBehaviour {
 
@@ -77,7 +83,7 @@ public class FunnelMovementBehaviour implements MovementBehaviour {
 		boolean upTo = context.blockEntityData.getBoolean("UpTo");
 		filterAmount = hasFilter ? filterAmount : 1;
 
-		ItemStack extract = ItemHelper.extract(context.contraption.getSharedInventory(),
+		ItemStack extract = ItemHelper.extract(context.contraption.getStorage().getAllItems(),
 			s -> filter.test(world, s),
 			upTo ? ItemHelper.ExtractionCountMode.UPTO : ItemHelper.ExtractionCountMode.EXACTLY, filterAmount, false);
 
@@ -106,7 +112,7 @@ public class FunnelMovementBehaviour implements MovementBehaviour {
 				ItemStack toInsert = item.getItem();
 				if (toInsert.isEmpty() || (!filter.test(context.world, toInsert)))
 					continue;
-				long inserted = TransferUtil.insertItem(context.contraption.getSharedInventory(), toInsert);
+				long inserted = TransferUtil.insertItem(context.contraption.getStorage().getAllItems(), toInsert);
 				if (inserted == 0)
 					continue;
 				if (inserted == toInsert.getCount()) {
@@ -120,11 +126,6 @@ public class FunnelMovementBehaviour implements MovementBehaviour {
 			}
 			t.commit();
 		}
-	}
-
-	@Override
-	public boolean renderAsNormalBlockEntity() {
-		return true;
 	}
 
 }

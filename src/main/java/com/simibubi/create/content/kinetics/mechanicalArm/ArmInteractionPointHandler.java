@@ -8,16 +8,15 @@ import java.util.List;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPackets;
-import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint.Mode;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.outliner.Outliner;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -61,8 +60,8 @@ public class ArmInteractionPointHandler {
 		selected.cycleMode();
 		if (player != null) {
 			Mode mode = selected.getMode();
-			Lang.builder()
-				.translate(mode.getTranslationKey(), Lang.blockName(state)
+			CreateLang.builder()
+				.translate(mode.getTranslationKey(), CreateLang.blockName(state)
 					.style(ChatFormatting.WHITE))
 				.color(mode.getColor())
 				.sendStatus(player);
@@ -94,7 +93,7 @@ public class ArmInteractionPointHandler {
 			return;
 
 		int removed = 0;
-		for (Iterator<ArmInteractionPoint> iterator = currentSelection.iterator(); iterator.hasNext();) {
+		for (Iterator<ArmInteractionPoint> iterator = currentSelection.iterator(); iterator.hasNext(); ) {
 			ArmInteractionPoint point = iterator.next();
 			if (point.getPos()
 				.closerThan(pos, ArmBlockEntity.getRange()))
@@ -105,7 +104,7 @@ public class ArmInteractionPointHandler {
 
 		LocalPlayer player = Minecraft.getInstance().player;
 		if (removed > 0) {
-			Lang.builder()
+			CreateLang.builder()
 				.translate("mechanical_arm.points_outside_range", removed)
 				.style(ChatFormatting.RED)
 				.sendStatus(player);
@@ -119,7 +118,7 @@ public class ArmInteractionPointHandler {
 					inputs++;
 			}
 			if (inputs + outputs > 0)
-				Lang.builder()
+				CreateLang.builder()
 					.translate("mechanical_arm.summary", inputs, outputs)
 					.style(ChatFormatting.WHITE)
 					.sendStatus(player);
@@ -157,11 +156,10 @@ public class ArmInteractionPointHandler {
 		}
 
 		HitResult objectMouseOver = Minecraft.getInstance().hitResult;
-		if (!(objectMouseOver instanceof BlockHitResult)) {
+		if (!(objectMouseOver instanceof BlockHitResult result)) {
 			return;
 		}
 
-		BlockHitResult result = (BlockHitResult) objectMouseOver;
 		BlockPos pos = result.getBlockPos();
 
 		BlockEntity be = Minecraft.getInstance().level.getBlockEntity(pos);
@@ -185,7 +183,7 @@ public class ArmInteractionPointHandler {
 	}
 
 	private static void drawOutlines(Collection<ArmInteractionPoint> selection) {
-		for (Iterator<ArmInteractionPoint> iterator = selection.iterator(); iterator.hasNext();) {
+		for (Iterator<ArmInteractionPoint> iterator = selection.iterator(); iterator.hasNext(); ) {
 			ArmInteractionPoint point = iterator.next();
 
 			if (!point.isValid()) {
@@ -202,8 +200,8 @@ public class ArmInteractionPointHandler {
 
 			int color = point.getMode()
 				.getColor();
-			CreateClient.OUTLINER.showAABB(point, shape.bounds()
-				.move(pos))
+			Outliner.getInstance().showAABB(point, shape.bounds()
+					.move(pos))
 				.colored(color)
 				.lineWidth(1 / 16f);
 		}

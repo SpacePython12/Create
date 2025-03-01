@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllRecipeTypes;
@@ -25,26 +24,19 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -65,6 +57,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class DeployerBlockEntity extends KineticBlockEntity implements SidedStorageBlockEntity {
 
@@ -194,12 +196,6 @@ public class DeployerBlockEntity extends KineticBlockEntity implements SidedStor
 		}
 		if (level.isClientSide)
 			return;
-		if (player == null)
-			return;
-
-		// https://github.com/Fabricators-of-Create/Create/issues/1139 | Occurs on forge as well
-		// Somehow when paired with Jade player becomes null because owner is null (which shouldn't ever happen)
-		// This allows the block to actually break and drop but not crash the game
 		if (player == null)
 			return;
 
@@ -368,8 +364,12 @@ public class DeployerBlockEntity extends KineticBlockEntity implements SidedStor
 		DeployerHandler.activate(player, center, clickedPos, movementVector, mode);
 		award(AllAdvancements.DEPLOYER);
 
-		if (player != null)
+		if (player != null) {
+			int count = heldItem.getCount();
 			heldItem = player.getMainHandItem();
+			if (count != heldItem.getCount())
+				setChanged();
+		}
 	}
 
 	protected Vec3 getMovementVector() {
@@ -514,22 +514,22 @@ public class DeployerBlockEntity extends KineticBlockEntity implements SidedStor
 
 	@Override
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-		Lang.translate("tooltip.deployer.header")
+		CreateLang.translate("tooltip.deployer.header")
 			.forGoggles(tooltip);
 
-		Lang.translate("tooltip.deployer." + (mode == Mode.USE ? "using" : "punching"))
+		CreateLang.translate("tooltip.deployer." + (mode == Mode.USE ? "using" : "punching"))
 			.style(ChatFormatting.YELLOW)
 			.forGoggles(tooltip);
 
 		if (!heldItem.isEmpty())
-			Lang.translate("tooltip.deployer.contains", Components.translatable(heldItem.getDescriptionId())
-				.getString(), heldItem.getCount())
+			CreateLang.translate("tooltip.deployer.contains", Component.translatable(heldItem.getDescriptionId())
+					.getString(), heldItem.getCount())
 				.style(ChatFormatting.GREEN)
 				.forGoggles(tooltip);
 
 		float stressAtBase = calculateStressApplied();
 		if (StressImpact.isEnabled() && !Mth.equal(stressAtBase, 0)) {
-			tooltip.add(Components.immutableEmpty());
+			tooltip.add(CommonComponents.EMPTY);
 			addStressImpactStats(tooltip, stressAtBase);
 		}
 
@@ -574,7 +574,10 @@ public class DeployerBlockEntity extends KineticBlockEntity implements SidedStor
 		ItemStack heldItemMainhand = player.getMainHandItem();
 		if (heldItemMainhand.getItem() instanceof SandPaperItem) {
 			sandpaperInv.setItem(0, stack);
-			return checkRecipe(AllRecipeTypes.SANDPAPER_POLISHING, sandpaperInv, level).orElse(null);
+			Optional<? extends Recipe<? extends Container>> polishingRecipe = checkRecipe(AllRecipeTypes.SANDPAPER_POLISHING, sandpaperInv, level);
+			if (polishingRecipe.isPresent()) {
+				return polishingRecipe.get();
+			}
 		}
 
 		recipeInv.setItem(0, stack);

@@ -11,14 +11,12 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
 import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
@@ -64,9 +62,9 @@ public class CouplingHandler {
 		Entity entity1 = world.getEntity(cartId1);
 		Entity entity2 = world.getEntity(cartId2);
 
-		if (!(entity1 instanceof AbstractMinecart))
+		if (!(entity1 instanceof AbstractMinecart cart1))
 			return false;
-		if (!(entity2 instanceof AbstractMinecart))
+		if (!(entity2 instanceof AbstractMinecart cart2))
 			return false;
 
 		String tooMany = "two_couplings_max";
@@ -89,8 +87,6 @@ public class CouplingHandler {
 			return false;
 		}
 
-		AbstractMinecart cart1 = (AbstractMinecart) entity1;
-		AbstractMinecart cart2 = (AbstractMinecart) entity2;
 		UUID mainID = cart1.getUUID();
 		UUID connectedID = cart2.getUUID();
 		MinecartController mainController = CapabilityMinecartController.getIfPresent(world, mainID);
@@ -171,7 +167,7 @@ public class CouplingHandler {
 	public static void status(Player player, String key) {
 		if (player == null)
 			return;
-		player.displayClientMessage(Lang.translateDirect("minecart_coupling." + key), true);
+		player.displayClientMessage(CreateLang.translateDirect("minecart_coupling." + key), true);
 	}
 
 }

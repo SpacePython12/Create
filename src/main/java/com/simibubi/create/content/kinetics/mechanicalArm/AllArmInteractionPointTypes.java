@@ -1,12 +1,12 @@
 package com.simibubi.create.content.kinetics.mechanicalArm;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.Create;
+import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.BeltBlock;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
@@ -30,15 +30,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipulationBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.utility.VecHelper;
 
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.Item;
@@ -58,40 +55,42 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+
 public class AllArmInteractionPointTypes {
+	static {
+		register("basin", new BasinType());
+		register("belt", new BeltType());
+		register("blaze_burner", new BlazeBurnerType());
+		register("chute", new ChuteType());
+		register("crafter", new CrafterType());
+		register("crushing_wheels", new CrushingWheelsType());
+		register("deployer", new DeployerType());
+		register("depot", new DepotType());
+		register("funnel", new FunnelType());
+		register("millstone", new MillstoneType());
+		register("packager", new PackagerType());
+		register("saw", new SawType());
 
-	public static final BasinType BASIN = register("basin", BasinType::new);
-	public static final BeltType BELT = register("belt", BeltType::new);
-	public static final BlazeBurnerType BLAZE_BURNER = register("blaze_burner", BlazeBurnerType::new);
-	public static final ChuteType CHUTE = register("chute", ChuteType::new);
-	public static final CrafterType CRAFTER = register("crafter", CrafterType::new);
-	public static final CrushingWheelsType CRUSHING_WHEELS = register("crushing_wheels", CrushingWheelsType::new);
-	public static final DeployerType DEPLOYER = register("deployer", DeployerType::new);
-	public static final DepotType DEPOT = register("depot", DepotType::new);
-	public static final FunnelType FUNNEL = register("funnel", FunnelType::new);
-	public static final MillstoneType MILLSTONE = register("millstone", MillstoneType::new);
-	public static final SawType SAW = register("saw", SawType::new);
-
-	public static final CampfireType CAMPFIRE = register("campfire", CampfireType::new);
-	public static final ComposterType COMPOSTER = register("composter", ComposterType::new);
-	public static final JukeboxType JUKEBOX = register("jukebox", JukeboxType::new);
-	public static final RespawnAnchorType RESPAWN_ANCHOR = register("respawn_anchor", RespawnAnchorType::new);
-
-	private static <T extends ArmInteractionPointType> T register(String id, Function<ResourceLocation, T> factory) {
-		T type = factory.apply(Create.asResource(id));
-		ArmInteractionPointType.register(type);
-		return type;
+		register("campfire", new CampfireType());
+		register("composter", new ComposterType());
+		register("jukebox", new JukeboxType());
+		register("respawn_anchor", new RespawnAnchorType());
 	}
 
-	public static void register() {}
+	private static <T extends ArmInteractionPointType> void register(String name, T type) {
+		Registry.register(CreateBuiltInRegistries.ARM_INTERACTION_POINT_TYPE, Create.asResource(name), type);
+	}
+
+	public static void init() {
+	}
 
 	//
 
 	public static class BasinType extends ArmInteractionPointType {
-		public BasinType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return BasinBlock.isBasin(level, pos);
@@ -104,10 +103,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class BeltType extends ArmInteractionPointType {
-		public BeltType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AllBlocks.BELT.has(state) && !(level.getBlockState(pos.above())
@@ -121,10 +116,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class BlazeBurnerType extends ArmInteractionPointType {
-		public BlazeBurnerType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AllBlocks.BLAZE_BURNER.has(state);
@@ -137,10 +128,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class ChuteType extends ArmInteractionPointType {
-		public ChuteType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AbstractChuteBlock.isChute(state);
@@ -153,10 +140,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class CrafterType extends ArmInteractionPointType {
-		public CrafterType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AllBlocks.MECHANICAL_CRAFTER.has(state);
@@ -169,10 +152,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class CrushingWheelsType extends ArmInteractionPointType {
-		public CrushingWheelsType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AllBlocks.CRUSHING_WHEEL_CONTROLLER.has(state);
@@ -185,10 +164,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class DeployerType extends ArmInteractionPointType {
-		public DeployerType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AllBlocks.DEPLOYER.has(state);
@@ -201,10 +176,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class DepotType extends ArmInteractionPointType {
-		public DepotType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AllBlocks.DEPOT.has(state) || AllBlocks.WEIGHTED_EJECTOR.has(state)
@@ -218,16 +189,12 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class FunnelType extends ArmInteractionPointType {
-		public FunnelType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return state.getBlock() instanceof AbstractFunnelBlock
 				&& !(state.hasProperty(FunnelBlock.EXTRACTING) && state.getValue(FunnelBlock.EXTRACTING))
 				&& !(state.hasProperty(BeltFunnelBlock.SHAPE)
-					&& state.getValue(BeltFunnelBlock.SHAPE) == Shape.PUSHING);
+				&& state.getValue(BeltFunnelBlock.SHAPE) == Shape.PUSHING);
 		}
 
 		@Override
@@ -237,10 +204,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class MillstoneType extends ArmInteractionPointType {
-		public MillstoneType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AllBlocks.MILLSTONE.has(state);
@@ -252,11 +215,19 @@ public class AllArmInteractionPointTypes {
 		}
 	}
 
-	public static class SawType extends ArmInteractionPointType {
-		public SawType(ResourceLocation id) {
-			super(id);
+	public static class PackagerType extends ArmInteractionPointType {
+		@Override
+		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
+			return AllBlocks.PACKAGER.has(state) || AllBlocks.REPACKAGER.has(state);
 		}
 
+		@Override
+		public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
+			return new ArmInteractionPoint(this, level, pos, state);
+		}
+	}
+
+	public static class SawType extends ArmInteractionPointType {
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return AllBlocks.MECHANICAL_SAW.has(state) && state.getValue(SawBlock.FACING) == Direction.UP
@@ -270,10 +241,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class CampfireType extends ArmInteractionPointType {
-		public CampfireType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return state.getBlock() instanceof CampfireBlock;
@@ -286,10 +253,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class ComposterType extends ArmInteractionPointType {
-		public ComposterType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return state.is(Blocks.COMPOSTER);
@@ -302,10 +265,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class JukeboxType extends ArmInteractionPointType {
-		public JukeboxType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return state.is(Blocks.JUKEBOX);
@@ -318,10 +277,6 @@ public class AllArmInteractionPointTypes {
 	}
 
 	public static class RespawnAnchorType extends ArmInteractionPointType {
-		public RespawnAnchorType(ResourceLocation id) {
-			super(id);
-		}
-
 		@Override
 		public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
 			return state.is(Blocks.RESPAWN_ANCHOR);
@@ -337,12 +292,13 @@ public class AllArmInteractionPointTypes {
 
 	public static class DepositOnlyArmInteractionPoint extends ArmInteractionPoint {
 		public DepositOnlyArmInteractionPoint(ArmInteractionPointType type, Level level, BlockPos pos,
-			BlockState state) {
+											  BlockState state) {
 			super(type, level, pos, state);
 		}
 
 		@Override
-		public void cycleMode() {}
+		public void cycleMode() {
+		}
 
 		@Override
 		public ItemStack extract(int amount, TransactionContext ctx) {
@@ -438,9 +394,8 @@ public class AllArmInteractionPointTypes {
 		@Override
 		public ItemStack extract(int amount, TransactionContext ctx) {
 			BlockEntity be = level.getBlockEntity(pos);
-			if (!(be instanceof MechanicalCrafterBlockEntity))
+			if (!(be instanceof MechanicalCrafterBlockEntity crafter))
 				return ItemStack.EMPTY;
-			MechanicalCrafterBlockEntity crafter = (MechanicalCrafterBlockEntity) be;
 			SmartInventory inventory = crafter.getInventory();
 			inventory.allowExtraction();
 			ItemStack extract = super.extract(amount, ctx);
@@ -532,8 +487,7 @@ public class AllArmInteractionPointTypes {
 			ItemStack insert = inserter.insert(stack);
 			if (insert.getCount() != stack.getCount()) {
 				BlockEntity blockEntity = level.getBlockEntity(pos);
-				if (blockEntity instanceof FunnelBlockEntity) {
-					FunnelBlockEntity funnelBlockEntity = (FunnelBlockEntity) blockEntity;
+				if (blockEntity instanceof FunnelBlockEntity funnelBlockEntity) {
 					TransactionCallback.onSuccess(ctx, () -> {
 						funnelBlockEntity.onTransfer(stack);
 						if (funnelBlockEntity.hasFlap())
@@ -631,24 +585,20 @@ public class AllArmInteractionPointTypes {
 
 		@Override
 		public ItemStack insert(ItemStack stack, TransactionContext ctx) {
-			Item item = stack.getItem();
-			if (!(item instanceof RecordItem))
+			if (!(stack.getItem() instanceof RecordItem))
 				return stack;
-			if (cachedState.getOptionalValue(JukeboxBlock.HAS_RECORD)
-				.orElse(true))
+			if (cachedState.getOptionalValue(JukeboxBlock.HAS_RECORD).orElse(true))
 				return stack;
-			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if (!(blockEntity instanceof JukeboxBlockEntity jukeboxBE))
+			if (!(level.getBlockEntity(pos) instanceof JukeboxBlockEntity jukeboxBE))
 				return stack;
-			if (!jukeboxBE.getFirstItem()
-				.isEmpty())
+			if (!jukeboxBE.getFirstItem().isEmpty())
 				return stack;
 			ItemStack remainder = stack.copy();
 			ItemStack toInsert = remainder.split(1);
 			level.updateSnapshots(ctx);
 			level.setBlock(pos, cachedState.setValue(JukeboxBlock.HAS_RECORD, true), 2);
 			TransactionCallback.onSuccess(ctx, () -> {
-				jukeboxBE.setFirstItem(toInsert);
+				jukeboxBE.setItem(0, toInsert);
 				level.levelEvent(null, 1010, pos, Item.getId(item));
 			});
 			return remainder;
@@ -656,11 +606,9 @@ public class AllArmInteractionPointTypes {
 
 		@Override
 		public ItemStack extract(int amount, TransactionContext ctx) {
-			if (!cachedState.getOptionalValue(JukeboxBlock.HAS_RECORD)
-				.orElse(false))
+			if (!cachedState.getOptionalValue(JukeboxBlock.HAS_RECORD).orElse(false))
 				return ItemStack.EMPTY;
-			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if (!(blockEntity instanceof JukeboxBlockEntity jukeboxBE))
+			if (!(level.getBlockEntity(pos) instanceof JukeboxBlockEntity jukeboxBE))
 				return ItemStack.EMPTY;
 			ItemStack record = jukeboxBE.getFirstItem();
 			if (record.isEmpty())
@@ -708,7 +656,7 @@ public class AllArmInteractionPointTypes {
 		@Override
 		protected Vec3 getInteractionPositionVector() {
 			return Vec3.atLowerCornerOf(pos)
-					.add(.5f, 1, .5f);
+				.add(.5f, 1, .5f);
 		}
 	}
 }

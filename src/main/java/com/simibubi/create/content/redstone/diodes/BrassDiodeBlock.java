@@ -4,7 +4,6 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.foundation.block.IBE;
-import io.github.fabricators_of_create.porting_lib.block.ConnectableRedstoneBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,6 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+
+import io.github.fabricators_of_create.porting_lib.block.ConnectableRedstoneBlock;
 
 public class BrassDiodeBlock extends AbstractDiodeBlock implements IBE<BrassDiodeBlockEntity>, ConnectableRedstoneBlock {
 
@@ -92,8 +93,9 @@ public class BrassDiodeBlock extends AbstractDiodeBlock implements IBE<BrassDiod
 
 	@Override
 	public BlockEntityType<? extends BrassDiodeBlockEntity> getBlockEntityType() {
-		return AllBlocks.PULSE_EXTENDER.is(this) ? AllBlockEntityTypes.PULSE_EXTENDER.get()
-			: AllBlockEntityTypes.PULSE_REPEATER.get();
+		return AllBlocks.PULSE_TIMER.is(this) ? AllBlockEntityTypes.PULSE_TIMER.get()
+			: AllBlocks.PULSE_EXTENDER.is(this) ? AllBlockEntityTypes.PULSE_EXTENDER.get()
+				: AllBlockEntityTypes.PULSE_REPEATER.get();
 	}
 
 }

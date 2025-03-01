@@ -14,6 +14,10 @@
     "create:mangrove_window",
     "create:crimson_window",
     "create:warped_window",
-    "create:ornate_iron_window"
+    "create:cherry_window",
+    "create:bamboo_window",
+    "create:ornate_iron_window",
+    "create:industrial_iron_window",
+    "create:weathered_iron_window"
   ]
 }

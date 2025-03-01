@@ -6,25 +6,23 @@ import static net.minecraft.ChatFormatting.GRAY;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.api.stress.BlockStressValues;
+import com.simibubi.create.api.stress.BlockStressValues.GeneratedRpm;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
-import com.simibubi.create.content.kinetics.BlockStressValues;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.IRotate.StressImpact;
 import com.simibubi.create.content.kinetics.crank.ValveHandleBlock;
 import com.simibubi.create.content.kinetics.steamEngine.SteamEngineBlock;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.LangBuilder;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CKinetics;
 
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.lang.LangBuilder;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -55,7 +53,7 @@ public class KineticStats implements TooltipModifier {
 	public void modify(ItemStack stack, Player player, TooltipFlag flags, List<Component> tooltip) {
 		List<Component> kineticStats = getKineticStats(block, player);
 		if (!kineticStats.isEmpty()) {
-			tooltip.add(Components.immutableEmpty());
+			tooltip.add(CommonComponents.EMPTY);
 			tooltip.addAll(kineticStats);
 		}
 	}
@@ -64,8 +62,8 @@ public class KineticStats implements TooltipModifier {
 		List<Component> list = new ArrayList<>();
 
 		CKinetics config = AllConfigs.server().kinetics;
-		LangBuilder rpmUnit = Lang.translate("generic.unit.rpm");
-		LangBuilder suUnit = Lang.translate("generic.unit.stress");
+		LangBuilder rpmUnit = CreateLang.translate("generic.unit.rpm");
+		LangBuilder suUnit = CreateLang.translate("generic.unit.stress");
 
 		boolean hasGoggles = GogglesItem.isWearingGoggles(player);
 
@@ -81,22 +79,22 @@ public class KineticStats implements TooltipModifier {
 
 		boolean hasStressImpact =
 			StressImpact.isEnabled() && showStressImpact && BlockStressValues.getImpact(block) > 0;
-		boolean hasStressCapacity = StressImpact.isEnabled() && BlockStressValues.hasCapacity(block);
+		boolean hasStressCapacity = StressImpact.isEnabled() && BlockStressValues.getCapacity(block) > 0;
 
 		if (hasStressImpact) {
-			Lang.translate("tooltip.stressImpact")
+			CreateLang.translate("tooltip.stressImpact")
 				.style(GRAY)
 				.addTo(list);
 
 			double impact = BlockStressValues.getImpact(block);
 			StressImpact impactId = impact >= config.highStressImpact.get() ? StressImpact.HIGH
 				: (impact >= config.mediumStressImpact.get() ? StressImpact.MEDIUM : StressImpact.LOW);
-			LangBuilder builder = Lang.builder()
-				.add(Lang.text(TooltipHelper.makeProgressBar(3, impactId.ordinal() + 1))
+			LangBuilder builder = CreateLang.builder()
+				.add(CreateLang.text(TooltipHelper.makeProgressBar(3, impactId.ordinal() + 1))
 					.style(impactId.getAbsoluteColor()));
 
 			if (hasGoggles) {
-				builder.add(Lang.number(impact))
+				builder.add(CreateLang.number(impact))
 					.text("x ")
 					.add(rpmUnit)
 					.addTo(list);
@@ -106,32 +104,31 @@ public class KineticStats implements TooltipModifier {
 		}
 
 		if (hasStressCapacity) {
-			Lang.translate("tooltip.capacityProvided")
+			CreateLang.translate("tooltip.capacityProvided")
 				.style(GRAY)
 				.addTo(list);
 
 			double capacity = BlockStressValues.getCapacity(block);
-			Couple<Integer> generatedRPM = BlockStressValues.getGeneratedRPM(block);
+			GeneratedRpm generatedRPM = BlockStressValues.RPM.get(block);
 
 			StressImpact impactId = capacity >= config.highCapacity.get() ? StressImpact.HIGH
 				: (capacity >= config.mediumCapacity.get() ? StressImpact.MEDIUM : StressImpact.LOW);
 			StressImpact opposite = StressImpact.values()[StressImpact.values().length - 2 - impactId.ordinal()];
-			LangBuilder builder = Lang.builder()
-				.add(Lang.text(TooltipHelper.makeProgressBar(3, impactId.ordinal() + 1))
+			LangBuilder builder = CreateLang.builder()
+				.add(CreateLang.text(TooltipHelper.makeProgressBar(3, impactId.ordinal() + 1))
 					.style(opposite.getAbsoluteColor()));
 
 			if (hasGoggles) {
-				builder.add(Lang.number(capacity))
+				builder.add(CreateLang.number(capacity))
 					.text("x ")
 					.add(rpmUnit)
 					.addTo(list);
 
 				if (generatedRPM != null) {
-					LangBuilder amount = Lang.number(capacity * generatedRPM.getSecond())
+					LangBuilder amount = CreateLang.number(capacity * generatedRPM.value())
 						.add(suUnit);
-					Lang.text(" -> ")
-						.add(!generatedRPM.getFirst()
-							.equals(generatedRPM.getSecond()) ? Lang.translate("tooltip.up_to", amount) : amount)
+					CreateLang.text(" -> ")
+						.add(generatedRPM.mayGenerateLess() ? CreateLang.translate("tooltip.up_to", amount) : amount)
 						.style(DARK_GRAY)
 						.addTo(list);
 				}

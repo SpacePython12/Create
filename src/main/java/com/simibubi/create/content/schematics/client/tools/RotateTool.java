@@ -1,10 +1,10 @@
 package com.simibubi.create.content.schematics.client.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.outliner.LineOutline;
-import com.simibubi.create.foundation.render.SuperRenderTypeBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.outliner.LineOutline;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 

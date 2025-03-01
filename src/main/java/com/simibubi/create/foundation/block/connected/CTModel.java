@@ -1,29 +1,27 @@
 package com.simibubi.create.foundation.block.connected;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Supplier;
 
 import com.simibubi.create.content.decoration.copycat.CopycatBlock;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour.CTContext;
-import com.simibubi.create.foundation.utility.Iterate;
 
-import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
-import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.util.RandomSource;
+
+import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
+import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 
 public class CTModel extends ForwardingBakedModel {
 
@@ -67,7 +65,7 @@ public class CTModel extends ForwardingBakedModel {
 			int index = data.get(quad.lightFace());
 			if (index != -1) {
 				TextureAtlasSprite sprite = spriteFinder.find(quad, 0);
-				CTSpriteShiftEntry spriteShift = behaviour.getShift(state, quad.lightFace(), sprite);
+				CTSpriteShiftEntry spriteShift = behaviour.getShift(state, randomSupplier.get(), quad.lightFace(), sprite);
 				if (spriteShift != null) {
 					if (sprite == spriteShift.getOriginal()) {
 						for (int vertex = 0; vertex < 4; vertex++) {

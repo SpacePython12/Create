@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.lang.FontHelper.Palette;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 public interface IDisplayAssemblyExceptions {
@@ -19,15 +19,15 @@ public interface IDisplayAssemblyExceptions {
 			return false;
 
 		if (!tooltip.isEmpty())
-			tooltip.add(Components.immutableEmpty());
+			tooltip.add(CommonComponents.EMPTY);
 
-		Lang.translate("gui.assembly.exception").style(ChatFormatting.GOLD)
+		CreateLang.translate("gui.assembly.exception").style(ChatFormatting.GOLD)
 			.forGoggles(tooltip);
 
 		String text = e.component.getString();
 		Arrays.stream(text.split("\n"))
 			.forEach(l -> TooltipHelper.cutStringTextComponent(l, Palette.GRAY_AND_WHITE)
-				.forEach(c -> Lang.builder().add(c).forGoggles(tooltip)));
+				.forEach(c -> CreateLang.builder().add(c).forGoggles(tooltip)));
 
 		return true;
 	}

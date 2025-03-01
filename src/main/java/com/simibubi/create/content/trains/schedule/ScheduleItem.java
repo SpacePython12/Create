@@ -10,11 +10,14 @@ import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.schedule.destination.DestinationInstruction;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.recipe.ItemCopyingRecipe.SupportsItemCopying;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
+import net.createmod.catnip.data.Couple;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -34,10 +37,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-public class ScheduleItem extends Item implements MenuProvider {
+import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
+
+public class ScheduleItem extends Item implements MenuProvider, SupportsItemCopying {
 
 	public ScheduleItem(Properties pProperties) {
 		super(pProperties);
@@ -65,7 +71,7 @@ public class ScheduleItem extends Item implements MenuProvider {
 	}
 
 	public InteractionResult handScheduleTo(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget,
-		InteractionHand pUsedHand) {
+											InteractionHand pUsedHand) {
 		InteractionResult pass = InteractionResult.PASS;
 
 		Schedule schedule = getSchedule(pStack);
@@ -74,12 +80,11 @@ public class ScheduleItem extends Item implements MenuProvider {
 		if (pInteractionTarget == null)
 			return pass;
 		Entity rootVehicle = pInteractionTarget.getRootVehicle();
-		if (!(rootVehicle instanceof CarriageContraptionEntity))
+		if (!(rootVehicle instanceof CarriageContraptionEntity entity))
 			return pass;
 		if (pPlayer.level().isClientSide)
 			return InteractionResult.SUCCESS;
 
-		CarriageContraptionEntity entity = (CarriageContraptionEntity) rootVehicle;
 		Contraption contraption = entity.getContraption();
 		if (contraption instanceof CarriageContraption cc) {
 
@@ -95,27 +100,27 @@ public class ScheduleItem extends Item implements MenuProvider {
 				.get(seatIndex);
 			Couple<Boolean> directions = cc.conductorSeats.get(seatPos);
 			if (directions == null) {
-				pPlayer.displayClientMessage(Lang.translateDirect("schedule.non_controlling_seat"), true);
+				pPlayer.displayClientMessage(CreateLang.translateDirect("schedule.non_controlling_seat"), true);
 				AllSoundEvents.DENY.playOnServer(pPlayer.level(), pPlayer.blockPosition(), 1, 1);
 				return InteractionResult.SUCCESS;
 			}
 
 			if (train.runtime.getSchedule() != null) {
 				AllSoundEvents.DENY.playOnServer(pPlayer.level(), pPlayer.blockPosition(), 1, 1);
-				pPlayer.displayClientMessage(Lang.translateDirect("schedule.remove_with_empty_hand"), true);
+				pPlayer.displayClientMessage(CreateLang.translateDirect("schedule.remove_with_empty_hand"), true);
 				return InteractionResult.SUCCESS;
 			}
 
 			if (schedule.entries.isEmpty()) {
 				AllSoundEvents.DENY.playOnServer(pPlayer.level(), pPlayer.blockPosition(), 1, 1);
-				pPlayer.displayClientMessage(Lang.translateDirect("schedule.no_stops"), true);
+				pPlayer.displayClientMessage(CreateLang.translateDirect("schedule.no_stops"), true);
 				return InteractionResult.SUCCESS;
 			}
 
 			train.runtime.setSchedule(schedule, false);
 			AllAdvancements.CONDUCTOR.awardTo(pPlayer);
 			AllSoundEvents.CONFIRM.playOnServer(pPlayer.level(), pPlayer.blockPosition(), 1, 1);
-			pPlayer.displayClientMessage(Lang.translateDirect("schedule.applied_to_train")
+			pPlayer.displayClientMessage(CreateLang.translateDirect("schedule.applied_to_train")
 				.withStyle(ChatFormatting.GREEN), true);
 			pStack.shrink(1);
 			pPlayer.setItemInHand(pUsedHand, pStack.isEmpty() ? ItemStack.EMPTY : pStack);
@@ -131,8 +136,8 @@ public class ScheduleItem extends Item implements MenuProvider {
 		if (schedule == null || schedule.entries.isEmpty())
 			return;
 
-		MutableComponent caret = Components.literal("> ").withStyle(ChatFormatting.GRAY);
-		MutableComponent arrow = Components.literal("-> ").withStyle(ChatFormatting.GRAY);
+		MutableComponent caret = Component.literal("> ").withStyle(ChatFormatting.GRAY);
+		MutableComponent arrow = Component.literal("-> ").withStyle(ChatFormatting.GRAY);
 
 		List<ScheduleEntry> entries = schedule.entries;
 		for (int i = 0; i < entries.size(); i++) {
@@ -143,7 +148,7 @@ public class ScheduleItem extends Item implements MenuProvider {
 			ChatFormatting format = current ? ChatFormatting.YELLOW : ChatFormatting.GOLD;
 			MutableComponent prefix = current ? arrow : caret;
 			tooltip.add(prefix.copy()
-				.append(Components.literal(destination.getFilter()).withStyle(format)));
+				.append(Component.literal(destination.getFilter()).withStyle(format)));
 		}
 	}
 

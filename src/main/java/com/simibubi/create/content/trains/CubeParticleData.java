@@ -11,24 +11,28 @@ import com.simibubi.create.foundation.particle.ICustomParticleData;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 public class CubeParticleData implements ParticleOptions, ICustomParticleData<CubeParticleData> {
 
-	public static final Codec<CubeParticleData> CODEC = RecordCodecBuilder.create(i -> 
+	public static final Codec<CubeParticleData> CODEC = RecordCodecBuilder.create(i ->
 		i.group(
-			Codec.FLOAT.fieldOf("r").forGetter(p -> p.r),
-			Codec.FLOAT.fieldOf("g").forGetter(p -> p.g),
-			Codec.FLOAT.fieldOf("b").forGetter(p -> p.b),
-			Codec.FLOAT.fieldOf("scale").forGetter(p -> p.scale),
-			Codec.INT.fieldOf("avgAge").forGetter(p -> p.avgAge),
-			Codec.BOOL.fieldOf("hot").forGetter(p -> p.hot))
-		.apply(i, CubeParticleData::new));
+				Codec.FLOAT.fieldOf("r").forGetter(p -> p.r),
+				Codec.FLOAT.fieldOf("g").forGetter(p -> p.g),
+				Codec.FLOAT.fieldOf("b").forGetter(p -> p.b),
+				Codec.FLOAT.fieldOf("scale").forGetter(p -> p.scale),
+				Codec.INT.fieldOf("avgAge").forGetter(p -> p.avgAge),
+				Codec.BOOL.fieldOf("hot").forGetter(p -> p.hot))
+			.apply(i, CubeParticleData::new));
 
-	public static final ParticleOptions.Deserializer<CubeParticleData> DESERIALIZER = new ParticleOptions.Deserializer<CubeParticleData>() {
+	public static final ParticleOptions.Deserializer<CubeParticleData> DESERIALIZER = new ParticleOptions.Deserializer<>() {
 		@Override
 		public CubeParticleData fromCommand(ParticleType<CubeParticleData> type, StringReader reader) throws CommandSyntaxException {
 			reader.expect(' ');

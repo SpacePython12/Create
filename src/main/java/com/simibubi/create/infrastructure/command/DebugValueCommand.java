@@ -2,10 +2,10 @@ package com.simibubi.create.infrastructure.command;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 
 public class DebugValueCommand {
 
@@ -17,7 +17,9 @@ public class DebugValueCommand {
 			.then(Commands.argument("value", FloatArgumentType.floatArg())
 					.executes((ctx) -> {
 						value = FloatArgumentType.getFloat(ctx, "value");
-						ctx.getSource().sendSuccess(() -> Components.literal("Set value to: "+value), true);
+						ctx.getSource().sendSuccess(() -> {
+                            return Component.literal("Set value to: "+value);
+                        }, true);
 						return 1;
 					}));
 

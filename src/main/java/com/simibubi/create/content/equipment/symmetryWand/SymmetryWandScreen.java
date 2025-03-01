@@ -10,18 +10,18 @@ import com.simibubi.create.content.equipment.symmetryWand.mirror.EmptyMirror;
 import com.simibubi.create.content.equipment.symmetryWand.mirror.PlaneMirror;
 import com.simibubi.create.content.equipment.symmetryWand.mirror.SymmetryMirror;
 import com.simibubi.create.content.equipment.symmetryWand.mirror.TriplePlaneMirror;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -37,8 +37,8 @@ public class SymmetryWandScreen extends AbstractSimiScreen {
 	private Label labelAlign;
 	private IconButton confirmButton;
 
-	private final Component mirrorType = Lang.translateDirect("gui.symmetryWand.mirrorType");
-	private final Component orientation = Lang.translateDirect("gui.symmetryWand.orientation");
+	private final Component mirrorType = CreateLang.translateDirect("gui.symmetryWand.mirrorType");
+	private final Component orientation = CreateLang.translateDirect("gui.symmetryWand.orientation");
 
 	private SymmetryMirror currentElement;
 	private ItemStack wand;
@@ -57,16 +57,16 @@ public class SymmetryWandScreen extends AbstractSimiScreen {
 
 	@Override
 	public void init() {
-		setWindowSize(background.width, background.height);
+		setWindowSize(background.getWidth(), background.getHeight());
 		setWindowOffset(-20, 0);
 		super.init();
 
 		int x = guiLeft;
 		int y = guiTop;
 
-		labelType = new Label(x + 49, y + 28, Components.immutableEmpty()).colored(0xFFFFFFFF)
+		labelType = new Label(x + 51, y + 28, CommonComponents.EMPTY).colored(0xFFFFFFFF)
 			.withShadow();
-		labelAlign = new Label(x + 49, y + 50, Components.immutableEmpty()).colored(0xFFFFFFFF)
+		labelAlign = new Label(x + 51, y + 50, CommonComponents.EMPTY).colored(0xFFFFFFFF)
 			.withShadow();
 
 		int state =
@@ -78,17 +78,17 @@ public class SymmetryWandScreen extends AbstractSimiScreen {
 
 		areaType.calling(position -> {
 			switch (position) {
-			case 0:
-				currentElement = new PlaneMirror(currentElement.getPosition());
-				break;
-			case 1:
-				currentElement = new CrossPlaneMirror(currentElement.getPosition());
-				break;
-			case 2:
-				currentElement = new TriplePlaneMirror(currentElement.getPosition());
-				break;
-			default:
-				break;
+				case 0:
+					currentElement = new PlaneMirror(currentElement.getPosition());
+					break;
+				case 1:
+					currentElement = new CrossPlaneMirror(currentElement.getPosition());
+					break;
+				case 2:
+					currentElement = new TriplePlaneMirror(currentElement.getPosition());
+					break;
+				default:
+					break;
 			}
 			initAlign(currentElement, x, y);
 		});
@@ -99,7 +99,7 @@ public class SymmetryWandScreen extends AbstractSimiScreen {
 		addRenderableWidget(areaType);
 		addRenderableWidget(labelType);
 
-		confirmButton = new IconButton(x + background.width - 33, y + background.height - 24, AllIcons.I_CONFIRM);
+		confirmButton = new IconButton(x + background.getWidth() - 33, y + background.getHeight() - 24, AllIcons.I_CONFIRM);
 		confirmButton.withCallback(() -> {
 			onClose();
 		});
@@ -125,19 +125,20 @@ public class SymmetryWandScreen extends AbstractSimiScreen {
 		int y = guiTop;
 
 		background.render(graphics, x, y);
-		graphics.drawString(font, wand.getHoverName(), x + 11, y + 4, 0x592424, false);
+		graphics.drawString(font, wand.getHoverName(),
+			x + (background.getWidth() - font.width(wand.getHoverName())) / 2, y + 4, 0x592424, false);
 
 		renderBlock(graphics, x, y);
 		GuiGameElement.of(wand)
-				.scale(4)
-				.rotate(-70, 20, 20)
-				.at(x + 178, y + 448, -150)
-				.render(graphics);
+			.scale(4)
+			.rotate(-70, 20, 20)
+			.at(x + 178, y + 448, -150)
+			.render(graphics);
 	}
 
 	protected void renderBlock(GuiGraphics graphics, int x, int y) {
 		PoseStack ms = graphics.pose();
-		
+
 		ms.pushPose();
 		ms.translate(x + 26, y + 39, 20);
 		ms.scale(16, 16, 16);

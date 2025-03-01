@@ -5,13 +5,11 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.joml.Matrix4f;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-
-import io.github.fabricators_of_create.porting_lib.util.client.ScreenUtils;
-
-import org.joml.Matrix4f;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,6 +21,8 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
+
+import io.github.fabricators_of_create.porting_lib.util.client.ScreenUtils;
 
 public class RemovedGuiUtils {
 	@Nonnull

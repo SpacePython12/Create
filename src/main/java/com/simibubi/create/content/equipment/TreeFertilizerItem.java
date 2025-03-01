@@ -1,7 +1,7 @@
 package com.simibubi.create.content.equipment;
 
-import com.simibubi.create.foundation.utility.worldWrappers.PlacementSimulationServerWorld;
 
+import net.createmod.catnip.levelWrappers.PlacementSimulationServerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -89,17 +89,17 @@ public class TreeFertilizerItem extends Item {
 		return original.setValue(BlockStateProperties.STAGE, 1);
 	}
 
-	private static class TreesDreamWorld extends PlacementSimulationServerWorld {
+	private static class TreesDreamWorld extends PlacementSimulationServerLevel {
 		private final BlockState soil;
 
 		protected TreesDreamWorld(ServerLevel wrapped, BlockPos saplingPos) {
 			super(wrapped);
 			BlockState stateUnderSapling = wrapped.getBlockState(saplingPos.below());
-			
+
 			// Tree features don't seem to succeed with mud as soil
 			if (stateUnderSapling.is(BlockTags.DIRT))
 				stateUnderSapling = Blocks.DIRT.defaultBlockState();
-			
+
 			soil = stateUnderSapling;
 		}
 

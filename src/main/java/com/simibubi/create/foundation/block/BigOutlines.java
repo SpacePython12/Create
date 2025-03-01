@@ -1,16 +1,14 @@
 package com.simibubi.create.foundation.block;
 
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.foundation.utility.RaycastHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
-
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -36,7 +34,7 @@ public class BigOutlines {
 
 		double maxRange = mc.hitResult == null ? Double.MAX_VALUE
 			: mc.hitResult.getLocation()
-				.distanceToSqr(origin);
+				.distanceToSqr(origin) + 0.5;
 
 		double range = ReachUtil.reach(player);
 		Vec3 target = RaycastHelper.getTraceTarget(player, Math.min(maxRange, range) + 1, origin);

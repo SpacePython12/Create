@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import mezz.jei.api.fabric.constants.FabricTypes;
-
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.simibubi.create.AllBlocks;
@@ -19,17 +16,20 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import mezz.jei.api.fabric.constants.FabricTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 @ParametersAreNonnullByDefault
 public class BasinCategory extends CreateRecipeCategory<BasinRecipe> {
@@ -68,7 +68,7 @@ public class BasinCategory extends CreateRecipeCategory<BasinRecipe> {
 					.addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
 					.setBackground(getRenderedSlot(), -1, -1)
 					.addIngredients(FabricTypes.FLUID_STACK, toJei(withImprovedVisibility(fluidIngredient.getMatchingFluidStacks())))
-					.addTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
+					.addRichTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
 			i++;
 		}
 
@@ -83,7 +83,7 @@ public class BasinCategory extends CreateRecipeCategory<BasinRecipe> {
 					.addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
 					.setBackground(getRenderedSlot(result), -1, -1)
 					.addItemStack(result.getStack())
-					.addTooltipCallback(addStochasticTooltip(result));
+					.addRichTooltipCallback(addStochasticTooltip(result));
 			i++;
 		}
 
@@ -95,7 +95,7 @@ public class BasinCategory extends CreateRecipeCategory<BasinRecipe> {
 					.addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
 					.setBackground(getRenderedSlot(), -1, -1)
 					.addIngredient(FabricTypes.FLUID_STACK, toJei(withImprovedVisibility(fluidResult)))
-					.addTooltipCallback(addFluidTooltip(fluidResult.getAmount()));
+					.addRichTooltipCallback(addFluidTooltip(fluidResult.getAmount()));
 			i++;
 		}
 
@@ -131,7 +131,7 @@ public class BasinCategory extends CreateRecipeCategory<BasinRecipe> {
 
 		AllGuiTextures heatBar = noHeat ? AllGuiTextures.JEI_NO_HEAT_BAR : AllGuiTextures.JEI_HEAT_BAR;
 		heatBar.render(graphics, 4, 80);
-		graphics.drawString(Minecraft.getInstance().font, Lang.translateDirect(requiredHeat.getTranslationKey()), 9,
+		graphics.drawString(Minecraft.getInstance().font, CreateLang.translateDirect(requiredHeat.getTranslationKey()), 9,
 				86, requiredHeat.getColor(), false);
 	}
 

@@ -4,12 +4,12 @@ import java.util.Vector;
 
 import com.tterrag.registrate.providers.DataGenContext;
 
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
-import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelProvider;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
+import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelProvider;
 
 public class PoweredLatchGenerator extends AbstractDiodeGenerator {
 

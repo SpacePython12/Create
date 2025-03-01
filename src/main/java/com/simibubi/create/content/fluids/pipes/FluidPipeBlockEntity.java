@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
+import com.simibubi.create.api.contraption.transformable.TransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.bracket.BracketedBlockEntityBehaviour;
 import com.simibubi.create.content.fluids.FluidPropagator;
@@ -17,10 +16,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class FluidPipeBlockEntity extends SmartBlockEntity implements ITransformableBlockEntity, PipeAttachmentBlockEntity {
+public class FluidPipeBlockEntity extends SmartBlockEntity implements TransformableBlockEntity {
 
 	public FluidPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -34,7 +34,7 @@ public class FluidPipeBlockEntity extends SmartBlockEntity implements ITransform
 	}
 
 	@Override
-	public void transform(StructureTransform transform) {
+	public void transform(BlockEntity be, StructureTransform transform) {
 		BracketedBlockEntityBehaviour bracketBehaviour = getBehaviour(BracketedBlockEntityBehaviour.TYPE);
 		if (bracketBehaviour != null) {
 			bracketBehaviour.transformBracket(transform);
@@ -47,7 +47,7 @@ public class FluidPipeBlockEntity extends SmartBlockEntity implements ITransform
 
 	@Override
 	@Nullable
-	public Object getRenderAttachmentData() {
+	public Object getRenderData() {
 		return PipeAttachmentBlockEntity.getAttachments(this);
 	}
 
@@ -74,19 +74,25 @@ public class FluidPipeBlockEntity extends SmartBlockEntity implements ITransform
 			if (state.getBlock() instanceof EncasedPipeBlock && attachment != AttachmentTypes.DRAIN)
 				return AttachmentTypes.NONE;
 
-			if (attachment == AttachmentTypes.RIM && !FluidPipeBlock.isPipe(otherState)
-				&& !AllBlocks.MECHANICAL_PUMP.has(otherState) && !AllBlocks.ENCASED_FLUID_PIPE.has(otherState)) {
-				FluidTransportBehaviour pipeBehaviour =
-					BlockEntityBehaviour.get(world, offsetPos, FluidTransportBehaviour.TYPE);
-				if (pipeBehaviour != null)
-					if (pipeBehaviour.canHaveFlowToward(otherState, direction.getOpposite()))
-						return AttachmentTypes.CONNECTION;
+			if (attachment == AttachmentTypes.RIM) {
+				if (!FluidPipeBlock.isPipe(otherState) && !(otherState.getBlock() instanceof EncasedPipeBlock)
+					&& !(otherState.getBlock() instanceof GlassFluidPipeBlock)) {
+					FluidTransportBehaviour pipeBehaviour =
+						BlockEntityBehaviour.get(world, offsetPos, FluidTransportBehaviour.TYPE);
+					if (pipeBehaviour != null && pipeBehaviour.canHaveFlowToward(otherState, direction.getOpposite()))
+						return AttachmentTypes.DETAILED_CONNECTION;
+				}
+
+				if (!FluidPipeBlock.shouldDrawRim(world, pos, state, direction))
+					return FluidPropagator.getStraightPipeAxis(state) == direction.getAxis()
+						? AttachmentTypes.CONNECTION
+						: AttachmentTypes.DETAILED_CONNECTION;
 			}
 
-			if (attachment == AttachmentTypes.RIM && !FluidPipeBlock.shouldDrawRim(world, pos, state, direction))
-				return AttachmentTypes.CONNECTION;
-			if (attachment == AttachmentTypes.NONE && state.getValue(FluidPipeBlock.PROPERTY_BY_DIRECTION.get(direction)))
-				return AttachmentTypes.CONNECTION;
+			if (attachment == AttachmentTypes.NONE
+				&& state.getValue(FluidPipeBlock.PROPERTY_BY_DIRECTION.get(direction)))
+				return AttachmentTypes.DETAILED_CONNECTION;
+
 			return attachment;
 		}
 

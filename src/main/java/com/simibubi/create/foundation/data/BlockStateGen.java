@@ -9,13 +9,6 @@ import java.util.Vector;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredModel;
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
-
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile.ExistingModelFile;
-import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelProvider;
-import io.github.fabricators_of_create.porting_lib.models.generators.block.MultiPartBlockStateBuilder;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableList;
@@ -32,13 +25,13 @@ import com.simibubi.create.content.fluids.pipes.EncasedPipeBlock;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Pointing;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonnullType;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.Pointing;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
@@ -50,6 +43,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.RailShape;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredModel;
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile.ExistingModelFile;
+import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelProvider;
+import io.github.fabricators_of_create.porting_lib.models.generators.block.MultiPartBlockStateBuilder;
 
 public class BlockStateGen {
 

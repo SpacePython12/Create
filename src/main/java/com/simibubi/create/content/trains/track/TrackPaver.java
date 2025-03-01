@@ -9,10 +9,10 @@ import java.util.Set;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.decoration.girder.GirderBlock;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -99,7 +99,7 @@ public class TrackPaver {
 		}
 
 		Map<Pair<Integer, Integer>, Double> yLevels = new HashMap<>();
-		BlockPos tePosition = bc.tePositions.getFirst();
+		BlockPos tePosition = bc.bePositions.getFirst();
 		Vec3 end1 = bc.starts.getFirst()
 			.subtract(Vec3.atLowerCornerOf(tePosition))
 			.add(0, 3 / 16f, 0);

@@ -5,16 +5,15 @@ import java.util.Vector;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.compat.computercraft.ComputerScreen;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -33,7 +32,7 @@ public class SequencedGearshiftScreen extends AbstractSimiScreen {
 	private Vector<Vector<ScrollInput>> inputs;
 
 	public SequencedGearshiftScreen(SequencedGearshiftBlockEntity be) {
-		super(Lang.translateDirect("gui.sequenced_gearshift.title"));
+		super(CreateLang.translateDirect("gui.sequenced_gearshift.title"));
 		this.instructions = be.instructions;
 		this.be = be;
 		compareTag = Instruction.serializeAll(instructions);
@@ -45,7 +44,7 @@ public class SequencedGearshiftScreen extends AbstractSimiScreen {
 			minecraft.setScreen(
 				new ComputerScreen(title, this::renderAdditional, this, be.computerBehaviour::hasAttachedComputer));
 
-		setWindowSize(background.width, background.height);
+		setWindowSize(background.getWidth(), background.getHeight());
 		setWindowOffset(-20, 0);
 		super.init();
 
@@ -59,7 +58,7 @@ public class SequencedGearshiftScreen extends AbstractSimiScreen {
 		for (int row = 0; row < instructions.size(); row++)
 			initInputsOfRow(row, x, y);
 
-		confirmButton = new IconButton(x + background.width - 33, y + background.height - 24, AllIcons.I_CONFIRM);
+		confirmButton = new IconButton(x + background.getWidth() - 33, y + background.getHeight() - 24, AllIcons.I_CONFIRM);
 		confirmButton.withCallback(() -> {
 			onClose();
 		});
@@ -81,13 +80,13 @@ public class SequencedGearshiftScreen extends AbstractSimiScreen {
 			new SelectionScrollInput(x, y + rowHeight * row, 50, 18).forOptions(SequencerInstructions.getOptions())
 				.calling(state -> instructionUpdated(index, state))
 				.setState(instruction.instruction.ordinal())
-				.titled(Lang.translateDirect("gui.sequenced_gearshift.instruction"));
+				.titled(CreateLang.translateDirect("gui.sequenced_gearshift.instruction"));
 		ScrollInput value =
 			new ScrollInput(x + 58, y + rowHeight * row, 28, 18).calling(state -> instruction.value = state);
 		ScrollInput direction = new SelectionScrollInput(x + 88, y + rowHeight * row, 28, 18)
 			.forOptions(InstructionSpeedModifiers.getOptions())
 			.calling(state -> instruction.speedModifier = InstructionSpeedModifiers.values()[state])
-			.titled(Lang.translateDirect("gui.sequenced_gearshift.speed"));
+			.titled(CreateLang.translateDirect("gui.sequenced_gearshift.speed"));
 
 		rowInputs.add(type);
 		rowInputs.add(value);
@@ -108,7 +107,7 @@ public class SequencedGearshiftScreen extends AbstractSimiScreen {
 		value.active = value.visible = hasValue;
 		if (hasValue)
 			value.withRange(1, def.maxValue + 1)
-				.titled(Lang.translateDirect(def.parameterKey))
+				.titled(CreateLang.translateDirect(def.parameterKey))
 				.withShiftStep(def.shiftStep)
 				.setState(instruction.value)
 				.onChanged();
@@ -148,14 +147,14 @@ public class SequencedGearshiftScreen extends AbstractSimiScreen {
 
 		for (int row = 0; row < instructions.capacity(); row++) {
 			AllGuiTextures toDraw = AllGuiTextures.SEQUENCER_EMPTY;
-			int yOffset = toDraw.height * row;
+			int yOffset = toDraw.getHeight() * row;
 
 			toDraw.render(graphics, x, y + 16 + yOffset);
 		}
 
 		for (int row = 0; row < instructions.capacity(); row++) {
 			AllGuiTextures toDraw = AllGuiTextures.SEQUENCER_EMPTY;
-			int yOffset = toDraw.height * row;
+			int yOffset = toDraw.getHeight() * row;
 			if (row >= instructions.size()) {
 				toDraw.render(graphics, x, y + 16 + yOffset);
 				continue;
@@ -165,24 +164,24 @@ public class SequencedGearshiftScreen extends AbstractSimiScreen {
 			SequencerInstructions def = instruction.instruction;
 			def.background.render(graphics, x, y + 16 + yOffset);
 
-			label(graphics, 36, yOffset - 1, Lang.translateDirect(def.translationKey));
+			label(graphics, 36, yOffset - 1, CreateLang.translateDirect(def.translationKey));
 			if (def.hasValueParameter) {
 				String text = def.formatValue(instruction.value);
 				int stringWidth = font.width(text);
-				label(graphics, 90 + (12 - stringWidth / 2), yOffset - 1, Components.literal(text));
+				label(graphics, 90 + (12 - stringWidth / 2), yOffset - 1, Component.literal(text));
 			}
 			if (def.hasSpeedParameter)
 				label(graphics, 127, yOffset - 1, instruction.speedModifier.label);
 		}
 
-		graphics.drawString(font, title, x + (background.width - 8) / 2 - font.width(title) / 2, y + 4, 0x592424, false);
+		graphics.drawString(font, title, x + (background.getWidth() - 8) / 2 - font.width(title) / 2, y + 4, 0x592424, false);
 		renderAdditional(graphics, mouseX, mouseY, partialTicks, x, y, background);
 	}
 
 	private void renderAdditional(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, int guiLeft, int guiTop,
-		AllGuiTextures background) {
+								  AllGuiTextures background) {
 		GuiGameElement.of(renderedItem).<GuiGameElement
-			.GuiRenderBuilder>at(guiLeft + background.width + 6, guiTop + background.height - 56, 100)
+				.GuiRenderBuilder>at(guiLeft + background.getWidth() + 6, guiTop + background.getHeight() - 56, 100)
 			.scale(5)
 			.render(graphics);
 	}

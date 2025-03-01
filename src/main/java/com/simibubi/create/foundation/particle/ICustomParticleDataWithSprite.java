@@ -2,9 +2,6 @@ package com.simibubi.create.foundation.particle;
 
 import com.mojang.serialization.Codec;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration;
 import net.minecraft.client.particle.ParticleProvider;
@@ -12,12 +9,16 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleOptions.Deserializer;
 import net.minecraft.core.particles.ParticleType;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+
 public interface ICustomParticleDataWithSprite<T extends ParticleOptions> extends ICustomParticleData<T> {
 
 	Deserializer<T> getDeserializer();
 
 	public default ParticleType<T> createType() {
-		return new ParticleType<T>(false, getDeserializer()) {
+		return new ParticleType<>(false, getDeserializer()) {
 
 			@Override
 			public Codec<T> codec() {
@@ -40,4 +41,5 @@ public interface ICustomParticleDataWithSprite<T extends ParticleOptions> extend
 	public default void register(ParticleType<T> type, ParticleEngine particles) {
 		ParticleFactoryRegistry.getInstance().register(type, getMetaFactory()::create);
 	}
+
 }

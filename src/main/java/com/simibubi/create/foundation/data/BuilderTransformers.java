@@ -1,7 +1,8 @@
 package com.simibubi.create.foundation.data;
 
-import static com.simibubi.create.AllInteractionBehaviours.interactionBehaviour;
-import static com.simibubi.create.AllMovementBehaviours.movementBehaviour;
+import static com.simibubi.create.Create.REGISTRATE;
+import static com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour.interactionBehaviour;
+import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
 import static com.simibubi.create.foundation.data.BlockStateGen.axisBlock;
 import static com.simibubi.create.foundation.data.CreateRegistrate.casingConnectivity;
 import static com.simibubi.create.foundation.data.CreateRegistrate.connectedTextures;
@@ -9,6 +10,7 @@ import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
 import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -18,6 +20,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags.AllBlockTags;
 import com.simibubi.create.AllTags.AllItemTags;
 import com.simibubi.create.Create;
+import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.content.contraptions.behaviour.DoorMovingInteraction;
 import com.simibubi.create.content.contraptions.behaviour.TrapdoorMovingInteraction;
 import com.simibubi.create.content.contraptions.piston.MechanicalPistonGenerator;
@@ -29,12 +32,15 @@ import com.simibubi.create.content.decoration.encasing.CasingBlock;
 import com.simibubi.create.content.decoration.encasing.EncasedCTBehaviour;
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorBlock;
 import com.simibubi.create.content.decoration.slidingDoor.SlidingDoorMovementBehaviour;
-import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.content.kinetics.crank.ValveHandleBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.encased.EncasedCogCTBehaviour;
 import com.simibubi.create.content.kinetics.simpleRelays.encased.EncasedCogwheelBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.encased.EncasedShaftBlock;
+import com.simibubi.create.content.logistics.box.PackageItem;
+import com.simibubi.create.content.logistics.box.PackageStyles.PackageStyle;
+import com.simibubi.create.content.logistics.packager.PackagerGenerator;
+import com.simibubi.create.content.logistics.tableCloth.TableClothBlockItem;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelBlock;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelBlock.Shape;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelItem;
@@ -43,22 +49,26 @@ import com.simibubi.create.content.trains.bogey.StandardBogeyBlock;
 import com.simibubi.create.foundation.block.ItemUseOverrides;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.HorizontalCTBehaviour;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
+import com.simibubi.create.foundation.item.ItemDescription;
+import com.simibubi.create.infrastructure.config.CStress;
 import com.tterrag.registrate.builders.BlockBuilder;
+import com.tterrag.registrate.builders.ItemBuilder;
+import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.util.DataIngredient;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 
-import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredModel;
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
-
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.ItemLike;
@@ -74,12 +84,16 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTable.Builder;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.ConfiguredModel;
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
 
 public class BuilderTransformers {
 
@@ -96,7 +110,6 @@ public class BuilderTransformers {
 			.build();
 	}
 
-	@SuppressWarnings("deprecation")
 	public static <B extends StandardBogeyBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> bogey() {
 		return b -> b.initialProperties(SharedProperties::softMetal)
 			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
@@ -105,7 +118,8 @@ public class BuilderTransformers {
 			.blockstate((c, p) -> BlockStateGen.horizontalAxisBlock(c, p, s -> p.models()
 				.getExistingFile(p.modLoc("block/track/bogey/top"))))
 			.loot((p, l) -> p.dropOther(l, AllBlocks.RAILWAY_CASING.get()))
-			.onRegister(block -> AbstractBogeyBlock.registerStandardBogey(RegisteredObjects.getKeyOrThrow(block)));
+			.onRegister(
+				block -> AbstractBogeyBlock.registerStandardBogey(CatnipServices.REGISTRIES.getKeyOrThrow(block)));
 	}
 
 	public static <B extends CopycatBlock, P> NonNullUnaryOperator<BlockBuilder<B, P>> copycat() {
@@ -211,7 +225,7 @@ public class BuilderTransformers {
 		Supplier<ItemLike> drop) {
 		return b.initialProperties(SharedProperties::stone)
 			.properties(BlockBehaviour.Properties::noOcclusion)
-			.transform(BlockStressDefaults.setNoImpact())
+			.transform(CStress.setNoImpact())
 			.loot((p, lb) -> p.dropOther(lb, drop.get()));
 	}
 
@@ -220,7 +234,7 @@ public class BuilderTransformers {
 			.blockstate((c, p) -> p.horizontalBlock(c.get(), p.models()
 				.getExistingFile(p.modLoc("block/cuckoo_clock/block"))))
 			.addLayer(() -> RenderType::cutoutMipped)
-			.transform(BlockStressDefaults.setImpact(1.0))
+			.transform(CStress.setImpact(1))
 			.item()
 			.transform(ModelGen.customItemModel("cuckoo_clock", "item"));
 	}
@@ -284,7 +298,7 @@ public class BuilderTransformers {
 					.texture("3", p.modLoc("block/valve_handle/valve_handle_" + variant)));
 			})
 			.tag(AllBlockTags.BRITTLE.tag, AllBlockTags.VALVE_HANDLES.tag)
-			.transform(BlockStressDefaults.setGeneratorSpeed(ValveHandleBlock::getSpeedRange))
+			.onRegister(BlockStressValues.setGeneratorSpeed(32))
 			.onRegister(ItemUseOverrides::addBlock)
 			.item()
 			.tag(AllItemTags.VALVE_HANDLES.tag)
@@ -365,7 +379,7 @@ public class BuilderTransformers {
 			.properties(p -> p.noOcclusion())
 			.blockstate(new MechanicalPistonGenerator(type)::generate)
 			.addLayer(() -> RenderType::cutoutMipped)
-			.transform(BlockStressDefaults.setImpact(4.0))
+			.transform(CStress.setImpact(4.0))
 			.item()
 			.transform(ModelGen.customItemModel("mechanical_piston", type.getSerializedName(), "item"));
 	}
@@ -426,7 +440,7 @@ public class BuilderTransformers {
 		return b -> b.blockstate((c, p) -> p.horizontalBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
 			.transform(pickaxeOnly())
 			.addLayer(() -> RenderType::cutoutMipped)
-			.transform(BlockStressDefaults.setImpact(4.0))
+			.transform(CStress.setImpact(4.0))
 			.loot((lt, block) -> {
 				Builder builder = LootTable.lootTable();
 				LootItemCondition.Builder survivesExplosion = ExplosionCondition.survivesExplosion();
@@ -460,4 +474,82 @@ public class BuilderTransformers {
 			.build();
 	}
 
+	public static ItemBuilder<PackageItem, CreateRegistrate> packageItem(PackageStyle style) {
+		String size = "_" + style.width() + "x" + style.height();
+		return REGISTRATE.item(style.getItemId()
+			.getPath(), p -> new PackageItem(p, style))
+			.properties(p -> p.stacksTo(1))
+			.tag(AllItemTags.PACKAGES.tag)
+			.model((c, p) -> {
+				if (style.rare())
+					p.withExistingParent(c.getName(), p.modLoc("item/package/custom" + size))
+						.texture("2", p.modLoc("item/package/" + style.type()));
+				else
+					p.withExistingParent(c.getName(), p.modLoc("item/package/" + style.type() + size));
+			})
+			.lang((style.rare() ? "Rare"
+				: style.type()
+					.substring(0, 1)
+					.toUpperCase(Locale.ROOT)
+					+ style.type()
+						.substring(1))
+				+ " Package");
+	}
+
+	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> tableCloth(String name,
+		NonNullSupplier<? extends Block> initialProps, boolean dyed) {
+		return b -> {
+			TagKey<Block> soundTag = dyed ? BlockTags.COMBINATION_STEP_SOUND_BLOCKS : BlockTags.INSIDE_STEP_SOUND_BLOCKS;
+
+			ItemBuilder<TableClothBlockItem, BlockBuilder<B, P>> item = b.initialProperties(initialProps)
+				.addLayer(() -> RenderType::cutoutMipped)
+				.blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
+					.withExistingParent(name + "_table_cloth", p.modLoc("block/table_cloth/block"))
+					.texture("0", p.modLoc("block/table_cloth/" + name))))
+//				.onRegister(CreateRegistrate.blockModel(() -> TableClothModel::new))
+				.tag(AllBlockTags.TABLE_CLOTHS.tag, soundTag)
+				.onRegisterAfter(Registries.ITEM, v -> ItemDescription.useKey(v, "block.create.table_cloth"))
+				.item(TableClothBlockItem::new);
+
+			if (dyed)
+				item.tag(AllItemTags.DYED_TABLE_CLOTHS.tag);
+
+			return item.model((c, p) -> p.withExistingParent(name + "_table_cloth", p.modLoc("block/table_cloth/item"))
+				.texture("0", p.modLoc("block/table_cloth/" + name)))
+				.tag(AllItemTags.TABLE_CLOTHS.tag)
+				.recipe((c, p) -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, c.get())
+					.requires(c.get())
+					.unlockedBy("has_" + c.getName(), RegistrateRecipeProvider.has(c.get()))
+					.save(p, Create.asResource("crafting/logistics/" + c.getName() + "_clear")))
+				.build();
+		};
+	}
+
+	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> packager() {
+		return b -> b.initialProperties(SharedProperties::softMetal)
+			.properties(p -> p.noOcclusion())
+			.properties(p -> p.isRedstoneConductor(($1, $2, $3) -> false))
+			.properties(p -> p.mapColor(MapColor.TERRACOTTA_BLUE)
+				.sound(SoundType.NETHERITE_BLOCK))
+			.transform(pickaxeOnly())
+			.addLayer(() -> RenderType::cutoutMipped)
+			.blockstate(new PackagerGenerator()::generate)
+			.item()
+			.model(AssetLookup::customItemModel)
+			.build();
+	}
+
+	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> palettesIronBlock() {
+		return b -> b.initialProperties(SharedProperties::softMetal)
+			.properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+				.sound(SoundType.NETHERITE_BLOCK)
+				.requiresCorrectToolForDrops())
+			.transform(pickaxeOnly())
+			.blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
+				.cubeColumn(c.getName(), p.modLoc("block/" + c.getName()), p.modLoc("block/" + c.getName() + "_top"))))
+			.tag(AllBlockTags.WRENCH_PICKUP.tag)
+			.recipe((c, p) -> p.stonecutting(DataIngredient.tag(ConventionalItemTags.IRON_INGOTS), RecipeCategory.BUILDING_BLOCKS,
+				c::get, 2))
+			.simpleItem();
+	}
 }

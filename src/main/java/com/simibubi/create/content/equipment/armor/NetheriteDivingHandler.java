@@ -1,5 +1,7 @@
 package com.simibubi.create.content.equipment.armor;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.simibubi.create.AllTags.AllItemTags;
 
 import net.minecraft.nbt.CompoundTag;
@@ -7,8 +9,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-
-import org.jetbrains.annotations.NotNull;
 
 public final class NetheriteDivingHandler {
 	public static final String NETHERITE_DIVING_BITS_KEY = "CreateNetheriteDivingBits";

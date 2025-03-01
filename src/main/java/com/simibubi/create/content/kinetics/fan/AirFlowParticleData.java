@@ -9,26 +9,27 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.foundation.particle.ICustomParticleDataWithSprite;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class AirFlowParticleData implements ParticleOptions, ICustomParticleDataWithSprite<AirFlowParticleData> {
-	
-	public static final Codec<AirFlowParticleData> CODEC = RecordCodecBuilder.create(i -> 
-		i.group(
-			Codec.INT.fieldOf("x").forGetter(p -> p.posX),
-			Codec.INT.fieldOf("y").forGetter(p -> p.posY),
-			Codec.INT.fieldOf("z").forGetter(p -> p.posZ))
-		.apply(i, AirFlowParticleData::new));
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-	public static final ParticleOptions.Deserializer<AirFlowParticleData> DESERIALIZER = new ParticleOptions.Deserializer<AirFlowParticleData>() {
+public class AirFlowParticleData implements ParticleOptions, ICustomParticleDataWithSprite<AirFlowParticleData> {
+
+	public static final Codec<AirFlowParticleData> CODEC = RecordCodecBuilder.create(i ->
+		i.group(
+				Codec.INT.fieldOf("x").forGetter(p -> p.posX),
+				Codec.INT.fieldOf("y").forGetter(p -> p.posY),
+				Codec.INT.fieldOf("z").forGetter(p -> p.posZ))
+			.apply(i, AirFlowParticleData::new));
+
+	public static final ParticleOptions.Deserializer<AirFlowParticleData> DESERIALIZER = new ParticleOptions.Deserializer<>() {
 		public AirFlowParticleData fromCommand(ParticleType<AirFlowParticleData> particleTypeIn, StringReader reader)
-				throws CommandSyntaxException {
+			throws CommandSyntaxException {
 			reader.expect(' ');
 			int x = reader.readInt();
 			reader.expect(' ');
@@ -82,7 +83,7 @@ public class AirFlowParticleData implements ParticleOptions, ICustomParticleData
 	public Deserializer<AirFlowParticleData> getDeserializer() {
 		return DESERIALIZER;
 	}
-	
+
 	@Override
 	public Codec<AirFlowParticleData> getCodec(ParticleType<AirFlowParticleData> type) {
 		return CODEC;

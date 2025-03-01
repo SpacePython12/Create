@@ -7,6 +7,7 @@
 	},
 	"elements": [
 		{
+			"name": "connection_up",
 			"from": [4, 12, 4],
 			"to": [12, 16, 12],
 			"rotation": {"angle": 0, "axis": "y", "origin": [16, 0, -16]},

@@ -3,18 +3,18 @@ package com.simibubi.create.foundation.blockEntity.behaviour.inventory;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.foundation.utility.fabric.ListeningStorageView;
 import com.simibubi.create.foundation.utility.fabric.ProcessingIterator;
 
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.world.item.ItemStack;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 
 public class VersionedInventoryWrapper implements Storage<ItemVariant> {
 

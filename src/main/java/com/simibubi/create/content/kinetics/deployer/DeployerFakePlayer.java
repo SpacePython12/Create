@@ -7,29 +7,19 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.LivingEntityEvents;
-import io.github.fabricators_of_create.porting_lib.util.UsernameCache;
-
-import net.fabricmc.fabric.api.entity.FakePlayer;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.authlib.GameProfile;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CKinetics;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
-import net.minecraft.network.PacketSendListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -43,6 +33,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.entity.FakePlayer;
+
+import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.LivingEntityEvents;
+import io.github.fabricators_of_create.porting_lib.util.UsernameCache;
 
 public class DeployerFakePlayer extends FakePlayer {
 
@@ -68,7 +66,7 @@ public class DeployerFakePlayer extends FakePlayer {
 
 	@Override
 	public Component getDisplayName() {
-		return Lang.translateDirect("block.deployer.damage_source_name");
+		return CreateLang.translateDirect("block.deployer.damage_source_name");
 	}
 
 	@Override
@@ -115,8 +113,7 @@ public class DeployerFakePlayer extends FakePlayer {
 
 	public static boolean deployerCollectsDropsFromKilledEntities(LivingEntity target, DamageSource source, Collection<ItemEntity> drops, int lootingLevel, boolean recentlyHit) {
 		Entity trueSource = source.getEntity();
-		if (trueSource != null && trueSource instanceof DeployerFakePlayer) {
-			DeployerFakePlayer fakePlayer = (DeployerFakePlayer) trueSource;
+		if (trueSource != null && trueSource instanceof DeployerFakePlayer fakePlayer) {
 			drops
 				.forEach(stack -> fakePlayer.getInventory()
 					.placeItemBackInInventory(stack.getItem()));
@@ -152,7 +149,7 @@ public class DeployerFakePlayer extends FakePlayer {
 
 		CKinetics.DeployerAggroSetting setting = AllConfigs.server().kinetics.ignoreDeployerAttacks.get();
 
-		switch(setting) {
+		switch (setting) {
 			case ALL -> event.setCanceled(true);
 			case CREEPERS -> {
 				if (mob instanceof Creeper)

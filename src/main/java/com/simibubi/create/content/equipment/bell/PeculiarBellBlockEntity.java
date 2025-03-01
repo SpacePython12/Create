@@ -1,13 +1,14 @@
 package com.simibubi.create.content.equipment.bell;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.AllPartialModels;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class PeculiarBellBlockEntity extends AbstractBellBlockEntity {
 

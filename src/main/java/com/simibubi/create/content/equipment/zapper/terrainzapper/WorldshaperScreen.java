@@ -13,25 +13,25 @@ import com.simibubi.create.foundation.gui.widget.Indicator.State;
 import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 public class WorldshaperScreen extends ZapperScreen {
 
-	protected final Component placementSection = Lang.translateDirect("gui.terrainzapper.placement");
-	protected final Component toolSection = Lang.translateDirect("gui.terrainzapper.tool");
+	protected final Component placementSection = CreateLang.translateDirect("gui.terrainzapper.placement");
+	protected final Component toolSection = CreateLang.translateDirect("gui.terrainzapper.tool");
 	protected final List<Component> brushOptions =
-		Lang.translatedOptions("gui.terrainzapper.brush", "cuboid", "sphere", "cylinder", "surface", "cluster");
+		CreateLang.translatedOptions("gui.terrainzapper.brush", "cuboid", "sphere", "cylinder", "surface", "cluster");
 
 	protected Vector<IconButton> toolButtons;
 	protected Vector<IconButton> placementButtons;
@@ -46,7 +46,7 @@ public class WorldshaperScreen extends ZapperScreen {
 	protected Indicator acrossMaterialsIndicator;
 
 	protected TerrainBrushes currentBrush;
-	protected int[] currentBrushParams = new int[] { 1, 1, 1 };
+	protected int[] currentBrushParams = new int[]{1, 1, 1};
 	protected boolean currentFollowDiagonals;
 	protected boolean currentAcrossMaterials;
 	protected TerrainTools currentTool;
@@ -82,9 +82,9 @@ public class WorldshaperScreen extends ZapperScreen {
 		int x = guiLeft;
 		int y = guiTop;
 
-		brushLabel = new Label(x + 61, y + 25, Components.immutableEmpty()).withShadow();
+		brushLabel = new Label(x + 61, y + 25, CommonComponents.EMPTY).withShadow();
 		brushInput = new SelectionScrollInput(x + 56, y + 20, 77, 18).forOptions(brushOptions)
-			.titled(Lang.translateDirect("gui.terrainzapper.brush"))
+			.titled(CreateLang.translateDirect("gui.terrainzapper.brush"))
 			.writingTo(brushLabel)
 			.calling(brushIndex -> {
 				currentBrush = TerrainBrushes.values()[brushIndex];
@@ -111,7 +111,7 @@ public class WorldshaperScreen extends ZapperScreen {
 		brushParams.clear();
 
 		for (int index = 0; index < 3; index++) {
-			Label label = new Label(x + 65 + 20 * index, y + 45, Components.immutableEmpty()).withShadow();
+			Label label = new Label(x + 65 + 20 * index, y + 45, CommonComponents.EMPTY).withShadow();
 
 			final int finalIndex = index;
 			ScrollInput input = new ScrollInput(x + 56 + 20 * index, y + 40, 18, 18)
@@ -155,22 +155,22 @@ public class WorldshaperScreen extends ZapperScreen {
 		if (currentBrush.hasConnectivityOptions()) {
 			int x1 = x + 7 + 4 * 18;
 			int y1 = y + 79;
-			followDiagonalsIndicator = new Indicator(x1, y1 - 6, Components.immutableEmpty());
+			followDiagonalsIndicator = new Indicator(x1, y1 - 6, CommonComponents.EMPTY);
 			followDiagonals = new IconButton(x1, y1, AllIcons.I_FOLLOW_DIAGONAL);
 			x1 += 18;
-			acrossMaterialsIndicator = new Indicator(x1, y1 - 6, Components.immutableEmpty());
+			acrossMaterialsIndicator = new Indicator(x1, y1 - 6, CommonComponents.EMPTY);
 			acrossMaterials = new IconButton(x1, y1, AllIcons.I_FOLLOW_MATERIAL);
 
 			followDiagonals.withCallback(() -> {
 				followDiagonalsIndicator.state = followDiagonalsIndicator.state == State.OFF ? State.ON : State.OFF;
 				currentFollowDiagonals = !currentFollowDiagonals;
 			});
-			followDiagonals.setToolTip(Lang.translateDirect("gui.terrainzapper.searchDiagonal"));
+			followDiagonals.setToolTip(CreateLang.translateDirect("gui.terrainzapper.searchDiagonal"));
 			acrossMaterials.withCallback(() -> {
 				acrossMaterialsIndicator.state = acrossMaterialsIndicator.state == State.OFF ? State.ON : State.OFF;
 				currentAcrossMaterials = !currentAcrossMaterials;
 			});
-			acrossMaterials.setToolTip(Lang.translateDirect("gui.terrainzapper.searchFuzzy"));
+			acrossMaterials.setToolTip(CreateLang.translateDirect("gui.terrainzapper.searchFuzzy"));
 			addRenderableWidget(followDiagonals);
 			addRenderableWidget(followDiagonalsIndicator);
 			addRenderableWidget(acrossMaterials);
@@ -192,11 +192,11 @@ public class WorldshaperScreen extends ZapperScreen {
 			TerrainTools tool = toolValues[id];
 			IconButton toolButton = new IconButton(x + 7 + id * 18, y + 79, tool.icon);
 			toolButton.withCallback(() -> {
-				toolButtons.forEach(b -> b.active = true);
-				toolButton.active = false;
+				toolButtons.forEach(b -> b.green = false);
+				toolButton.green = true;
 				currentTool = tool;
 			});
-			toolButton.setToolTip(Lang.translateDirect("gui.terrainzapper.tool." + tool.translationKey));
+			toolButton.setToolTip(CreateLang.translateDirect("gui.terrainzapper.tool." + tool.translationKey));
 			toolButtons.add(toolButton);
 		}
 
@@ -208,7 +208,7 @@ public class WorldshaperScreen extends ZapperScreen {
 			currentTool = toolValues[0];
 			toolIndex = 0;
 		}
-		toolButtons.get(toolIndex).active = false;
+		toolButtons.get(toolIndex).green = true;
 
 		addRenderableWidgets(toolButtons);
 
@@ -224,15 +224,15 @@ public class WorldshaperScreen extends ZapperScreen {
 				PlacementOptions option = placementValues[id];
 				IconButton placementButton = new IconButton(x + 136 + id * 18, y + 79, option.icon);
 				placementButton.withCallback(() -> {
-					placementButtons.forEach(b -> b.active = true);
-					placementButton.active = false;
+					placementButtons.forEach(b -> b.green = false);
+					placementButton.green = true;
 					currentPlacement = option;
 				});
-				placementButton.setToolTip(Lang.translateDirect("gui.terrainzapper.placement." + option.translationKey));
+				placementButton.setToolTip(CreateLang.translateDirect("gui.terrainzapper.placement." + option.translationKey));
 				placementButtons.add(placementButton);
 			}
 
-			placementButtons.get(currentPlacement.ordinal()).active = false;
+			placementButtons.get(currentPlacement.ordinal()).green = true;
 
 			addRenderableWidgets(placementButtons);
 		}

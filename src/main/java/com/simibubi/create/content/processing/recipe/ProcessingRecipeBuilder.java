@@ -12,14 +12,9 @@ import com.simibubi.create.foundation.data.recipe.Mods;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.Pair;
 import com.tterrag.registrate.util.DataIngredient;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
-import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
-import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
-import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -31,13 +26,21 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 
-public class ProcessingRecipeBuilder<T extends ProcessingRecipe<?>> {
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
+import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
+import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+
+public class ProcessingRecipeBuilder<T extends ProcessingRecipe<?>> {
+	protected ResourceLocation recipeId;
 	protected ProcessingRecipeFactory<T> factory;
 	protected ProcessingRecipeParams params;
 	protected List<ConditionJsonProvider> recipeConditions;
 
 	public ProcessingRecipeBuilder(ProcessingRecipeFactory<T> factory, ResourceLocation recipeId) {
+		this.recipeId = recipeId;
 		params = new ProcessingRecipeParams(recipeId);
 		recipeConditions = new ArrayList<>();
 		this.factory = factory;
@@ -188,6 +191,11 @@ public class ProcessingRecipeBuilder<T extends ProcessingRecipe<?>> {
 	public ProcessingRecipeBuilder<T> output(float chance, Mods mod, String id, int amount) {
 		return output(new ProcessingOutput(Pair.of(mod.asResource(id), amount), chance));
 	}
+
+	public ProcessingRecipeBuilder<T> output(ResourceLocation id) {
+		return output(1, id, 1);
+	}
+
 	public ProcessingRecipeBuilder<T> output(Mods mod, String id) {
 		return output(1, mod.asResource(id), 1);
 	}

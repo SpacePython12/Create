@@ -1,7 +1,6 @@
 {
-  "parent": "create:item/pane",
+  "parent": "minecraft:item/generated",
   "textures": {
-    "edge": "create:block/palettes/ornate_iron_window_pane_top",
-    "pane": "create:block/palettes/ornate_iron_window"
+    "layer0": "create:block/palettes/ornate_iron_window"
   }
 }

@@ -1,15 +1,15 @@
 package com.simibubi.create.content.equipment.zapper;
 
 import java.util.List;
-import net.minecraft.util.RandomSource;
 import java.util.function.Predicate;
 
 import com.google.common.base.Predicates;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.Lang;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
 public enum PlacementPatterns {

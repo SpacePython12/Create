@@ -12,7 +12,6 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.track.TrackTargetingBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.map.CustomRenderedMapDecoration;
-import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -21,6 +20,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
@@ -47,7 +47,7 @@ public class StationMarker {
 		BlockPos source = NbtUtils.readBlockPos(tag.getCompound("source"));
 		BlockPos target = NbtUtils.readBlockPos(tag.getCompound("target"));
 		Component name = Component.Serializer.fromJson(tag.getString("name"));
-		if (name == null) name = Components.immutableEmpty();
+		if (name == null) name = CommonComponents.EMPTY;
 
 		return new StationMarker(source, target, name);
 	}
@@ -61,7 +61,7 @@ public class StationMarker {
 		String name = stationOption.get()
 			.getStation().name;
 		return new StationMarker(pos, BlockEntityBehaviour.get(stationOption.get(), TrackTargetingBehaviour.TYPE)
-			.getPositionForMapMarker(), Components.literal(name));
+			.getPositionForMapMarker(), Component.literal(name));
 	}
 
 	public CompoundTag save() {
@@ -135,17 +135,17 @@ public class StationMarker {
 			VertexConsumer buffer = bufferSource.getBuffer(RenderType.text(TEXTURE));
 			Matrix4f mat = poseStack.last().pose();
 			float zOffset = -0.001f;
-			buffer.vertex(mat, -1, -1, zOffset * index).color(255, 255, 255, 255).uv(0.0f		, 0.0f		 ).uv2(packedLight).endVertex();
-			buffer.vertex(mat, -1,  1, zOffset * index).color(255, 255, 255, 255).uv(0.0f		, 0.0f + 1.0f).uv2(packedLight).endVertex();
-			buffer.vertex(mat,  1,  1, zOffset * index).color(255, 255, 255, 255).uv(0.0f + 1.0f, 0.0f + 1.0f).uv2(packedLight).endVertex();
-			buffer.vertex(mat,  1, -1, zOffset * index).color(255, 255, 255, 255).uv(0.0f + 1.0f, 0.0f		 ).uv2(packedLight).endVertex();
+			buffer.vertex(mat, -1, -1, zOffset * index).color(255, 255, 255, 255).uv(0.0f, 0.0f).uv2(packedLight).endVertex();
+			buffer.vertex(mat, -1, 1, zOffset * index).color(255, 255, 255, 255).uv(0.0f, 0.0f + 1.0f).uv2(packedLight).endVertex();
+			buffer.vertex(mat, 1, 1, zOffset * index).color(255, 255, 255, 255).uv(0.0f + 1.0f, 0.0f + 1.0f).uv2(packedLight).endVertex();
+			buffer.vertex(mat, 1, -1, zOffset * index).color(255, 255, 255, 255).uv(0.0f + 1.0f, 0.0f).uv2(packedLight).endVertex();
 
 			poseStack.popPose();
 
 			if (getName() != null) {
 				Font font = Minecraft.getInstance().font;
 				Component component = getName();
-				float f6 = (float)font.width(component);
+				float f6 = (float) font.width(component);
 //				float f7 = Mth.clamp(25.0F / f6, 0.0F, 6.0F / 9.0F);
 				poseStack.pushPose();
 //				poseStack.translate((double)(0.0F + (float)getX() / 2.0F + 64.0F / 2.0F), (double)(0.0F + (float)getY() / 2.0F + 64.0F + 4.0F), (double)-0.025F);

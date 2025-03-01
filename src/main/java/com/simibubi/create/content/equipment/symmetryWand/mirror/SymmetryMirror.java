@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
-import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -45,8 +46,8 @@ public abstract class SymmetryMirror {
 	}
 
 	public static List<Component> getMirrors() {
-		return ImmutableList.of(Lang.translateDirect("symmetry.mirror.plane"), Lang.translateDirect("symmetry.mirror.doublePlane"),
-			Lang.translateDirect("symmetry.mirror.triplePlane"));
+		return ImmutableList.of(CreateLang.translateDirect("symmetry.mirror.plane"), CreateLang.translateDirect("symmetry.mirror.doublePlane"),
+			CreateLang.translateDirect("symmetry.mirror.triplePlane"));
 	}
 
 	public StringRepresentable getOrientation() {

@@ -1,18 +1,15 @@
 package com.simibubi.create.content.contraptions;
 
-import static com.simibubi.create.foundation.utility.AngleHelper.angleLerp;
-
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllEntityTypes;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.contraptions.bearing.BearingContraption;
-import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -24,6 +21,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 /**
  * Ex: Pistons, bearings <br>
@@ -44,14 +44,14 @@ public class ControlledContraptionEntity extends AbstractContraptionEntity {
 	}
 
 	public static ControlledContraptionEntity create(Level world, IControlContraption controller,
-		Contraption contraption) {
+													 Contraption contraption) {
 		ControlledContraptionEntity entity =
 			new ControlledContraptionEntity(AllEntityTypes.CONTROLLED_CONTRAPTION.get(), world);
 		entity.controllerPos = controller.getBlockPosition();
 		entity.setContraption(contraption);
 		return entity;
 	}
-	
+
 	@Override
 	public void setPos(double x, double y, double z) {
 		super.setPos(x, y, z);
@@ -132,7 +132,7 @@ public class ControlledContraptionEntity extends AbstractContraptionEntity {
 	}
 
 	public float getAngle(float partialTicks) {
-		return partialTicks == 1.0F ? angle : angleLerp(partialTicks, prevAngle, angle);
+		return partialTicks == 1.0F ? angle : AngleHelper.angleLerp(partialTicks, prevAngle, angle);
 	}
 
 	public void setRotationAxis(Axis rotationAxis) {
@@ -144,11 +144,13 @@ public class ControlledContraptionEntity extends AbstractContraptionEntity {
 	}
 
 	@Override
-	public void teleportTo(double p_70634_1_, double p_70634_3_, double p_70634_5_) {}
+	public void teleportTo(double p_70634_1_, double p_70634_3_, double p_70634_5_) {
+	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public void lerpTo(double x, double y, double z, float yw, float pt, int inc, boolean t) {}
+	public void lerpTo(double x, double y, double z, float yw, float pt, int inc, boolean t) {
+	}
 
 	protected void tickContraption() {
 		angleDelta = angle - prevAngle;
@@ -173,14 +175,13 @@ public class ControlledContraptionEntity extends AbstractContraptionEntity {
 
 	@Override
 	protected boolean shouldActorTrigger(MovementContext context, StructureBlockInfo blockInfo, MovementBehaviour actor,
-		Vec3 actorPosition, BlockPos gridPosition) {
+										 Vec3 actorPosition, BlockPos gridPosition) {
 		if (super.shouldActorTrigger(context, blockInfo, actor, actorPosition, gridPosition))
 			return true;
 
 		// Special activation timer for actors in the center of a bearing contraption
-		if (!(contraption instanceof BearingContraption))
+		if (!(contraption instanceof BearingContraption bc))
 			return false;
-		BearingContraption bc = (BearingContraption) contraption;
 		Direction facing = bc.getFacing();
 		Vec3 activeAreaOffset = actor.getActiveAreaOffset(context);
 		if (!activeAreaOffset.multiply(VecHelper.axisAlingedPlaneOf(Vec3.atLowerCornerOf(facing.getNormal())))
@@ -246,10 +247,12 @@ public class ControlledContraptionEntity extends AbstractContraptionEntity {
 		float angle = getAngle(partialTicks);
 		Axis axis = getRotationAxis();
 
-		TransformStack.cast(matrixStack)
-			.nudge(getId())
-			.centre()
-			.rotate(angle, axis)
-			.unCentre();
+		if (axis != null) {
+			TransformStack.of(matrixStack)
+				.nudge(getId())
+				.center()
+				.rotateDegrees(angle, axis)
+				.uncenter();
+		}
 	}
 }

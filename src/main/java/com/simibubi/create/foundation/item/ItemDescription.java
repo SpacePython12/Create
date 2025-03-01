@@ -11,21 +11,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableList;
-import com.simibubi.create.foundation.item.TooltipHelper.Palette;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.lang.FontHelper.Palette;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +30,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ItemLike;
 
-public record ItemDescription(ImmutableList<Component> lines, ImmutableList<Component> linesOnShift, ImmutableList<Component> linesOnCtrl) {
+public record ItemDescription(ImmutableList<Component> lines, ImmutableList<Component> linesOnShift,
+							  ImmutableList<Component> linesOnCtrl) {
 	private static final Map<Item, Supplier<String>> CUSTOM_TOOLTIP_KEYS = new IdentityHashMap<>();
 
 	@Nullable
@@ -149,20 +146,20 @@ public record ItemDescription(ImmutableList<Component> lines, ImmutableList<Comp
 			}
 
 			if (!behaviours.isEmpty()) {
-				linesOnShift.add(Components.immutableEmpty());
+				linesOnShift.add(CommonComponents.EMPTY);
 			}
 
 			for (Pair<String, String> behaviourPair : behaviours) {
 				String condition = behaviourPair.getLeft();
 				String behaviour = behaviourPair.getRight();
-				linesOnShift.add(Components.literal(condition).withStyle(GRAY));
+				linesOnShift.add(Component.literal(condition).withStyle(GRAY));
 				linesOnShift.addAll(TooltipHelper.cutStringTextComponent(behaviour, palette.primary(), palette.highlight(), 1));
 			}
 
 			for (Pair<String, String> actionPair : actions) {
 				String condition = actionPair.getLeft();
 				String action = actionPair.getRight();
-				linesOnCtrl.add(Components.literal(condition).withStyle(GRAY));
+				linesOnCtrl.add(Component.literal(condition).withStyle(GRAY));
 				linesOnCtrl.addAll(TooltipHelper.cutStringTextComponent(action, palette.primary(), palette.highlight(), 1));
 			}
 
@@ -170,43 +167,43 @@ public record ItemDescription(ImmutableList<Component> lines, ImmutableList<Comp
 			boolean hasControls = !linesOnCtrl.isEmpty();
 
 			if (hasDescription || hasControls) {
-				String[] holdDesc = Lang.translateDirect("tooltip.holdForDescription", "$")
+				String[] holdDesc = CreateLang.translateDirect("tooltip.holdForDescription", "$")
 					.getString()
 					.split("\\$");
-				String[] holdCtrl = Lang.translateDirect("tooltip.holdForControls", "$")
+				String[] holdCtrl = CreateLang.translateDirect("tooltip.holdForControls", "$")
 					.getString()
 					.split("\\$");
-				MutableComponent keyShift = Lang.translateDirect("tooltip.keyShift");
-				MutableComponent keyCtrl = Lang.translateDirect("tooltip.keyCtrl");
+				MutableComponent keyShift = CreateLang.translateDirect("tooltip.keyShift");
+				MutableComponent keyCtrl = CreateLang.translateDirect("tooltip.keyCtrl");
 				for (List<Component> list : Arrays.asList(lines, linesOnShift, linesOnCtrl)) {
 					boolean shift = list == linesOnShift;
 					boolean ctrl = list == linesOnCtrl;
 
 					if (holdDesc.length != 2 || holdCtrl.length != 2) {
-						list.add(0, Components.literal("Invalid lang formatting!"));
+						list.add(0, Component.literal("Invalid lang formatting!"));
 						continue;
 					}
 
 					if (hasControls) {
-						MutableComponent tabBuilder = Components.empty();
-						tabBuilder.append(Components.literal(holdCtrl[0]).withStyle(DARK_GRAY));
+						MutableComponent tabBuilder = Component.empty();
+						tabBuilder.append(Component.literal(holdCtrl[0]).withStyle(DARK_GRAY));
 						tabBuilder.append(keyCtrl.plainCopy()
 							.withStyle(ctrl ? WHITE : GRAY));
-						tabBuilder.append(Components.literal(holdCtrl[1]).withStyle(DARK_GRAY));
+						tabBuilder.append(Component.literal(holdCtrl[1]).withStyle(DARK_GRAY));
 						list.add(0, tabBuilder);
 					}
 
 					if (hasDescription) {
-						MutableComponent tabBuilder = Components.empty();
-						tabBuilder.append(Components.literal(holdDesc[0]).withStyle(DARK_GRAY));
+						MutableComponent tabBuilder = Component.empty();
+						tabBuilder.append(Component.literal(holdDesc[0]).withStyle(DARK_GRAY));
 						tabBuilder.append(keyShift.plainCopy()
 							.withStyle(shift ? WHITE : GRAY));
-						tabBuilder.append(Components.literal(holdDesc[1]).withStyle(DARK_GRAY));
+						tabBuilder.append(Component.literal(holdDesc[1]).withStyle(DARK_GRAY));
 						list.add(0, tabBuilder);
 					}
 
 					if (shift || ctrl)
-						list.add(hasDescription && hasControls ? 2 : 1, Components.immutableEmpty());
+						list.add(hasDescription && hasControls ? 2 : 1, CommonComponents.EMPTY);
 				}
 			}
 

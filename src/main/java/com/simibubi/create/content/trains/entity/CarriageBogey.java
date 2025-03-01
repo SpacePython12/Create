@@ -5,26 +5,24 @@ import static com.simibubi.create.content.trains.bogey.AbstractBogeyBlockEntity.
 
 import javax.annotation.Nullable;
 
-import com.jozufozu.flywheel.api.MaterialManager;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllBogeyStyles;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlockEntity;
-import com.simibubi.create.content.trains.bogey.BogeyInstance;
+import com.simibubi.create.content.trains.bogey.BogeySizes.BogeySize;
 import com.simibubi.create.content.trains.bogey.BogeyStyle;
 import com.simibubi.create.content.trains.graph.DimensionPalette;
 import com.simibubi.create.content.trains.graph.TrackGraph;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.nbt.NBTHelper;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -181,12 +179,12 @@ public class CarriageBogey {
 
 	public CompoundTag write(DimensionPalette dimensions) {
 		CompoundTag tag = new CompoundTag();
-		tag.putString("Type", RegisteredObjects.getKeyOrThrow((Block) type)
+		tag.putString("Type", CatnipServices.REGISTRIES.getKeyOrThrow((Block) type)
 				.toString());
 		tag.put("Points", points.serializeEach(tp -> tp.write(dimensions)));
 		tag.putBoolean("UpsideDown", upsideDown);
 		bogeyData.putBoolean(UPSIDE_DOWN_KEY, upsideDown);
-		NBTHelper.writeResourceLocation(bogeyData, BOGEY_STYLE_KEY, getStyle().name);
+		NBTHelper.writeResourceLocation(bogeyData, BOGEY_STYLE_KEY, getStyle().id);
 		tag.put(BOGEY_DATA_KEY, bogeyData);
 		return tag;
 	}
@@ -202,20 +200,20 @@ public class CarriageBogey {
 		return new CarriageBogey(type, upsideDown, data, points.getFirst(), points.getSecond());
 	}
 
-	public BogeyInstance createInstance(MaterialManager materialManager) {
-		return this.getStyle().createInstance(this, type.getSize(), materialManager);
-	}
-
 	public BogeyStyle getStyle() {
 		ResourceLocation location = NBTHelper.readResourceLocation(this.bogeyData, BOGEY_STYLE_KEY);
 		BogeyStyle style = AllBogeyStyles.BOGEY_STYLES.get(location);
 		return style != null ? style : AllBogeyStyles.STANDARD; // just for safety
 	}
 
+	public BogeySize getSize() {
+		return type.getSize();
+	}
+
 	private CompoundTag createBogeyData() {
 		BogeyStyle style = type != null ? type.getDefaultStyle() : AllBogeyStyles.STANDARD;
 		CompoundTag nbt = style.defaultData != null ? style.defaultData : new CompoundTag();
-		NBTHelper.writeResourceLocation(nbt, BOGEY_STYLE_KEY, style.name);
+		NBTHelper.writeResourceLocation(nbt, BOGEY_STYLE_KEY, style.id);
 		nbt.putBoolean(UPSIDE_DOWN_KEY, isUpsideDown());
 		return nbt;
 	}

@@ -2,10 +2,10 @@ package com.simibubi.create.content.schematics.client.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllSpecialTextures;
-import com.simibubi.create.foundation.outliner.AABBOutline;
-import com.simibubi.create.foundation.render.SuperRenderTypeBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.outliner.AABBOutline;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;
@@ -67,7 +67,7 @@ public class FlipTool extends PlacementToolBase {
 			.inflate(1 - directionVec.x, 1 - directionVec.y, 1 - directionVec.z);
 		bounds = bounds.move(directionVec.scale(.5f)
 			.multiply(boundsSize));
-		
+
 		outline.setBounds(bounds);
 		AllSpecialTextures tex = AllSpecialTextures.CHECKERED;
 		outline.getParams()
@@ -76,7 +76,7 @@ public class FlipTool extends PlacementToolBase {
 			.colored(0xdddddd)
 			.withFaceTextures(tex, tex);
 		outline.render(ms, buffer, Vec3.ZERO, AnimationTickHolder.getPartialTicks());
-		
+
 		super.renderOnSchematic(ms, buffer);
 	}
 

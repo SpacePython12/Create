@@ -1,8 +1,7 @@
 package com.simibubi.create.content.kinetics.mechanicalArm;
 
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
-
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;

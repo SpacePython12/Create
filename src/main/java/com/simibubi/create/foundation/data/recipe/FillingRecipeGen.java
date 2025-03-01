@@ -3,15 +3,18 @@ package com.simibubi.create.foundation.data.recipe;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.AllTags;
 import com.simibubi.create.AllTags.AllFluidTags;
 import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class FillingRecipeGen extends ProcessingRecipeGen {
 
@@ -89,7 +92,15 @@ public class FillingRecipeGen extends ProcessingRecipeGen {
 		VMP_CURSED_GRASS = create(Mods.VMP.recipeId("cursed_grass"), b -> b.require(Fluids.WATER, FluidConstants.BUCKET / 2)
 			.require(Mods.VMP, "cursed_earth")
 			.output(Mods.VMP, "cursed_grass")
-			.whenModLoaded(Mods.VMP.getId()));
+			.whenModLoaded(Mods.VMP.getId())),
+	
+		// IE
+
+		IE_TREATED_WOOD = create(Mods.IE.recipeId("treated_wood_in_spout"),
+			b -> b.require(AllTags.forgeFluidTag("creosote"), 125)
+				.require(I.planks())
+				.output(Mods.IE, "treated_wood_horizontal")
+				.whenModLoaded(Mods.IE.getId()));
 
 	;
 

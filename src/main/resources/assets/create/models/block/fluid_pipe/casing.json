@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "create:block/pipes",
-		"particle": "create:block/pipes"
+		"particle": "block/copper_block"
 	},
 	"elements": [
 		{

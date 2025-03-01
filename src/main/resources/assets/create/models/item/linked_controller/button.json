@@ -12,7 +12,7 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0.5]},
 			"faces": {
 				"north": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
-				"east": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
+				"east": {"uv": [2, 13, 4, 14], "texture": "#redstone_bridge"},
 				"south": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"west": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"},
 				"up": {"uv": [2, 11, 4, 13], "texture": "#redstone_bridge"}

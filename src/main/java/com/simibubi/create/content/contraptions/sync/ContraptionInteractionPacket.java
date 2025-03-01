@@ -1,8 +1,5 @@
 package com.simibubi.create.content.contraptions.sync;
 
-import java.util.function.Supplier;
-
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;
@@ -52,9 +49,8 @@ public class ContraptionInteractionPacket extends SimplePacketBase {
 			if (sender == null)
 				return;
 			Entity entityByID = sender.level().getEntity(target);
-			if (!(entityByID instanceof AbstractContraptionEntity))
+			if (!(entityByID instanceof AbstractContraptionEntity contraptionEntity))
 				return;
-			AbstractContraptionEntity contraptionEntity = (AbstractContraptionEntity) entityByID;
 			AABB bb = contraptionEntity.getBoundingBox();
 			double boundsExtra = Math.max(bb.getXsize(), bb.getYsize());
 			double d = ReachUtil.reach(sender) + 10 + boundsExtra;

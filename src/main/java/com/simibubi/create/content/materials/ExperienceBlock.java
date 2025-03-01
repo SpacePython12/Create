@@ -1,7 +1,6 @@
 package com.simibubi.create.content.materials;
 
-import com.simibubi.create.foundation.utility.VecHelper;
-
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;

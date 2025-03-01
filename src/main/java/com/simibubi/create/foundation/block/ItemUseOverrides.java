@@ -4,12 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.simibubi.create.AllItems;
-import com.simibubi.create.AllTags;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,7 +22,7 @@ public class ItemUseOverrides {
 	private static final Set<ResourceLocation> OVERRIDES = new HashSet<>();
 
 	public static void addBlock(Block block) {
-		OVERRIDES.add(RegisteredObjects.getKeyOrThrow(block));
+		OVERRIDES.add(CatnipServices.REGISTRIES.getKeyOrThrow(block));
 	}
 
 	public static InteractionResult onBlockActivated(Player player, Level world, InteractionHand hand, BlockHitResult traceResult) {
@@ -38,7 +36,7 @@ public class ItemUseOverrides {
 
 		BlockState state = world
 				.getBlockState(pos);
-		ResourceLocation id = RegisteredObjects.getKeyOrThrow(state.getBlock());
+		ResourceLocation id = CatnipServices.REGISTRIES.getKeyOrThrow(state.getBlock());
 
 		if (!OVERRIDES.contains(id))
 			return InteractionResult.PASS;

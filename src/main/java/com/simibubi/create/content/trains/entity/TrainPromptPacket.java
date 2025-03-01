@@ -2,13 +2,13 @@ package com.simibubi.create.content.trains.entity;
 
 import com.simibubi.create.content.trains.TrainHUD;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-
 import com.tterrag.registrate.fabric.EnvExecutor;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 
 public class TrainPromptPacket extends SimplePacketBase {
 

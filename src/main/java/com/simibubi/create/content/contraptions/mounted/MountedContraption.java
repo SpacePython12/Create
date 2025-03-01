@@ -4,27 +4,18 @@ import static com.simibubi.create.content.contraptions.mounted.CartAssemblerBloc
 
 import java.util.Queue;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllContraptionTypes;
+import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.mounted.CartAssemblerBlockEntity.CartMovementMode;
-import com.simibubi.create.content.contraptions.render.ContraptionLighter;
-import com.simibubi.create.content.contraptions.render.NonStationaryLighter;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -41,6 +32,8 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.AABB;
 
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+
 public class MountedContraption extends Contraption {
 
 	public CartMovementMode rotationMode;
@@ -56,7 +49,7 @@ public class MountedContraption extends Contraption {
 
 	@Override
 	public ContraptionType getType() {
-		return ContraptionType.MOUNTED;
+		return AllContraptionTypes.MOUNTED.value();
 	}
 
 	@Override
@@ -68,7 +61,7 @@ public class MountedContraption extends Contraption {
 			return false;
 
 		Axis axis = state.getValue(RAIL_SHAPE) == RailShape.EAST_WEST ? Axis.X : Axis.Z;
-		addBlock(pos, Pair.of(new StructureBlockInfo(pos, AllBlocks.MINECART_ANCHOR.getDefaultState()
+		addBlock(world, pos, Pair.of(new StructureBlockInfo(pos, AllBlocks.MINECART_ANCHOR.getDefaultState()
 			.setValue(BlockStateProperties.HORIZONTAL_AXIS, axis), null), null));
 
 		if (blocks.size() == 1)
@@ -162,12 +155,7 @@ public class MountedContraption extends Contraption {
 
 	public void addExtraInventories(Entity cart) {
 		if (cart instanceof Container container)
-			storage.attachExternal(new ContraptionInvWrapper(true, InventoryStorage.of(container, null)));
+			storage.attachExternal(InventoryStorage.of(container, null));
 	}
 
-	@Override
-	@Environment(EnvType.CLIENT)
-	public ContraptionLighter<?> makeLighter() {
-		return new NonStationaryLighter<>(this);
-	}
 }

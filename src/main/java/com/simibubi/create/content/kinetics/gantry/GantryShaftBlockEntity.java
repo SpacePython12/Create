@@ -4,8 +4,8 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.contraptions.gantry.GantryCarriageBlock;
 import com.simibubi.create.content.contraptions.gantry.GantryCarriageBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -23,7 +23,7 @@ public class GantryShaftBlockEntity extends KineticBlockEntity {
 	protected boolean syncSequenceContext() {
 		return true;
 	}
-	
+
 	public void checkAttachedCarriageBlocks() {
 		if (!canAssembleOn())
 			return;

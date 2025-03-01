@@ -9,13 +9,10 @@ import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentType
 import com.simibubi.create.content.fluids.FluidTransportBehaviour.AttachmentTypes.ComponentPartials;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Iterate;
 
-import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
-import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,10 +20,26 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
+import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
+
 public class PipeAttachmentModel extends ForwardingBakedModel {
 
-	public PipeAttachmentModel(BakedModel template) {
+	private boolean ao;
+
+	public static PipeAttachmentModel withAO(BakedModel template) {
+		return new PipeAttachmentModel(template, true);
+	}
+
+	public static PipeAttachmentModel withoutAO(BakedModel template) {
+		return new PipeAttachmentModel(template, false);
+	}
+
+	public PipeAttachmentModel(BakedModel template, boolean ao) {
 		wrapped = template;
+		this.ao = ao;
 	}
 
 	@Override
@@ -57,18 +70,6 @@ public class PipeAttachmentModel extends ForwardingBakedModel {
 		addQuads(world, state, pos, randomSupplier, context, data);
 	}
 
-	// fabric: unnecessary
-	// TODO: Update once MinecraftForge#9163 is merged
-//	@SuppressWarnings("removal")
-//	@Override
-//	public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
-//		ChunkRenderTypeSet set = super.getRenderTypes(state, rand, data);
-//		if (set.isEmpty()) {
-//			return ItemBlockRenderTypes.getRenderLayers(state);
-//		}
-//		return set;
-//	}
-
 	private void addQuads(BlockAndTintGetter world, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context,
 		PipeModelData pipeData) {
 		BakedModel bracket = pipeData.getBracket();
@@ -86,6 +87,21 @@ public class PipeAttachmentModel extends ForwardingBakedModel {
 		if (pipeData.isEncased())
 			((FabricBakedModel) AllPartialModels.FLUID_PIPE_CASING.get())
 				.emitBlockQuads(world, state, pos, randomSupplier, context);
+	}
+
+	@Override
+	public boolean useAmbientOcclusion(BlockState state, RenderType renderType) {
+		return ao;
+	}
+
+	@Override
+	public boolean useAmbientOcclusion(BlockState state) {
+		return ao;
+	}
+
+	@Override
+	public boolean useAmbientOcclusion() {
+		return ao;
 	}
 
 	private static class PipeModelData {

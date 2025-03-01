@@ -1,18 +1,20 @@
 package com.simibubi.create.content.logistics.chute;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.math.AngleHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class SmartChuteFilterSlotPositioning extends ValueBoxTransform.Sided {
 
 	@Override
-	public Vec3 getLocalOffset(BlockState state) {
+	public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
 		Direction side = getSide();
 		float horizontalAngle = AngleHelper.horizontalAngle(side);
 		Vec3 southLocation = VecHelper.voxelSpace(8, 11, 15.5f);

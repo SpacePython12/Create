@@ -1,14 +1,14 @@
 package com.simibubi.create.content.decoration.girder;
 
 import com.simibubi.create.foundation.data.AssetLookup;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 
-import io.github.fabricators_of_create.porting_lib.models.generators.block.MultiPartBlockStateBuilder;
-
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.Block;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.block.MultiPartBlockStateBuilder;
 
 public class GirderBlockStateGenerator {
 

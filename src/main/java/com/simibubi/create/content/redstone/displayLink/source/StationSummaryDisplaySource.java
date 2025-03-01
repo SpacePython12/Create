@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.simibubi.create.api.behaviour.display.DisplaySource;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
@@ -16,26 +17,41 @@ import com.simibubi.create.content.trains.station.GlobalStation;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 public class StationSummaryDisplaySource extends DisplaySource {
 
-	protected static final MutableComponent UNPREDICTABLE = Components.literal(" ~ ");
+	protected static final MutableComponent UNPREDICTABLE;
 
-	protected static final List<MutableComponent> EMPTY_ENTRY_4 =
-		ImmutableList.of(WHITESPACE, Components.literal(" . "), WHITESPACE, WHITESPACE);
-	protected static final List<MutableComponent> EMPTY_ENTRY_5 =
-		ImmutableList.of(WHITESPACE, Components.literal(" . "), WHITESPACE, WHITESPACE, WHITESPACE);
+    static {
+        UNPREDICTABLE = Component.literal(" ~ ");
+    }
 
-	@Override
+    protected static final List<MutableComponent> EMPTY_ENTRY_4;
+
+    static {
+        EMPTY_ENTRY_4 = ImmutableList.of(WHITESPACE, Component.literal(" . "), WHITESPACE, WHITESPACE);
+    }
+
+    protected static final List<MutableComponent> EMPTY_ENTRY_5;
+
+    static {
+        EMPTY_ENTRY_5 = ImmutableList.of(WHITESPACE, Component.literal(" . "), WHITESPACE, WHITESPACE, WHITESPACE);
+    }
+
+    @Override
 	public List<MutableComponent> provideText(DisplayLinkContext context, DisplayTargetStats stats) {
 		return EMPTY;
 	}
@@ -57,7 +73,7 @@ public class StationSummaryDisplaySource extends DisplaySource {
 
 				} else if (prediction.ticks < 200) {
 					lines.add(WHITESPACE);
-					lines.add(Lang.translateDirect("display_source.station_summary.now"));
+					lines.add(CreateLang.translateDirect("display_source.station_summary.now"));
 
 				} else {
 					int min = prediction.ticks / 1200;
@@ -67,9 +83,9 @@ public class StationSummaryDisplaySource extends DisplaySource {
 						min++;
 						sec = 0;
 					}
-					lines.add(min > 0 ? Components.literal(String.valueOf(min)) : WHITESPACE);
-					lines.add(min > 0 ? Lang.translateDirect("display_source.station_summary.minutes")
-						: Lang.translateDirect("display_source.station_summary.seconds", sec));
+					lines.add(min > 0 ? Component.literal(String.valueOf(min)) : WHITESPACE);
+					lines.add(min > 0 ? CreateLang.translateDirect("display_source.station_summary.minutes")
+						: CreateLang.translateDirect("display_source.station_summary.seconds", sec));
 				}
 
 				lines.add(prediction.train.name.copy());
@@ -86,7 +102,7 @@ public class StationSummaryDisplaySource extends DisplaySource {
 						platform = platform.replace(string, "");
 				platform = platform.replace("*", "?");
 
-				lines.add(Components.literal(platform.trim()));
+				lines.add(Component.literal(platform.trim()));
 				list.add(lines);
 			});
 
@@ -187,16 +203,16 @@ public class StationSummaryDisplaySource extends DisplaySource {
 		if (isFirstLine) {
 			builder.addTextInput(0, 137, (e, t) -> {
 				e.setValue("");
-				t.withTooltip(ImmutableList.of(Lang.translateDirect("display_source.station_summary.filter")
+				t.withTooltip(ImmutableList.of(CreateLang.translateDirect("display_source.station_summary.filter")
 					.withStyle(s -> s.withColor(0x5391E1)),
-					Lang.translateDirect("gui.schedule.lmb_edit")
+					CreateLang.translateDirect("gui.schedule.lmb_edit")
 						.withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)));
 			}, "Filter");
 			return;
 		}
 
 		builder.addScrollInput(0, 32, (si, l) -> {
-			si.titled(Lang.translateDirect("display_source.station_summary.train_name_column"))
+			si.titled(CreateLang.translateDirect("display_source.station_summary.train_name_column"))
 				.withRange(0, 73)
 				.withShiftStep(12);
 			si.setState(50);
@@ -204,7 +220,7 @@ public class StationSummaryDisplaySource extends DisplaySource {
 		}, "NameColumn");
 
 		builder.addScrollInput(36, 22, (si, l) -> {
-			si.titled(Lang.translateDirect("display_source.station_summary.platform_column"))
+			si.titled(CreateLang.translateDirect("display_source.station_summary.platform_column"))
 				.withRange(0, 16)
 				.withShiftStep(4);
 			si.setState(3);

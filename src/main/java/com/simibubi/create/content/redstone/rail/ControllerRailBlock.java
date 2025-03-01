@@ -5,11 +5,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.block.MinecartPassHandlerBlock;
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,6 +37,9 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
 
+import io.github.fabricators_of_create.porting_lib.block.MinecartPassHandlerBlock;
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ControllerRailBlock extends BaseRailBlock implements IWrenchable, MinecartPassHandlerBlock {
@@ -63,15 +64,15 @@ public class ControllerRailBlock extends BaseRailBlock implements IWrenchable, M
 
 	private static Direction getPointingTowards(BlockState state) {
 		switch (state.getValue(SHAPE)) {
-		case ASCENDING_WEST:
-		case EAST_WEST:
-			return Direction.WEST;
-		case ASCENDING_EAST:
-			return Direction.EAST;
-		case ASCENDING_SOUTH:
-			return Direction.SOUTH;
-		default:
-			return Direction.NORTH;
+			case ASCENDING_WEST:
+			case EAST_WEST:
+				return Direction.WEST;
+			case ASCENDING_EAST:
+				return Direction.EAST;
+			case ASCENDING_SOUTH:
+				return Direction.SOUTH;
+			default:
+				return Direction.NORTH;
 		}
 	}
 
@@ -111,8 +112,7 @@ public class ControllerRailBlock extends BaseRailBlock implements IWrenchable, M
 			.subtract(cart.position());
 		cart.setDeltaMovement(diff.x / 16f, 0, diff.z / 16f);
 
-		if (cart instanceof MinecartFurnace) {
-			MinecartFurnace fme = (MinecartFurnace) cart;
+		if (cart instanceof MinecartFurnace fme) {
 			fme.xPush = fme.zPush = 0;
 		}
 	}
@@ -147,8 +147,7 @@ public class ControllerRailBlock extends BaseRailBlock implements IWrenchable, M
 		Vec3 accelerationVec = Vec3.atLowerCornerOf(getAccelerationVector(state));
 		double targetSpeed = MinecartAndRailUtil.getMaximumSpeed(cart) * state.getValue(POWER) / 15f;
 
-		if (cart instanceof MinecartFurnace) {
-			MinecartFurnace fme = (MinecartFurnace) cart;
+		if (cart instanceof MinecartFurnace fme) {
 			fme.xPush = accelerationVec.x;
 			fme.zPush = accelerationVec.z;
 		}
@@ -218,8 +217,8 @@ public class ControllerRailBlock extends BaseRailBlock implements IWrenchable, M
 		if (world.isClientSide)
 			return InteractionResult.SUCCESS;
 		BlockPos pos = context.getClickedPos();
-		for (Rotation testRotation : new Rotation[] { Rotation.CLOCKWISE_90, Rotation.CLOCKWISE_180,
-			Rotation.COUNTERCLOCKWISE_90 }) {
+		for (Rotation testRotation : new Rotation[]{Rotation.CLOCKWISE_90, Rotation.CLOCKWISE_180,
+			Rotation.COUNTERCLOCKWISE_90}) {
 			BlockState testState = rotate(state, testRotation);
 			if (isStableWith(testState, world, pos)) {
 				placeAndNotify(testState, pos, world);

@@ -4,11 +4,12 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.AdventureUtil;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
 
+import com.simibubi.create.foundation.utility.AdventureUtil;
+
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -60,7 +61,7 @@ public class WaterWheelBlock extends DirectionalKineticBlock implements IBE<Wate
 	@Override
 	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn,
 		BlockPos currentPos, BlockPos facingPos) {
-		if (worldIn instanceof WrappedWorld)
+		if (worldIn instanceof WrappedLevel)
 			return stateIn;
 		if (worldIn.isClientSide())
 			return stateIn;
@@ -128,10 +129,6 @@ public class WaterWheelBlock extends DirectionalKineticBlock implements IBE<Wate
 	@Override
 	public BlockEntityType<? extends WaterWheelBlockEntity> getBlockEntityType() {
 		return AllBlockEntityTypes.WATER_WHEEL.get();
-	}
-
-	public static Couple<Integer> getSpeedRange() {
-		return Couple.create(8, 8);
 	}
 
 }

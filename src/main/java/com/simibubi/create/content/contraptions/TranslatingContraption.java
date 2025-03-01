@@ -55,5 +55,5 @@ public abstract class TranslatingContraption extends Contraption {
 	public boolean canBeStabilized(Direction facing, BlockPos localPos) {
 		return AllConfigs.server().kinetics.stabiliseStableContraptions.get();
 	}
-	
+
 }

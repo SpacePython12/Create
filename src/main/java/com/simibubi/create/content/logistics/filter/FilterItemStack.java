@@ -5,15 +5,18 @@ import java.util.List;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
-import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.content.logistics.box.PackageItem;
+import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class FilterItemStack {
 
@@ -23,14 +26,18 @@ public class FilterItemStack {
 
 	public static FilterItemStack of(ItemStack filter) {
 		if (filter.hasTag()) {
-			CompoundTag stackTag = filter.getTag();
-			stackTag.remove("Enchantments");
-			stackTag.remove("AttributeModifiers");
-
-			if (AllItems.FILTER.isIn(filter))
+			if (AllItems.FILTER.isIn(filter)) {
+				trimFilterTag(filter);
 				return new ListFilterItemStack(filter);
-			if (AllItems.ATTRIBUTE_FILTER.isIn(filter))
+			}
+			if (AllItems.ATTRIBUTE_FILTER.isIn(filter)) {
+				trimFilterTag(filter);
 				return new AttributeFilterItemStack(filter);
+			}
+			if (AllItems.PACKAGE_FILTER.isIn(filter)) {
+				trimFilterTag(filter);
+				return new PackageFilterItemStack(filter);
+			}
 		}
 
 		return new FilterItemStack(filter);
@@ -42,6 +49,12 @@ public class FilterItemStack {
 
 	public static FilterItemStack empty() {
 		return of(ItemStack.EMPTY);
+	}
+
+	private static void trimFilterTag(ItemStack filter) {
+		CompoundTag stackTag = filter.getTag();
+		stackTag.remove("Enchantments");
+		stackTag.remove("AttributeModifiers");
 	}
 
 	public boolean isEmpty() {
@@ -106,7 +119,7 @@ public class FilterItemStack {
 			fluidExtracted = true;
 			if (GenericItemEmptying.canItemBeEmptied(world, filterItemStack))
 				filterFluidStack = GenericItemEmptying.emptyItem(world, filterItemStack, true)
-				.getFirst();
+					.getFirst();
 		}
 	}
 
@@ -136,10 +149,10 @@ public class FilterItemStack {
 
 			shouldRespectNBT = defaults ? false
 				: filter.getTag()
-					.getBoolean("RespectNBT");
+				.getBoolean("RespectNBT");
 			isBlacklist = defaults ? false
 				: filter.getTag()
-					.getBoolean("Blacklist");
+				.getBoolean("Blacklist");
 		}
 
 		@Override
@@ -178,14 +191,14 @@ public class FilterItemStack {
 			attributeTests = new ArrayList<>();
 			whitelistMode = WhitelistMode.values()[defaults ? 0
 				: filter.getTag()
-					.getInt("WhitelistMode")];
+				.getInt("WhitelistMode")];
 
 			ListTag attributes = defaults ? new ListTag()
 				: filter.getTag()
-					.getList("MatchedAttributes", Tag.TAG_COMPOUND);
+				.getList("MatchedAttributes", Tag.TAG_COMPOUND);
 			for (Tag inbt : attributes) {
 				CompoundTag compound = (CompoundTag) inbt;
-				ItemAttribute attribute = ItemAttribute.fromNBT(compound);
+				ItemAttribute attribute = ItemAttribute.loadStatic(compound);
 				if (attribute != null)
 					attributeTests.add(Pair.of(attribute, compound.getBoolean("Inverted")));
 			}
@@ -207,34 +220,55 @@ public class FilterItemStack {
 
 				if (matches) {
 					switch (whitelistMode) {
-					case BLACKLIST:
-						return false;
-					case WHITELIST_CONJ:
-						continue;
-					case WHITELIST_DISJ:
-						return true;
+						case BLACKLIST -> {
+							return false;
+						}
+						case WHITELIST_CONJ -> {
+							continue;
+						}
+						case WHITELIST_DISJ -> {
+							return true;
+						}
 					}
 				} else {
 					switch (whitelistMode) {
-					case BLACKLIST:
-						continue;
-					case WHITELIST_CONJ:
-						return false;
-					case WHITELIST_DISJ:
-						continue;
+						case BLACKLIST, WHITELIST_DISJ -> {
+							continue;
+						}
+						case WHITELIST_CONJ -> {
+							return false;
+						}
 					}
 				}
 			}
 
-			switch (whitelistMode) {
-			case BLACKLIST:
-				return true;
-			case WHITELIST_CONJ:
-				return true;
-			case WHITELIST_DISJ:
-				return false;
-			}
+			return switch (whitelistMode) {
+				case BLACKLIST, WHITELIST_CONJ -> true;
+				case WHITELIST_DISJ -> false;
+			};
 
+		}
+
+	}
+
+	public static class PackageFilterItemStack extends FilterItemStack {
+
+		public String filterString;
+
+		protected PackageFilterItemStack(ItemStack filter) {
+			super(filter);
+			filterString = filter.getOrCreateTag()
+				.getString("Address");
+		}
+
+		@Override
+		public boolean test(Level world, ItemStack stack, boolean matchNBT) {
+			return (filterString.isBlank() && super.test(world, stack, matchNBT))
+				|| PackageItem.isPackage(stack) && PackageItem.matchAddress(stack, filterString);
+		}
+
+		@Override
+		public boolean test(Level world, FluidStack stack, boolean matchNBT) {
 			return false;
 		}
 

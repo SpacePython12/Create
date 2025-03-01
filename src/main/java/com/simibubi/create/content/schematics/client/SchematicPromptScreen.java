@@ -4,25 +4,25 @@ import org.lwjgl.glfw.GLFW;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.CreateClient;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 public class SchematicPromptScreen extends AbstractSimiScreen {
 
 	private AllGuiTextures background;
 
-	private final Component convertLabel = Lang.translateDirect("schematicAndQuill.convert");
-	private final Component abortLabel = Lang.translateDirect("action.discard");
-	private final Component confirmLabel = Lang.translateDirect("action.saveToFile");
+	private final Component convertLabel = CreateLang.translateDirect("schematicAndQuill.convert");
+	private final Component abortLabel = CreateLang.translateDirect("action.discard");
+	private final Component confirmLabel = CreateLang.translateDirect("action.saveToFile");
 
 	private EditBox nameField;
 	private IconButton confirm;
@@ -30,19 +30,19 @@ public class SchematicPromptScreen extends AbstractSimiScreen {
 	private IconButton convert;
 
 	public SchematicPromptScreen() {
-		super(Lang.translateDirect("schematicAndQuill.title"));
+		super(CreateLang.translateDirect("schematicAndQuill.title"));
 		background = AllGuiTextures.SCHEMATIC_PROMPT;
 	}
 
 	@Override
 	public void init() {
-		setWindowSize(background.width, background.height);
+		setWindowSize(background.getWidth(), background.getHeight());
 		super.init();
 
 		int x = guiLeft;
-		int y = guiTop;
+		int y = guiTop + 2;
 
-		nameField = new EditBox(font, x + 49, y + 26, 131, 10, Components.immutableEmpty());
+		nameField = new EditBox(font, x + 49, y + 26, 131, 10, CommonComponents.EMPTY);
 		nameField.setTextColor(-1);
 		nameField.setTextColorUneditable(-1);
 		nameField.setBordered(false);
@@ -80,16 +80,16 @@ public class SchematicPromptScreen extends AbstractSimiScreen {
 		int y = guiTop;
 
 		background.render(graphics, x, y);
-		graphics.drawCenteredString(font, title, x + (background.width - 8) / 2, y + 3, 0xFFFFFF);
+		graphics.drawString(font, title, x + (background.getWidth() - 8 - font.width(title)) / 2, y + 4, 0x505050, false);
 
 		GuiGameElement.of(AllItems.SCHEMATIC.asStack())
-				.at(x + 22, y + 23, 0)
-				.render(graphics);
+			.at(x + 22, y + 24, 0)
+			.render(graphics);
 
 		GuiGameElement.of(AllItems.SCHEMATIC_AND_QUILL.asStack())
-				.scale(3)
-				.at(x + background.width + 6, y + background.height - 40, -200)
-				.render(graphics);
+			.scale(3)
+			.at(x + background.getWidth() + 6, y + background.getHeight() - 38, -200)
+			.render(graphics);
 	}
 
 	@Override

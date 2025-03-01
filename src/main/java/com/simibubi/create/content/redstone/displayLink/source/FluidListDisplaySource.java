@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
@@ -19,22 +16,26 @@ import com.simibubi.create.content.trains.display.FlapDisplaySection;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.TankManipulationBehaviour;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Couple;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.FluidFormatter;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LongAttached;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
+import net.createmod.catnip.data.Couple;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.material.Fluid;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.material.Fluid;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 
 public class FluidListDisplaySource extends ValueListDisplaySource {
 
@@ -129,8 +130,8 @@ public class FluidListDisplaySource extends ValueListDisplaySource {
 	protected void addFullNumberConfig(ModularGuiLineBuilder builder) {
 		// fabric: replace shortened / full number option (buckets / millibuckets) with fluid unit selection
 		builder.addSelectionScrollInput(0, 75,
-				(si, l) -> si.forOptions(Lang.translatedOptions("display_source.fluid_amount", "buckets", "millibuckets", "droplets"))
-						.titled(Lang.translateDirect("display_source.fluid_amount.display")),
+				(si, l) -> si.forOptions(CreateLang.translatedOptions("display_source.fluid_amount", "buckets", "millibuckets", "droplets"))
+						.titled(CreateLang.translateDirect("display_source.fluid_amount.display")),
 				"Format");
 	}
 }

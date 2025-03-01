@@ -1,141 +1,134 @@
 package com.simibubi.create.foundation.render;
 
 import java.io.IOException;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import com.jozufozu.flywheel.backend.ShadersModHandler;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.simibubi.create.AllSpecialTextures;
 import com.simibubi.create.Create;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.RenderTypeAccessor;
-import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback.RegistrationContext;
-
+import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 
-// TODO 1.17: use custom shaders instead of vanilla ones
+import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.client.accessor.RenderTypeAccessor;
+
 public class RenderTypes extends RenderStateShard {
-
 	public static final RenderStateShard.ShaderStateShard GLOWING_SHADER = new RenderStateShard.ShaderStateShard(() -> Shaders.glowingShader);
 
-	private static final RenderType OUTLINE_SOLID =
-		RenderTypeAccessor.port_lib$create(createLayerName("outline_solid"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false,
-			false, RenderType.CompositeState.builder()
+	private static final RenderType ENTITY_SOLID_BLOCK_MIPPED = RenderType.create(createLayerName("entity_solid_block_mipped"),
+			DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false,
+			RenderType.CompositeState.builder()
 				.setShaderState(RENDERTYPE_ENTITY_SOLID_SHADER)
-				.setTextureState(new RenderStateShard.TextureStateShard(AllSpecialTextures.BLANK.getLocation(), false, false))
-				.setCullState(CULL)
-				.setLightmapState(LIGHTMAP)
-				.setOverlayState(OVERLAY)
-				.createCompositeState(false));
-
-	public static RenderType getOutlineSolid() {
-		return OUTLINE_SOLID;
-	}
-
-	public static RenderType getOutlineTranslucent(ResourceLocation texture, boolean cull) {
-		return RenderTypeAccessor.port_lib$create(createLayerName("outline_translucent" + (cull ? "_cull" : "")),
-			DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder()
-				.setShaderState(cull ? RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER : RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
-				.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-				.setCullState(cull ? CULL : NO_CULL)
-				.setLightmapState(LIGHTMAP)
-				.setOverlayState(OVERLAY)
-				.setWriteMaskState(COLOR_WRITE)
-				.createCompositeState(false));
-	}
-
-	public static RenderType getGlowingSolid(ResourceLocation texture) {
-		return RenderTypeAccessor.port_lib$create(createLayerName("glowing_solid"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256,
-			true, false, RenderType.CompositeState.builder()
-				.setShaderState(GLOWING_SHADER)
-				.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-				.setCullState(CULL)
+				.setTextureState(BLOCK_SHEET_MIPPED)
+				.setTransparencyState(NO_TRANSPARENCY)
 				.setLightmapState(LIGHTMAP)
 				.setOverlayState(OVERLAY)
 				.createCompositeState(true));
-	}
 
-	private static final RenderType GLOWING_SOLID_DEFAULT = getGlowingSolid(InventoryMenu.BLOCK_ATLAS);
+	private static final RenderType ENTITY_CUTOUT_BLOCK_MIPPED = RenderType.create(createLayerName("entity_cutout_block_mipped"),
+			DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false,
+			RenderType.CompositeState.builder()
+				.setShaderState(RENDERTYPE_ENTITY_CUTOUT_SHADER)
+				.setTextureState(BLOCK_SHEET_MIPPED)
+				.setTransparencyState(NO_TRANSPARENCY)
+				.setLightmapState(LIGHTMAP)
+				.setOverlayState(OVERLAY)
+				.createCompositeState(true));
 
-	public static RenderType getGlowingSolid() {
-		return GLOWING_SOLID_DEFAULT;
-	}
-
-	public static RenderType getGlowingTranslucent(ResourceLocation texture) {
-		return RenderTypeAccessor.port_lib$create(createLayerName("glowing_translucent"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS,
-			256, true, true, RenderType.CompositeState.builder()
-				.setShaderState(GLOWING_SHADER)
-				.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+	private static final RenderType ENTITY_TRANSLUCENT_BLOCK_MIPPED = RenderType.create(createLayerName("entity_translucent_block_mipped"),
+			DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true,
+			RenderType.CompositeState.builder()
+				.setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER)
+				.setTextureState(BLOCK_SHEET_MIPPED)
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setLightmapState(LIGHTMAP)
 				.setOverlayState(OVERLAY)
 				.createCompositeState(true));
-	}
 
 	private static final RenderType ADDITIVE = RenderType.create(createLayerName("additive"), DefaultVertexFormat.BLOCK,
 		VertexFormat.Mode.QUADS, 256, true, true, RenderType.CompositeState.builder()
 			.setShaderState(RENDERTYPE_SOLID_SHADER)
-			.setTextureState(new RenderStateShard.TextureStateShard(InventoryMenu.BLOCK_ATLAS, false, false))
+			.setTextureState(BLOCK_SHEET)
 			.setTransparencyState(ADDITIVE_TRANSPARENCY)
 			.setCullState(NO_CULL)
 			.setLightmapState(LIGHTMAP)
 			.setOverlayState(OVERLAY)
 			.createCompositeState(true));
 
-	public static RenderType getAdditive() {
-		return ADDITIVE;
-	}
+	private static final RenderType ITEM_GLOWING_SOLID = RenderType.create(createLayerName("item_glowing_solid"),
+		DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, false, RenderType.CompositeState.builder()
+			.setShaderState(GLOWING_SHADER)
+			.setTextureState(BLOCK_SHEET)
+			.setLightmapState(LIGHTMAP)
+			.setOverlayState(OVERLAY)
+			.createCompositeState(true));
 
-	private static final RenderType GLOWING_TRANSLUCENT_DEFAULT = getGlowingTranslucent(InventoryMenu.BLOCK_ATLAS);
-
-	public static RenderType getGlowingTranslucent() {
-		return GLOWING_TRANSLUCENT_DEFAULT;
-	}
-
-	private static final RenderType ITEM_PARTIAL_SOLID =
-		RenderTypeAccessor.port_lib$create(createLayerName("item_partial_solid"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true,
-			false, RenderType.CompositeState.builder()
-				.setShaderState(RENDERTYPE_ENTITY_SOLID_SHADER)
-				.setTextureState(BLOCK_SHEET)
-				.setCullState(CULL)
-				.setLightmapState(LIGHTMAP)
-				.setOverlayState(OVERLAY)
-				.createCompositeState(true));
-
-	public static RenderType getItemPartialSolid() {
-		return ITEM_PARTIAL_SOLID;
-	}
-
-	private static final RenderType ITEM_PARTIAL_TRANSLUCENT = RenderTypeAccessor.port_lib$create(createLayerName("item_partial_translucent"),
+	private static final RenderType ITEM_GLOWING_TRANSLUCENT = RenderTypeAccessor.port_lib$create(createLayerName("item_glowing_translucent"),
 		DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, RenderType.CompositeState.builder()
-			.setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER)
+			.setShaderState(GLOWING_SHADER)
 			.setTextureState(BLOCK_SHEET)
 			.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 			.setLightmapState(LIGHTMAP)
 			.setOverlayState(OVERLAY)
 			.createCompositeState(true));
 
-	public static RenderType getItemPartialTranslucent() {
-		return ITEM_PARTIAL_TRANSLUCENT;
+	private static final Function<ResourceLocation, RenderType> CHAIN = Util.memoize((p_234330_) -> {
+		return RenderType.create("chain_conveyor_chain", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 256, false,
+			true, RenderType.CompositeState.builder()
+				.setShaderState(RENDERTYPE_CUTOUT_MIPPED_SHADER)
+				.setTextureState(new RenderStateShard.TextureStateShard(p_234330_, false, true))
+				.setTransparencyState(NO_TRANSPARENCY)
+				.setWriteMaskState(COLOR_DEPTH_WRITE)
+				.setLightmapState(LIGHTMAP)
+				.setOverlayState(OVERLAY)
+				.createCompositeState(false));
+	});
+
+	public static RenderType entitySolidBlockMipped() {
+		return ENTITY_SOLID_BLOCK_MIPPED;
 	}
 
-	private static final RenderType FLUID = RenderTypeAccessor.port_lib$create(createLayerName("fluid"),
-		DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder()
-			.setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER)
-			.setTextureState(BLOCK_SHEET_MIPPED)
-			.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-			.setLightmapState(LIGHTMAP)
-			.setOverlayState(OVERLAY)
-			.createCompositeState(true));
+	public static RenderType entityCutoutBlockMipped() {
+		return ENTITY_CUTOUT_BLOCK_MIPPED;
+	}
 
-	public static RenderType getFluid() {
-		return FLUID;
+	public static RenderType entityTranslucentBlockMipped() {
+		return ENTITY_TRANSLUCENT_BLOCK_MIPPED;
+	}
+
+	public static RenderType additive() {
+		return ADDITIVE;
+	}
+
+	public static BiFunction<ResourceLocation, Boolean, RenderType> TRAIN_MAP = Util.memoize(RenderTypes::getTrainMap);
+
+	private static RenderType getTrainMap(ResourceLocation locationIn, boolean linearFiltering) {
+		RenderType.CompositeState rendertype$state = RenderType.CompositeState.builder()
+			.setShaderState(RENDERTYPE_TEXT_SHADER)
+			.setTextureState(new RenderStateShard.TextureStateShard(locationIn, linearFiltering, false))
+			.setTransparencyState(NO_TRANSPARENCY)
+			.setLightmapState(LIGHTMAP)
+			.createCompositeState(false);
+		return RenderType.create("create_train_map", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP,
+			VertexFormat.Mode.QUADS, 256, false, true, rendertype$state);
+	}
+
+	public static RenderType itemGlowingSolid() {
+		return ITEM_GLOWING_SOLID;
+	}
+
+	public static RenderType itemGlowingTranslucent() {
+		return ITEM_GLOWING_TRANSLUCENT;
+	}
+
+	public static RenderType chain(ResourceLocation pLocation) {
+		return CHAIN.apply(pLocation);
 	}
 
 	private static String createLayerName(String name) {
@@ -154,9 +147,9 @@ public class RenderTypes extends RenderStateShard {
 	private static class Shaders {
 		private static ShaderInstance glowingShader;
 
-		public static void onRegisterShaders(RegistrationContext ctx) throws IOException {
-			ctx.register(Create.asResource("glowing_shader"), DefaultVertexFormat.NEW_ENTITY, shader -> glowingShader = shader);
+		public static void onRegisterShaders(CoreShaderRegistrationCallback.RegistrationContext ctx) throws IOException {
+			ctx.register(Create.asResource("glowing_shader"),
+				DefaultVertexFormat.NEW_ENTITY, shader -> glowingShader = shader);
 		}
 	}
-
 }

@@ -6,38 +6,21 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
-
-import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
-import net.fabricmc.fabric.api.entity.FakePlayer;
-
 import org.apache.commons.lang3.Validate;
 
 import com.simibubi.create.AllEntityTypes;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
+import com.simibubi.create.api.schematic.requirement.SpecialEntityItemRequirement;
 import com.simibubi.create.content.logistics.filter.FilterItemStack;
-import com.simibubi.create.content.logistics.filter.FilterItemStack;
-import com.simibubi.create.content.schematics.requirement.ISpecialEntityItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType;
 import com.simibubi.create.foundation.networking.ISyncPersistentData;
-import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.IInteractionChecker;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -48,7 +31,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -77,8 +59,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+import io.github.fabricators_of_create.porting_lib.entity.PortingLibEntity;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
+
 public class BlueprintEntity extends HangingEntity
-	implements IEntityAdditionalSpawnData, ISpecialEntityItemRequirement, ISyncPersistentData, IInteractionChecker {
+	implements IEntityAdditionalSpawnData, SpecialEntityItemRequirement, ISyncPersistentData, IInteractionChecker {
 
 	protected int size;
 	protected Direction verticalOrientation;
@@ -178,15 +176,15 @@ public class BlueprintEntity extends HangingEntity
 		Axis axis = direction.getAxis();
 		if (size == 2)
 			pos = pos.add(Vec3.atLowerCornerOf(axis.isHorizontal() ? direction.getCounterClockWise()
-				.getNormal()
-				: verticalOrientation.getClockWise()
-					.getNormal())
-				.scale(0.5))
+						.getNormal()
+						: verticalOrientation.getClockWise()
+						.getNormal())
+					.scale(0.5))
 				.add(Vec3
 					.atLowerCornerOf(axis.isHorizontal() ? Direction.UP.getNormal()
 						: direction == Direction.UP ? verticalOrientation.getNormal()
-							: verticalOrientation.getOpposite()
-								.getNormal())
+						: verticalOrientation.getOpposite()
+						.getNormal())
 					.scale(0.5));
 
 		d1 = pos.x;
@@ -198,20 +196,26 @@ public class BlueprintEntity extends HangingEntity
 		double d6 = (double) this.getWidth();
 		Direction.Axis direction$axis = this.direction.getAxis();
 		switch (direction$axis) {
-		case X:
-			d4 = 1.0D;
-			break;
-		case Y:
-			d5 = 1.0D;
-			break;
-		case Z:
-			d6 = 1.0D;
+			case X:
+				d4 = 1.0D;
+				break;
+			case Y:
+				d5 = 1.0D;
+				break;
+			case Z:
+				d6 = 1.0D;
 		}
 
 		d4 = d4 / 32.0D;
 		d5 = d5 / 32.0D;
 		d6 = d6 / 32.0D;
 		this.setBoundingBox(new AABB(d1 - d4, d2 - d5, d3 - d6, d1 + d4, d2 + d5, d3 + d6));
+	}
+
+	@Override
+	public void setPos(double pX, double pY, double pZ) {
+		setPosRaw(pX, pY, pZ);
+		super.setPos(pX, pY, pZ);
 	}
 
 	@Override
@@ -224,7 +228,7 @@ public class BlueprintEntity extends HangingEntity
 		BlockPos blockpos = this.pos.relative(this.direction.getOpposite());
 		Direction upDirection = direction.getAxis()
 			.isHorizontal() ? Direction.UP
-				: direction == Direction.UP ? verticalOrientation : verticalOrientation.getOpposite();
+			: direction == Direction.UP ? verticalOrientation : verticalOrientation.getOpposite();
 		Direction newDirection = direction.getAxis()
 			.isVertical() ? verticalOrientation.getClockWise() : direction.getCounterClockWise();
 		BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
@@ -261,10 +265,9 @@ public class BlueprintEntity extends HangingEntity
 
 	@Override
 	public boolean skipAttackInteraction(Entity source) {
-		if (!(source instanceof Player) || level().isClientSide)
+		if (!(source instanceof Player player) || level().isClientSide)
 			return super.skipAttackInteraction(source);
 
-		Player player = (Player) source;
 		double attrib = ReachUtil.reach(player);
 
 		Vec3 eyePos = source.getEyePosition(1);
@@ -295,8 +298,7 @@ public class BlueprintEntity extends HangingEntity
 			return;
 
 		playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
-		if (p_110128_1_ instanceof Player) {
-			Player playerentity = (Player) p_110128_1_;
+		if (p_110128_1_ instanceof Player playerentity) {
 			if (playerentity.getAbilities().instabuild)
 				return;
 		}
@@ -328,7 +330,7 @@ public class BlueprintEntity extends HangingEntity
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void lerpTo(double p_180426_1_, double p_180426_3_, double p_180426_5_, float p_180426_7_, float p_180426_8_,
-		int p_180426_9_, boolean p_180426_10_) {
+					   int p_180426_9_, boolean p_180426_10_) {
 		BlockPos blockpos =
 			this.pos.offset(BlockPos.containing(p_180426_1_ - this.getX(), p_180426_3_ - this.getY(), p_180426_5_ - this.getZ()));
 		this.setPos((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ());
@@ -372,7 +374,8 @@ public class BlueprintEntity extends HangingEntity
 					Map<Integer, ItemStack> craftingGrid = new HashMap<>();
 					boolean success = true;
 
-					Search: for (int i = 0; i < 9; i++) {
+					Search:
+				for (int i = 0; i < 9; i++) {
 						FilterItemStack requestedItem = FilterItemStack.of(items.getStackInSlot(i));
 						if (requestedItem.isEmpty()) {
 							craftingGrid.put(i, ItemStack.EMPTY);

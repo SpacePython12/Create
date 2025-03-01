@@ -80,6 +80,7 @@
 		{
 			"from": [11.24264, 4.75736, 7],
 			"to": [13.24264, 14.75736, 9],
+			"forge_data": {"calculate_normals": true},
 			"rotation": {"angle": -45, "axis": "z", "origin": [8, 9, 8]},
 			"faces": {
 				"north": {"uv": [7, 6, 9, 16], "texture": "#lever"},
@@ -98,7 +99,7 @@
 		},
         "fixed": {
             "rotation": [ 270, 0, 0 ],
-            "translation": [ 0, 0, -3],
+            "translation": [ 0, 0, -5],
             "scale":[ 0.5, 0.5, 0.5 ]
         }
     }

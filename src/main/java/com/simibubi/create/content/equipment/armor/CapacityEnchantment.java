@@ -1,10 +1,11 @@
 package com.simibubi.create.content.equipment.armor;
 
-import io.github.fabricators_of_create.porting_lib.enchant.CustomEnchantingTableBehaviorEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+
+import io.github.fabricators_of_create.porting_lib.enchant.CustomEnchantingTableBehaviorEnchantment;
 
 public class CapacityEnchantment extends Enchantment implements CustomEnchantingTableBehaviorEnchantment {
 

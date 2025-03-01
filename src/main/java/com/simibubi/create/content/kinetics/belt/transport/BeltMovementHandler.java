@@ -7,6 +7,7 @@ import static net.minecraft.world.entity.MoverType.SELF;
 import java.util.List;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.belt.BeltBlock;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 import com.simibubi.create.content.kinetics.belt.BeltPart;
@@ -19,6 +20,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -60,7 +62,8 @@ public class BeltMovementHandler {
 	public static boolean canBeTransported(Entity entity) {
 		if (!entity.isAlive())
 			return false;
-		if (entity instanceof Player && ((Player) entity).isShiftKeyDown())
+		if (entity instanceof Player p && p.isShiftKeyDown()
+			&& !AllItems.CARDBOARD_BOOTS.isIn(p.getItemBySlot(EquipmentSlot.FEET)))
 			return false;
 		return true;
 	}

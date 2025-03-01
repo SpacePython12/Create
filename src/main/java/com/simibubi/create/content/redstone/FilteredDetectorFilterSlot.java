@@ -1,13 +1,15 @@
 package com.simibubi.create.content.redstone;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.math.AngleHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -40,15 +42,15 @@ public class FilteredDetectorFilterSlot extends ValueBoxTransform.Sided {
 	}
 
 	@Override
-	public void rotate(BlockState state, PoseStack ms) {
-		super.rotate(state, ms);
+	public void rotate(LevelAccessor level, BlockPos pos, BlockState state, PoseStack ms) {
+		super.rotate(level, pos, state, ms);
 		Direction facing = state.getValue(DirectedDirectionalBlock.FACING);
 		if (facing.getAxis() == Axis.Y)
 			return;
 		if (getSide() != Direction.UP)
 			return;
-		TransformStack.cast(ms)
-			.rotateZ(-AngleHelper.horizontalAngle(facing) + 180);
+		TransformStack.of(ms)
+			.rotateZDegrees(-AngleHelper.horizontalAngle(facing) + 180);
 	}
 
 	@Override

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.shedaniel.rei.api.client.gui.widgets.TooltipContext;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -19,7 +17,7 @@ import com.simibubi.create.content.processing.sequenced.SequencedRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -36,7 +34,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -66,7 +63,7 @@ public class SequencedAssemblyCategory extends CreateRecipeCategory<SequencedAss
 		ClientEntryStacks.setTooltipProcessor(output.getCurrentEntry(), (entryStack, tooltip) -> {
 			float chance = display.getRecipe().getOutputChance();
 			if (chance != 1)
-				tooltip.add(Lang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
+				tooltip.add(CreateLang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
 						.withStyle(ChatFormatting.GOLD));
 			return tooltip;
 		});
@@ -219,7 +216,7 @@ public class SequencedAssemblyCategory extends CreateRecipeCategory<SequencedAss
 	public List<Component> getTooltipStrings(SequencedAssemblyRecipe recipe, double mouseX, double mouseY) {
 		List<Component> tooltip = new ArrayList<Component>();
 
-		MutableComponent junk = Lang.translateDirect("recipe.assembly.junk");
+		MutableComponent junk = CreateLang.translateDirect("recipe.assembly.junk");
 
 		boolean singleOutput = recipe.getOutputChance() == 1;
 		boolean willRepeat = recipe.getLoops() > 1;
@@ -232,7 +229,7 @@ public class SequencedAssemblyCategory extends CreateRecipeCategory<SequencedAss
 		if (!singleOutput && mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY) {
 			float chance = recipe.getOutputChance();
 			tooltip.add(junk);
-			tooltip.add(Lang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : 100 - (int) (chance * 100))
+			tooltip.add(CreateLang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : 100 - (int) (chance * 100))
 					.withStyle(ChatFormatting.GOLD));
 			return tooltip;
 		}
@@ -242,7 +239,7 @@ public class SequencedAssemblyCategory extends CreateRecipeCategory<SequencedAss
 		minY = 92;
 		maxY = minY + 24;
 		if (willRepeat && mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY) {
-			tooltip.add(Lang.translateDirect("recipe.assembly.repeat", recipe.getLoops()));
+			tooltip.add(CreateLang.translateDirect("recipe.assembly.repeat", recipe.getLoops()));
 			return tooltip;
 		}
 
@@ -260,7 +257,7 @@ public class SequencedAssemblyCategory extends CreateRecipeCategory<SequencedAss
 				SequencedRecipe<?> sequencedRecipe = sequence.get(i);
 				ReiSequencedAssemblySubCategory subCategory = getSubCategory(sequencedRecipe);
 				if (relativeX >= 0 && relativeX < subCategory.getWidth()) {
-					tooltip.add(Lang.translateDirect("recipe.assembly.step", i + 1));
+					tooltip.add(CreateLang.translateDirect("recipe.assembly.step", i + 1));
 					tooltip.add(sequencedRecipe.getAsAssemblyRecipe()
 							.getDescriptionForAssembly()
 							.plainCopy()

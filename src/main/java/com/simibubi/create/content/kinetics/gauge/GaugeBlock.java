@@ -6,12 +6,12 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.levelWrappers.WrappedLevel;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -113,7 +113,7 @@ public class GaugeBlock extends DirectionalAxisKineticBlock implements IBE<Gauge
 			return false;
 		if (getRotationAxis(state) == Axis.Y && face != state.getValue(FACING))
 			return false;
-		if (!Block.shouldRenderFace(state, world, pos, face, pos.relative(face)) && !(world instanceof WrappedWorld))
+		if (!Block.shouldRenderFace(state, world, pos, face, pos.relative(face)) && !(world instanceof WrappedLevel))
 			return false;
 		return true;
 	}
@@ -121,9 +121,8 @@ public class GaugeBlock extends DirectionalAxisKineticBlock implements IBE<Gauge
 	@Override
 	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
 		BlockEntity be = worldIn.getBlockEntity(pos);
-		if (be == null || !(be instanceof GaugeBlockEntity))
+		if (be == null || !(be instanceof GaugeBlockEntity gaugeBE))
 			return;
-		GaugeBlockEntity gaugeBE = (GaugeBlockEntity) be;
 		if (gaugeBE.dialTarget == 0)
 			return;
 		int color = gaugeBE.color;
@@ -169,8 +168,7 @@ public class GaugeBlock extends DirectionalAxisKineticBlock implements IBE<Gauge
 	@Override
 	public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
 		BlockEntity be = worldIn.getBlockEntity(pos);
-		if (be instanceof GaugeBlockEntity) {
-			GaugeBlockEntity gaugeBlockEntity = (GaugeBlockEntity) be;
+		if (be instanceof GaugeBlockEntity gaugeBlockEntity) {
 			return Mth.ceil(Mth.clamp(gaugeBlockEntity.dialTarget * 14, 0, 15));
 		}
 		return 0;

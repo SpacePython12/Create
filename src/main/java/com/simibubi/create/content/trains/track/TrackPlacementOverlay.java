@@ -1,21 +1,21 @@
 package com.simibubi.create.content.trains.track;
 
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.mixin.fabric.GuiAccessor;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.GameType;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class TrackPlacementOverlay {
 
@@ -35,7 +35,7 @@ public class TrackPlacementOverlay {
 			return;
 
 		boolean active = mc.options.keySprint.isDown();
-		MutableComponent text = Lang.translateDirect("track.hold_for_smooth_curve", Components.keybind("key.sprint")
+        MutableComponent text = CreateLang.translateDirect("track.hold_for_smooth_curve", Component.keybind("key.sprint")
 			.withStyle(active ? ChatFormatting.WHITE : ChatFormatting.GRAY));
 
 		Window window = mc.getWindow();

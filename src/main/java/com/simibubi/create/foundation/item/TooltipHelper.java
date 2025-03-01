@@ -6,12 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.common.base.Strings;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.common.util.MinecraftClientUtil;
-
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -19,22 +17,24 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 
+import io.github.fabricators_of_create.porting_lib.common.util.MinecraftClientUtil;
+
 public class TooltipHelper {
 
 	public static final int MAX_WIDTH_PER_LINE = 200;
 
-	public static MutableComponent holdShift(Palette palette, boolean highlighted) {
-		return Lang.translateDirect("tooltip.holdForDescription", Lang.translateDirect("tooltip.keyShift")
+	public static MutableComponent holdShift(FontHelper.Palette palette, boolean highlighted) {
+		return CreateLang.translateDirect("tooltip.holdForDescription", CreateLang.translateDirect("tooltip.keyShift")
 			.withStyle(ChatFormatting.GRAY))
 			.withStyle(ChatFormatting.DARK_GRAY);
 	}
 
 	public static void addHint(List<Component> tooltip, String hintKey, Object... messageParams) {
-		Lang.translate(hintKey + ".title").style(ChatFormatting.GOLD).forGoggles(tooltip);
-		Component hint = Lang.translateDirect(hintKey);
-		List<Component> cutComponent = cutTextComponent(hint, Palette.GRAY_AND_WHITE);
+		CreateLang.translate(hintKey + ".title").style(ChatFormatting.GOLD).forGoggles(tooltip);
+		Component hint = CreateLang.translateDirect(hintKey);
+		List<Component> cutComponent = cutTextComponent(hint, FontHelper.Palette.GRAY_AND_WHITE);
 		for (Component component : cutComponent)
-			Lang.builder().add(component).forGoggles(tooltip);
+			CreateLang.builder().add(component).forGoggles(tooltip);
 	}
 
 	public static String makeProgressBar(int length, int filledLength) {
@@ -55,17 +55,17 @@ public class TooltipHelper {
 		return Style.EMPTY.withColor(hex);
 	}
 
-	public static List<Component> cutStringTextComponent(String s, Palette palette) {
-		return cutTextComponent(Components.literal(s), palette);
+	public static List<Component> cutStringTextComponent(String s, FontHelper.Palette palette) {
+		return cutTextComponent(Component.literal(s), palette);
 	}
 
-	public static List<Component> cutTextComponent(Component c, Palette palette) {
+	public static List<Component> cutTextComponent(Component c, FontHelper.Palette palette) {
 		return cutTextComponent(c, palette.primary(), palette.highlight());
 	}
 
 	public static List<Component> cutStringTextComponent(String s, Style primaryStyle,
 		Style highlightStyle) {
-		return cutTextComponent(Components.literal(s), primaryStyle, highlightStyle);
+		return cutTextComponent(Component.literal(s), primaryStyle, highlightStyle);
 	}
 
 	public static List<Component> cutTextComponent(Component c, Style primaryStyle,
@@ -75,7 +75,7 @@ public class TooltipHelper {
 
 	public static List<Component> cutStringTextComponent(String c, Style primaryStyle,
 		Style highlightStyle, int indent) {
-		return cutTextComponent(Components.literal(c), primaryStyle, highlightStyle, indent);
+		return cutTextComponent(Component.literal(c), primaryStyle, highlightStyle, indent);
 	}
 
 	public static List<Component> cutTextComponent(Component c, Style primaryStyle,
@@ -118,7 +118,7 @@ public class TooltipHelper {
 		}
 
 		// Format
-		MutableComponent lineStart = Components.literal(Strings.repeat(" ", indent));
+        MutableComponent lineStart = Component.literal(Strings.repeat(" ", indent));
 		lineStart.withStyle(primaryStyle);
 		List<Component> formattedLines = new ArrayList<>(lines.size());
 		Couple<Style> styles = Couple.create(highlightStyle, primaryStyle);
@@ -128,7 +128,7 @@ public class TooltipHelper {
 			MutableComponent currentComponent = lineStart.plainCopy();
 			String[] split = string.split("_");
 			for (String part : split) {
-				currentComponent.append(Components.literal(part).withStyle(styles.get(currentlyHighlighted)));
+                currentComponent.append(Component.literal(part).withStyle(styles.get(currentlyHighlighted)));
 				currentlyHighlighted = !currentlyHighlighted;
 			}
 
@@ -137,27 +137,6 @@ public class TooltipHelper {
 		}
 
 		return formattedLines;
-	}
-
-	public record Palette(Style primary, Style highlight) {
-		public static final Palette STANDARD_CREATE = new Palette(styleFromColor(0xC9974C), styleFromColor(0xF1DD79));
-
-		public static final Palette BLUE = ofColors(ChatFormatting.BLUE, ChatFormatting.AQUA);
-		public static final Palette GREEN = ofColors(ChatFormatting.DARK_GREEN, ChatFormatting.GREEN);
-		public static final Palette YELLOW = ofColors(ChatFormatting.GOLD, ChatFormatting.YELLOW);
-		public static final Palette RED = ofColors(ChatFormatting.DARK_RED, ChatFormatting.RED);
-		public static final Palette PURPLE = ofColors(ChatFormatting.DARK_PURPLE, ChatFormatting.LIGHT_PURPLE);
-		public static final Palette GRAY = ofColors(ChatFormatting.DARK_GRAY, ChatFormatting.GRAY);
-
-		public static final Palette ALL_GRAY = ofColors(ChatFormatting.GRAY, ChatFormatting.GRAY);
-		public static final Palette GRAY_AND_BLUE = ofColors(ChatFormatting.GRAY, ChatFormatting.BLUE);
-		public static final Palette GRAY_AND_WHITE = ofColors(ChatFormatting.GRAY, ChatFormatting.WHITE);
-		public static final Palette GRAY_AND_GOLD = ofColors(ChatFormatting.GRAY, ChatFormatting.GOLD);
-		public static final Palette GRAY_AND_RED = ofColors(ChatFormatting.GRAY, ChatFormatting.RED);
-
-		public static Palette ofColors(ChatFormatting primary, ChatFormatting highlight) {
-			return new Palette(styleFromColor(primary), styleFromColor(highlight));
-		}
 	}
 
 }

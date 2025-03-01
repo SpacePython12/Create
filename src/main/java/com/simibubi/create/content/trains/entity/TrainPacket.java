@@ -8,11 +8,10 @@ import java.util.UUID;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.trains.bogey.AbstractBogeyBlock;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
-import net.minecraft.core.Registry;
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -68,6 +67,7 @@ public class TrainPacket extends SimplePacketBase {
 
 		train.name = Component.Serializer.fromJson(buffer.readUtf());
 		train.icon = TrainIconType.byId(buffer.readResourceLocation());
+		train.mapColorIndex = buffer.readVarInt();
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class TrainPacket extends SimplePacketBase {
 						continue;
 				}
 				CarriageBogey bogey = carriage.bogeys.get(first);
-				buffer.writeResourceLocation(RegisteredObjects.getKeyOrThrow((Block) bogey.type));
+				buffer.writeResourceLocation(CatnipServices.REGISTRIES.getKeyOrThrow((Block) bogey.type));
 				buffer.writeBoolean(bogey.upsideDown);
 				buffer.writeNbt(bogey.bogeyData);
 			}
@@ -105,6 +105,7 @@ public class TrainPacket extends SimplePacketBase {
 		buffer.writeBoolean(train.doubleEnded);
 		buffer.writeUtf(Component.Serializer.toJson(train.name));
 		buffer.writeResourceLocation(train.icon.id);
+		buffer.writeVarInt(train.mapColorIndex);
 	}
 
 	@Override

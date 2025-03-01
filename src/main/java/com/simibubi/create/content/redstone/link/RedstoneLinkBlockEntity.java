@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelSupportBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
@@ -23,12 +24,18 @@ public class RedstoneLinkBlockEntity extends SmartBlockEntity {
 	protected LinkBehaviour link;
 	private boolean transmitter;
 
+	public FactoryPanelSupportBehaviour panelSupport;
+
 	public RedstoneLinkBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 
 	@Override
-	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {}
+	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+		behaviours.add(panelSupport = new FactoryPanelSupportBehaviour(this, () -> link != null && link.isListening(),
+			() -> receivedSignal > 0, () -> AllBlocks.REDSTONE_LINK.get()
+				.updateTransmittedSignal(getBlockState(), level, worldPosition)));
+	}
 
 	@Override
 	public void addBehavioursDeferred(List<BlockEntityBehaviour> behaviours) {
@@ -115,6 +122,7 @@ public class RedstoneLinkBlockEntity extends SmartBlockEntity {
 			level.blockUpdated(attachedPos, level.getBlockState(attachedPos)
 				.getBlock());
 			receivedSignalChanged = false;
+			panelSupport.notifyPanels();
 		}
 	}
 

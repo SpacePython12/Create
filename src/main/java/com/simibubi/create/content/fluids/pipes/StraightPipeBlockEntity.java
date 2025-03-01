@@ -34,7 +34,7 @@ public class StraightPipeBlockEntity extends SmartBlockEntity implements PipeAtt
 
 	@Override
 	@Nullable
-	public Object getRenderAttachmentData() {
+	public Object getRenderData() {
 		return PipeAttachmentBlockEntity.getAttachments(this);
 	}
 
@@ -60,8 +60,12 @@ public class StraightPipeBlockEntity extends SmartBlockEntity implements PipeAtt
 
 			if (attachment == AttachmentTypes.RIM && state.getBlock() instanceof FluidValveBlock)
 				return AttachmentTypes.NONE;
-			if (attachment == AttachmentTypes.RIM && FluidPipeBlock.isPipe(otherState))
+			if (attachment == AttachmentTypes.RIM && !(state.getBlock() instanceof GlassFluidPipeBlock)
+				&& otherState.getBlock() instanceof GlassFluidPipeBlock)
 				return AttachmentTypes.PARTIAL_RIM;
+
+			if (attachment == AttachmentTypes.RIM && FluidPipeBlock.isPipe(otherState))
+				return AttachmentTypes.NONE;
 			if (axis == otherAxis && axis != null)
 				return AttachmentTypes.NONE;
 

@@ -2,8 +2,6 @@ package com.simibubi.create.content.equipment.armor;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
@@ -12,8 +10,8 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.ComparatorUtil;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.particle.AirParticleData;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.ParticleTypes;
@@ -183,8 +181,10 @@ public class BacktankBlockEntity extends KineticBlockEntity implements Nameable 
 	}
 
 	public void setTags(CompoundTag vanillaTag/*, @Nullable CompoundTag forgeCapsTag*/) {
-		this.vanillaTag = vanillaTag;
-//		this.forgeCapsTag = forgeCapsTag;
+		this.vanillaTag = vanillaTag.copy();
+//		this.forgeCapsTag = forgeCapsTag == null ? null : forgeCapsTag.copy();
+		// Prevent nesting of the ctrl+pick block added tag
+		vanillaTag.remove("BlockEntityTag");
 	}
 
 	public CompoundTag getVanillaTag() {

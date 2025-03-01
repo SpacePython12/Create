@@ -7,24 +7,23 @@ import javax.annotation.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
-import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
-import com.jozufozu.flywheel.config.BackendType;
-import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.Create;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import dev.engine_room.flywheel.lib.visualization.VisualizationHelper;
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.render.SuperByteBuffer;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -52,7 +51,7 @@ public class BlockEntityRenderHelper {
 		Iterator<BlockEntity> iterator = customRenderBEs.iterator();
 		while (iterator.hasNext()) {
 			BlockEntity blockEntity = iterator.next();
-			if (Backend.getBackendType() == BackendType.INSTANCING && Backend.isFlywheelWorld(renderWorld) && InstancedRenderRegistry.shouldSkipRender(blockEntity))
+			if (VisualizationManager.supportsVisualization(world) && VisualizationHelper.skipVanillaRender(blockEntity))
 				continue;
 
 			BlockEntityRenderer<BlockEntity> renderer = Minecraft.getInstance().getBlockEntityRenderDispatcher().getRenderer(blockEntity);
@@ -63,7 +62,7 @@ public class BlockEntityRenderHelper {
 
 			BlockPos pos = blockEntity.getBlockPos();
 			ms.pushPose();
-			TransformStack.cast(ms)
+			TransformStack.of(ms)
 				.translate(pos);
 
 			try {
@@ -81,7 +80,7 @@ public class BlockEntityRenderHelper {
 			} catch (Exception e) {
 				iterator.remove();
 
-				String message = "BlockEntity " + RegisteredObjects.getKeyOrThrow(blockEntity.getType())
+				String message = "BlockEntity " + CatnipServices.REGISTRIES.getKeyOrThrow(blockEntity.getType())
 					.toString() + " could not be rendered virtually.";
 				if (AllConfigs.client().explainRenderErrors.get())
 					Create.LOGGER.error(message, e);

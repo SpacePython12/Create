@@ -5,13 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import net.minecraft.util.RandomSource;
-
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -27,12 +24,12 @@ import com.simibubi.create.content.trains.signal.SignalEdgeGroup;
 import com.simibubi.create.content.trains.signal.TrackEdgePoint;
 import com.simibubi.create.content.trains.track.BezierConnection;
 import com.simibubi.create.content.trains.track.TrackMaterial;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -170,9 +167,7 @@ public class TrackGraph {
 			return false;
 
 		Map<UUID, Train> trains = Create.RAILWAYS.trains;
-		for (Iterator<UUID> iterator = trains.keySet()
-			.iterator(); iterator.hasNext();) {
-			UUID uuid = iterator.next();
+		for (UUID uuid : trains.keySet()) {
 			Train train = trains.get(uuid);
 			if (train.graph != this)
 				continue;
@@ -268,9 +263,7 @@ public class TrackGraph {
 		toOther.invalidateBounds();
 
 		Map<UUID, Train> trains = Create.RAILWAYS.trains;
-		for (Iterator<UUID> iterator = trains.keySet()
-			.iterator(); iterator.hasNext();) {
-			UUID uuid = iterator.next();
+		for (UUID uuid : trains.keySet()) {
 			Train train = trains.get(uuid);
 			if (train.graph != this)
 				continue;
@@ -279,7 +272,7 @@ public class TrackGraph {
 	}
 
 	public Set<TrackGraph> findDisconnectedGraphs(@Nullable LevelAccessor level,
-		@Nullable Map<Integer, Pair<Integer, UUID>> splitSubGraphs) {
+												  @Nullable Map<Integer, Pair<Integer, UUID>> splitSubGraphs) {
 		Set<TrackGraph> dicovered = new HashSet<>();
 		Set<TrackNodeLocation> vertices = new HashSet<>(nodes.keySet());
 		List<TrackNodeLocation> frontier = new ArrayList<>();
@@ -358,9 +351,7 @@ public class TrackGraph {
 		}
 
 		if (level != null)
-			for (Iterator<UUID> iterator = trains.keySet()
-				.iterator(); iterator.hasNext();) {
-				UUID uuid = iterator.next();
+			for (UUID uuid : trains.keySet()) {
 				Train train = trains.get(uuid);
 				if (train.graph != this)
 					continue;
@@ -393,7 +384,7 @@ public class TrackGraph {
 	}
 
 	public void connectNodes(LevelAccessor reader, DiscoveredLocation location, DiscoveredLocation location2,
-		@Nullable BezierConnection turn) {
+							 @Nullable BezierConnection turn) {
 		TrackNode node1 = nodes.get(location);
 		TrackNode node2 = nodes.get(location2);
 
@@ -416,6 +407,10 @@ public class TrackGraph {
 							continue;
 
 					if (edge == otherEdge)
+						continue;
+					if (otherEdge.isInterDimensional() || edge.isInterDimensional())
+						continue;
+					if (node1.location.dimension != otherNode1.location.dimension)
 						continue;
 					if (!bezier && !otherEdge.isTurn())
 						continue;

@@ -1,9 +1,10 @@
 package com.simibubi.create.content.trains.graph;
 
-import com.simibubi.create.content.trains.station.GlobalStation;
-import com.simibubi.create.foundation.utility.Couple;
-
 import java.util.List;
+
+import com.simibubi.create.content.trains.station.GlobalStation;
+
+import net.createmod.catnip.data.Couple;
 
 public class DiscoveredPath {
 	public List<Couple<TrackNode>> path;

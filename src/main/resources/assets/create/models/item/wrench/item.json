@@ -37,6 +37,7 @@
 			"name": "axle",
 			"from": [8.35355, 5, 7.14645],
 			"to": [9.35355, 12, 8.14645],
+			"forge_data": {"calculate_normals": true},
 			"rotation": {"angle": -45, "axis": "y", "origin": [8.5, 11, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 2, 14], "texture": "#5"},
@@ -93,6 +94,7 @@
 			"name": "gear case",
 			"from": [7.5, 6, 7],
 			"to": [9.5, 7, 9],
+			"forge_data": {"calculate_normals": true},
 			"rotation": {"angle": 45, "axis": "y", "origin": [8.5, 11, 8]},
 			"faces": {
 				"north": {"uv": [12, 12, 16, 14], "texture": "#5"},
@@ -106,12 +108,12 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [0, 90, 0],
-			"translation": [0, 3.25, 0]
+			"rotation": [-21.5, 90, 0],
+			"translation": [0, 3.25, -2.25]
 		},
 		"thirdperson_lefthand": {
-			"rotation": [0, -90, 0],
-			"translation": [0, 3.75, 0]
+			"rotation": [-22.5, -90, 1],
+			"translation": [0, 3.25, -2.25]
 		},
 		"firstperson_righthand": {
 			"rotation": [-4.5, 100.25, 10],
@@ -132,8 +134,8 @@
 			"scale": [1.09453, 1.09453, 1.09453]
 		},
 		"fixed": {
-			"rotation": [0, 160.5, 0],
-			"translation": [0.5, 0.5, 0]
+			"rotation": [0, 180, 0],
+			"translation": [0.5, 0.5, -0.75]
 		}
 	},
 	"groups": [

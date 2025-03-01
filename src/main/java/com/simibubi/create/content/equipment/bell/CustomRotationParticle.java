@@ -3,10 +3,10 @@ package com.simibubi.create.content.equipment.bell;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import com.jozufozu.flywheel.backend.ShadersModHandler;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
+import dev.engine_room.flywheel.lib.util.ShadersModHelper;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SimpleAnimatedParticle;
@@ -65,7 +65,7 @@ public class CustomRotationParticle extends SimpleAnimatedParticle {
 		float maxU = mirror ? getU0() : getU1();
 		float minV = getV0();
 		float maxV = getV1();
-		int brightness = ShadersModHandler.isShaderPackInUse() ? LightTexture.pack(12, 15) : getLightColor(partialTicks);
+		int brightness = ShadersModHelper.isShaderPackInUse() ? LightTexture.pack(12, 15) : getLightColor(partialTicks);
 		builder.vertex(vertices[0].x(), vertices[0].y(), vertices[0].z()).uv(maxU, maxV).color(rCol, gCol, bCol, alpha).uv2(brightness).endVertex();
 		builder.vertex(vertices[1].x(), vertices[1].y(), vertices[1].z()).uv(maxU, minV).color(rCol, gCol, bCol, alpha).uv2(brightness).endVertex();
 		builder.vertex(vertices[2].x(), vertices[2].y(), vertices[2].z()).uv(minU, minV).color(rCol, gCol, bCol, alpha).uv2(brightness).endVertex();

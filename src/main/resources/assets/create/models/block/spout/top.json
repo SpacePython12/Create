@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "create:block/spout",
-		"particle": "create:block/copper_plating"
+		"0": "create:block/spout_nozzle",
+		"particle": "create:block/spout_nozzle"
 	},
 	"elements": [
 		{
@@ -11,11 +11,11 @@
 			"to": [12, 0, 12],
 			"rotation": {"angle": 0, "axis": "y", "origin": [15.5, 5.5, 15.5]},
 			"faces": {
-				"north": {"uv": [12, 6, 16, 7], "texture": "#0"},
-				"east": {"uv": [12, 6, 16, 7], "texture": "#0"},
-				"south": {"uv": [12, 6, 16, 7], "texture": "#0"},
-				"west": {"uv": [12, 6, 16, 7], "texture": "#0"},
-				"down": {"uv": [12, 2, 16, 6], "texture": "#0"}
+				"north": {"uv": [4, 12, 12, 14], "texture": "#0"},
+				"east": {"uv": [4, 12, 12, 14], "texture": "#0"},
+				"south": {"uv": [4, 12, 12, 14], "texture": "#0"},
+				"west": {"uv": [4, 12, 12, 14], "texture": "#0"},
+				"down": {"uv": [4, 4, 12, 12], "texture": "#0"}
 			}
 		}
 	]

@@ -13,17 +13,19 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
 
 /**
  * Behaviour for BlockEntities to which belts can transfer items directly in a
@@ -62,7 +64,7 @@ public class DirectBeltInputBehaviour extends BlockEntityBehaviour {
 		canInsert = pred;
 		return this;
 	}
-	
+
 	public DirectBeltInputBehaviour considerOccupiedWhen(OccupiedPredicate pred) {
 		isOccupied = pred;
 		return this;
@@ -108,7 +110,7 @@ public class DirectBeltInputBehaviour extends BlockEntityBehaviour {
 	public boolean isOccupied(Direction side) {
 		return isOccupied.test(side);
 	}
-	
+
 	public ItemStack handleInsertion(ItemStack stack, Direction side, boolean simulate) {
 		return handleInsertion(new TransportedItemStack(stack), side, simulate);
 	}
@@ -131,7 +133,7 @@ public class DirectBeltInputBehaviour extends BlockEntityBehaviour {
 	public interface OccupiedPredicate {
 		public boolean test(Direction side);
 	}
-	
+
 	@FunctionalInterface
 	public interface AvailabilityPredicate {
 		public boolean test(Direction side);

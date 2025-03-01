@@ -27,7 +27,7 @@ public class BacktankItem extends BaseArmorItem implements ICapacityEnchantable 
 	public static final EquipmentSlot SLOT = EquipmentSlot.CHEST;
 	public static final ArmorItem.Type TYPE = ArmorItem.Type.CHESTPLATE;
 	public static final int BAR_COLOR = 0xEFEFEF;
-	
+
 	private final Supplier<BacktankBlockItem> blockItem;
 
 	public BacktankItem(ArmorMaterial material, Properties properties, ResourceLocation textureLoc, Supplier<BacktankBlockItem> placeable) {

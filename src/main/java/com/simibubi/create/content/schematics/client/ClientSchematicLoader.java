@@ -1,5 +1,7 @@
 package com.simibubi.create.content.schematics.client;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -17,16 +19,16 @@ import java.util.Map;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.schematics.packet.SchematicUploadPacket;
-import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.FilesHelper;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public class ClientSchematicLoader {
@@ -71,6 +73,14 @@ public class ClientSchematicLoader {
 			if (!validateSizeLimitation(size))
 				return;
 
+			// Validate if the file is encoded in a GZIP compatible format
+			if (!isGZIPEncoded(path.toFile())) {
+				LocalPlayer player = Minecraft.getInstance().player;
+				if (player != null)
+					player.displayClientMessage(CreateLang.translateDirect("schematics.wrongFormat"), false);
+				return;
+			}
+
 			in = Files.newInputStream(path, StandardOpenOption.READ);
 			activeUploads.put(schematic, in);
 			AllPackets.getChannel().sendToServer(SchematicUploadPacket.begin(schematic, size));
@@ -86,12 +96,31 @@ public class ClientSchematicLoader {
 		if (size > maxSize * 1000) {
 			LocalPlayer player = Minecraft.getInstance().player;
 			if (player != null) {
-				player.displayClientMessage(Lang.translateDirect("schematics.uploadTooLarge").append(" (" + size / 1000 + " KB)."), false);
-				player.displayClientMessage(Lang.translateDirect("schematics.maxAllowedSize").append(" " + maxSize + " KB"), false);
+				player.displayClientMessage(CreateLang.translateDirect("schematics.uploadTooLarge").append(" (" + size / 1000 + " KB)."), false);
+				player.displayClientMessage(CreateLang.translateDirect("schematics.maxAllowedSize").append(" " + maxSize + " KB"), false);
 			}
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Checks if a given file is GZIP-encoded by checking its header,
+	 * of which the first two bytes should contain the magic number (0x1F, 0x8B)
+	 */
+	public static boolean isGZIPEncoded(File file) {
+		try (FileInputStream fis = new FileInputStream(file)) {
+			byte[] bytes = new byte[2];
+			if (fis.read(bytes) != 2)
+				return false;
+
+			int byte1 = bytes[0] & 0xFF;
+			int byte2 = bytes[1] & 0xFF;
+
+			return byte1 == 0x1F && byte2 == 0x8B;
+		} catch (IOException exception) {
+			return false;
+		}
 	}
 
 	private void continueUpload(String schematic) {
@@ -133,12 +162,12 @@ public class ClientSchematicLoader {
 
 		try {
 			Files.list(Paths.get("schematics/"))
-					.filter(f -> !Files.isDirectory(f) && f.getFileName().toString().endsWith(".nbt")).forEach(path -> {
-						if (Files.isDirectory(path))
-							return;
+				.filter(f -> !Files.isDirectory(f) && f.getFileName().toString().endsWith(".nbt")).forEach(path -> {
+					if (Files.isDirectory(path))
+						return;
 
-						availableSchematics.add(Components.literal(path.getFileName().toString()));
-					});
+					availableSchematics.add(Component.literal(path.getFileName().toString()));
+				});
 		} catch (NoSuchFileException e) {
 			// No Schematics created yet
 		} catch (IOException e) {

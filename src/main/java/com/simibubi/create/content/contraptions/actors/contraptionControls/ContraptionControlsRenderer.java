@@ -2,8 +2,6 @@ package com.simibubi.create.content.contraptions.actors.contraptionControls;
 
 import java.util.Random;
 
-import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllBlocks;
@@ -13,14 +11,16 @@ import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
 import com.simibubi.create.content.redstone.nixieTube.NixieTubeRenderer;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.DyeHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -57,14 +57,14 @@ public class ContraptionControlsRenderer extends SmartBlockEntityRenderer<Contra
 		ms.translate(buttonOffset.x, buttonOffset.y, buttonOffset.z);
 
 		VertexConsumer vc = buffer.getBuffer(RenderType.solid());
-		CachedBufferer.partialFacing(AllPartialModels.CONTRAPTION_CONTROLS_BUTTON, blockState, facing)
+		CachedBuffers.partialFacing(AllPartialModels.CONTRAPTION_CONTROLS_BUTTON, blockState, facing)
 			.light(light)
 			.renderInto(ms, vc);
 
 		ms.popPose();
 
 		int i = (((int) blockEntity.indicator.getValue(pt) / 45) % 8) + 8;
-		CachedBufferer.partialFacing(AllPartialModels.CONTRAPTION_CONTROLS_INDICATOR.get(i % 8), blockState, facing)
+		CachedBuffers.partialFacing(AllPartialModels.CONTRAPTION_CONTROLS_INDICATOR.get(i % 8), blockState, facing)
 			.light(light)
 			.renderInto(ms, vc);
 	}
@@ -83,7 +83,7 @@ public class ContraptionControlsRenderer extends SmartBlockEntityRenderer<Contra
 			: ctx.position.distanceToSqr(cameraEntity.getEyePosition()));
 
 		float flicker = r.nextFloat();
-		Couple<Integer> couple = DyeHelper.DYE_TABLE.get(efs.targetYEqualsSelection ? DyeColor.WHITE : DyeColor.ORANGE);
+		Couple<Integer> couple = DyeHelper.getDyeColors(efs.targetYEqualsSelection ? DyeColor.WHITE : DyeColor.ORANGE);
 		int brightColor = couple.getFirst();
 		int darkColor = couple.getSecond();
 		int flickeringBrightColor = Color.mixColors(brightColor, darkColor, flicker / 4);
@@ -93,14 +93,14 @@ public class ContraptionControlsRenderer extends SmartBlockEntityRenderer<Contra
 		String text = efs.currentShortName;
 		String description = efs.currentLongName;
 		PoseStack ms = matrices.getViewProjection();
-		TransformStack msr = TransformStack.cast(ms);
+		var msr = TransformStack.of(ms);
 
 		ms.pushPose();
 		msr.translate(ctx.localPos);
-		msr.rotateCentered(Direction.UP,
-			AngleHelper.rad(AngleHelper.horizontalAngle(ctx.state.getValue(ContraptionControlsBlock.FACING))));
-		ms.translate(0.275f + 0.125f, 1, 0.5f);
-		msr.rotate(Direction.WEST, AngleHelper.rad(67.5f));
+		msr.rotateCentered(AngleHelper.rad(AngleHelper.horizontalAngle(ctx.state.getValue(ContraptionControlsBlock.FACING))),
+			Direction.UP);
+		ms.translate(0.275f + 0.125f, 1 + 2/16f, 0.5f);
+		msr.rotate(AngleHelper.rad(67.5f), Direction.WEST);
 
 		float buttondepth = -.25f;
 		if (ctx.contraption.presentBlockEntities.get(ctx.localPos) instanceof ContraptionControlsBlockEntity cbe)

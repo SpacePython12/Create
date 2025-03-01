@@ -8,6 +8,7 @@ import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

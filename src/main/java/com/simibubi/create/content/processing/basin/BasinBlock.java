@@ -17,10 +17,12 @@ import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.item.ItemHelper;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -49,6 +51,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+
 public class BasinBlock extends Block implements IBE<BasinBlockEntity>, IWrenchable {
 
 	public static final DirectionProperty FACING = BlockStateProperties.FACING_HOPPER;
@@ -62,7 +72,7 @@ public class BasinBlock extends Block implements IBE<BasinBlockEntity>, IWrencha
 	protected void createBlockStateDefinition(Builder<Block, BlockState> p_206840_1_) {
 		super.createBlockStateDefinition(p_206840_1_.add(FACING));
 	}
-	
+
 	public static boolean isBasin(LevelReader world, BlockPos pos) {
 		return world.getBlockEntity(pos) instanceof BasinBlockEntity;
 	}
@@ -85,7 +95,7 @@ public class BasinBlock extends Block implements IBE<BasinBlockEntity>, IWrencha
 
 	@Override
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
-		BlockHitResult hit) {
+								 BlockHitResult hit) {
 		ItemStack heldItem = player.getItemInHand(handIn);
 
 		return onBlockEntityUse(worldIn, pos, be -> {
@@ -128,11 +138,10 @@ public class BasinBlock extends Block implements IBE<BasinBlockEntity>, IWrencha
 		if (!worldIn.getBlockState(entityIn.blockPosition())
 			.is(this))
 			return;
-		if (!(entityIn instanceof ItemEntity))
+		if (!(entityIn instanceof ItemEntity itemEntity))
 			return;
 		if (!entityIn.isAlive())
 			return;
-		ItemEntity itemEntity = (ItemEntity) entityIn;
 		withBlockEntityDo(worldIn, entityIn.blockPosition(), be -> {
 
 			// Tossed items bypass the quarter-stack limit
@@ -140,7 +149,6 @@ public class BasinBlock extends Block implements IBE<BasinBlockEntity>, IWrencha
 			ItemStack stack = itemEntity.getItem().copy();
 			try (Transaction t = TransferUtil.getTransaction()) {
 				long inserted = be.inputInventory.insert(ItemVariant.of(stack), stack.getCount(), t);
-				be.inputInventory.withMaxStackSize(16);
 				t.commit();
 
 				if (inserted == stack.getCount()) {
@@ -213,8 +221,7 @@ public class BasinBlock extends Block implements IBE<BasinBlockEntity>, IWrencha
 			return false;
 		} else {
 			BlockEntity blockEntity = world.getBlockEntity(output);
-			if (blockEntity instanceof BeltBlockEntity) {
-				BeltBlockEntity belt = (BeltBlockEntity) blockEntity;
+			if (blockEntity instanceof BeltBlockEntity belt) {
 				return belt.getSpeed() == 0 || belt.getMovementFacing() != direction.getOpposite();
 			}
 		}

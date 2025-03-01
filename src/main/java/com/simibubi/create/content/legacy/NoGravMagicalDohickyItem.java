@@ -1,8 +1,6 @@
 package com.simibubi.create.content.legacy;
 
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.item.EntityTickListenerItem;
-
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -11,6 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.item.EntityTickListenerItem;
 
 public class NoGravMagicalDohickyItem extends Item implements EntityTickListenerItem {
 

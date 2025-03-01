@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.foundation.utility.WorldHelper;
 
+import net.createmod.catnip.levelWrappers.WorldHelper;
 import net.minecraft.world.level.LevelAccessor;
 
 public class TorquePropagator {

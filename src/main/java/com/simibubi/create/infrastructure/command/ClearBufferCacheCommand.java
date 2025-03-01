@@ -2,13 +2,15 @@ package com.simibubi.create.infrastructure.command;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.simibubi.create.CreateClient;
-import com.simibubi.create.foundation.utility.Components;
 import com.tterrag.registrate.fabric.EnvExecutor;
+
+import net.createmod.ponder.PonderClient;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 
 public class ClearBufferCacheCommand {
 
@@ -18,13 +20,14 @@ public class ClearBufferCacheCommand {
 			.executes(ctx -> {
 				EnvExecutor.runWhenOn(EnvType.CLIENT, () -> ClearBufferCacheCommand::execute);
 				ctx.getSource()
-					.sendSuccess(() -> Components.literal("Cleared rendering buffers."), true);
+					.sendSuccess(() -> Component.literal("Cleared rendering buffers."),true);
 				return 1;
 			});
 	}
 
 	@Environment(EnvType.CLIENT)
 	private static void execute() {
+		PonderClient.invalidateRenderers();
 		CreateClient.invalidateRenderers();
 	}
 }

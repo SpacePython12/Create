@@ -1,15 +1,15 @@
 package com.simibubi.create.content.contraptions;
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import net.fabricmc.api.EnvType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.api.EnvType;
 
 public class ContraptionBlockChangedPacket extends SimplePacketBase {
 

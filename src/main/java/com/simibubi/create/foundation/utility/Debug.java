@@ -2,12 +2,13 @@ package com.simibubi.create.foundation.utility;
 
 import com.simibubi.create.Create;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 /** Deprecated so simi doensn't forget to remove debug calls **/
 @Environment(value = EnvType.CLIENT)
@@ -15,21 +16,24 @@ public class Debug {
 
 	@Deprecated
 	public static void debugChat(String message) {
-		if (Minecraft.getInstance().player != null)
-			Minecraft.getInstance().player.displayClientMessage(Components.literal(message), false);
+		if (Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.displayClientMessage(Component.literal(message), false);
+        }
 	}
 
 	@Deprecated
 	public static void debugChatAndShowStack(String message, int depth) {
-		if (Minecraft.getInstance().player != null)
-			Minecraft.getInstance().player.displayClientMessage(Components.literal(message).append("@")
-				.append(debugStack(depth)), false);
+		if (Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.displayClientMessage(Component.literal(message).append("@")
+                .append(debugStack(depth)), false);
+        }
 	}
 
 	@Deprecated
 	public static void debugMessage(String message) {
-		if (Minecraft.getInstance().player != null)
-			Minecraft.getInstance().player.displayClientMessage(Components.literal(message), true);
+		if (Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.displayClientMessage(Component.literal(message), true);
+        }
 	}
 
 	@Deprecated
@@ -47,18 +51,18 @@ public class Debug {
 	public static Component debugStack(int depth) {
 		StackTraceElement[] stackTraceElements = Thread.currentThread()
 			.getStackTrace();
-		MutableComponent text = Components.literal("[")
-			.append(Components.literal(getLogicalSide()).withStyle(ChatFormatting.GOLD))
+		MutableComponent text = Component.literal("[")
+			.append(Component.literal(getLogicalSide()).withStyle(ChatFormatting.GOLD))
 			.append("] ");
 		for (int i = 1; i < depth + 2 && i < stackTraceElements.length; i++) {
 			StackTraceElement e = stackTraceElements[i];
 			if (e.getClassName()
 				.equals(Debug.class.getName()))
 				continue;
-			text.append(Components.literal(e.getMethodName()).withStyle(ChatFormatting.YELLOW))
+			text.append(Component.literal(e.getMethodName()).withStyle(ChatFormatting.YELLOW))
 				.append(", ");
 		}
-		return text.append(Components.literal(" ...").withStyle(ChatFormatting.GRAY));
+		return text.append(Component.literal(" ...").withStyle(ChatFormatting.GRAY));
 	}
 
 	@Deprecated

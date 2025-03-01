@@ -1,24 +1,26 @@
 package com.simibubi.create.content.contraptions.actors.contraptionControls;
 
-import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.contraptions.elevator.ElevatorContraption;
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.IntAttached;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
+import com.simibubi.create.foundation.utility.CreateLang;
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.IntAttached;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class ContraptionControlsMovement implements MovementBehaviour {
 
@@ -134,13 +136,8 @@ public class ContraptionControlsMovement implements MovementBehaviour {
 		efs.targetYEqualsSelection = efs.currentTargetY == ec.clientYTarget;
 
 		if (ec.isTargetUnreachable(efs.currentTargetY))
-			efs.currentLongName = Lang.translate("contraption.controls.floor_unreachable")
+			efs.currentLongName = CreateLang.translate("contraption.controls.floor_unreachable")
 				.string();
-	}
-
-	@Override
-	public boolean renderAsNormalBlockEntity() {
-		return true;
 	}
 
 	@Override

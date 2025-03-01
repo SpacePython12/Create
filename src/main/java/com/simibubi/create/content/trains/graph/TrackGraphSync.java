@@ -14,9 +14,9 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.signal.EdgeGroupColor;
 import com.simibubi.create.content.trains.signal.SignalEdgeGroupPacket;
 import com.simibubi.create.content.trains.signal.TrackEdgePoint;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.server.level.ServerPlayer;
 
 public class TrackGraphSync {

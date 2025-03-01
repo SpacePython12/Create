@@ -6,33 +6,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllEntityTypes;
-import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
-import com.simibubi.create.content.contraptions.actors.contraptionControls.ContraptionControlsMovingInteraction;
 import com.simibubi.create.content.contraptions.bearing.MechanicalBearingBlockEntity;
 import com.simibubi.create.content.contraptions.elevator.ElevatorPulleyBlockEntity;
 import com.simibubi.create.content.kinetics.transmission.sequencer.SequencedGearshiftBlock;
 import com.simibubi.create.infrastructure.gametest.CreateGameTestHelper;
 import com.simibubi.create.infrastructure.gametest.GameTestGroup;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
-
-import org.apache.commons.lang3.mutable.MutableInt;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.RedstoneLampBlock;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 @GameTestGroup(path = "contraptions")
 public class TestContraptions {
@@ -236,4 +230,48 @@ public class TestContraptions {
 //	public static void trainObserver(CreateGameTestHelper helper) {
 //		helper.fail("NYI");
 //	}
+
+	@GameTest(template = "dispensers_dont_fight")
+	public static void dispensersDontFight(CreateGameTestHelper helper) {
+		helper.pullLever(2, 3, 1);
+		BlockPos bottom = new BlockPos(6, 4, 1);
+		BlockPos top = new BlockPos(6, 6, 1);
+		BlockPos dispenser = new BlockPos(3, 4, 1);
+
+		helper.succeedWhen(() -> {
+			helper.assertEntitiesPresent(EntityType.ARROW, bottom, 3, 0);
+			helper.assertEntityNotPresent(EntityType.ARROW, top);
+			helper.assertBlockPresent(Blocks.DISPENSER, dispenser);
+			helper.assertContainerContains(dispenser, new ItemStack(Items.ARROW, 2));
+		});
+	}
+
+	@GameTest(template = "dispensers_refill")
+	public static void dispensersRefill(CreateGameTestHelper helper) {
+		BlockPos lever = new BlockPos(2, 3, 1);
+		helper.pullLever(lever);
+		BlockPos barrel = lever.above();
+		BlockPos dispenser = barrel.east();
+
+		helper.succeedWhen(() -> {
+			helper.assertBlockPresent(Blocks.DISPENSER, dispenser);
+			helper.assertContainerContains(dispenser, new ItemStack(Items.SPECTRAL_ARROW, 2));
+			helper.assertContainerEmpty(barrel);
+		});
+	}
+
+	@GameTest(template = "vaults_protect_fuel")
+	public static void vaultsProtectFuel(CreateGameTestHelper helper) {
+		BlockPos lever = new BlockPos(2, 2, 1);
+		helper.pullLever(lever);
+		BlockPos barrelLamp = new BlockPos(1, 3, 3);
+		BlockPos vaultLamp = barrelLamp.east(2);
+
+		helper.runAtTickTime(10, () -> helper.pullLever(lever));
+
+		helper.succeedWhen(() -> {
+			helper.assertBlockProperty(barrelLamp, RedstoneLampBlock.LIT, false);
+			helper.assertBlockProperty(vaultLamp, RedstoneLampBlock.LIT, true);
+		});
+	}
 }

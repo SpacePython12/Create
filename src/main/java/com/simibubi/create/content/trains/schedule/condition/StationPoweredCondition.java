@@ -3,9 +3,9 @@ package com.simibubi.create.content.trains.schedule.condition;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.station.GlobalStation;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.data.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -20,9 +20,9 @@ import net.minecraft.world.level.Level;
 public class StationPoweredCondition extends ScheduleWaitCondition {
 	@Override
 	public Pair<ItemStack, Component> getSummary() {
-		return Pair.of(ItemStack.EMPTY, Lang.translateDirect("schedule.condition.powered"));
+		return Pair.of(ItemStack.EMPTY, CreateLang.translateDirect("schedule.condition.powered"));
 	}
-	
+
 	@Override
 	public boolean tickCompletion(Level level, Train train, CompoundTag context) {
 		GlobalStation currentStation = train.getCurrentStation();
@@ -52,6 +52,6 @@ public class StationPoweredCondition extends ScheduleWaitCondition {
 
 	@Override
 	public MutableComponent getWaitingStatus(Level level, Train train, CompoundTag tag) {
-		return Lang.translateDirect("schedule.condition.powered.status");
+		return CreateLang.translateDirect("schedule.condition.powered.status");
 	}
 }

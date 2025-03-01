@@ -3,7 +3,6 @@ package com.simibubi.create.compat.rei.category;
 import java.util.Collections;
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import me.shedaniel.rei.api.client.gui.widgets.Widget;

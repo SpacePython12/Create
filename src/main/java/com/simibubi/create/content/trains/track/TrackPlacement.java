@@ -6,24 +6,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.jozufozu.flywheel.util.Color;
 import com.simibubi.create.AllSpecialTextures;
 import com.simibubi.create.AllTags;
-import com.simibubi.create.CreateClient;
+import com.simibubi.create.AllTags.AllItemTags;
 import com.simibubi.create.content.equipment.blueprint.BlueprintOverlayRenderer;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.outliner.Outliner;
+import net.createmod.catnip.theme.Color;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -51,8 +55,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class TrackPlacement {
 
@@ -106,7 +113,7 @@ public class TrackPlacement {
 	static int extraTipWarmup;
 
 	public static PlacementInfo tryConnect(Level level, Player player, BlockPos pos2, BlockState state2,
-		ItemStack stack, boolean girder, boolean maximiseTurn) {
+										   ItemStack stack, boolean girder, boolean maximiseTurn) {
 		Vec3 lookVec = player.getLookAngle();
 		int lookAngle = (int) (22.5 + AngleHelper.deg(Mth.atan2(lookVec.z, lookVec.x)) % 360) / 8;
 		int maxLength = AllConfigs.server().trains.maxTrackPlacementLength.get();
@@ -360,8 +367,8 @@ public class TrackPlacement {
 
 		info.curve = skipCurve ? null
 			: new BezierConnection(Couple.create(targetPos1, targetPos2),
-				Couple.create(end1.add(offset1), end2.add(offset2)), Couple.create(normedAxis1, normedAxis2),
-				Couple.create(normal1, normal2), true, girder, TrackMaterial.fromItem(stack.getItem()));
+			Couple.create(end1.add(offset1), end2.add(offset2)), Couple.create(normedAxis1, normedAxis2),
+			Couple.create(normal1, normal2), true, girder, TrackMaterial.fromItem(stack.getItem()));
 
 		info.valid = true;
 
@@ -374,7 +381,7 @@ public class TrackPlacement {
 
 		ItemStack offhandItem = player.getOffhandItem()
 			.copy();
-		boolean shouldPave = offhandItem.getItem() instanceof BlockItem;
+		boolean shouldPave = offhandItem.getItem() instanceof BlockItem && !AllItemTags.INVALID_FOR_TRACK_PAVING.matches(offhandItem);
 		if (shouldPave) {
 			BlockItem paveItem = (BlockItem) offhandItem.getItem();
 			paveTracks(level, info, paveItem, true);
@@ -480,7 +487,7 @@ public class TrackPlacement {
 	}
 
 	private static PlacementInfo placeTracks(Level level, PlacementInfo info, BlockState state1, BlockState state2,
-		BlockPos targetPos1, BlockPos targetPos2, boolean simulate) {
+											 BlockPos targetPos1, BlockPos targetPos2, boolean simulate) {
 		info.requiredTracks = 0;
 
 		for (boolean first : Iterate.trueAndFalse) {
@@ -492,14 +499,14 @@ public class TrackPlacement {
 				state = state.setValue(TrackBlock.HAS_BE, false);
 
 			switch (state.getValue(TrackBlock.SHAPE)) {
-			case TE, TW:
-				state = state.setValue(TrackBlock.SHAPE, TrackShape.XO);
-				break;
-			case TN, TS:
-				state = state.setValue(TrackBlock.SHAPE, TrackShape.ZO);
-				break;
-			default:
-				break;
+				case TE, TW:
+					state = state.setValue(TrackBlock.SHAPE, TrackShape.XO);
+					break;
+				case TN, TS:
+					state = state.setValue(TrackBlock.SHAPE, TrackShape.ZO);
+					break;
+				default:
+					break;
 			}
 
 			for (int i = 0; i < (info.curve != null ? extent + 1 : extent); i++) {
@@ -532,26 +539,23 @@ public class TrackPlacement {
 			BlockState onto = info.trackMaterial.getBlock().defaultBlockState();
 			BlockState stateAtPos = level.getBlockState(targetPos1);
 			level.setBlock(targetPos1, ProperWaterloggedBlock.withWater(level,
-					(AllTags.AllBlockTags.TRACKS.matches(stateAtPos) ? stateAtPos : BlockHelper.copyProperties(state1, onto))
-							.setValue(TrackBlock.HAS_BE, true), targetPos1), 3);
+				(AllTags.AllBlockTags.TRACKS.matches(stateAtPos) ? stateAtPos : BlockHelper.copyProperties(state1, onto))
+					.setValue(TrackBlock.HAS_BE, true), targetPos1), 3);
 
 			stateAtPos = level.getBlockState(targetPos2);
 			level.setBlock(targetPos2, ProperWaterloggedBlock.withWater(level,
-					(AllTags.AllBlockTags.TRACKS.matches(stateAtPos) ? stateAtPos : BlockHelper.copyProperties(state2, onto))
-							.setValue(TrackBlock.HAS_BE, true), targetPos2), 3);
+				(AllTags.AllBlockTags.TRACKS.matches(stateAtPos) ? stateAtPos : BlockHelper.copyProperties(state2, onto))
+					.setValue(TrackBlock.HAS_BE, true), targetPos2), 3);
 		}
 
 		BlockEntity te1 = level.getBlockEntity(targetPos1);
 		BlockEntity te2 = level.getBlockEntity(targetPos2);
 		int requiredTracksForTurn = (info.curve.getSegmentCount() + 1) / 2;
 
-		if (!(te1 instanceof TrackBlockEntity) || !(te2 instanceof TrackBlockEntity)) {
+		if (!(te1 instanceof TrackBlockEntity tte1) || !(te2 instanceof TrackBlockEntity tte2)) {
 			info.requiredTracks += requiredTracksForTurn;
 			return info;
 		}
-
-		TrackBlockEntity tte1 = (TrackBlockEntity) te1;
-		TrackBlockEntity tte2 = (TrackBlockEntity) te2;
 
 		if (!tte1.getConnections()
 			.containsKey(tte2.getBlockPos()))
@@ -626,11 +630,11 @@ public class TrackPlacement {
 			BlueprintOverlayRenderer.displayTrackRequirements(info, player.getOffhandItem());
 
 		if (info.valid)
-			player.displayClientMessage(Lang.translateDirect("track.valid_connection")
+			player.displayClientMessage(CreateLang.translateDirect("track.valid_connection")
 				.withStyle(ChatFormatting.GREEN), true);
 		else if (info.message != null)
-			player.displayClientMessage(Lang.translateDirect(info.message)
-				.withStyle(info.message.equals("track.second_point") ? ChatFormatting.WHITE : ChatFormatting.RED),
+			player.displayClientMessage(CreateLang.translateDirect(info.message)
+					.withStyle(info.message.equals("track.second_point") ? ChatFormatting.WHITE : ChatFormatting.RED),
 				true);
 
 		if (bhr.getDirection() == Direction.UP) {
@@ -653,11 +657,11 @@ public class TrackPlacement {
 			}
 
 			if (hints != null && !hints.either(Collection::isEmpty)) {
-				CreateClient.OUTLINER.showCluster("track_valid", hints.getFirst())
+				Outliner.getInstance().showCluster("track_valid", hints.getFirst())
 					.withFaceTexture(AllSpecialTextures.THIN_CHECKERED)
 					.colored(0x95CD41)
 					.lineWidth(0);
-				CreateClient.OUTLINER.showCluster("track_invalid", hints.getSecond())
+				Outliner.getInstance().showCluster("track_invalid", hints.getSecond())
 					.withFaceTexture(AllSpecialTextures.THIN_CHECKERED)
 					.colored(0xEA5C2B)
 					.lineWidth(0);
@@ -737,13 +741,13 @@ public class TrackPlacement {
 					.scale(0.5f);
 				Vec3 middle2 = rail2.add(previous2)
 					.scale(0.5f);
-				CreateClient.OUTLINER
+				Outliner.getInstance()
 					.showLine(Pair.of(key, i * 2), VecHelper.lerp(s, middle1, previous1),
 						VecHelper.lerp(s, middle1, rail1))
 					.colored(railcolor)
 					.disableLineNormals()
 					.lineWidth(lw);
-				CreateClient.OUTLINER
+				Outliner.getInstance()
 					.showLine(Pair.of(key, i * 2 + 1), VecHelper.lerp(s, middle2, previous2),
 						VecHelper.lerp(s, middle2, rail2))
 					.colored(railcolor)
@@ -756,8 +760,8 @@ public class TrackPlacement {
 		}
 
 		for (int i = segCount + 1; i <= lastLineCount; i++) {
-			CreateClient.OUTLINER.remove(Pair.of(key, i * 2));
-			CreateClient.OUTLINER.remove(Pair.of(key, i * 2 + 1));
+			Outliner.getInstance().remove(Pair.of(key, i * 2));
+			Outliner.getInstance().remove(Pair.of(key, i * 2 + 1));
 		}
 
 		lastLineCount = segCount;
@@ -766,7 +770,7 @@ public class TrackPlacement {
 	@Environment(EnvType.CLIENT)
 	private static void line(int id, Vec3 v1, Vec3 o1, Vec3 ex) {
 		int color = Color.mixColors(0xEA5C2B, 0x95CD41, animation.getValue());
-		CreateClient.OUTLINER.showLine(Pair.of("start", id), v1.subtract(o1), v1.add(ex))
+		Outliner.getInstance().showLine(Pair.of("start", id), v1.subtract(o1), v1.add(ex))
 			.lineWidth(1 / 8f)
 			.disableLineNormals()
 			.colored(color);

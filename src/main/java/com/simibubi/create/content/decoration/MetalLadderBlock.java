@@ -3,28 +3,36 @@ package com.simibubi.create.content.decoration;
 import java.util.function.Predicate;
 
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.equipment.extendoGrip.ExtendoGripItem;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
-import com.simibubi.create.foundation.placement.IPlacementHelper;
-import com.simibubi.create.foundation.placement.PlacementHelpers;
-import com.simibubi.create.foundation.placement.PlacementOffset;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.placement.IPlacementHelper;
+import net.createmod.catnip.placement.PlacementHelpers;
+import net.createmod.catnip.placement.PlacementOffset;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class MetalLadderBlock extends LadderBlock implements IWrenchable {
 
@@ -42,8 +50,31 @@ public class MetalLadderBlock extends LadderBlock implements IWrenchable {
 
 	@Override
 	@Environment(EnvType.CLIENT)
+	@SuppressWarnings("deprecation")
 	public boolean skipRendering(BlockState pState, BlockState pAdjacentBlockState, Direction pDirection) {
+		if (pDirection != null && pDirection.getAxis()
+			.isHorizontal())
+			return pAdjacentBlockState.isAir() || !pAdjacentBlockState.blocksMotion();
 		return pDirection == Direction.UP && pAdjacentBlockState.getBlock() instanceof LadderBlock;
+	}
+
+	@Override
+	public VoxelShape getOcclusionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
+		return AllShapes.SIX_VOXEL_POLE.get(Axis.Y);
+	}
+
+	@Override
+	public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel,
+		BlockPos pCurrentPos, BlockPos pFacingPos) {
+		if (!pState.canSurvive(pLevel, pCurrentPos))
+			return Blocks.AIR.defaultBlockState();
+		return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+	}
+
+	@Override
+	public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+		return super.canSurvive(pState, pLevel, pPos) || pLevel.getBlockState(pPos.relative(Direction.UP))
+			.is(this);
 	}
 
 	@Override
@@ -87,7 +118,7 @@ public class MetalLadderBlock extends LadderBlock implements IWrenchable {
 
 		@Override
 		public PlacementOffset getOffset(Player player, Level world, BlockState state, BlockPos pos,
-			BlockHitResult ray) {
+										 BlockHitResult ray) {
 			Direction dir = player.getXRot() < 0 ? Direction.UP : Direction.DOWN;
 
 			int range = AllConfigs.server().equipment.placementAssistRange.get();

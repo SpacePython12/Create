@@ -12,7 +12,7 @@ import java.util.function.Function;
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllKeys;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
@@ -21,13 +21,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.BulkScrollValueBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -40,6 +38,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ChassisBlockEntity extends SmartBlockEntity {
 
@@ -54,7 +55,7 @@ public class ChassisBlockEntity extends SmartBlockEntity {
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		int max = AllConfigs.server().kinetics.maxChassisRange.get();
-		range = new ChassisScrollValueBehaviour(Lang.translateDirect("contraptions.chassis.range"), this,
+		range = new ChassisScrollValueBehaviour(CreateLang.translateDirect("contraptions.chassis.range"), this,
 			new CenteredSideValueBoxTransform(), be -> ((ChassisBlockEntity) be).collectChassisGroup());
 		range.requiresWrench();
 		range.between(1, max);
@@ -70,7 +71,7 @@ public class ChassisBlockEntity extends SmartBlockEntity {
 	public void initialize() {
 		super.initialize();
 		if (getBlockState().getBlock() instanceof RadialChassisBlock)
-			range.setLabel(Lang.translateDirect("contraptions.chassis.radius"));
+			range.setLabel(CreateLang.translateDirect("contraptions.chassis.radius"));
 	}
 
 	@Override
@@ -107,8 +108,7 @@ public class ChassisBlockEntity extends SmartBlockEntity {
 				continue;
 			visited.add(current);
 			BlockEntity blockEntity = level.getBlockEntity(current);
-			if (blockEntity instanceof ChassisBlockEntity) {
-				ChassisBlockEntity chassis = (ChassisBlockEntity) blockEntity;
+			if (blockEntity instanceof ChassisBlockEntity chassis) {
 				collected.add(chassis);
 				visited.add(current);
 				chassis.addAttachedChasses(frontier, visited);
@@ -125,7 +125,7 @@ public class ChassisBlockEntity extends SmartBlockEntity {
 		if (isRadial()) {
 
 			// Collect chain of radial chassis
-			for (int offset : new int[] { -1, 1 }) {
+			for (int offset : new int[]{-1, 1}) {
 				Direction direction = Direction.get(AxisDirection.POSITIVE, axis);
 				BlockPos currentPos = worldPosition.relative(direction, offset);
 				if (!level.isLoaded(currentPos))
@@ -173,7 +173,7 @@ public class ChassisBlockEntity extends SmartBlockEntity {
 		Direction facing = Direction.get(AxisDirection.POSITIVE, axis);
 		int chassisRange = visualize ? currentlySelectedRange : getRange();
 
-		for (int offset : new int[] { 1, -1 }) {
+		for (int offset : new int[]{1, -1}) {
 			if (offset == -1)
 				facing = facing.getOpposite();
 			boolean sticky = state.getValue(block.getGlueableSide(state, facing));
@@ -254,13 +254,13 @@ public class ChassisBlockEntity extends SmartBlockEntity {
 	class ChassisScrollValueBehaviour extends BulkScrollValueBehaviour {
 
 		public ChassisScrollValueBehaviour(Component label, SmartBlockEntity be, ValueBoxTransform slot,
-			Function<SmartBlockEntity, List<? extends SmartBlockEntity>> groupGetter) {
+										   Function<SmartBlockEntity, List<? extends SmartBlockEntity>> groupGetter) {
 			super(label, be, slot, groupGetter);
 		}
 
 		@Override
 		public ValueSettingsBoard createBoard(Player player, BlockHitResult hitResult) {
-			ImmutableList<Component> rows = ImmutableList.of(Lang.translateDirect("contraptions.chassis.distance"));
+			ImmutableList<Component> rows = ImmutableList.of(CreateLang.translateDirect("contraptions.chassis.distance"));
 			ValueSettingsFormatter formatter =
 				new ValueSettingsFormatter(vs -> new ValueSettings(vs.row(), vs.value() + 1).format());
 			return new ValueSettingsBoard(label, max - 1, 1, rows, formatter);

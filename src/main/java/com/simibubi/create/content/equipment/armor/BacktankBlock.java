@@ -1,18 +1,16 @@
 package com.simibubi.create.content.equipment.armor;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllEnchantments;
 import com.simibubi.create.AllShapes;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType;
 import com.simibubi.create.foundation.block.IBE;
 
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -43,13 +41,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BacktankBlock extends HorizontalKineticBlock implements IBE<BacktankBlockEntity>, SimpleWaterloggedBlock, ISpecialBlockItemRequirement {
+import net.fabricmc.fabric.api.entity.FakePlayer;
+
+public class BacktankBlock extends HorizontalKineticBlock implements IBE<BacktankBlockEntity>, SimpleWaterloggedBlock, SpecialBlockItemRequirement {
 
 	public BacktankBlock(Properties properties) {
 		super(properties);
@@ -190,8 +188,10 @@ public class BacktankBlock extends HorizontalKineticBlock implements IBE<Backtan
 		Optional<BacktankBlockEntity> blockEntityOptional = getBlockEntityOptional(blockGetter, pos);
 
 //		CompoundTag forgeCapsTag = blockEntityOptional.map(BacktankBlockEntity::getForgeCapsTag)
+	//			.map(CompoundTag::copy)
 //			.orElse(null);
 		CompoundTag vanillaTag = blockEntityOptional.map(BacktankBlockEntity::getVanillaTag)
+				.map(CompoundTag::copy)
 			.orElse(new CompoundTag());
 		int air = blockEntityOptional.map(BacktankBlockEntity::getAirLevel)
 			.orElse(0);

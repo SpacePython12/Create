@@ -1,7 +1,6 @@
 package com.simibubi.create.compat.trinkets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import com.mojang.math.Axis;
 import com.simibubi.create.AllItems;
 
@@ -14,7 +13,6 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;

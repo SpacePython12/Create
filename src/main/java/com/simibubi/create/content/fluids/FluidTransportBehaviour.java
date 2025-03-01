@@ -14,10 +14,9 @@ import com.simibubi.create.content.fluids.pump.PumpBlock;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.WorldAttached;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.data.WorldAttached;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -25,6 +24,8 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public abstract class FluidTransportBehaviour extends BlockEntityBehaviour {
 
@@ -260,6 +261,7 @@ public abstract class FluidTransportBehaviour extends BlockEntityBehaviour {
 	public enum AttachmentTypes {
 		NONE,
 		CONNECTION(ComponentPartials.CONNECTION),
+		DETAILED_CONNECTION(ComponentPartials.RIM_CONNECTOR),
 		RIM(ComponentPartials.RIM_CONNECTOR, ComponentPartials.RIM),
 		PARTIAL_RIM(ComponentPartials.RIM),
 		DRAIN(ComponentPartials.RIM_CONNECTOR, ComponentPartials.DRAIN),

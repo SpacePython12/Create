@@ -5,7 +5,6 @@ import org.joml.Quaternionf;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllParticleTypes;
-import io.github.fabricators_of_create.porting_lib.util.ParticleHelper;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -14,6 +13,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.util.Mth;
+
+import io.github.fabricators_of_create.porting_lib.util.ParticleHelper;
 
 public class SoulParticle extends CustomRotationParticle {
 

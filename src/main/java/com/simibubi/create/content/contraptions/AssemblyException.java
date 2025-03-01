@@ -1,6 +1,6 @@
 package com.simibubi.create.content.contraptions;
 
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import net.minecraft.core.BlockPos;
@@ -45,7 +45,7 @@ public class AssemblyException extends Exception {
 	}
 
 	public AssemblyException(String langKey, Object... objects) {
-		this(Lang.translateDirect("gui.assembly.exception." + langKey, objects));
+		this(CreateLang.translateDirect("gui.assembly.exception." + langKey, objects));
 	}
 
 	public static AssemblyException unmovableBlock(BlockPos pos, BlockState state) {
@@ -72,7 +72,7 @@ public class AssemblyException extends Exception {
 	public static AssemblyException noPistonPoles() {
 		return new AssemblyException("noPistonPoles");
 	}
-	
+
 	public static AssemblyException notEnoughSails(int sails) {
 		return new AssemblyException("not_enough_sails", sails, AllConfigs.server().kinetics.minimumWindmillSails.get());
 	}

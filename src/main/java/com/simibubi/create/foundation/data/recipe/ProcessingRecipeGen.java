@@ -11,19 +11,16 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 
 public abstract class ProcessingRecipeGen extends CreateRecipeProvider {
 
@@ -77,7 +74,7 @@ public abstract class ProcessingRecipeGen extends CreateRecipeProvider {
 			ItemLike itemLike = singleIngredient.get();
 			transform
 				.apply(new ProcessingRecipeBuilder<>(serializer.getFactory(),
-					new ResourceLocation(namespace, RegisteredObjects.getKeyOrThrow(itemLike.asItem())
+					new ResourceLocation(namespace, CatnipServices.REGISTRIES.getKeyOrThrow(itemLike.asItem())
 						.getPath())).withItemIngredients(Ingredient.of(itemLike)))
 				.build(c);
 		};
@@ -130,8 +127,8 @@ public abstract class ProcessingRecipeGen extends CreateRecipeProvider {
 
 	protected Supplier<ResourceLocation> idWithSuffix(Supplier<ItemLike> item, String suffix) {
 		return () -> {
-			ResourceLocation registryName = RegisteredObjects.getKeyOrThrow(item.get()
-				.asItem());
+			ResourceLocation registryName = CatnipServices.REGISTRIES.getKeyOrThrow(item.get()
+					.asItem());
 			return Create.asResource(registryName.getPath() + suffix);
 		};
 	}

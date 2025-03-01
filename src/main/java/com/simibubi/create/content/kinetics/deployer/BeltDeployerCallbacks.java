@@ -21,7 +21,6 @@ import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity.State;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,6 +31,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class BeltDeployerCallbacks {
 
@@ -126,6 +127,8 @@ public class BeltDeployerCallbacks {
 				.collect(Collectors.toList());
 
 		blockEntity.award(AllAdvancements.DEPLOYER);
+		
+		transported.clearFanProcessingData();
 
 		TransportedItemStack left = transported.copy();
 		blockEntity.player.spawnedItemEffects = transported.stack.copy();
@@ -166,7 +169,7 @@ public class BeltDeployerCallbacks {
 		if (recipe instanceof SandPaperPolishingRecipe)
 			AllSoundEvents.SANDING_SHORT.playOnServer(world, pos, .35f, 1f);
 
-		blockEntity.sendData();
+		blockEntity.notifyUpdate();
 	}
 
 	private static void awardAdvancements(DeployerBlockEntity blockEntity, ItemStack created) {

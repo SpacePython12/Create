@@ -4,11 +4,10 @@ import java.util.Iterator;
 
 import com.simibubi.create.AllEntityTypes;
 import com.simibubi.create.content.contraptions.glue.SuperGlueEntity;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.IntTag;
@@ -28,9 +27,9 @@ public class SchematicAndQuillItem extends Item {
 	}
 
 	public static void replaceStructureVoidWithAir(CompoundTag nbt) {
-		String air = RegisteredObjects.getKeyOrThrow(Blocks.AIR)
+		String air = CatnipServices.REGISTRIES.getKeyOrThrow(Blocks.AIR)
 			.toString();
-		String structureVoid = RegisteredObjects.getKeyOrThrow(Blocks.STRUCTURE_VOID)
+		String structureVoid = CatnipServices.REGISTRIES.getKeyOrThrow(Blocks.STRUCTURE_VOID)
 			.toString();
 
 		NBTHelper.iterateCompoundList(nbt.getList("palette", 10), c -> {

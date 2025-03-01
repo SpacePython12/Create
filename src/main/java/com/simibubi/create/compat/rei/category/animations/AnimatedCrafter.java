@@ -1,10 +1,10 @@
 package com.simibubi.create.compat.rei.category.animations;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class AnimatedCrafter extends AnimatedKinetics {
@@ -17,7 +17,7 @@ public class AnimatedCrafter extends AnimatedKinetics {
 		AllGuiTextures.JEI_SHADOW.render(graphics, -16, 13);
 
 		matrixStack.translate(3, 16, 0);
-		TransformStack.cast(matrixStack)
+		TransformStack.of(matrixStack)
 			.rotateX(-12.5f)
 			.rotateY(-22.5f);
 		int scale = 22;

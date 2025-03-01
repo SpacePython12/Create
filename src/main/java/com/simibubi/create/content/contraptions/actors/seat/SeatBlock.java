@@ -12,8 +12,7 @@ import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
-import io.github.fabricators_of_create.porting_lib.util.TagUtil;
-import net.fabricmc.fabric.api.registry.LandPathNodeTypesRegistry;
+
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,6 +42,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.fabricmc.fabric.api.registry.LandPathNodeTypesRegistry;
+
+import io.github.fabricators_of_create.porting_lib.util.TagUtil;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -125,7 +129,7 @@ public class SeatBlock extends Block implements ProperWaterloggedBlock {
 	@Override
 	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
 		BlockHitResult p_225533_6_) {
-		if (player.isShiftKeyDown())
+		if (player.isShiftKeyDown() || player instanceof FakePlayer)
 			return InteractionResult.PASS;
 
 		ItemStack heldItem = player.getItemInHand(hand);

@@ -15,11 +15,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.base.Predicates;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Pointing;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.Pointing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
@@ -33,6 +32,8 @@ import net.minecraft.world.item.crafting.FireworkRocketRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class RecipeGridHandler {
 
@@ -52,7 +53,6 @@ public class RecipeGridHandler {
 		Set<MechanicalCrafterBlockEntity> visited = new HashSet<>();
 		frontier.add(Pair.of(root, null));
 
-		boolean powered = false;
 		boolean empty = false;
 		boolean allEmpty = true;
 
@@ -67,9 +67,6 @@ public class RecipeGridHandler {
 				empty = true;
 			else
 				allEmpty = false;
-			if (poweredStart && current.getLevel()
-				.hasNeighborSignal(current.getBlockPos()))
-				powered = true;
 
 			crafters.add(current);
 			visited.add(current);
@@ -82,7 +79,7 @@ public class RecipeGridHandler {
 					frontier.add(Pair.of(preceding, current));
 		}
 
-		return empty && !powered || allEmpty ? null : crafters;
+		return empty && !poweredStart || allEmpty ? null : crafters;
 	}
 
 	public static MechanicalCrafterBlockEntity getTargetingCrafter(MechanicalCrafterBlockEntity crafter) {
@@ -242,6 +239,13 @@ public class RecipeGridHandler {
 
 			width = maxX - minX + 1;
 			height = maxY - minY + 1;
+		}
+
+		public boolean onlyEmptyItems() {
+			for (ItemStack stack : grid.values())
+				if (!stack.isEmpty())
+					return false;
+			return true;
 		}
 
 	}

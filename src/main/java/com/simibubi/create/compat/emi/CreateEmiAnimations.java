@@ -3,7 +3,6 @@ package com.simibubi.create.compat.emi;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -14,17 +13,16 @@ import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.content.kinetics.deployer.DeployerBlock;
 import com.simibubi.create.content.kinetics.saw.SawBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
-import com.simibubi.create.foundation.block.render.SpriteShiftEntry;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
 import com.simibubi.create.foundation.gui.CustomLightingSettings;
-import com.simibubi.create.foundation.gui.ILightingSettings;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
 import dev.emi.emi.api.widget.WidgetHolder;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.gui.ILightingSettings;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.GuiGameElement;
+import net.createmod.catnip.render.SpriteShiftEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
@@ -36,6 +34,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class CreateEmiAnimations {
 	private static final BlockState WHEEL = AllBlocks.CRUSHING_WHEEL.getDefaultState().setValue(BlockStateProperties.AXIS, Axis.X);
@@ -167,7 +167,7 @@ public class CreateEmiAnimations {
 					- spriteShift.getTarget()
 					.getV0();
 
-			float time = AnimationTickHolder.getRenderTime(Minecraft.getInstance().level);
+			float time = AnimationTickHolder.getRenderTime();
 			float speed = 1 / 32f + 1 / 64f * heatLevel.ordinal();
 
 			double vScroll = speed * time;

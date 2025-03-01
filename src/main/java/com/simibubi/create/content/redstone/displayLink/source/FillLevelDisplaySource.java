@@ -3,9 +3,10 @@ package com.simibubi.create.content.redstone.displayLink.source;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.thresholdSwitch.ThresholdSwitchBlockEntity;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -16,7 +17,8 @@ public class FillLevelDisplaySource extends PercentOrProgressBarDisplaySource {
 		BlockEntity be = context.getSourceBlockEntity();
 		if (!(be instanceof ThresholdSwitchBlockEntity tsbe))
 			return null;
-		return tsbe.currentLevel;
+		return Math.max(0,
+			(float) (tsbe.currentLevel - tsbe.currentMinLevel) / (tsbe.currentMaxLevel - tsbe.currentMinLevel));
 	}
 
 	@Override
@@ -37,8 +39,8 @@ public class FillLevelDisplaySource extends PercentOrProgressBarDisplaySource {
 		if (isFirstLine)
 			return;
 		builder.addSelectionScrollInput(0, 120,
-			(si, l) -> si.forOptions(Lang.translatedOptions("display_source.fill_level", "percent", "progress_bar"))
-				.titled(Lang.translateDirect("display_source.fill_level.display")),
+			(si, l) -> si.forOptions(CreateLang.translatedOptions("display_source.fill_level", "percent", "progress_bar"))
+				.titled(CreateLang.translateDirect("display_source.fill_level.display")),
 			"Mode");
 	}
 

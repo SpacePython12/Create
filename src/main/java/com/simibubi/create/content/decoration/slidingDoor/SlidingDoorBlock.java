@@ -8,7 +8,6 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.contraptions.ContraptionWorld;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-
 import com.simibubi.create.foundation.block.IHaveBigOutline;
 
 import net.minecraft.core.BlockPos;
@@ -62,11 +61,11 @@ public class SlidingDoorBlock extends DoorBlock implements IWrenchable, IBE<Slid
 	public static SlidingDoorBlock metal(Properties p_52737_, boolean folds) {
 		return new SlidingDoorBlock(p_52737_, TRAIN_SET_TYPE.get(), folds);
 	}
-	
+
 	public static SlidingDoorBlock glass(Properties p_52737_, boolean folds) {
 		return new SlidingDoorBlock(p_52737_, GLASS_SET_TYPE.get(), folds);
 	}
-	
+
 	public SlidingDoorBlock(Properties p_52737_, BlockSetType type, boolean folds) {
 		super(p_52737_, type);
 		this.folds = folds;

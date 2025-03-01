@@ -1,8 +1,8 @@
 package com.simibubi.create.compat.thresholdSwitch;
 
 //import com.simibubi.create.compat.Mods;
-//import com.simibubi.create.foundation.utility.RegisteredObjects;
 //
+//import net.createmod.catnip.platform.CatnipServices;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraftforge.items.IItemHandler;
 //
@@ -13,7 +13,7 @@ package com.simibubi.create.compat.thresholdSwitch;
 //		if (be == null)
 //			return false;
 //
-//		String namespace = RegisteredObjects.getKeyOrThrow(be.getType())
+//		String namespace = CatnipServices.REGISTRIES.getKeyOrThrow(be.getType())
 //			.getNamespace();
 //
 //		return

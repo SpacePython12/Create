@@ -1,15 +1,12 @@
 package com.simibubi.create.content.contraptions.behaviour;
 
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.CampfireBlock;
 
 public class CampfireMovementBehaviour implements MovementBehaviour {
-	@Override
-	public boolean renderAsNormalBlockEntity() {
-		return true;
-	}
-
 	@Override
 	public void tick(MovementContext context) {
 		if (context.world == null || !context.world.isClientSide || context.position == null

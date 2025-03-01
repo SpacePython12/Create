@@ -3,8 +3,8 @@ package com.simibubi.create.foundation.block.connected;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour.CTContext;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour.ContextRequirement;
-import com.simibubi.create.foundation.utility.Lang;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.resources.ResourceLocation;
 
 public enum AllCTTypes implements CTType {
@@ -87,6 +87,71 @@ public enum AllCTTypes implements CTType {
 			}
 
 			return tileX + 8 * tileY;
+		}
+	},
+	ROOF(4, ContextRequirement.builder().all().build()) {
+		@Override
+		public int getTextureIndex(CTContext context) {
+			boolean upDrops = context.down && !context.up && (context.left || context.right);
+			boolean downDrops = !context.down && context.up && (context.left || context.right);
+			boolean leftDrops = !context.left && context.right && (context.up || context.down);
+			boolean rightDrops = context.left && !context.right && (context.up || context.down);
+
+			if (upDrops) {
+				if (leftDrops)
+					return context.bottomRight ? 0 : 5;
+				if (rightDrops)
+					return context.bottomLeft ? 2 : 5;
+				return 1;
+			}
+
+			if (downDrops) {
+				if (leftDrops)
+					return context.topRight ? 8 : 5;
+				if (rightDrops)
+					return context.topLeft ? 10 : 5;
+				return 9;
+			}
+
+			if (leftDrops)
+				return 4;
+			if (rightDrops)
+				return 6;
+
+			if (!context.up || !context.down || !context.left || !context.right)
+				return 5;
+
+			if (context.bottomLeft && context.topRight) {
+				if (context.topLeft && !context.bottomRight)
+					return 12;
+				if (context.bottomRight && !context.topLeft)
+					return 15;
+				if (!context.bottomRight && !context.topLeft)
+					return 7;
+			}
+
+			if (context.bottomRight && context.topLeft) {
+				if (context.topRight && !context.bottomLeft)
+					return 13;
+				if (context.bottomLeft && !context.topRight)
+					return 14;
+				if (!context.bottomLeft && !context.topRight)
+					return 11;
+			}
+
+			return 5;
+		}
+	},
+	ROOF_STAIR(4, ContextRequirement.builder()
+		.axisAligned()
+		.build()) {
+		private static final int[][] MAPPING = { { 1, 6, 9, 4 }, { 14, 12, 13, 15 }, { 2, 10, 8, 0 }, { 5, 5, 5, 5 } };
+
+		@Override
+		public int getTextureIndex(CTContext context) {
+			int type = (context.up ? 2 : 0) + (context.right ? 1 : 0);
+			int rot = (context.left ? 2 : 0) + (context.down ? 1 : 0);
+			return MAPPING[type][rot];
 		}
 	},
 	CROSS(4, ContextRequirement.builder().axisAligned().build()) {

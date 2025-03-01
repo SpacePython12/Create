@@ -2,18 +2,16 @@ package com.simibubi.create.content.kinetics.deployer;
 
 import java.util.UUID;
 
-import com.simibubi.create.foundation.utility.AdventureUtil;
-
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import com.simibubi.create.AllItems;
+import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
-import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
 import com.simibubi.create.content.contraptions.mounted.MountedContraption;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.AdventureUtil;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +19,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class DeployerMovingInteraction extends MovingInteractionBehaviour {
 

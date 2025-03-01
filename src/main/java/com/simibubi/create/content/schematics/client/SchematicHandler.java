@@ -14,23 +14,24 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.schematics.SchematicInstances;
 import com.simibubi.create.content.schematics.SchematicItem;
-import com.simibubi.create.content.schematics.SchematicWorld;
 import com.simibubi.create.content.schematics.client.tools.ToolType;
 import com.simibubi.create.content.schematics.packet.SchematicPlacePacket;
 import com.simibubi.create.content.schematics.packet.SchematicSyncPacket;
-import com.simibubi.create.foundation.outliner.AABBOutline;
-import com.simibubi.create.foundation.render.SuperRenderTypeBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.levelWrappers.SchematicLevel;
+import net.createmod.catnip.nbt.NBTHelper;
+import net.createmod.catnip.outliner.AABBOutline;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -96,8 +97,6 @@ public class SchematicHandler {
 		if (activeSchematicItem != null && transformation != null)
 			transformation.tick();
 
-		renderers.forEach(SchematicRenderer::tick);
-
 		LocalPlayer player = mc.player;
 		ItemStack stack = findBlueprintInHand(player);
 		if (stack == null) {
@@ -150,14 +149,14 @@ public class SchematicHandler {
 	private void setupRenderer() {
 		Level clientWorld = Minecraft.getInstance().level;
 		StructureTemplate schematic =
-			SchematicItem.loadSchematic(clientWorld.holderLookup(Registries.BLOCK), activeSchematicItem);
+			SchematicItem.loadSchematic(clientWorld, activeSchematicItem);
 		Vec3i size = schematic.getSize();
 		if (size.equals(Vec3i.ZERO))
 			return;
 
-		SchematicWorld w = new SchematicWorld(clientWorld);
-		SchematicWorld wMirroredFB = new SchematicWorld(clientWorld);
-		SchematicWorld wMirroredLR = new SchematicWorld(clientWorld);
+		SchematicLevel w = new SchematicLevel(clientWorld);
+		SchematicLevel wMirroredFB = new SchematicLevel(clientWorld);
+		SchematicLevel wMirroredLR = new SchematicLevel(clientWorld);
 		StructurePlaceSettings placementSettings = new StructurePlaceSettings();
 		StructureTransform transform;
 		BlockPos pos;
@@ -168,9 +167,9 @@ public class SchematicHandler {
 			schematic.placeInWorld(w, pos, pos, placementSettings, w.getRandom(), Block.UPDATE_CLIENTS);
 			for (BlockEntity blockEntity : w.getBlockEntities())
 				blockEntity.setLevel(w);
-			w.fixControllerBlockEntities();
+			fixControllerBlockEntities(w);
 		} catch (Exception e) {
-			Minecraft.getInstance().player.displayClientMessage(Lang.translate("schematic.error")
+			Minecraft.getInstance().player.displayClientMessage(CreateLang.translate("schematic.error")
 				.component(), false);
 			Create.LOGGER.error("Failed to load Schematic for Previewing", e);
 			return;
@@ -183,7 +182,7 @@ public class SchematicHandler {
 			placementSettings.getMirror());
 		for (BlockEntity be : wMirroredFB.getRenderedBlockEntities())
 			transform.apply(be);
-		wMirroredFB.fixControllerBlockEntities();
+		fixControllerBlockEntities(wMirroredFB);
 
 		placementSettings.setMirror(Mirror.LEFT_RIGHT);
 		pos = BlockPos.ZERO.south(size.getZ() - 1);
@@ -192,7 +191,7 @@ public class SchematicHandler {
 			placementSettings.getMirror());
 		for (BlockEntity be : wMirroredLR.getRenderedBlockEntities())
 			transform.apply(be);
-		wMirroredLR.fixControllerBlockEntities();
+		fixControllerBlockEntities(wMirroredLR);
 
 		renderers.get(0)
 			.display(w);
@@ -200,6 +199,26 @@ public class SchematicHandler {
 			.display(wMirroredFB);
 		renderers.get(2)
 			.display(wMirroredLR);
+	}
+
+	private void fixControllerBlockEntities(SchematicLevel level) {
+		for (BlockEntity blockEntity : level.getBlockEntities()) {
+			if (!(blockEntity instanceof IMultiBlockEntityContainer multiBlockEntity))
+				continue;
+			BlockPos lastKnown = multiBlockEntity.getLastKnownPos();
+			BlockPos current = blockEntity.getBlockPos();
+			if (lastKnown == null || current == null)
+				continue;
+			if (multiBlockEntity.isController())
+				continue;
+			if (!lastKnown.equals(current)) {
+				BlockPos newControllerPos = multiBlockEntity.getController()
+					.offset(current.subtract(lastKnown));
+				if (multiBlockEntity instanceof SmartBlockEntity sbe)
+					sbe.markVirtual();
+				multiBlockEntity.setController(newControllerPos);
+			}
+		}
 	}
 
 	public void render(PoseStack ms, SuperRenderTypeBuffer buffer, Vec3 camera) {
@@ -265,8 +284,7 @@ public class SchematicHandler {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player.isShiftKeyDown())
 			return false;
-		if (mc.hitResult instanceof BlockHitResult) {
-			BlockHitResult blockRayTraceResult = (BlockHitResult) mc.hitResult;
+		if (mc.hitResult instanceof BlockHitResult blockRayTraceResult) {
 			BlockState clickedBlock = mc.level.getBlockState(blockRayTraceResult.getBlockPos());
 			if (AllBlocks.SCHEMATICANNON.has(clickedBlock))
 				return false;
@@ -296,7 +314,7 @@ public class SchematicHandler {
 			return false;
 
 		if (selectionScreen.focused) {
-			selectionScreen.cycle((int) delta);
+			selectionScreen.cycle((int) Math.signum(delta));
 			return true;
 		}
 		if (AllKeys.ctrlDown())
@@ -320,11 +338,11 @@ public class SchematicHandler {
 	private boolean itemLost(Player player) {
 		for (int i = 0; i < Inventory.getSelectionSize(); i++) {
 			if (player.getInventory()
-					.getItem(i)
-					.is(activeSchematicItem.getItem()))
+				.getItem(i)
+				.is(activeSchematicItem.getItem()))
 				continue;
 			if (!ItemStack.matches(player.getInventory()
-					.getItem(i), activeSchematicItem))
+				.getItem(i), activeSchematicItem))
 				continue;
 			return false;
 		}

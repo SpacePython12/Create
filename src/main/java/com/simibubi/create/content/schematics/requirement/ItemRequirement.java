@@ -6,12 +6,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.simibubi.create.api.schematic.requirement.SchematicRequirementRegistries;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockEntityItemRequirement;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
+import com.simibubi.create.api.schematic.requirement.SpecialEntityItemRequirement;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockEntityItemRequirement;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
+import com.simibubi.create.api.schematic.requirement.SpecialEntityItemRequirement;
 import com.simibubi.create.compat.framedblocks.FramedBlocksInSchematics;
 import com.simibubi.create.foundation.data.recipe.Mods;
-import com.simibubi.create.foundation.utility.NBTProcessors;
+import net.createmod.catnip.nbt.NBTProcessors;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.minecraft.core.Registry;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -32,6 +41,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 
 public class ItemRequirement {
 	public static final ItemRequirement NONE = new ItemRequirement(Collections.emptyList());
@@ -61,21 +72,29 @@ public class ItemRequirement {
 			.collect(Collectors.toList()));
 	}
 
-	public static ItemRequirement of(BlockState state, BlockEntity be) {
+	public static ItemRequirement of(BlockState state, @Nullable BlockEntity be) {
 		Block block = state.getBlock();
 
 		ItemRequirement requirement;
-		if (block instanceof ISpecialBlockItemRequirement specialBlock) {
+		SchematicRequirementRegistries.BlockRequirement blockRequirement = SchematicRequirementRegistries.BLOCKS.get(block);
+		if (blockRequirement != null) {
+			requirement = blockRequirement.getRequiredItems(state, be);
+		} else if (block instanceof SpecialBlockItemRequirement specialBlock) {
 			requirement = specialBlock.getRequiredItems(state, be);
 		} else {
 			requirement = defaultOf(state, be);
 		}
 
-		if (be instanceof ISpecialBlockEntityItemRequirement specialBE)
-			requirement = requirement.union(specialBE.getRequiredItems(state));
-
-		if (com.simibubi.create.compat.Mods.FRAMEDBLOCKS.contains(block))
-			requirement = requirement.union(FramedBlocksInSchematics.getRequiredItems(state, be));
+		if (be != null) {
+			SchematicRequirementRegistries.BlockEntityRequirement beRequirement = SchematicRequirementRegistries.BLOCK_ENTITIES.get(be.getType());
+			if (beRequirement != null) {
+				requirement = requirement.union(beRequirement.getRequiredItems(be, state));
+			} else if (be instanceof SpecialBlockEntityItemRequirement specialBE) {
+				requirement = requirement.union(specialBE.getRequiredItems(state));
+			} else if (com.simibubi.create.compat.Mods.FRAMEDBLOCKS.contains(block)) {
+				requirement = requirement.union(FramedBlocksInSchematics.getRequiredItems(state, be));
+			}
+		}
 
 		return requirement;
 	}
@@ -120,8 +139,12 @@ public class ItemRequirement {
 	}
 
 	public static ItemRequirement of(Entity entity) {
-		if (entity instanceof ISpecialEntityItemRequirement specialEntity)
+		SchematicRequirementRegistries.EntityRequirement requirement = SchematicRequirementRegistries.ENTITIES.get(entity.getType());
+		if (requirement != null) {
+			return requirement.getRequiredItems(entity);
+		} else if (entity instanceof SpecialEntityItemRequirement specialEntity) {
 			return specialEntity.getRequiredItems();
+		}
 
 		if (entity instanceof ItemFrame itemFrame) {
 			ItemStack frame = new ItemStack(Items.ITEM_FRAME);

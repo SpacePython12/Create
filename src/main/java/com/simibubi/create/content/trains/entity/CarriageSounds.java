@@ -3,10 +3,10 @@ package com.simibubi.create.content.trains.entity;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.AllSoundEvents.SoundEntry;
 import com.simibubi.create.content.trains.entity.Carriage.DimensionalCarriageEntity;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -42,7 +42,7 @@ public class CarriageSounds {
 	public CarriageSounds(CarriageContraptionEntity entity) {
 		this.entity = entity;
 		bogeySounds = entity.getCarriage().bogeys.map(bogey ->
-				bogey != null && bogey.getStyle() != null ? bogey.getStyle().getSoundType()
+				bogey != null && bogey.getStyle() != null ? bogey.getStyle().soundEvent.get()
 					: AllSoundEvents.TRAIN2.getMainEvent());
 		closestBogeySound = bogeySounds.getFirst();
 		distanceFactor = LerpedFloat.linear();
@@ -94,7 +94,7 @@ public class CarriageSounds {
 			relevantBogey = bogeys.getFirst();
 		}
 		if (relevantBogey != null) {
-			closestBogeySound = relevantBogey.getStyle().getSoundType();
+			closestBogeySound = relevantBogey.getStyle().soundEvent.get();
 		}
 
 		Vec3 toCarriage = distance1 > distance2 ? toBogey2 : toBogey1;

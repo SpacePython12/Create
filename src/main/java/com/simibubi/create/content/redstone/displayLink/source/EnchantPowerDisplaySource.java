@@ -2,10 +2,9 @@ package com.simibubi.create.content.redstone.displayLink.source;
 
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
-import com.simibubi.create.foundation.utility.Components;
 
-import io.github.fabricators_of_create.porting_lib.enchant.EnchantmentBonusBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +15,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EnchantmentTableBlock;
 import net.minecraft.world.level.block.entity.EnchantmentTableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.enchant.EnchantmentBonusBlock;
 
 public class EnchantPowerDisplaySource extends NumericSingleLineDisplaySource {
 
@@ -46,7 +47,7 @@ public class EnchantPowerDisplaySource extends NumericSingleLineDisplaySource {
 
 		int cost = EnchantmentHelper.getEnchantmentCost(random, 2, (int) enchantPower, stack);
 
-		return Components.literal(String.valueOf(cost));
+		return Component.literal(String.valueOf(cost));
 	}
 
 	@Override

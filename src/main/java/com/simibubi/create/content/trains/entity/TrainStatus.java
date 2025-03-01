@@ -1,13 +1,17 @@
 package com.simibubi.create.content.trains.entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.google.common.collect.Streams;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -16,11 +20,11 @@ public class TrainStatus {
 
 	Train train;
 
-	boolean navigation;
-	boolean track;
-	boolean conductor;
+	public boolean navigation;
+	public boolean track;
+	public boolean conductor;
 
-	List<Component> queued = new ArrayList<>();
+	List<StatusMessage> queued = new ArrayList<>();
 
 	public TrainStatus(Train train) {
 		this.train = train;
@@ -37,6 +41,13 @@ public class TrainStatus {
 		if (navigation)
 			return;
 		displayInformation("no_match", false, filter);
+		navigation = true;
+	}
+
+	public void failedPackageNoTarget(String address) {
+		if (navigation)
+			return;
+		displayInformation("no_package_target", false, address);
 		navigation = true;
 	}
 
@@ -101,7 +112,26 @@ public class TrainStatus {
 	}
 
 	public void crash() {
-		displayInformation("collision", false);
+		Component component =
+			Component.literal(" - ").withStyle(ChatFormatting.GRAY)
+			.append(
+				CreateLang.translateDirect("train.status.collision").withStyle(st -> st.withColor(0xFFD3B4))
+			);
+		List<ResourceKey<Level>> presentDimensions = train.getPresentDimensions();
+		Stream<Component> locationComponents = presentDimensions.stream().map(key ->
+                {
+                    return Component.literal(" - ").withStyle(ChatFormatting.GRAY)
+                        .append(
+                            CreateLang.translateDirect(
+                                "train.status.collision.where",
+                                    key.location(),
+                                    train.getPositionInDimension(key).get().toShortString()
+                                ).withStyle(style -> style.withColor(0xFFD3B4))
+                        );
+                }
+		);
+		addMessage(new StatusMessage(Streams.concat(Stream.of(component), locationComponents).toArray(Component[]::new)));
+
 	}
 
 	public void successfulMigration() {
@@ -122,17 +152,23 @@ public class TrainStatus {
 		if (owner == null)
 			return;
 		if (owner instanceof Player player) {
-			player.displayClientMessage(Lang.translateDirect("train.status", train.name)
+			player.displayClientMessage(CreateLang.translateDirect("train.status", train.name)
 				.withStyle(ChatFormatting.GOLD), false);
-			queued.forEach(c -> player.displayClientMessage(c, false));
+			queued.forEach(message -> message.displayToPlayer(player));
 		}
 		queued.clear();
 	}
 
 	public void displayInformation(String key, boolean itsAGoodThing, Object... args) {
-		queued.add(Components.literal(" - ").withStyle(ChatFormatting.GRAY)
-			.append(Lang.translateDirect("train.status." + key, args)
-				.withStyle(st -> st.withColor(itsAGoodThing ? 0xD5ECC2 : 0xFFD3B4))));
+        MutableComponent component = Component.literal(" - ").withStyle(ChatFormatting.GRAY)
+			.append(CreateLang.translateDirect("train.status." + key, args)
+				.withStyle(st -> st.withColor(itsAGoodThing ? 0xD5ECC2 : 0xFFD3B4)));
+		addMessage(new StatusMessage(component));
+	}
+
+	public void addMessage(StatusMessage message) {
+		queued.add(message);
+
 		if (queued.size() > 3)
 			queued.remove(0);
 	}
@@ -141,5 +177,12 @@ public class TrainStatus {
 		navigation = false;
 		conductor = false;
 	}
+
+	public record StatusMessage(Component... messages) {
+		public void displayToPlayer(Player player) {
+			Arrays.stream(messages).forEach(messages -> player.displayClientMessage(messages, false));
+		}
+
+	};
 
 }

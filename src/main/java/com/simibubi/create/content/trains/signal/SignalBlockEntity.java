@@ -4,22 +4,23 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.simibubi.create.content.contraptions.ITransformableBlockEntity;
+import com.simibubi.create.api.contraption.transformable.TransformableBlockEntity;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.trains.graph.EdgePointType;
 import com.simibubi.create.content.trains.signal.SignalBlock.SignalType;
 import com.simibubi.create.content.trains.track.TrackTargetingBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.NBTHelper;
 
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-public class SignalBlockEntity extends SmartBlockEntity implements ITransformableBlockEntity {
+public class SignalBlockEntity extends SmartBlockEntity implements TransformableBlockEntity {
 
 	public static enum OverlayState {
 		RENDER, SKIP, DUAL
@@ -109,7 +110,7 @@ public class SignalBlockEntity extends SmartBlockEntity implements ITransformabl
 			boundary.updateBlockEntityPower(this);
 			notifyUpdate();
 		});
-		
+
 		blockState.getOptionalValue(SignalBlock.TYPE)
 			.ifPresent(stateType -> {
 				SignalType targetType = boundary.getTypeFor(worldPosition);
@@ -160,8 +161,8 @@ public class SignalBlockEntity extends SmartBlockEntity implements ITransformabl
 	}
 
 	@Override
-	public void transform(StructureTransform transform) {
-		edgePoint.transform(transform);
+	public void transform(BlockEntity be, StructureTransform transform) {
+		edgePoint.transform(be, transform);
 	}
 
 }

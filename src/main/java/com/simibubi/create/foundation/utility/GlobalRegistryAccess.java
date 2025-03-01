@@ -1,0 +1,52 @@
+package com.simibubi.create.foundation.utility;
+
+import java.util.function.Supplier;
+
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.MinecraftServer;
+
+import net.fabricmc.api.EnvType;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
+
+public final class GlobalRegistryAccess {
+	private static Supplier<@Nullable RegistryAccess> supplier;
+
+	static {
+		EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> supplier = () -> {
+			ClientPacketListener packetListener = Minecraft.getInstance().getConnection();
+			if (packetListener == null) {
+				return null;
+			}
+			return packetListener.registryAccess();
+		});
+
+		if (supplier == null) {
+			supplier = () -> {
+				MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+				if (server == null) {
+					return null;
+				}
+				return server.registryAccess();
+			};
+		}
+	}
+
+	@Nullable
+	public static RegistryAccess get() {
+		return supplier.get();
+	}
+
+	public static RegistryAccess getOrThrow() {
+		RegistryAccess registryAccess = get();
+		if (registryAccess == null) {
+			throw new IllegalStateException("Could not get RegistryAccess");
+		}
+		return registryAccess;
+	}
+}

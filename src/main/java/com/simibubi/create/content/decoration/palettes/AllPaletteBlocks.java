@@ -8,17 +8,17 @@ import static com.simibubi.create.foundation.data.WindowGen.framedGlassPane;
 import static com.simibubi.create.foundation.data.WindowGen.woodenWindowBlock;
 import static com.simibubi.create.foundation.data.WindowGen.woodenWindowPane;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.block.connected.HorizontalCTBehaviour;
 import com.simibubi.create.foundation.block.connected.SimpleCTBehaviour;
 import com.simibubi.create.foundation.data.BlockStateGen;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.WindowGen;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
-
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -29,6 +29,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class AllPaletteBlocks {
 
@@ -78,9 +80,18 @@ public class AllPaletteBlocks {
 		MANGROVE_WINDOW = woodenWindowBlock(WoodType.MANGROVE, Blocks.MANGROVE_PLANKS),
 		CRIMSON_WINDOW = woodenWindowBlock(WoodType.CRIMSON, Blocks.CRIMSON_PLANKS),
 		WARPED_WINDOW = woodenWindowBlock(WoodType.WARPED, Blocks.WARPED_PLANKS),
+		CHERRY_WINDOW = woodenWindowBlock(WoodType.CHERRY, Blocks.CHERRY_PLANKS),
+		BAMBOO_WINDOW = woodenWindowBlock(WoodType.BAMBOO, Blocks.BAMBOO_PLANKS),
 		ORNATE_IRON_WINDOW =
 			customWindowBlock("ornate_iron_window", () -> Items.IRON_NUGGET, () -> AllSpriteShifts.ORNATE_IRON_WINDOW,
-				() -> RenderType::cutout, false, () -> MapColor.TERRACOTTA_LIGHT_GRAY);
+				() -> RenderType::cutout, false, () -> MapColor.TERRACOTTA_LIGHT_GRAY),
+		INDUSTRIAL_IRON_WINDOW = customWindowBlock("industrial_iron_window", AllBlocks.INDUSTRIAL_IRON_BLOCK,
+			() -> AllSpriteShifts.INDUSTRIAL_IRON_WINDOW, () -> RenderType::cutout, false, () -> MapColor.COLOR_GRAY),
+		WEATHERED_IRON_WINDOW = WindowGen
+			.randomisedWindowBlock("weathered_iron_window", AllBlocks.WEATHERED_IRON_BLOCK,
+				() -> RenderType::translucent, true, () -> MapColor.TERRACOTTA_LIGHT_GRAY)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new WeatheredIronWindowCTBehaviour()))
+			.register();
 
 	public static final BlockEntry<ConnectedGlassPaneBlock> OAK_WINDOW_PANE =
 		woodenWindowPane(WoodType.OAK, OAK_WINDOW),
@@ -92,8 +103,16 @@ public class AllPaletteBlocks {
 		MANGROVE_WINDOW_PANE = woodenWindowPane(WoodType.MANGROVE, MANGROVE_WINDOW),
 		CRIMSON_WINDOW_PANE = woodenWindowPane(WoodType.CRIMSON, CRIMSON_WINDOW),
 		WARPED_WINDOW_PANE = woodenWindowPane(WoodType.WARPED, WARPED_WINDOW),
+		CHERRY_WINDOW_PANE = woodenWindowPane(WoodType.CHERRY, CHERRY_WINDOW),
+		BAMBOO_WINDOW_PANE = woodenWindowPane(WoodType.BAMBOO, BAMBOO_WINDOW),
 		ORNATE_IRON_WINDOW_PANE = customWindowPane("ornate_iron_window", ORNATE_IRON_WINDOW,
-			() -> AllSpriteShifts.ORNATE_IRON_WINDOW, () -> RenderType::cutoutMipped);
+			() -> AllSpriteShifts.ORNATE_IRON_WINDOW, () -> RenderType::cutoutMipped).register(),
+		INDUSTRIAL_IRON_WINDOW_PANE = customWindowPane("industrial_iron_window", INDUSTRIAL_IRON_WINDOW,
+			() -> AllSpriteShifts.INDUSTRIAL_IRON_WINDOW, () -> RenderType::cutoutMipped).register(),
+		WEATHERED_IRON_WINDOW_PANE =
+			customWindowPane("weathered_iron_window", WEATHERED_IRON_WINDOW, null, () -> RenderType::translucent)
+				.onRegister(CreateRegistrate.connectedTextures(() -> new WeatheredIronWindowPaneCTBehaviour()))
+				.register();
 
 	static {
 		AllPaletteStoneTypes.register(REGISTRATE);

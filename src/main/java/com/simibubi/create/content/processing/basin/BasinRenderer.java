@@ -1,25 +1,18 @@
 package com.simibubi.create.content.processing.basin;
 
 import java.util.List;
-import java.util.Random;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.foundation.utility.LongAttached;
-import com.simibubi.create.foundation.utility.VecHelper;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -32,6 +25,13 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class BasinRenderer extends SmartBlockEntityRenderer<BasinBlockEntity> {
 
@@ -51,8 +51,8 @@ public class BasinRenderer extends SmartBlockEntityRenderer<BasinBlockEntity> {
 
 		BlockPos pos = basin.getBlockPos();
 		ms.translate(.5, .2f, .5);
-		TransformStack.cast(ms)
-			.rotateY(basin.ingredientRotation.getValue(partialTicks));
+		TransformStack.of(ms)
+			.rotateYDegrees(basin.ingredientRotation.getValue(partialTicks));
 
 		RandomSource r = RandomSource.create(pos.hashCode());
 		Vec3 baseVector = new Vec3(.125, level, 0);
@@ -71,19 +71,19 @@ public class BasinRenderer extends SmartBlockEntityRenderer<BasinBlockEntity> {
 
 				ms.pushPose();
 
-				if (fluidLevel > 0) {
-					ms.translate(0,
-							(Mth.sin(
-									AnimationTickHolder.getRenderTime(basin.getLevel()) / 12f + anglePartition * itemCount) + 1.5f)
-									* 1 / 32f,
-							0);
-				}
+			if (fluidLevel > 0) {
+				ms.translate(0,
+					(Mth.sin(
+							AnimationTickHolder.getRenderTime(basin.getLevel()) / 12f + anglePartition * itemCount) + 1.5f)
+						* 1 / 32f,
+					0);
+			}
 
 				Vec3 itemPosition = VecHelper.rotate(baseVector, anglePartition * itemCount, Axis.Y);
 				ms.translate(itemPosition.x, itemPosition.y, itemPosition.z);
-				TransformStack.cast(ms)
-						.rotateY(anglePartition * itemCount + 35)
-						.rotateX(65);
+				TransformStack.of(ms)
+						.rotateYDegrees(anglePartition * itemCount + 35)
+						.rotateXDegrees(65);
 
 				for (int i = 0; i <= stack.getCount() / 8; i++) {
 					ms.pushPose();
@@ -124,12 +124,12 @@ public class BasinRenderer extends SmartBlockEntityRenderer<BasinBlockEntity> {
 				continue;
 
 			ms.pushPose();
-            TransformStack.cast(ms)
+            TransformStack.of(ms)
 				.translate(outVec)
 				.translate(new Vec3(0, Math.max(-.55f, -(progress * progress * 2)), 0))
 				.translate(directionVec.scale(progress * .5f))
-				.rotateY(AngleHelper.horizontalAngle(direction))
-				.rotateX(progress * 180);
+				.rotateYDegrees(AngleHelper.horizontalAngle(direction))
+				.rotateXDegrees(progress * 180);
 			renderItem(ms, buffer, light, overlay, LongAttached.getValue());
 			ms.popPose();
 		}
@@ -174,8 +174,8 @@ public class BasinRenderer extends SmartBlockEntityRenderer<BasinBlockEntity> {
 
 				float partial = Mth.clamp(units / totalUnits, 0, 1);
 				xMax += partial * 12 / 16f;
-				FluidRenderer.renderFluidBox(renderedFluid, xMin, yMin, zMin, xMax, yMax, zMax, buffer, ms, light,
-					false);
+				FluidRenderer.renderFluidBox(renderedFluid.getFluid(), renderedFluid.getAmount(), xMin, yMin, zMin, xMax, yMax, zMax, buffer, ms, light,
+					false, false, renderedFluid.getTag());
 
 				xMin = xMax;
 			}

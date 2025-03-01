@@ -6,14 +6,16 @@ import com.google.common.base.Supplier;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class MechanicalCraftingRecipeGen extends CreateRecipeProvider {
 
@@ -98,8 +100,8 @@ public class MechanicalCraftingRecipeGen extends CreateRecipeProvider {
 			return register(consumer -> {
 				MechanicalCraftingRecipeBuilder b =
 					builder.apply(MechanicalCraftingRecipeBuilder.shapedRecipe(result.get(), amount));
-				ResourceLocation location = Create.asResource("mechanical_crafting/" + RegisteredObjects.getKeyOrThrow(result.get()
-					.asItem())
+				ResourceLocation location = Create.asResource("mechanical_crafting/" + CatnipServices.REGISTRIES.getKeyOrThrow(result.get()
+								.asItem())
 					.getPath() + suffix);
 				b.build(consumer, location);
 			});

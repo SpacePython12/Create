@@ -2,8 +2,7 @@ package com.simibubi.create.content.trains.graph;
 
 import java.util.UUID;
 
-import com.simibubi.create.foundation.utility.Couple;
-
+import net.createmod.catnip.data.Couple;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 

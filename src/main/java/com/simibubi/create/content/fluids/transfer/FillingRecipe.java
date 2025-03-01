@@ -10,19 +10,20 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeParams;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.util.FluidUtil;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.util.FluidUtil;
 
 public class FillingRecipe extends ProcessingRecipe<Container> implements IAssemblyRecipe {
 
@@ -59,8 +60,7 @@ public class FillingRecipe extends ProcessingRecipe<Container> implements IAssem
 
 	@Override
 	public void addAssemblyIngredients(List<Ingredient> list) {
-	}
-
+}
 	@Override
 	public void addAssemblyFluidIngredients(List<FluidIngredient> list) {
 		list.add(getRequiredFluid());
@@ -69,14 +69,15 @@ public class FillingRecipe extends ProcessingRecipe<Container> implements IAssem
 	@Override
 	@Environment(EnvType.CLIENT)
 	public Component getDescriptionForAssembly() {
-		List<FluidStack> matchingFluidStacks = fluidIngredients.get(0).getMatchingFluidStacks();
-
-		if (matchingFluidStacks.size() == 0)
-			return Components.literal("Invalid");
-
+		List<FluidStack> matchingFluidStacks = fluidIngredients.get(0)
+			.getMatchingFluidStacks();
+		if (matchingFluidStacks.size() == 0) {
+			return Component.literal("Invalid");
+		}
 		Fluid fluid = matchingFluidStacks.get(0).getFluid();
 		String translationKey = FluidUtil.getTranslationKey(fluid);
-		return Lang.translateDirect("recipe.assembly.spout_filling_fluid", Component.translatable(translationKey).getString());
+		return CreateLang.translateDirect("recipe.assembly.spout_filling_fluid",
+			Component.translatable(translationKey).getString());
 	}
 
 	@Override

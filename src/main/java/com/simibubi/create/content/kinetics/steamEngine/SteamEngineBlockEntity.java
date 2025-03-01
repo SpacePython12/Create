@@ -6,9 +6,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllSoundEvents;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.contraptions.bearing.WindmillBearingBlockEntity.RotationDirection;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.IRotate;
@@ -17,25 +16,23 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
-
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -55,7 +52,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		movementDirection = new ScrollOptionBehaviour<>(RotationDirection.class,
-			Lang.translateDirect("contraptions.windmill.rotation_direction"), this, new SteamEngineValueBox());
+			CreateLang.translateDirect("contraptions.windmill.rotation_direction"), this, new SteamEngineValueBox());
 		movementDirection.onlyActiveWhen(() -> {
 			PoweredShaftBlockEntity shaft = getShaft();
 			return shaft == null || !shaft.hasSource();
@@ -66,7 +63,8 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		registerAwardables(behaviours, AllAdvancements.STEAM_ENGINE);
 	}
 
-	private void onDirectionChanged() {}
+	private void onDirectionChanged() {
+	}
 
 	@Override
 	public void tick() {
@@ -94,7 +92,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		boolean verticalTarget = false;
 		BlockState shaftState = shaft.getBlockState();
 		Axis targetAxis = Axis.X;
-		if (shaftState.getBlock()instanceof IRotate ir)
+		if (shaftState.getBlock() instanceof IRotate ir)
 			targetAxis = ir.getRotationAxis(shaftState);
 		verticalTarget = targetAxis == Axis.Y;
 
@@ -209,11 +207,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 		if (sourceBE != null) {
 			FluidTankBlockEntity controller = sourceBE.getControllerBE();
 			if (controller != null && controller.boiler != null) {
-				float volume = 3f / Math.max(2, controller.boiler.attachedEngines / 6);
-				float pitch = 1.18f - level.random.nextFloat() * .25f;
-				level.playLocalSound(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(),
-					SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, volume, pitch, false);
-				AllSoundEvents.STEAM.playAt(level, worldPosition, volume / 16, .8f, false);
+				controller.boiler.queueSoundOnSide(worldPosition, SteamEngineBlock.getFacing(getBlockState()));
 			}
 		}
 
@@ -250,7 +244,7 @@ public class SteamEngineBlockEntity extends SmartBlockEntity implements IHaveGog
 			return null;
 
 		axis = KineticBlockEntityRenderer.getRotationAxisOf(shaft);
-		angle = KineticBlockEntityRenderer.getAngleForTe(shaft, shaft.getBlockPos(), axis);
+		angle = KineticBlockEntityRenderer.getAngleForBe(shaft, shaft.getBlockPos(), axis);
 
 		if (axis == facingAxis)
 			return null;

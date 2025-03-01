@@ -1,8 +1,8 @@
 package com.simibubi.create.content.kinetics.base;
 
 import com.simibubi.create.content.kinetics.base.IRotate.SpeedLevel;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.ParticleOptions;
@@ -76,10 +76,9 @@ public class KineticEffectHandler {
 
 		BlockState state = kte.getBlockState();
 		Block block = state.getBlock();
-		if (!(block instanceof KineticBlock))
+		if (!(block instanceof KineticBlock kb))
 			return;
 
-		KineticBlock kb = (KineticBlock) block;
 		float radius1 = kb.getParticleInitialRadius();
 		float radius2 = kb.getParticleTargetRadius();
 

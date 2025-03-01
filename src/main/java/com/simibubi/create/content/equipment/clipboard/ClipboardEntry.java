@@ -3,20 +3,21 @@ package com.simibubi.create.content.equipment.clipboard;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.simibubi.create.foundation.utility.NBTHelper;
-
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+
 public class ClipboardEntry {
 
 	public boolean checked;
 	public MutableComponent text;
 	public ItemStack icon;
+	public int itemAmount;
 
 	public ClipboardEntry(boolean checked, MutableComponent text) {
 		this.checked = checked;
@@ -24,8 +25,9 @@ public class ClipboardEntry {
 		this.icon = ItemStack.EMPTY;
 	}
 
-	public ClipboardEntry displayItem(ItemStack icon) {
+	public ClipboardEntry displayItem(ItemStack icon, int amount) {
 		this.icon = icon;
+		this.itemAmount = amount;
 		return this;
 	}
 
@@ -64,6 +66,7 @@ public class ClipboardEntry {
 		if (icon.isEmpty())
 			return nbt;
 		nbt.put("Icon", NBTSerializer.serializeNBT(icon));
+		nbt.putInt("ItemAmount", itemAmount);
 		return nbt;
 	}
 
@@ -71,7 +74,7 @@ public class ClipboardEntry {
 		ClipboardEntry clipboardEntry =
 			new ClipboardEntry(tag.getBoolean("Checked"), Component.Serializer.fromJson(tag.getString("Text")));
 		if (tag.contains("Icon"))
-			clipboardEntry.displayItem(ItemStack.of(tag.getCompound("Icon")));
+			clipboardEntry.displayItem(ItemStack.of(tag.getCompound("Icon")), tag.getInt("ItemAmount"));
 		return clipboardEntry;
 	}
 

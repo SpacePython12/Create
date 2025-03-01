@@ -2,10 +2,10 @@ package com.simibubi.create.infrastructure.data;
 
 import com.simibubi.create.api.data.TrainHatInfoProvider;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.data.PackOutput;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 public class VanillaHatOffsetGenerator extends TrainHatInfoProvider {
 	public VanillaHatOffsetGenerator(FabricDataOutput output) {
@@ -62,7 +62,7 @@ public class VanillaHatOffsetGenerator extends TrainHatInfoProvider {
 		this.makeInfoFor(EntityType.TURTLE, new Vec3(0.0F, 3.0F, 0.0F));
 		this.makeInfoFor(EntityType.WARDEN, new Vec3(0.0F, 3.5F, 0.5F), "bone/body/head", 0.5F);
 		this.makeInfoFor(EntityType.WITHER, new Vec3(0.0F, 3.0F, 0.0F), "center_head");
-		this.makeInfoFor(EntityType.WOLF, new Vec3(0.5F, 2.5F, 0.25F), "real_head");
+		this.makeInfoFor(EntityType.WOLF, new Vec3(1.0F, 2.5F, 1.0F), "real_head");
 		this.makeInfoFor(EntityType.ZOGLIN, new Vec3(0.0F, 0.0F, -4.5F), 0.5F);
 		this.makeInfoFor(EntityType.ZOMBIE_HORSE, new Vec3(0.0F, 0.0F, 2.0F));
 	}

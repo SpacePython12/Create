@@ -9,8 +9,6 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
-import com.jozufozu.flywheel.Flywheel;
-import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.platform.GlUtil;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.mixin.accessor.SystemReportAccessor;
@@ -18,15 +16,20 @@ import com.simibubi.create.infrastructure.debugInfo.element.DebugInfoSection;
 import com.simibubi.create.infrastructure.debugInfo.element.InfoElement;
 import com.simibubi.create.infrastructure.debugInfo.element.InfoEntry;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.metadata.ModMetadata;
+import dev.engine_room.flywheel.api.Flywheel;
+import dev.engine_room.flywheel.api.backend.Backend;
+import dev.engine_room.flywheel.api.backend.BackendManager;
 import net.minecraft.SharedConstants;
 import net.minecraft.SystemReport;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import oshi.SystemInfo;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.ModMetadata;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 /**
  * Allows for providing easily accessible debugging information.
@@ -74,8 +77,13 @@ public class DebugInformation {
 
 		EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
 			DebugInfoSection.builder("Graphics")
-					.put("Flywheel Version", Flywheel.getVersion().toString())
-					.put("Flywheel Backend", () -> Backend.getBackendType().toString())
+					.put("Flywheel Version", FabricLoader.getInstance()
+							.getModContainer(Flywheel.ID)
+							.map(c -> c.getMetadata()
+									.getVersion()
+									.toString())
+							.orElse("None"))
+					.put("Flywheel Backend", () -> Backend.REGISTRY.getIdOrThrow(BackendManager.currentBackend()).toString())
 					.put("OpenGL Renderer", GlUtil::getRenderer)
 					.put("OpenGL Version", GlUtil::getOpenGLVersion)
 					.put("Graphics Mode", () -> Minecraft.getInstance().options.graphicsMode().get().getKey())

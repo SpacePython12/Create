@@ -11,8 +11,6 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.item.ItemHelper;
 
-import io.github.fabricators_of_create.porting_lib.block.CustomSoundTypeBlock;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -35,6 +33,10 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomSoundTypeBlock;
 
 public class ItemVaultBlock extends Block implements IWrenchable, IBE<ItemVaultBlockEntity>, CustomSoundTypeBlock {
 
@@ -90,8 +92,7 @@ public class ItemVaultBlock extends Block implements IWrenchable, IBE<ItemVaultB
 			.isVertical()) {
 			BlockEntity be = context.getLevel()
 				.getBlockEntity(context.getClickedPos());
-			if (be instanceof ItemVaultBlockEntity) {
-				ItemVaultBlockEntity vault = (ItemVaultBlockEntity) be;
+			if (be instanceof ItemVaultBlockEntity vault) {
 				ConnectivityHandler.splitMulti(vault);
 				vault.removeController(true);
 			}
@@ -105,9 +106,8 @@ public class ItemVaultBlock extends Block implements IWrenchable, IBE<ItemVaultB
 	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean pIsMoving) {
 		if (state.hasBlockEntity() && (state.getBlock() != newState.getBlock() || !newState.hasBlockEntity())) {
 			BlockEntity be = world.getBlockEntity(pos);
-			if (!(be instanceof ItemVaultBlockEntity))
+			if (!(be instanceof ItemVaultBlockEntity vaultBE))
 				return;
-			ItemVaultBlockEntity vaultBE = (ItemVaultBlockEntity) be;
 			ItemHelper.dropContents(world, pos, vaultBE.inventory);
 			world.removeBlockEntity(pos);
 			ConnectivityHandler.splitMulti(vaultBE);

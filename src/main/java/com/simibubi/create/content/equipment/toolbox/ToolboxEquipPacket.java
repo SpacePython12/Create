@@ -2,10 +2,6 @@ package com.simibubi.create.content.equipment.toolbox;
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -14,6 +10,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class ToolboxEquipPacket extends SimplePacketBase {
 
@@ -61,7 +62,7 @@ public class ToolboxEquipPacket extends SimplePacketBase {
 			if (player.distanceToSqr(toolboxPos.getX() + 0.5, toolboxPos.getY(), toolboxPos.getZ() + 0.5) > maxRange
 				* maxRange)
 				return;
-			if (!(blockEntity instanceof ToolboxBlockEntity))
+			if (!(blockEntity instanceof ToolboxBlockEntity toolboxBlockEntity))
 				return;
 
 			ToolboxHandler.unequip(player, hotbarSlot, false);
@@ -70,8 +71,6 @@ public class ToolboxEquipPacket extends SimplePacketBase {
 				ToolboxHandler.syncData(player);
 				return;
 			}
-
-			ToolboxBlockEntity toolboxBlockEntity = (ToolboxBlockEntity) blockEntity;
 
 			ItemStack playerStack = player.getInventory().getItem(hotbarSlot);
 			if (!playerStack.isEmpty() && !ToolboxInventory.canItemsShareCompartment(playerStack,

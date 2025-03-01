@@ -3,16 +3,15 @@ package com.simibubi.create.compat;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
-
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Registry;
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 /**
  * For compatibility with and without another mod present, we have to define load conditions of the specific code
@@ -21,7 +20,6 @@ public enum Mods {
 	AETHER,
 	BETTEREND,
 	COMPUTERCRAFT,
-	CONNECTIVITY,
 	CURIOS,
 	DYNAMICTREES,
 	FUNCTIONALSTORAGE,
@@ -34,6 +32,9 @@ public enum Mods {
 	FRAMEDBLOCKS,
 	XLPACKETS,
 	MODERNUI,
+	FTBCHUNKS,
+	JOURNEYMAP,
+	FTBLIBRARY,
 
 	// fabric mods
 	SANDWICHABLE,
@@ -74,7 +75,7 @@ public enum Mods {
 		if (!isLoaded())
 			return false;
 		Item asItem = entry.asItem();
-		return asItem != null && RegisteredObjects.getKeyOrThrow(asItem)
+		return asItem != null && CatnipServices.REGISTRIES.getKeyOrThrow(asItem)
 			.getNamespace()
 			.equals(id);
 	}

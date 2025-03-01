@@ -13,9 +13,8 @@ import com.mojang.datafixers.util.Pair;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllKeys;
 import com.simibubi.create.AllSpecialTextures;
-import com.simibubi.create.AllTags;
-import com.simibubi.create.CreateClient;
 
+import net.createmod.catnip.outliner.Outliner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -36,7 +35,7 @@ public class ChassisRangeDisplay {
 		public Entry(ChassisBlockEntity be) {
 			this.be = be;
 			timer = DISPLAY_TIME;
-			CreateClient.OUTLINER.showCluster(getOutlineKey(), createSelection(be))
+			Outliner.getInstance().showCluster(getOutlineKey(), createSelection(be))
 				.colored(0xFFFFFF)
 				.disableLineNormals()
 				.lineWidth(1 / 16f)
@@ -93,40 +92,38 @@ public class ChassisRangeDisplay {
 		boolean hasWrench = AllItems.WRENCH.isIn(player.getMainHandItem());
 
 		for (Iterator<BlockPos> iterator = entries.keySet()
-			.iterator(); iterator.hasNext();) {
+			.iterator(); iterator.hasNext(); ) {
 			BlockPos pos = iterator.next();
 			Entry entry = entries.get(pos);
 			if (tickEntry(entry, hasWrench))
 				iterator.remove();
-			CreateClient.OUTLINER.keep(entry.getOutlineKey());
+			Outliner.getInstance().keep(entry.getOutlineKey());
 		}
 
-		for (Iterator<GroupEntry> iterator = groupEntries.iterator(); iterator.hasNext();) {
+		for (Iterator<GroupEntry> iterator = groupEntries.iterator(); iterator.hasNext(); ) {
 			GroupEntry group = iterator.next();
 			if (tickEntry(group, hasWrench)) {
 				iterator.remove();
 				if (group == lastHoveredGroup)
 					lastHoveredGroup = null;
 			}
-			CreateClient.OUTLINER.keep(group.getOutlineKey());
+			Outliner.getInstance().keep(group.getOutlineKey());
 		}
 
 		if (!hasWrench)
 			return;
 
 		HitResult over = Minecraft.getInstance().hitResult;
-		if (!(over instanceof BlockHitResult))
+		if (!(over instanceof BlockHitResult ray))
 			return;
-		BlockHitResult ray = (BlockHitResult) over;
 		BlockPos pos = ray.getBlockPos();
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		if (blockEntity == null || blockEntity.isRemoved())
 			return;
-		if (!(blockEntity instanceof ChassisBlockEntity))
+		if (!(blockEntity instanceof ChassisBlockEntity chassisBlockEntity))
 			return;
 
 		boolean ctrl = AllKeys.ctrlDown();
-		ChassisBlockEntity chassisBlockEntity = (ChassisBlockEntity) blockEntity;
 
 		if (ctrl) {
 			GroupEntry existingGroupForPos = getExistingGroupForPos(pos);
@@ -174,9 +171,9 @@ public class ChassisRangeDisplay {
 			GroupEntry hoveredGroup = new GroupEntry(chassis);
 
 			for (ChassisBlockEntity included : hoveredGroup.includedBEs)
-				CreateClient.OUTLINER.remove(Pair.of(included.getBlockPos(), 1));
+				Outliner.getInstance().remove(Pair.of(included.getBlockPos(), 1));
 
-			groupEntries.forEach(entry -> CreateClient.OUTLINER.remove(entry.getOutlineKey()));
+			groupEntries.forEach(entry -> Outliner.getInstance().remove(entry.getOutlineKey()));
 			groupEntries.clear();
 			entries.clear();
 			groupEntries.add(hoveredGroup);
@@ -187,7 +184,7 @@ public class ChassisRangeDisplay {
 		BlockPos pos = chassis.getBlockPos();
 		GroupEntry entry = getExistingGroupForPos(pos);
 		if (entry != null)
-			CreateClient.OUTLINER.remove(entry.getOutlineKey());
+			Outliner.getInstance().remove(entry.getOutlineKey());
 
 		groupEntries.clear();
 		entries.clear();

@@ -1,6 +1,5 @@
 package com.simibubi.create.content.trains.signal;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.trains.signal.SignalBlockEntity.OverlayState;
@@ -9,9 +8,11 @@ import com.simibubi.create.content.trains.track.ITrackBlock;
 import com.simibubi.create.content.trains.track.TrackTargetingBehaviour;
 import com.simibubi.create.content.trains.track.TrackTargetingBehaviour.RenderedTrackOverlayType;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.render.CachedBuffers;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -33,10 +34,11 @@ public class SignalRenderer extends SafeBlockEntityRenderer<SignalBlockEntity> {
 
 		float renderTime = AnimationTickHolder.getRenderTime(be.getLevel());
 		if (signalState.isRedLight(renderTime))
-			CachedBufferer.partial(AllPartialModels.SIGNAL_ON, blockState)
+			CachedBuffers.partial(AllPartialModels.SIGNAL_ON, blockState)
+				.light(LightTexture.FULL_BLOCK)
 				.renderInto(ms, buffer.getBuffer(RenderType.solid()));
 		else
-			CachedBufferer.partial(AllPartialModels.SIGNAL_OFF, blockState)
+			CachedBuffers.partial(AllPartialModels.SIGNAL_OFF, blockState)
 				.light(light)
 				.renderInto(ms, buffer.getBuffer(RenderType.solid()));
 
@@ -53,7 +55,7 @@ public class SignalRenderer extends SafeBlockEntityRenderer<SignalBlockEntity> {
 			return;
 
 		ms.pushPose();
-		TransformStack.cast(ms)
+		TransformStack.of(ms)
 			.translate(targetPosition.subtract(pos));
 		RenderedTrackOverlayType type =
 			overlayState == OverlayState.DUAL ? RenderedTrackOverlayType.DUAL_SIGNAL : RenderedTrackOverlayType.SIGNAL;

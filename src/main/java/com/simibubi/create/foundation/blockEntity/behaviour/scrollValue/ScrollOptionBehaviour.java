@@ -5,7 +5,6 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter.ScrollOptionSettingsFormatter;
-import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -31,10 +30,10 @@ public class ScrollOptionBehaviour<E extends Enum<E> & INamedIconOptions> extend
 
 	@Override
 	public ValueSettingsBoard createBoard(Player player, BlockHitResult hitResult) {
-		return new ValueSettingsBoard(label, max, 1, ImmutableList.of(Components.literal("Select")),
+		return new ValueSettingsBoard(label, max, 1, ImmutableList.of(Component.literal("Select")),
 			new ScrollOptionSettingsFormatter(options));
 	}
-	
+
 	@Override
 	public String getClipboardKey() {
 		return options[0].getClass().getSimpleName();

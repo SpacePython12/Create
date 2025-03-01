@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.mutable.MutableObject;
+
 import com.simibubi.create.AllItems;
-import com.simibubi.create.foundation.gui.ScreenOpener;
-import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import net.fabricmc.fabric.api.client.screen.v1.Screens;
+import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,16 +19,17 @@ import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.item.ItemStack;
 
-import org.apache.commons.lang3.mutable.MutableObject;
+import net.fabricmc.fabric.api.client.screen.v1.Screens;
 
 public class OpenCreateMenuButton extends Button {
 
 	public static final ItemStack ICON = AllItems.GOGGLES.asStack();
 
 	public OpenCreateMenuButton(int x, int y) {
-		super(x, y, 20, 20, Components.immutableEmpty(), OpenCreateMenuButton::click, DEFAULT_NARRATION);
+		super(x, y, 20, 20, CommonComponents.EMPTY, OpenCreateMenuButton::click, DEFAULT_NARRATION);
 	}
 
 	@Override

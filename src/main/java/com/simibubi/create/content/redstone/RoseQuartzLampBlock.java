@@ -8,9 +8,8 @@ import java.util.function.BiConsumer;
 
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.redstone.diodes.BrassDiodeBlock;
-import com.simibubi.create.foundation.utility.Iterate;
 
-import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
@@ -31,6 +30,8 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+
+import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 
 public class RoseQuartzLampBlock extends Block implements IWrenchable, WeakPowerCheckingBlock {
 

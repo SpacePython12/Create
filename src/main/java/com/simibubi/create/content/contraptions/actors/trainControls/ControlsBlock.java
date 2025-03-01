@@ -67,4 +67,10 @@ public class ControlsBlock extends HorizontalDirectionalBlock implements IWrench
 		return AllShapes.CONTROLS.get(pState.getValue(FACING));
 	}
 
+	@Override
+	public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos,
+		CollisionContext pContext) {
+		return AllShapes.CONTROLS_COLLISION.get(pState.getValue(FACING));
+	}
+
 }

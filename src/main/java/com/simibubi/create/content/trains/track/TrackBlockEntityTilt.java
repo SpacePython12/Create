@@ -6,9 +6,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.simibubi.create.content.trains.graph.TrackNodeLocation;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;

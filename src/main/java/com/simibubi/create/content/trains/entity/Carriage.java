@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,15 +27,13 @@ import com.simibubi.create.content.trains.graph.DimensionPalette;
 import com.simibubi.create.content.trains.graph.TrackGraph;
 import com.simibubi.create.content.trains.graph.TrackNodeLocation;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -48,6 +47,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class Carriage {
 
@@ -97,6 +101,14 @@ public class Carriage {
 
 	public boolean presentInMultipleDimensions() {
 		return entities.size() > 1;
+	}
+
+	public List<ResourceKey<Level>> getPresentDimensions() {
+		return entities.keySet().stream().distinct().toList();
+	}
+
+	public Optional<BlockPos> getPositionInDimension(ResourceKey<Level> dimension) {
+		return Optional.ofNullable(entities.get(dimension)).map(carriage -> BlockPos.containing(carriage.positionAnchor));
 	}
 
 	public void setContraption(Level level, CarriageContraption contraption) {
@@ -423,6 +435,13 @@ public class Carriage {
 		return null;
 	}
 
+	public Pair<ResourceKey<Level>, DimensionalCarriageEntity> anyAvailableDimensionalCarriage() {
+		for (Entry<ResourceKey<Level>, DimensionalCarriageEntity> entry : entities.entrySet())
+			if (entry.getValue().entity.get() != null)
+				return Pair.of(entry.getKey(), entry.getValue());
+		return null;
+	}
+
 	public void forEachPresentEntity(Consumer<CarriageContraptionEntity> callback) {
 		for (DimensionalCarriageEntity dimensionalCarriageEntity : entities.values()) {
 			CarriageContraptionEntity entity = dimensionalCarriageEntity.entity.get();
@@ -631,7 +650,7 @@ public class Carriage {
 		public void read(CompoundTag tag) {
 			cutoff = tag.getFloat("Cutoff");
 			discardTicks = tag.getInt("DiscardTicks");
-			storage.read(tag, null, false);
+			storage.read(tag, false, null);
 			if (tag.contains("Pivot"))
 				pivot = TrackNodeLocation.read(tag.getCompound("Pivot"), null);
 			if (positionAnchor != null)

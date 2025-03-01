@@ -15,15 +15,11 @@ import com.simibubi.create.content.equipment.symmetryWand.mirror.CrossPlaneMirro
 import com.simibubi.create.content.equipment.symmetryWand.mirror.EmptyMirror;
 import com.simibubi.create.content.equipment.symmetryWand.mirror.PlaneMirror;
 import com.simibubi.create.content.equipment.symmetryWand.mirror.SymmetryMirror;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -44,6 +40,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class SymmetryWandItem extends Item {
 
@@ -144,13 +146,13 @@ public class SymmetryWandItem extends Item {
 				playerIn.getCooldowns()
 					.addCooldown(this, 5);
 			}
-			return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, wand);
+			return new InteractionResultHolder<>(InteractionResult.SUCCESS, wand);
 		}
 
 		// No Shift -> Clear Mirror
 		wand.getTag()
 			.putBoolean(ENABLE, false);
-		return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, wand);
+		return new InteractionResultHolder<>(InteractionResult.SUCCESS, wand);
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -334,7 +336,11 @@ public class SymmetryWandItem extends Item {
 		PlayerBlockBreakEvents.CANCELED.invoker().onBlockBreakCanceled(world, player, pos, state, be);
 		return true;
 	}
-	
+
+	public static void handlePostEvent(Level world, Player player, BlockPos pos, BlockState state, BlockEntity be) {
+		PlayerBlockBreakEvents.AFTER.invoker().afterBlockBreak(world, player, pos, state, be);
+	}
+
 	public static boolean presentInHotbar(Player player) {
 		Inventory inv = player.getInventory();
 		for (int i = 0; i < Inventory.getSelectionSize(); i++)
@@ -342,15 +348,5 @@ public class SymmetryWandItem extends Item {
 				return true;
 		return false;
 	}
-
-	public static void handlePostEvent(Level world, Player player, BlockPos pos, BlockState state, BlockEntity be) {
-		PlayerBlockBreakEvents.AFTER.invoker().afterBlockBreak(world, player, pos, state, be);
-	}
-
-//	@Override
-//	@Environment(EnvType.CLIENT)
-//	public void initializeClient(Consumer<IItemRenderProperties> consumer) {
-//		consumer.accept(SimpleCustomRenderer.create(this, new SymmetryWandItemRenderer()));
-//	}
 
 }

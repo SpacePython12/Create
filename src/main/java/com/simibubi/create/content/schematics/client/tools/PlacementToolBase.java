@@ -1,8 +1,8 @@
 package com.simibubi.create.content.schematics.client.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.render.SuperRenderTypeBuffer;
 
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.phys.Vec3;
 

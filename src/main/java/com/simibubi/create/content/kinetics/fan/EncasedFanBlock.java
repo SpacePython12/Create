@@ -4,8 +4,8 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.content.logistics.chute.AbstractChuteBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
 
+import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -63,7 +63,7 @@ public class EncasedFanBlock extends DirectionalKineticBlock implements IBE<Enca
 	}
 
 	protected void blockUpdate(BlockState state, LevelAccessor worldIn, BlockPos pos) {
-		if (worldIn instanceof WrappedWorld)
+		if (worldIn instanceof WrappedLevel)
 			return;
 		notifyFanBlockEntity(worldIn, pos);
 	}
@@ -94,7 +94,7 @@ public class EncasedFanBlock extends DirectionalKineticBlock implements IBE<Enca
 	public Class<EncasedFanBlockEntity> getBlockEntityClass() {
 		return EncasedFanBlockEntity.class;
 	}
-	
+
 	@Override
 	public BlockEntityType<? extends EncasedFanBlockEntity> getBlockEntityType() {
 		return AllBlockEntityTypes.ENCASED_FAN.get();

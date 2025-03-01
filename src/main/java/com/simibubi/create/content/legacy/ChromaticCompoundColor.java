@@ -1,8 +1,7 @@
 package com.simibubi.create.content.legacy;
 
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.Color;
-
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.util.Mth;

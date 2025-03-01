@@ -2,8 +2,6 @@ package com.simibubi.create.content.decoration.copycat;
 
 import java.util.function.Predicate;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;

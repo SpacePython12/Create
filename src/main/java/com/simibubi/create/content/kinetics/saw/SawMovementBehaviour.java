@@ -2,20 +2,18 @@ package com.simibubi.create.content.kinetics.saw;
 
 import java.util.Optional;
 
-import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
+import com.simibubi.create.content.contraptions.render.ActorVisual;
 import com.simibubi.create.content.contraptions.render.ContraptionMatrices;
 import com.simibubi.create.content.kinetics.base.BlockBreakingMovementBehaviour;
 import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
 import com.simibubi.create.foundation.utility.AbstractBlockBreakQueue;
-import com.simibubi.create.foundation.utility.TreeCutter;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import dev.engine_room.flywheel.api.visualization.VisualizationContext;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,6 +24,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class SawMovementBehaviour extends BlockBreakingMovementBehaviour {
 
@@ -80,7 +83,7 @@ public class SawMovementBehaviour extends BlockBreakingMovementBehaviour {
 	}
 
 	public void dropItemFromCutTree(MovementContext context, BlockPos pos, ItemStack stack) {
-		long inserted = TransferUtil.insertItem(context.contraption.getSharedInventory(), stack);
+		long inserted = TransferUtil.insertItem(context.contraption.getStorage().getAllItems(), stack);
 		if (inserted == stack.getCount())
 			return;
 		long remaining = stack.getCount() - inserted;
@@ -93,6 +96,16 @@ public class SawMovementBehaviour extends BlockBreakingMovementBehaviour {
 		ItemEntity entity = new ItemEntity(world, dropPos.x, dropPos.y, dropPos.z, remainder);
 		entity.setDeltaMovement(context.relativeMotion.scale(distance / 20f));
 		world.addFreshEntity(entity);
+	}
+
+	@Override
+	public boolean disableBlockEntityRendering() {
+		return true;
+	}
+
+	@Override
+	public @Nullable ActorVisual createVisual(VisualizationContext visualizationContext, VirtualRenderWorld simulationWorld, MovementContext movementContext) {
+		return new SawActorVisual(visualizationContext, simulationWorld, movementContext);
 	}
 
 	@Override

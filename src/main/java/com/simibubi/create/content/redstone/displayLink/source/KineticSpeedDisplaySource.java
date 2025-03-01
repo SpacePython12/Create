@@ -4,11 +4,12 @@ import com.simibubi.create.content.kinetics.gauge.SpeedGaugeBlockEntity;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
+
+import net.minecraft.network.chat.MutableComponent;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.MutableComponent;
 
 public class KineticSpeedDisplaySource extends NumericSingleLineDisplaySource {
 
@@ -20,7 +21,7 @@ public class KineticSpeedDisplaySource extends NumericSingleLineDisplaySource {
 		boolean absoluteValue = context.sourceConfig()
 			.getInt("Directional") == 0;
 		float speed = absoluteValue ? Math.abs(speedGauge.getSpeed()) : speedGauge.getSpeed();
-		return Lang.number(speed)
+		return CreateLang.number(speed)
 			.space()
 			.translate("generic.unit.rpm")
 			.component();
@@ -41,7 +42,7 @@ public class KineticSpeedDisplaySource extends NumericSingleLineDisplaySource {
 
 		builder.addSelectionScrollInput(0, 95, (selectionScrollInput, label) -> {
 			selectionScrollInput
-				.forOptions(Lang.translatedOptions("display_source.kinetic_speed", "absolute", "directional"));
+				.forOptions(CreateLang.translatedOptions("display_source.kinetic_speed", "absolute", "directional"));
 		}, "Directional");
 	}
 

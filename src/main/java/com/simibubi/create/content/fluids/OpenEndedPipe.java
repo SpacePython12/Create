@@ -2,47 +2,24 @@ package com.simibubi.create.content.fluids;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.simibubi.create.AllFluids;
+import com.simibubi.create.api.effect.OpenPipeEffectHandler;
 import com.simibubi.create.content.fluids.pipes.VanillaFluidTargets;
-import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.fluid.FluidHelper;
-import com.simibubi.create.foundation.utility.BlockFace;
+import com.simibubi.create.foundation.mixin.accessor.FlowingFluidAccessor;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import io.github.tropheusj.milk.Milk;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.createmod.catnip.math.BlockFace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.AbstractCandleBlock;
-import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -51,17 +28,18 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
+import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
+
 public class OpenEndedPipe extends FlowSource {
-
-	private static final List<IEffectHandler> EFFECT_HANDLERS = new ArrayList<>();
-
-	static {
-		registerEffectHandler(new PotionEffectHandler());
-		registerEffectHandler(new MilkEffectHandler());
-		registerEffectHandler(new WaterEffectHandler());
-		registerEffectHandler(new LavaEffectHandler());
-		registerEffectHandler(new TeaEffectHandler());
-	}
 
 	private Level world;
 	private BlockPos pos;
@@ -71,9 +49,6 @@ public class OpenEndedPipe extends FlowSource {
 	private BlockPos outputPos;
 	private boolean wasPulling;
 
-	private FluidStack cachedFluid;
-	private List<MobEffectInstance> cachedEffects;
-
 	public OpenEndedPipe(BlockFace face) {
 		super(face);
 		fluidHandler = new OpenEndFluidHandler();
@@ -82,10 +57,6 @@ public class OpenEndedPipe extends FlowSource {
 		aoe = new AABB(outputPos).expandTowards(0, -1, 0);
 		if (face.getFace() == Direction.DOWN)
 			aoe = aoe.expandTowards(0, -1, 0);
-	}
-
-	public static void registerEffectHandler(IEffectHandler handler) {
-		EFFECT_HANDLERS.add(handler);
 	}
 
 	public Level getWorld() {
@@ -168,10 +139,25 @@ public class OpenEndedPipe extends FlowSource {
 		if (waterlog) {
 			world.setBlock(outputPos, state.setValue(WATERLOGGED, false), 3);
 			TransactionCallback.onSuccess(ctx, () -> world.scheduleTick(outputPos, Fluids.WATER, 1));
-			return stack;
+		} else {
+			var newState = fluidState.createLegacyBlock()
+				.setValue(LiquidBlock.LEVEL, 14);
+
+			var newFluidState = newState.getFluidState();
+
+			if (newFluidState.getType() instanceof FlowingFluidAccessor flowing) {
+				var potentiallyFilled = flowing.create$getNewLiquid(world, outputPos, newState);
+
+				// Check if we'd immediately become the same fluid again.
+				if (potentiallyFilled.equals(fluidState)) {
+					// If so, no need to update the block state.
+					return stack;
+				}
+			}
+
+			world.setBlock(outputPos, newState, 3);
 		}
-		world.setBlock(outputPos, fluidState.createLegacyBlock()
-			.setValue(LiquidBlock.LEVEL, 14), 3);
+
 		return stack;
 	}
 
@@ -198,7 +184,7 @@ public class OpenEndedPipe extends FlowSource {
 
 		// fabric: note - this is possibly prone to issues but follows what forge does.
 		// collisions completely ignore simulation / transactions.
-		if (!fluidState.isEmpty() && fluidState.getType() != fluid.getFluid()) {
+		if (!fluidState.isEmpty() && FluidHelper.convertToStill(fluidState.getType()) != fluid.getFluid()) {
 			FluidReactions.handlePipeSpillCollision(world, outputPos, fluid.getFluid(), fluidState);
 			return false;
 		}
@@ -234,23 +220,6 @@ public class OpenEndedPipe extends FlowSource {
 		return true;
 	}
 
-	private boolean canApplyEffects(FluidStack fluid) {
-		for (IEffectHandler handler : EFFECT_HANDLERS) {
-			if (handler.canApplyEffects(this, fluid)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private void applyEffects(FluidStack fluid) {
-		for (IEffectHandler handler : EFFECT_HANDLERS) {
-			if (handler.canApplyEffects(this, fluid)) {
-				handler.applyEffects(this, fluid);
-			}
-		}
-	}
-
 	private class OpenEndFluidHandler extends FluidTank {
 
 		public OpenEndFluidHandler() {
@@ -281,15 +250,22 @@ public class OpenEndedPipe extends FlowSource {
 			if (wasPulling)
 				wasPulling = false;
 
-			if (canApplyEffects(stack) && !hasBlockState)
+			OpenPipeEffectHandler effectHandler = OpenPipeEffectHandler.REGISTRY.get(resource.getFluid());
+			if (effectHandler != null && !hasBlockState)
 				maxAmount = 81; // fabric: deplete fluids 81 times faster to account for larger amounts
+
 			long fill = super.insert(resource, maxAmount, transaction);
-			if (!stack.isEmpty())
-				TransactionCallback.onSuccess(transaction, () -> applyEffects(stack));
-			if (getFluidAmount() == FluidConstants.BUCKET || (!FluidHelper.hasBlockState(containedFluidStack.getFluid()) || containedFluidStack.getFluid().is(Milk.MILK_FLUID_TAG))) { // fabric: milk logic is different
-				if (provideFluidToSpace(containedFluidStack, transaction))
-					setFluid(FluidStack.EMPTY);
+
+			if (effectHandler != null && !resource.isEmpty()) {
+				// resource should be copied before giving it to the handler.
+				// if hasBlockState is false, it was already copied above.
+				FluidStack exposed = hasBlockState ? resource.copy() : resource;
+				effectHandler.apply(world, aoe, exposed);
 			}
+
+			if (getFluidAmount() == 1000 || !hasBlockState)
+				if (provideFluidToSpace(containedFluidStack, false))
+					setFluid(FluidStack.EMPTY);
 			return fill;
 		}
 
@@ -352,133 +328,4 @@ public class OpenEndedPipe extends FlowSource {
 			return isResourceBlank() ? 0 : FluidConstants.BUCKET;
 		}
 	}
-
-	public interface IEffectHandler {
-		boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid);
-
-		void applyEffects(OpenEndedPipe pipe, FluidStack fluid);
-	}
-
-	public static class PotionEffectHandler implements IEffectHandler {
-		@Override
-		public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			return fluid.getFluid()
-				.isSame(AllFluids.POTION.get());
-		}
-
-		@Override
-		public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			if (pipe.cachedFluid == null || pipe.cachedEffects == null || !fluid.isFluidEqual(pipe.cachedFluid)) {
-				FluidStack copy = fluid.copy();
-				copy.setAmount(FluidConstants.BOTTLE);
-				ItemStack bottle = PotionFluidHandler.fillBottle(new ItemStack(Items.GLASS_BOTTLE), fluid);
-				pipe.cachedEffects = PotionUtils.getMobEffects(bottle);
-			}
-
-			if (pipe.cachedEffects.isEmpty())
-				return;
-
-			List<LivingEntity> entities = pipe.getWorld()
-				.getEntitiesOfClass(LivingEntity.class, pipe.getAOE(), LivingEntity::isAffectedByPotions);
-			for (LivingEntity entity : entities) {
-				for (MobEffectInstance effectInstance : pipe.cachedEffects) {
-					MobEffect effect = effectInstance.getEffect();
-					if (effect.isInstantenous()) {
-						effect.applyInstantenousEffect(null, null, entity, effectInstance.getAmplifier(), 0.5D);
-					} else {
-						entity.addEffect(new MobEffectInstance(effectInstance));
-					}
-				}
-			}
-		}
-	}
-
-	public static class MilkEffectHandler implements IEffectHandler {
-		@Override
-		public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			return FluidHelper.isTag(fluid, Tags.Fluids.MILK);
-		}
-
-		@Override
-		public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			Level world = pipe.getWorld();
-			if (world.getGameTime() % 5 != 0)
-				return;
-			List<LivingEntity> entities =
-				world.getEntitiesOfClass(LivingEntity.class, pipe.getAOE(), LivingEntity::isAffectedByPotions);
-//			ItemStack curativeItem = new ItemStack(Items.MILK_BUCKET);
-			for (LivingEntity entity : entities)
-				entity.removeAllEffects();
-		}
-	}
-
-	public static class WaterEffectHandler implements IEffectHandler {
-		@Override
-		public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			return FluidHelper.isTag(fluid, FluidTags.WATER);
-		}
-
-		@Override
-		public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			Level world = pipe.getWorld();
-			if (world.getGameTime() % 5 != 0)
-				return;
-			List<Entity> entities = world.getEntities((Entity) null, pipe.getAOE(), Entity::isOnFire);
-			for (Entity entity : entities)
-				entity.clearFire();
-			BlockPos.betweenClosedStream(pipe.getAOE())
-				.forEach(pos -> dowseFire(world, pos));
-		}
-
-		// Adapted from ThrownPotion
-		private static void dowseFire(Level level, BlockPos pos) {
-			BlockState state = level.getBlockState(pos);
-			if (state.is(BlockTags.FIRE)) {
-				level.removeBlock(pos, false);
-			} else if (AbstractCandleBlock.isLit(state)) {
-				AbstractCandleBlock.extinguish(null, state, level, pos);
-			} else if (CampfireBlock.isLitCampfire(state)) {
-				level.levelEvent(null, 1009, pos, 0);
-				CampfireBlock.dowse(null, level, pos, state);
-				level.setBlockAndUpdate(pos, state.setValue(CampfireBlock.LIT, false));
-			}
-		}
-	}
-
-	public static class LavaEffectHandler implements IEffectHandler {
-		@Override
-		public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			return FluidHelper.isTag(fluid, FluidTags.LAVA);
-		}
-
-		@Override
-		public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			Level world = pipe.getWorld();
-			if (world.getGameTime() % 5 != 0)
-				return;
-			List<Entity> entities = world.getEntities((Entity) null, pipe.getAOE(), entity -> !entity.fireImmune());
-			for (Entity entity : entities)
-				entity.setSecondsOnFire(3);
-		}
-	}
-
-	public static class TeaEffectHandler implements IEffectHandler {
-		@Override
-		public boolean canApplyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			return fluid.getFluid().isSame(AllFluids.TEA.get());
-		}
-
-		@Override
-		public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
-			Level world = pipe.getWorld();
-			if (world.getGameTime() % 5 != 0)
-				return;
-			List<LivingEntity> entities = world
-					.getEntitiesOfClass(LivingEntity.class, pipe.getAOE(), LivingEntity::isAffectedByPotions);
-			for (LivingEntity entity : entities) {
-					entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 21, 0, false, false, false));
-			}
-		}
-	}
-
 }

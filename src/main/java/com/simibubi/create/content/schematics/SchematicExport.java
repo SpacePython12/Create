@@ -9,10 +9,8 @@ import java.nio.file.StandardOpenOption;
 import javax.annotation.Nullable;
 
 import com.simibubi.create.Create;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.FilesHelper;
-import com.simibubi.create.foundation.utility.Lang;
-
-import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +20,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 public class SchematicExport {
 	public static final Path SCHEMATICS = FabricLoader.getInstance().getGameDir().resolve("schematics");
@@ -49,7 +49,7 @@ public class SchematicExport {
 		SchematicAndQuillItem.clampGlueBoxes(level, new AABB(origin, origin.offset(bounds)), data);
 
 		if (fileName.isEmpty())
-			fileName = Lang.translateDirect("schematicAndQuill.fallbackName").getString();
+			fileName = CreateLang.translateDirect("schematicAndQuill.fallbackName").getString();
 		if (!overwrite)
 			fileName = FilesHelper.findFirstValidFilename(fileName, dir, "nbt");
 		if (!fileName.endsWith(".nbt"))

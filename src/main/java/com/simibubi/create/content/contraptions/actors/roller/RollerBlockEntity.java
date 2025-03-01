@@ -2,7 +2,6 @@ package com.simibubi.create.content.contraptions.actors.roller;
 
 import java.util.List;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -11,15 +10,18 @@ import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringB
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -47,10 +49,10 @@ public class RollerBlockEntity extends SmartBlockEntity {
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		behaviours.add(filtering = new FilteringBehaviour(this, new RollerValueBox(3)));
-		behaviours.add(mode = new ScrollOptionBehaviour<RollingMode>(RollingMode.class,
-			Lang.translateDirect("contraptions.roller_mode"), this, new RollerValueBox(-3)));
+		behaviours.add(mode = new ScrollOptionBehaviour<>(RollingMode.class,
+			CreateLang.translateDirect("contraptions.roller_mode"), this, new RollerValueBox(-3)));
 
-		filtering.setLabel(Lang.translateDirect("contraptions.mechanical_roller.pave_material"));
+		filtering.setLabel(CreateLang.translateDirect("contraptions.mechanical_roller.pave_material"));
 		filtering.withCallback(this::onFilterChanged);
 		filtering.withPredicate(this::isValidMaterial);
 		mode.withCallback(this::onModeChanged);
@@ -179,24 +181,24 @@ public class RollerBlockEntity extends SmartBlockEntity {
 		}
 
 		@Override
-		public void rotate(BlockState state, PoseStack ms) {
+		public void rotate(LevelAccessor level, BlockPos pos, BlockState state, PoseStack ms) {
 			Direction facing = state.getValue(RollerBlock.FACING);
 			float yRot = AngleHelper.horizontalAngle(facing) + 180;
-			TransformStack.cast(ms)
-				.rotateY(yRot)
-				.rotateX(90);
+			TransformStack.of(ms)
+				.rotateYDegrees(yRot)
+				.rotateXDegrees(90);
 		}
-		
+
 		@Override
-		public boolean testHit(BlockState state, Vec3 localHit) {
-			Vec3 offset = getLocalOffset(state);
+		public boolean testHit(LevelAccessor level, BlockPos pos, BlockState state, Vec3 localHit) {
+			Vec3 offset = getLocalOffset(level, pos, state);
 			if (offset == null)
 				return false;
 			return localHit.distanceTo(offset) < scale / 3;
 		}
 
 		@Override
-		public Vec3 getLocalOffset(BlockState state) {
+		public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
 			Direction facing = state.getValue(RollerBlock.FACING);
 			float stateAngle = AngleHelper.horizontalAngle(facing) + 180;
 			return VecHelper.rotateCentered(VecHelper.voxelSpace(8 + hOffset, 15.5f, 11), stateAngle, Axis.Y);

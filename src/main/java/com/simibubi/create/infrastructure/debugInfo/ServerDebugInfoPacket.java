@@ -3,18 +3,20 @@ package com.simibubi.create.infrastructure.debugInfo;
 import java.util.List;
 import java.util.Objects;
 
+import com.simibubi.create.Create;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import com.simibubi.create.foundation.utility.DyeHelper;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.infrastructure.debugInfo.element.DebugInfoSection;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class ServerDebugInfoPacket extends SimplePacketBase {
 
@@ -82,8 +84,8 @@ public class ServerDebugInfoPacket extends SimplePacketBase {
 
 		String text = output.toString();
 		Minecraft.getInstance().keyboardHandler.setClipboard(text);
-		Lang.translate("command.debuginfo.saved_to_clipboard")
-			.color(DyeHelper.DYE_TABLE.get(DyeColor.LIME)
+		Create.lang().translate("command.debuginfo.saved_to_clipboard")
+			.color(DyeHelper.getDyeColors(DyeColor.LIME)
 				.getFirst())
 			.sendChat(player);
 	}

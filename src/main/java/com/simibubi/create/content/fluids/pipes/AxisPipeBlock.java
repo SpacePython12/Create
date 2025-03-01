@@ -2,6 +2,7 @@ package com.simibubi.create.content.fluids.pipes;
 
 import java.util.Map;
 import java.util.Optional;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlocks;
@@ -12,9 +13,8 @@ import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Iterate;
 
-import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -39,6 +39,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.TickPriority;
+
+import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 
 public class AxisPipeBlock extends RotatedPillarBlock implements IWrenchableWithBracket, IAxisPipe, BlockPickInteractionAware {
 

@@ -9,6 +9,8 @@ import java.util.Map;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.entity.Train;
 
+import net.createmod.catnip.data.Glob;
+
 import net.minecraft.network.chat.MutableComponent;
 
 public class GlobalTrainDisplayData {
@@ -30,7 +32,7 @@ public class GlobalTrainDisplayData {
 	}
 
 	public static List<TrainDeparturePrediction> prepare(String filter, int maxLines) {
-		String regex = filter.isBlank() ? filter : "\\Q" + filter.replace("*", "\\E.*\\Q") + "\\E";
+		String regex = Glob.toRegexPattern(filter, "");
 		return statusByDestination.entrySet()
 			.stream()
 			.filter(e -> e.getKey()

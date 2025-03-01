@@ -9,8 +9,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllKeys;
 import com.simibubi.create.content.schematics.client.tools.ToolType;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,7 +18,7 @@ import net.minecraft.network.chat.Component;
 
 public class ToolSelectionScreen extends Screen {
 
-	public final String scrollToCycle = Lang.translateDirect("gui.toolmenu.cycle")
+	public final String scrollToCycle = CreateLang.translateDirect("gui.toolmenu.cycle")
 		.getString();
 	public final String holdToFocus = "gui.toolmenu.focusKey";
 
@@ -34,7 +33,7 @@ public class ToolSelectionScreen extends Screen {
 	protected int h;
 
 	public ToolSelectionScreen(List<ToolType> tools, Consumer<ToolType> callback) {
-		super(Components.literal("Tool Selection"));
+		super(Component.literal("Tool Selection"));
 		this.minecraft = Minecraft.getInstance();
 		this.tools = tools;
 		this.callback = callback;
@@ -76,7 +75,7 @@ public class ToolSelectionScreen extends Screen {
 		RenderSystem.enableBlend();
 		RenderSystem.setShaderColor(1, 1, 1, focused ? 7 / 8f : 1 / 2f);
 
-		graphics.blit(gray.location, x - 15, y, gray.startX, gray.startY, w, h, gray.width, gray.height);
+		graphics.blit(gray.location, x - 15, y, gray.getStartX(), gray.getStartY(), w, h, gray.getWidth(), gray.getHeight());
 
 		float toolTipAlpha = yOffset / 10;
 		List<Component> toolTip = tools.get(selection)
@@ -85,7 +84,7 @@ public class ToolSelectionScreen extends Screen {
 
 		if (toolTipAlpha > 0.25f) {
 			RenderSystem.setShaderColor(.7f, .7f, .8f, toolTipAlpha);
-			graphics.blit(gray.location, x - 15, y + 33, gray.startX, gray.startY, w, h + 22, gray.width, gray.height);
+			graphics.blit(gray.location, x - 15, y + 33, gray.getStartX(), gray.getStartY(), w, h + 22, gray.getWidth(), gray.getHeight());
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 
 			if (toolTip.size() > 0)
@@ -104,14 +103,14 @@ public class ToolSelectionScreen extends Screen {
 			int width = minecraft.getWindow()
 				.getGuiScaledWidth();
 			if (!focused)
-				graphics.drawCenteredString(minecraft.font, Lang.translateDirect(holdToFocus, keyName), width / 2,
+				graphics.drawCenteredString(minecraft.font, CreateLang.translateDirect(holdToFocus, keyName), width / 2,
 					y - 10, 0xCCDDFF);
 			else
 				graphics.drawCenteredString(minecraft.font, scrollToCycle, width / 2, y - 10, 0xCCDDFF);
 		} else {
 			x += 65;
 		}
-		
+
 
 		for (int i = 0; i < tools.size(); i++) {
 			RenderSystem.enableBlend();
@@ -138,6 +137,7 @@ public class ToolSelectionScreen extends Screen {
 			matrixStack.popPose();
 		}
 
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.disableBlend();
 		matrixStack.popPose();
 	}

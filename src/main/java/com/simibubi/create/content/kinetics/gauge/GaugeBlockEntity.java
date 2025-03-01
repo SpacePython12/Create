@@ -2,9 +2,9 @@ package com.simibubi.create.content.kinetics.gauge;
 
 import java.util.List;
 
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -48,7 +48,7 @@ public abstract class GaugeBlockEntity extends KineticBlockEntity implements IHa
 
 	@Override
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-		Lang.translate("gui.gauge.info_header").forGoggles(tooltip);
+		CreateLang.translate("gui.gauge.info_header").forGoggles(tooltip);
 
 		return true;
 	}

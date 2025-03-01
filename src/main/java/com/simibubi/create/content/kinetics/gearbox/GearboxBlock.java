@@ -10,7 +10,6 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
-import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -21,9 +20,10 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.HitResult;
+
+import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 
 public class GearboxBlock extends RotatedPillarKineticBlock implements IBE<GearboxBlockEntity>, BlockPickInteractionAware {
 

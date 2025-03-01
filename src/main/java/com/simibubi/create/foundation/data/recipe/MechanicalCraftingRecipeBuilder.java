@@ -15,11 +15,8 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
-import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
-import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
-import net.minecraft.core.Registry;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -27,6 +24,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+
+import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
+import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
 
 public class MechanicalCraftingRecipeBuilder {
 
@@ -111,7 +111,7 @@ public class MechanicalCraftingRecipeBuilder {
 	 * Builds this recipe into a {@link FinishedRecipe}.
 	 */
 	public void build(Consumer<FinishedRecipe> p_200464_1_) {
-		this.build(p_200464_1_, RegisteredObjects.getKeyOrThrow(this.result));
+		this.build(p_200464_1_, CatnipServices.REGISTRIES.getKeyOrThrow(this.result));
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class MechanicalCraftingRecipeBuilder {
 	 * {@link #build(Consumer)} if save is the same as the ID for the result.
 	 */
 	public void build(Consumer<FinishedRecipe> p_200466_1_, String p_200466_2_) {
-		ResourceLocation resourcelocation = RegisteredObjects.getKeyOrThrow(this.result);
+		ResourceLocation resourcelocation = CatnipServices.REGISTRIES.getKeyOrThrow(this.result);
 		if ((new ResourceLocation(p_200466_2_)).equals(resourcelocation)) {
 			throw new IllegalStateException("Shaped Recipe " + p_200466_2_ + " should remove its 'save' argument");
 		} else {
@@ -208,7 +208,7 @@ public class MechanicalCraftingRecipeBuilder {
 
 			p_218610_1_.add("key", jsonobject);
 			JsonObject jsonobject1 = new JsonObject();
-			jsonobject1.addProperty("item", RegisteredObjects.getKeyOrThrow(this.result)
+			jsonobject1.addProperty("item", CatnipServices.REGISTRIES.getKeyOrThrow(this.result)
 				.toString());
 			if (this.count > 1)
 				jsonobject1.addProperty("count", this.count);

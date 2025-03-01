@@ -10,7 +10,7 @@ import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -59,7 +59,7 @@ public class BasinEmiRecipe extends CreateEmiRecipe<BasinRecipe> {
 		if (needsHeating) {
 			AllGuiTextures heatBar = noHeat ? AllGuiTextures.JEI_NO_HEAT_BAR : AllGuiTextures.JEI_HEAT_BAR;
 			addTexture(widgets, heatBar, 4, 80);
-			widgets.addText(Lang.translateDirect(requiredHeat.getTranslationKey()).getVisualOrderText(), 9, 86, requiredHeat.getColor(), true);
+			widgets.addText(CreateLang.translateDirect(requiredHeat.getTranslationKey()).getVisualOrderText(), 9, 86, requiredHeat.getColor(), true);
 		}
 
 		int xOff = inputSize < 3 ? (3 - inputSize) * 19 / 2 : 0;

@@ -1,25 +1,21 @@
 package com.simibubi.create.content.contraptions.pulley;
 
+import com.simibubi.create.AllContraptionTypes;
+import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AssemblyException;
-import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.TranslatingContraption;
-import com.simibubi.create.content.contraptions.render.ContraptionLighter;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 
 public class PulleyContraption extends TranslatingContraption {
 
 	int initialOffset;
-	
+
 	@Override
 	public ContraptionType getType() {
-		return ContraptionType.PULLEY;
+		return AllContraptionTypes.PULLEY.value();
 	}
 
 	public PulleyContraption() {}
@@ -59,13 +55,7 @@ public class PulleyContraption extends TranslatingContraption {
 		super.readNBT(world, nbt, spawnData);
 	}
 
-	@Override
-	@Environment(EnvType.CLIENT)
-	public ContraptionLighter<?> makeLighter() {
-		return new PulleyLighter(this);
-	}
-
-	public int getInitialOffset() {
+    public int getInitialOffset() {
 		return initialOffset;
 	}
 }

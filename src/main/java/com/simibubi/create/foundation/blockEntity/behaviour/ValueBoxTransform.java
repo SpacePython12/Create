@@ -4,13 +4,15 @@ import java.util.function.Function;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.math.AngleHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
@@ -19,30 +21,30 @@ public abstract class ValueBoxTransform {
 
 	protected float scale = getScale();
 
-	public abstract Vec3 getLocalOffset(BlockState state);
+	public abstract Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state);
 
-	public abstract void rotate(BlockState state, PoseStack ms);
+	public abstract void rotate(LevelAccessor level, BlockPos pos, BlockState state, PoseStack ms);
 
-	public boolean testHit(BlockState state, Vec3 localHit) {
-		Vec3 offset = getLocalOffset(state);
+	public boolean testHit(LevelAccessor level, BlockPos pos, BlockState state, Vec3 localHit) {
+		Vec3 offset = getLocalOffset(level, pos, state);
 		if (offset == null)
 			return false;
 		return localHit.distanceTo(offset) < scale / 2;
 	}
 
-	public void transform(BlockState state, PoseStack ms) {
-		Vec3 position = getLocalOffset(state);
+	public void transform(LevelAccessor level, BlockPos pos, BlockState state, PoseStack ms) {
+		Vec3 position = getLocalOffset(level, pos, state);
 		if (position == null)
 			return;
 		ms.translate(position.x, position.y, position.z);
-		rotate(state, ms);
+		rotate(level, pos, state, ms);
 		ms.scale(scale, scale, scale);
 	}
 
-	public boolean shouldRender(BlockState state) {
-		return !state.isAir() && getLocalOffset(state) != null;
+	public boolean shouldRender(LevelAccessor level, BlockPos pos, BlockState state) {
+		return !state.isAir() && getLocalOffset(level, pos, state) != null;
 	}
-	
+
 	public int getOverrideColor() {
 		return -1;
 	}
@@ -80,8 +82,9 @@ public abstract class ValueBoxTransform {
 			return Pair.of(factory.apply(true), factory.apply(false));
 		}
 
-		public boolean testHit(BlockState state, Vec3 localHit) {
-			Vec3 offset = getLocalOffset(state);
+		@Override
+		public boolean testHit(LevelAccessor level, BlockPos pos, BlockState state, Vec3 localHit) {
+			Vec3 offset = getLocalOffset(level, pos, state);
 			if (offset == null)
 				return false;
 			return localHit.distanceTo(offset) < scale / 3.5f;
@@ -99,7 +102,7 @@ public abstract class ValueBoxTransform {
 		}
 
 		@Override
-		public Vec3 getLocalOffset(BlockState state) {
+		public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
 			Vec3 location = getSouthLocation();
 			location = VecHelper.rotateCentered(location, AngleHelper.horizontalAngle(getSide()), Axis.Y);
 			location = VecHelper.rotateCentered(location, AngleHelper.verticalAngle(getSide()), Axis.X);
@@ -109,22 +112,22 @@ public abstract class ValueBoxTransform {
 		protected abstract Vec3 getSouthLocation();
 
 		@Override
-		public void rotate(BlockState state, PoseStack ms) {
+		public void rotate(LevelAccessor level, BlockPos pos, BlockState state, PoseStack ms) {
 			float yRot = AngleHelper.horizontalAngle(getSide()) + 180;
 			float xRot = getSide() == Direction.UP ? 90 : getSide() == Direction.DOWN ? 270 : 0;
-			TransformStack.cast(ms)
-				.rotateY(yRot)
-				.rotateX(xRot);
+			TransformStack.of(ms)
+				.rotateYDegrees(yRot)
+				.rotateXDegrees(xRot);
 		}
 
 		@Override
-		public boolean shouldRender(BlockState state) {
-			return super.shouldRender(state) && isSideActive(state, getSide());
+		public boolean shouldRender(LevelAccessor level, BlockPos pos, BlockState state) {
+			return super.shouldRender(level, pos, state) && isSideActive(state, getSide());
 		}
 
 		@Override
-		public boolean testHit(BlockState state, Vec3 localHit) {
-			return isSideActive(state, getSide()) && super.testHit(state, localHit);
+		public boolean testHit(LevelAccessor level, BlockPos pos, BlockState state, Vec3 localHit) {
+			return isSideActive(state, getSide()) && super.testHit(level, pos, state, localHit);
 		}
 
 		protected boolean isSideActive(BlockState state, Direction direction) {

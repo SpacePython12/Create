@@ -4,15 +4,15 @@ import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlock;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlockEntity;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
-import com.simibubi.create.foundation.utility.Components;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public class AccumulatedItemCountDisplaySource extends NumericSingleLineDisplaySource {
 
 	@Override
 	protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
-		return Components.literal(String.valueOf(context.sourceConfig()
+		return Component.literal(String.valueOf(context.sourceConfig()
 			.getInt("Collected")));
 	}
 
@@ -21,7 +21,7 @@ public class AccumulatedItemCountDisplaySource extends NumericSingleLineDisplayS
 			.getOptionalValue(DisplayLinkBlock.POWERED)
 			.orElse(true))
 			return;
-		
+
 		int collected = be.getSourceConfig()
 			.getInt("Collected");
 		be.getSourceConfig()

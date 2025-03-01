@@ -2,13 +2,13 @@ package com.simibubi.create.foundation.data.recipe;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllRecipeTypes;
-
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import com.simibubi.create.AllTags;
 
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 public class PressingRecipeGen extends ProcessingRecipeGen {
 
@@ -16,7 +16,7 @@ public class PressingRecipeGen extends ProcessingRecipeGen {
 
 	SUGAR_CANE = create(() -> Items.SUGAR_CANE, b -> b.output(Items.PAPER)),
 
-		PATH = create("path", b -> b.require(Ingredient.of(Items.GRASS_BLOCK, Items.DIRT))
+		PATH = create("path", b -> b.require(Ingredient.of(Items.GRASS_BLOCK, Items.DIRT, Items.COARSE_DIRT, Items.ROOTED_DIRT))
 			.output(Items.DIRT_PATH)),
 
 		IRON = create("iron_ingot", b -> b.require(I.iron())
@@ -27,6 +27,9 @@ public class PressingRecipeGen extends ProcessingRecipeGen {
 			.output(AllItems.COPPER_SHEET.get())),
 		BRASS = create("brass_ingot", b -> b.require(I.brass())
 			.output(AllItems.BRASS_SHEET.get())),
+
+		CARDBOARD = create("cardboard", b -> b.require(AllItems.PULP)
+			.output(AllItems.CARDBOARD.get())),
 
 		// Atmospheric
 		ATM = moddedPaths(Mods.ATM, "crustose"),
@@ -89,6 +92,10 @@ public class PressingRecipeGen extends ProcessingRecipeGen {
 				.output(Mods.RU, "silt_dirt_path")
 				.whenModLoaded(Mods.RU.getId())),
 
+		// IE
+		
+		IE_PLATES = iePlates("aluminum", "lead", "silver", "nickel", "uranium", "constantan", "electrum", "steel"),
+		
 		// Vampirism
 
 		VMP_CURSED_PATH = moddedPaths(Mods.VMP, "cursed_earth"),
@@ -104,6 +111,14 @@ public class PressingRecipeGen extends ProcessingRecipeGen {
 		for(String block : blocks) {
 			moddedCompacting(mod, block, block + "_path");
 		}
+		return null;
+	}
+
+	GeneratedRecipe iePlates(String... metals) {
+		for (String metal : metals)
+			create(Mods.IE.recipeId("plate_" + metal), b -> b.require(AllTags.forgeItemTag("ingots/" + metal))
+				.output(Mods.IE, "plate_" + metal)
+				.whenModLoaded(Mods.IE.getId()));
 		return null;
 	}
 

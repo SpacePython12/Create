@@ -3,7 +3,7 @@ package com.simibubi.create.content.equipment.extendoGrip;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMultimap;
@@ -12,13 +12,8 @@ import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -27,22 +22,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult.Type;
-import net.minecraft.world.phys.Vec3;
 
-public class ExtendoGripItem extends Item  {
+public class ExtendoGripItem extends Item {
 	public static final int MAX_DAMAGE = 200;
 
 	public static final AttributeModifier singleRangeAttributeModifier =
@@ -53,11 +41,11 @@ public class ExtendoGripItem extends Item  {
 			AttributeModifier.Operation.ADDITION);
 
 	private static final Supplier<Multimap<Attribute, AttributeModifier>> rangeModifier = Suppliers.memoize(() ->
-	// Holding an ExtendoGrip
-	ImmutableMultimap.of(ReachEntityAttributes.REACH, singleRangeAttributeModifier, ReachEntityAttributes.ATTACK_RANGE, singleRangeAttributeModifier));
+		// Holding an ExtendoGrip
+		ImmutableMultimap.of(ReachEntityAttributes.REACH, singleRangeAttributeModifier, ReachEntityAttributes.ATTACK_RANGE, singleRangeAttributeModifier));
 	private static final Supplier<Multimap<Attribute, AttributeModifier>> doubleRangeModifier = Suppliers.memoize(() ->
-	// Holding two ExtendoGrips o.O
-	ImmutableMultimap.of(ReachEntityAttributes.REACH, doubleRangeAttributeModifier, ReachEntityAttributes.ATTACK_RANGE, doubleRangeAttributeModifier));
+		// Holding two ExtendoGrips o.O
+		ImmutableMultimap.of(ReachEntityAttributes.REACH, doubleRangeAttributeModifier, ReachEntityAttributes.ATTACK_RANGE, doubleRangeAttributeModifier));
 
 	private static DamageSource lastActiveDamageSource;
 
@@ -69,10 +57,8 @@ public class ExtendoGripItem extends Item  {
 	public static final String DUAL_EXTENDO_MARKER = "createDualExtendo";
 
 	public static void holdingExtendoGripIncreasesRange(LivingEntity entity) {
-		if (!(entity instanceof Player))
+		if (!(entity instanceof Player player))
 			return;
-
-		Player player = (Player) entity;
 
 		CompoundTag persistentData = player.getCustomData();
 		boolean inOff = AllItems.EXTENDO_GRIP.isIn(player.getOffhandItem());
@@ -179,7 +165,13 @@ public class ExtendoGripItem extends Item  {
 		return amount;
 	}
 
-	public static double attacksByExtendoGripHaveMoreKnockback(double strength, Player player) {
+	public static double attacksByExtendoGripHaveMoreKnockback(double strength, Player player2) {
+		if (lastActiveDamageSource == null)
+			return strength;
+		Entity entity = lastActiveDamageSource.getDirectEntity();
+		if (!(entity instanceof Player player))
+			return strength;
+		lastActiveDamageSource = null;
 		if (!isHoldingExtendoGrip(player))
 			return strength;
 		return strength + 2;

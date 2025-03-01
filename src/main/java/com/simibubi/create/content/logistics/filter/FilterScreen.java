@@ -7,9 +7,7 @@ import com.simibubi.create.content.logistics.filter.FilterScreenPacket.Option;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.gui.widget.Indicator;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -19,20 +17,18 @@ public class FilterScreen extends AbstractFilterScreen<FilterMenu> {
 
 	private static final String PREFIX = "gui.filter.";
 
-	private Component allowN = Lang.translateDirect(PREFIX + "allow_list");
-	private Component allowDESC = Lang.translateDirect(PREFIX + "allow_list.description");
-	private Component denyN = Lang.translateDirect(PREFIX + "deny_list");
-	private Component denyDESC = Lang.translateDirect(PREFIX + "deny_list.description");
+	private Component allowN = CreateLang.translateDirect(PREFIX + "allow_list");
+	private Component allowDESC = CreateLang.translateDirect(PREFIX + "allow_list.description");
+	private Component denyN = CreateLang.translateDirect(PREFIX + "deny_list");
+	private Component denyDESC = CreateLang.translateDirect(PREFIX + "deny_list.description");
 
-	private Component respectDataN = Lang.translateDirect(PREFIX + "respect_data");
-	private Component respectDataDESC = Lang.translateDirect(PREFIX + "respect_data.description");
-	private Component ignoreDataN = Lang.translateDirect(PREFIX + "ignore_data");
-	private Component ignoreDataDESC = Lang.translateDirect(PREFIX + "ignore_data.description");
+	private Component respectDataN = CreateLang.translateDirect(PREFIX + "respect_data");
+	private Component respectDataDESC = CreateLang.translateDirect(PREFIX + "respect_data.description");
+	private Component ignoreDataN = CreateLang.translateDirect(PREFIX + "ignore_data");
+	private Component ignoreDataDESC = CreateLang.translateDirect(PREFIX + "ignore_data.description");
 
 	private IconButton whitelist, blacklist;
 	private IconButton respectNBT, ignoreNBT;
-	private Indicator whitelistIndicator, blacklistIndicator;
-	private Indicator respectNBTIndicator, ignoreNBTIndicator;
 
 	public FilterScreen(FilterMenu menu, Inventory inv, Component title) {
 		super(menu, inv, title, AllGuiTextures.FILTER);
@@ -58,9 +54,7 @@ public class FilterScreen extends AbstractFilterScreen<FilterMenu> {
 			sendOptionUpdate(Option.WHITELIST);
 		});
 		whitelist.setToolTip(allowN);
-		blacklistIndicator = new Indicator(x + 18, y + 69, Components.immutableEmpty());
-		whitelistIndicator = new Indicator(x + 36, y + 69, Components.immutableEmpty());
-		addRenderableWidgets(blacklist, whitelist, blacklistIndicator, whitelistIndicator);
+		addRenderableWidgets(blacklist, whitelist);
 
 		respectNBT = new IconButton(x + 60, y + 75, AllIcons.I_RESPECT_NBT);
 		respectNBT.withCallback(() -> {
@@ -74,9 +68,7 @@ public class FilterScreen extends AbstractFilterScreen<FilterMenu> {
 			sendOptionUpdate(Option.IGNORE_DATA);
 		});
 		ignoreNBT.setToolTip(ignoreDataN);
-		respectNBTIndicator = new Indicator(x + 60, y + 69, Components.immutableEmpty());
-		ignoreNBTIndicator = new Indicator(x + 78, y + 69, Components.immutableEmpty());
-		addRenderableWidgets(respectNBT, ignoreNBT, respectNBTIndicator, ignoreNBTIndicator);
+		addRenderableWidgets(respectNBT, ignoreNBT);
 
 		handleIndicators();
 	}
@@ -92,11 +84,6 @@ public class FilterScreen extends AbstractFilterScreen<FilterMenu> {
 	}
 
 	@Override
-	protected List<Indicator> getIndicators() {
-		return Arrays.asList(blacklistIndicator, whitelistIndicator, respectNBTIndicator, ignoreNBTIndicator);
-	}
-
-	@Override
 	protected boolean isButtonEnabled(IconButton button) {
 		if (button == blacklist)
 			return !menu.blacklist;
@@ -107,19 +94,6 @@ public class FilterScreen extends AbstractFilterScreen<FilterMenu> {
 		if (button == ignoreNBT)
 			return menu.respectNBT;
 		return true;
-	}
-
-	@Override
-	protected boolean isIndicatorOn(Indicator indicator) {
-		if (indicator == blacklistIndicator)
-			return menu.blacklist;
-		if (indicator == whitelistIndicator)
-			return !menu.blacklist;
-		if (indicator == respectNBTIndicator)
-			return menu.respectNBT;
-		if (indicator == ignoreNBTIndicator)
-			return !menu.respectNBT;
-		return false;
 	}
 
 }

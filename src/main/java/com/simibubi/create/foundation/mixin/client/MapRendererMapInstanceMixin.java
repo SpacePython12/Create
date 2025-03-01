@@ -2,16 +2,15 @@ package com.simibubi.create.foundation.mixin.client;
 
 import java.util.Iterator;
 
-import com.google.common.collect.Iterators;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-
-import com.llamalad7.mixinextras.sugar.Local;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.google.common.collect.Iterators;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.map.CustomRenderedMapDecoration;
 
@@ -19,8 +18,6 @@ import net.minecraft.client.gui.MapRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
-
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 // fabric: we have an AW for it, and compiler complains if specified by string
 @Mixin(MapRenderer.MapInstance.class)

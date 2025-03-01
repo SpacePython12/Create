@@ -2,14 +2,15 @@ package com.simibubi.create.content.decoration.placard;
 
 import java.util.List;
 
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+
 import org.joml.Vector3f;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.VecHelper;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class PlacardBlockEntity extends SmartBlockEntity {
 

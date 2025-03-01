@@ -7,10 +7,10 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.ContraptionRelocationPacket;
 import com.simibubi.create.content.trains.track.BezierTrackPointLocation;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -94,7 +94,7 @@ public class TrainRelocationPacket extends SimplePacketBase {
 			}
 
 			if (TrainRelocator.relocate(train, sender.level(), pos, hoveredBezier, direction, lookAngle, false)) {
-				sender.displayClientMessage(Lang.translateDirect("train.relocate.success")
+				sender.displayClientMessage(CreateLang.translateDirect("train.relocate.success")
 					.withStyle(ChatFormatting.GREEN), true);
 				train.carriages.forEach(c -> c.forEachPresentEntity(e -> {
 					e.nonDamageTicks = 10;

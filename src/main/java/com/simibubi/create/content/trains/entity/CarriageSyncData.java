@@ -18,12 +18,12 @@ import com.simibubi.create.content.trains.entity.TravellingPoint.ITrackSelector;
 import com.simibubi.create.content.trains.graph.TrackEdge;
 import com.simibubi.create.content.trains.graph.TrackGraph;
 import com.simibubi.create.content.trains.graph.TrackNode;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -127,7 +127,7 @@ public class CarriageSyncData {
 		for (boolean first : Iterate.trueAndFalse) {
 			if (!first && !carriage.isOnTwoBogeys())
 				break;
-			
+
 			CarriageBogey bogey = carriage.bogeys.get(first);
 			for (boolean firstPoint : Iterate.trueAndFalse) {
 				TravellingPoint point = bogey.points.get(firstPoint);
@@ -228,14 +228,14 @@ public class CarriageSyncData {
 
 	public void approach(CarriageContraptionEntity entity, Carriage carriage, float partialIn) {
 		DimensionalCarriageEntity dce = carriage.getDimensional(entity.level());
-		
+
 		int updateInterval = entity.getType()
 			.updateInterval();
 		if (ticksSince >= updateInterval * 2)
 			partialIn /= ticksSince - updateInterval * 2 + 1;
 		partialIn *= ServerSpeedProvider.get();
 		final float partial = partialIn;
-		
+
 		ticksSince++;
 
 		if (fallbackLocations != null && fallbackPointSnapshot != null) {
@@ -304,11 +304,11 @@ public class CarriageSyncData {
 
 		TrackNode initialNode1 = forward ? current.node1 : current.node2;
 		TrackNode initialNode2 = forward ? current.node2 : current.node1;
-		
+
 		Map<TrackNode, TrackEdge> connectionsFromInitial = graph.getConnectionsFrom(initialNode1);
 		if (connectionsFromInitial == null)
 			return -1;
-		
+
 		TrackEdge initialEdge = connectionsFromInitial.get(initialNode2);
 		if (initialEdge == null)
 			return -1; // graph changed

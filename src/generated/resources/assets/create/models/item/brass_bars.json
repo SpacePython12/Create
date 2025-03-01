@@ -1,7 +1,6 @@
 {
-  "parent": "create:item/bars",
+  "parent": "minecraft:item/generated",
   "textures": {
-    "bars": "create:block/bars/brass_bars",
-    "edge": "create:block/bars/brass_bars_edge"
+    "layer0": "create:block/bars/brass_bars"
   }
 }

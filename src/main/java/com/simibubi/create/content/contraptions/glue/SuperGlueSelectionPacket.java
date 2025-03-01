@@ -3,7 +3,6 @@ package com.simibubi.create.content.contraptions.glue;
 import java.util.Set;
 
 import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;

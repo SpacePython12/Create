@@ -8,28 +8,17 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.fluids.tank.FluidTankBlock.Shape;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributeHandler;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -40,13 +29,26 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributeHandler;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
+
 public class FluidTankBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, IMultiBlockEntityContainer.Fluid, CustomRenderBoundingBoxBlockEntity, SidedStorageBlockEntity {
 
 	private static final int MAX_SIZE = 3;
 
 	protected boolean forceFluidLevelUpdate;
 	protected SmartFluidTank tankInventory;
-	protected FluidTank exposedTank;
+	protected io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank exposedTank;
 	protected BlockPos controller;
 	protected BlockPos lastKnownPos;
 	protected boolean updateConnectivity;
@@ -117,6 +119,13 @@ public class FluidTankBlockEntity extends SmartBlockEntity implements IHaveGoggl
 			fluidLevel.tickChaser();
 		if (isController())
 			boiler.tick(this);
+	}
+
+	@Override
+	public void lazyTick() {
+		super.lazyTick();
+		if (isController())
+			boiler.updateOcclusion(this);
 	}
 
 	@Override
@@ -365,9 +374,9 @@ public class FluidTankBlockEntity extends SmartBlockEntity implements IHaveGoggl
 		exposedTank = handlerForCapability();
 	}
 
-	private FluidTank handlerForCapability() {
+	private io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank handlerForCapability() {
 		return isController() ? boiler.isActive() ? boiler.createHandler() : tankInventory
-				: getControllerBE() != null ? getControllerBE().handlerForCapability() : new FluidTank(0);
+				: getControllerBE() != null ? getControllerBE().handlerForCapability() : new io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank(0);
 	}
 
 	@Override
@@ -638,7 +647,7 @@ public class FluidTankBlockEntity extends SmartBlockEntity implements IHaveGoggl
 	}
 
 	@Override
-	public FluidTank getTank(int tank) {
+	public io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank getTank(int tank) {
 		return tankInventory;
 	}
 

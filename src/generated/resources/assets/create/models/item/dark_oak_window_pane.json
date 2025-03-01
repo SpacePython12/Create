@@ -1,7 +1,6 @@
 {
-  "parent": "create:item/pane",
+  "parent": "minecraft:item/generated",
   "textures": {
-    "edge": "minecraft:block/dark_oak_planks",
-    "pane": "create:block/palettes/dark_oak_window"
+    "layer0": "create:block/palettes/dark_oak_window"
   }
 }

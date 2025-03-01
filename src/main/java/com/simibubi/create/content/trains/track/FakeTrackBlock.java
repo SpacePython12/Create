@@ -3,9 +3,6 @@ package com.simibubi.create.content.trains.track;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 
-import io.github.fabricators_of_create.porting_lib.block.CustomLandingEffectsBlock;
-import io.github.fabricators_of_create.porting_lib.block.CustomRunningEffectsBlock;
-import net.fabricmc.fabric.api.registry.LandPathNodeTypesRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -27,6 +24,11 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.fabric.api.registry.LandPathNodeTypesRegistry;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomLandingEffectsBlock;
+import io.github.fabricators_of_create.porting_lib.block.CustomRunningEffectsBlock;
 
 public class FakeTrackBlock extends Block implements EntityBlock, ProperWaterloggedBlock, CustomLandingEffectsBlock, CustomRunningEffectsBlock {
 

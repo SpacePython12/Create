@@ -23,6 +23,11 @@ accessible method net/minecraft/world/item/context/UseOnContext <init> (Lnet/min
 
 accessible field net/minecraft/data/tags/TagsProvider$TagAppender builder Lnet/minecraft/tags/TagBuilder;
 
-# I (IThundxr) will change these to use accessors upstream eventually
-accessible field net/minecraft/client/renderer/LevelRenderer capturedFrustum Lnet/minecraft/client/renderer/culling/Frustum;
-accessible field net/minecraft/client/renderer/LevelRenderer cullingFrustum Lnet/minecraft/client/renderer/culling/Frustum;
+accessible class net/minecraft/data/models/ItemModelGenerators$TrimModelData
+accessible field net/minecraft/data/models/ItemModelGenerators GENERATED_TRIM_MODELS Ljava/util/List;
+
+# TODO - Convert to accessor
+accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible field net/minecraft/client/particle/Particle stoppedByCollision Z
+accessible field net/minecraft/server/network/ServerGamePacketListenerImpl aboveGroundTickCount I
+accessible field net/minecraft/server/network/ServerGamePacketListenerImpl aboveGroundVehicleTickCount I

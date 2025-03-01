@@ -7,8 +7,8 @@ import java.util.Set;
 
 import com.simibubi.create.content.trains.track.BezierConnection;
 import com.simibubi.create.content.trains.track.TrackMaterial;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -174,7 +174,7 @@ public class TrackNodeLocation extends Vec3i {
 			this.normal = normal;
 			return this;
 		}
-		
+
 		public DiscoveredLocation withYOffset(int yOffsetPixels) {
 			this.yOffsetPixels = yOffsetPixels;
 			return this;

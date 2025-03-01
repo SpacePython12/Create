@@ -2,10 +2,10 @@ package com.simibubi.create.content.redstone.diodes;
 
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.ColoredOverlayBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.Color;
 
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
 public class BrassDiodeRenderer extends ColoredOverlayBlockEntityRenderer<BrassDiodeBlockEntity> {
@@ -21,7 +21,7 @@ public class BrassDiodeRenderer extends ColoredOverlayBlockEntityRenderer<BrassD
 
 	@Override
 	protected SuperByteBuffer getOverlayBuffer(BrassDiodeBlockEntity be) {
-		return CachedBufferer.partial(AllPartialModels.FLEXPEATER_INDICATOR, be.getBlockState());
+		return CachedBuffers.partial(AllPartialModels.FLEXPEATER_INDICATOR, be.getBlockState());
 	}
 
 }

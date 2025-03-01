@@ -1,9 +1,5 @@
 package com.simibubi.create.content.equipment.armor;
 
-import com.simibubi.create.foundation.utility.NBTHelper;
-
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.LivingEntityAccessor;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
@@ -15,6 +11,8 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.LivingEntityAccessor;
 
 public class DivingBootsItem extends BaseArmorItem {
 	public static final EquipmentSlot SLOT = EquipmentSlot.FEET;
@@ -69,13 +67,12 @@ public class DivingBootsItem extends BaseArmorItem {
 			return false;
 		}
 
-		NBTHelper.putMarker(entity.getCustomData(), "HeavyBoots");
+		net.createmod.catnip.utility.NBTHelper.putMarker(entity.getCustomData(), "HeavyBoots");
 		if (!entity.isInWater())
 			return false;
 		if (entity.getPose() == Pose.SWIMMING)
 			return false;
-		if (entity instanceof Player) {
-			Player playerEntity = (Player) entity;
+		if (entity instanceof Player playerEntity) {
 			if (playerEntity.getAbilities().flying)
 				return false;
 		}

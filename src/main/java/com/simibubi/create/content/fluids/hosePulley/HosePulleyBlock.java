@@ -4,8 +4,8 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -69,12 +69,12 @@ public class HosePulleyBlock extends HorizontalKineticBlock implements IBE<HoseP
 		}
 		return prefferedSide == null ? null : prefferedSide.getOpposite();
 	}
-	
+
 	@Override
 	public Class<HosePulleyBlockEntity> getBlockEntityClass() {
 		return HosePulleyBlockEntity.class;
 	}
-	
+
 	@Override
 	public BlockEntityType<? extends HosePulleyBlockEntity> getBlockEntityType() {
 		return AllBlockEntityTypes.HOSE_PULLEY.get();

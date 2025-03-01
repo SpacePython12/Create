@@ -10,12 +10,10 @@ import com.simibubi.create.content.contraptions.ContraptionCollider;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.kinetics.gantry.GantryShaftBlock;
 import com.simibubi.create.content.kinetics.gantry.GantryShaftBlockEntity;
-import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
-import com.simibubi.create.foundation.utility.VecHelper;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,6 +25,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class GantryContraptionEntity extends AbstractContraptionEntity {
 
@@ -100,7 +101,7 @@ public class GantryContraptionEntity extends AbstractContraptionEntity {
 		BlockPos gantryShaftPos = BlockPos.containing(currentPosition).relative(facing.getOpposite());
 
 		BlockEntity be = level().getBlockEntity(gantryShaftPos);
-		if (!(be instanceof GantryShaftBlockEntity) || !AllBlocks.GANTRY_SHAFT.has(be.getBlockState())) {
+		if (!(be instanceof GantryShaftBlockEntity gantryShaftBlockEntity) || !AllBlocks.GANTRY_SHAFT.has(be.getBlockState())) {
 			if (!level().isClientSide) {
 				setContraptionMotion(Vec3.ZERO);
 				disassemble();
@@ -110,7 +111,6 @@ public class GantryContraptionEntity extends AbstractContraptionEntity {
 
 		BlockState blockState = be.getBlockState();
 		Direction direction = blockState.getValue(GantryShaftBlock.FACING);
-		GantryShaftBlockEntity gantryShaftBlockEntity = (GantryShaftBlockEntity) be;
 
 		float pinionMovementSpeed = gantryShaftBlockEntity.getPinionMovementSpeed();
 		if (blockState.getValue(GantryShaftBlock.POWERED) || pinionMovementSpeed == 0) {
@@ -183,11 +183,13 @@ public class GantryContraptionEntity extends AbstractContraptionEntity {
 	}
 
 	@Override
-	public void teleportTo(double p_70634_1_, double p_70634_3_, double p_70634_5_) {}
+	public void teleportTo(double p_70634_1_, double p_70634_3_, double p_70634_5_) {
+	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public void lerpTo(double x, double y, double z, float yw, float pt, int inc, boolean t) {}
+	public void lerpTo(double x, double y, double z, float yw, float pt, int inc, boolean t) {
+	}
 
 	@Override
 	protected void handleStallInformation(double x, double y, double z, float angle) {
@@ -202,7 +204,8 @@ public class GantryContraptionEntity extends AbstractContraptionEntity {
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public void applyLocalTransforms(PoseStack matrixStack, float partialTicks) { }
+	public void applyLocalTransforms(PoseStack matrixStack, float partialTicks) {
+	}
 
 	public void updateClientMotion() {
 		float modifier = movementAxis.getAxisDirection()
@@ -228,9 +231,8 @@ public class GantryContraptionEntity extends AbstractContraptionEntity {
 	@Environment(EnvType.CLIENT)
 	public static void handlePacket(GantryContraptionUpdatePacket packet) {
 		Entity entity = Minecraft.getInstance().level.getEntity(packet.entityID);
-		if (!(entity instanceof GantryContraptionEntity))
+		if (!(entity instanceof GantryContraptionEntity ce))
 			return;
-		GantryContraptionEntity ce = (GantryContraptionEntity) entity;
 		if (ce.movementAxis == null)
 			return; // fabric: packet ordering makes this null for a short period
 		ce.axisMotion = packet.motion;

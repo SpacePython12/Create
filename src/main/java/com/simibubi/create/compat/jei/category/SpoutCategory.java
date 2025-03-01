@@ -14,13 +14,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
-import com.simibubi.create.foundation.item.ItemHelper;
-
-import io.github.fabricators_of_create.porting_lib.transfer.MutableContainerItemContext;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.fabric.constants.FabricTypes;
 import mezz.jei.api.fabric.ingredients.fluids.IJeiFluidIngredient;
@@ -29,18 +23,15 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.runtime.IIngredientManager;
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 @ParametersAreNonnullByDefault
 public class SpoutCategory extends CreateRecipeCategory<FillingRecipe> {
@@ -65,39 +56,46 @@ public class SpoutCategory extends CreateRecipeCategory<FillingRecipe> {
 				continue;
 			}
 
-			ContainerItemContext testCtx = ContainerItemContext.withConstant(stack);
-			Storage<FluidVariant> testStorage = testCtx.find(FluidStorage.ITEM);
-			if (testStorage == null)
+			LazyOptional<IFluidHandlerItem> capability =
+				stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
+			if (!capability.isPresent())
 				continue;
 
-			for (IJeiFluidIngredient ingredient : fluidStacks) {
-				FluidStack fluidStack = fromJei(ingredient);
-				ItemStack copy = stack.copy();
-				MutableContainerItemContext ctx = new MutableContainerItemContext(copy);
-				Storage<FluidVariant> storage = ctx.find(FluidStorage.ITEM);
-				if (!GenericItemFilling.isFluidHandlerValid(copy, storage))
-					continue;
-				FluidStack fluidCopy = fluidStack.copy();
-				fluidCopy.setAmount(FluidConstants.BUCKET);
-				TransferUtil.insertFluid(storage, fluidCopy);
-				ItemVariant container = ctx.getItemVariant();
-				if (copy.is(container.getItem()))
-					continue;
-				if (container.isBlank())
-					continue;
+			var existingFluidHandler = capability.orElse(null);
+			int numTanks = existingFluidHandler.getTanks();
+			FluidStack existingFluid = numTanks == 1 ? existingFluidHandler.getFluidInTank(0) : FluidStack.EMPTY;
 
-				Ingredient bucket = Ingredient.of(stack);
-				ResourceLocation itemName = RegisteredObjects.getKeyOrThrow(stack.getItem()
-						);
-				ResourceLocation fluidName = RegisteredObjects.getKeyOrThrow(fluidCopy.getFluid()
-						);
-				consumer.accept(new ProcessingRecipeBuilder<>(FillingRecipe::new,
-						Create.asResource("fill_" + itemName.getNamespace() + "_" + itemName.getPath()
+			for (FluidStack fluidStack : fluidStacks) {
+				// Hoist the fluid equality check to avoid the work of copying the stack + populating capabilities
+				// when most fluids will not match
+				if (numTanks == 1 && (!existingFluid.isEmpty() && !existingFluid.isFluidEqual(fluidStack))) {
+					continue;
+				}
+				ItemStack copy = stack.copy();
+				copy.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM)
+					.ifPresent(fhi -> {
+						if (!GenericItemFilling.isFluidHandlerValid(copy, fhi))
+							return;
+						FluidStack fluidCopy = fluidStack.copy();
+						fluidCopy.setAmount(1000);
+						fhi.fill(fluidCopy, FluidAction.EXECUTE);
+						ItemStack container = fhi.getContainer();
+						if (ItemHelper.sameItem(container, copy))
+							return;
+						if (container.isEmpty())
+							return;
+
+						Ingredient bucket = Ingredient.of(stack);
+						ResourceLocation itemName = CatnipServices.REGISTRIES.getKeyOrThrow(stack.getItem());
+						ResourceLocation fluidName = CatnipServices.REGISTRIES.getKeyOrThrow(fluidCopy.getFluid());
+						consumer.accept(new ProcessingRecipeBuilder<>(FillingRecipe::new,
+							Create.asResource("fill_" + itemName.getNamespace() + "_" + itemName.getPath()
 								+ "_with_" + fluidName.getNamespace() + "_" + fluidName.getPath()))
-						.withItemIngredients(bucket)
-						.withFluidIngredients(FluidIngredient.fromFluidStack(fluidCopy))
-						.withSingleItemOutput(container.toStack(ItemHelper.truncateLong(ctx.getAmount())))
-						.build());
+									.withItemIngredients(bucket)
+									.withFluidIngredients(FluidIngredient.fromFluidStack(fluidCopy))
+									.withSingleItemOutput(container)
+									.build());
+					});
 			}
 		}
 	}
@@ -112,7 +110,7 @@ public class SpoutCategory extends CreateRecipeCategory<FillingRecipe> {
 				.addSlot(RecipeIngredientRole.INPUT, 27, 32)
 				.setBackground(getRenderedSlot(), -1, -1)
 				.addIngredients(FabricTypes.FLUID_STACK, toJei(withImprovedVisibility(recipe.getRequiredFluid().getMatchingFluidStacks())))
-				.addTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
+				.addRichTooltipCallback(addFluidTooltip(recipe.getRequiredFluid().getRequiredAmount()));
 		builder
 				.addSlot(RecipeIngredientRole.OUTPUT, 132, 51)
 				.setBackground(getRenderedSlot(), -1, -1)

@@ -3,8 +3,9 @@ package com.simibubi.create.content.contraptions;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
-import net.fabricmc.api.EnvType;
 import net.minecraft.network.FriendlyByteBuf;
+
+import net.fabricmc.api.EnvType;
 
 public class ContraptionStallPacket extends SimplePacketBase {
 

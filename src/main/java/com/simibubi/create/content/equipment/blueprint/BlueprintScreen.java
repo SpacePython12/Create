@@ -13,19 +13,19 @@ import com.simibubi.create.content.logistics.filter.FilterScreenPacket;
 import com.simibubi.create.content.logistics.filter.FilterScreenPacket.Option;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.widget.IconButton;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.PlayerAccessor;
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.SlotAccessor;
-
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.PlayerAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.SlotAccessor;
 
 public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintMenu> {
 
@@ -42,20 +42,20 @@ public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintMenu> 
 
 	@Override
 	protected void init() {
-		setWindowSize(background.width, background.height + 4 + PLAYER_INVENTORY.height);
+		setWindowSize(background.getWidth(), background.getHeight() + 4 + PLAYER_INVENTORY.getHeight());
 		setWindowOffset(1, 0);
 		super.init();
 
 		int x = leftPos;
 		int y = topPos;
 
-		resetButton = new IconButton(x + background.width - 62, y + background.height - 24, AllIcons.I_TRASH);
+		resetButton = new IconButton(x + background.getWidth() - 62, y + background.getHeight() - 24, AllIcons.I_TRASH);
 		resetButton.withCallback(() -> {
 			menu.clearContents();
 			contentsCleared();
 			menu.sendClearPacket();
 		});
-		confirmButton = new IconButton(x + background.width - 33, y + background.height - 24, AllIcons.I_CONFIRM);
+		confirmButton = new IconButton(x + background.getWidth() - 33, y + background.getHeight() - 24, AllIcons.I_CONFIRM);
 		confirmButton.withCallback(() -> {
 			minecraft.player.closeContainer();
 		});
@@ -63,13 +63,13 @@ public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintMenu> 
 		addRenderableWidget(resetButton);
 		addRenderableWidget(confirmButton);
 
-		extraAreas = ImmutableList.of(new Rect2i(x + background.width, y + background.height - 36, 56, 44));
+		extraAreas = ImmutableList.of(new Rect2i(x + background.getWidth(), y + background.getHeight() - 36, 56, 44));
 	}
 
 	@Override
 	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
-		int invX = getLeftOfCentered(PLAYER_INVENTORY.width);
-		int invY = topPos + background.height + 4;
+		int invX = getLeftOfCentered(PLAYER_INVENTORY.getWidth());
+		int invY = topPos + background.getHeight() + 4;
 		renderPlayerInventory(graphics, invX, invY);
 
 		int x = leftPos;
@@ -79,7 +79,7 @@ public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintMenu> 
 		graphics.drawString(font, title, x + 15, y + 4, 0xFFFFFF, false);
 
 		GuiGameElement.of(AllPartialModels.CRAFTING_BLUEPRINT_1x1).<GuiGameElement
-			.GuiRenderBuilder>at(x + background.width + 20, y + background.height - 32, 0)
+			.GuiRenderBuilder>at(x + background.getWidth() + 20, y + background.getHeight() - 32, 0)
 			.rotate(45, -45, 22.5f)
 			.scale(40)
 			.render(graphics);
@@ -105,26 +105,26 @@ public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintMenu> 
 			return list;
 
 		if (slot < 9) {
-			list.add(Lang.translateDirect("crafting_blueprint.crafting_slot")
+			list.add(CreateLang.translateDirect("crafting_blueprint.crafting_slot")
 				.withStyle(ChatFormatting.GOLD));
 			if (isEmptySlot)
-				list.add(Lang.translateDirect("crafting_blueprint.filter_items_viable")
+				list.add(CreateLang.translateDirect("crafting_blueprint.filter_items_viable")
 					.withStyle(ChatFormatting.GRAY));
 
 		} else if (slot == 9) {
-			list.add(Lang.translateDirect("crafting_blueprint.display_slot")
+			list.add(CreateLang.translateDirect("crafting_blueprint.display_slot")
 				.withStyle(ChatFormatting.GOLD));
 			if (!isEmptySlot)
-				list.add(Lang
+				list.add(CreateLang
 					.translateDirect(
 						"crafting_blueprint." + (menu.contentHolder.inferredIcon ? "inferred" : "manually_assigned"))
 					.withStyle(ChatFormatting.GRAY));
 
 		} else if (slot == 10) {
-			list.add(Lang.translateDirect("crafting_blueprint.secondary_display_slot")
+			list.add(CreateLang.translateDirect("crafting_blueprint.secondary_display_slot")
 				.withStyle(ChatFormatting.GOLD));
 			if (isEmptySlot)
-				list.add(Lang.translateDirect("crafting_blueprint.optional")
+				list.add(CreateLang.translateDirect("crafting_blueprint.optional")
 					.withStyle(ChatFormatting.GRAY));
 		}
 

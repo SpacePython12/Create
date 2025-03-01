@@ -16,19 +16,21 @@ import com.simibubi.create.content.contraptions.actors.contraptionControls.Contr
 import com.simibubi.create.content.contraptions.actors.contraptionControls.ContraptionControlsMovement;
 import com.simibubi.create.content.contraptions.actors.contraptionControls.ContraptionControlsMovement.ElevatorFloorSelection;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
-import com.simibubi.create.foundation.utility.Couple;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.data.Couple;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ElevatorControlsHandler {
 
@@ -37,8 +39,8 @@ public class ElevatorControlsHandler {
 	private static class ElevatorControlsSlot extends ContraptionControlsBlockEntity.ControlsSlot {
 
 		@Override
-		public boolean testHit(BlockState state, Vec3 localHit) {
-			Vec3 offset = getLocalOffset(state);
+		public boolean testHit(LevelAccessor level, BlockPos pos, BlockState state, Vec3 localHit) {
+			Vec3 offset = getLocalOffset(level, pos, state);
 			if (offset == null)
 				return false;
 			return localHit.distanceTo(offset) < scale * .85;
@@ -94,7 +96,7 @@ public class ElevatorControlsHandler {
 			if (!AllBlocks.CONTRAPTION_CONTROLS.has(info.state()))
 				continue;
 
-			if (!slot.testHit(info.state(), rayTraceResult.getLocation()
+			if (!slot.testHit(mc.level, pos, info.state(), rayTraceResult.getLocation()
 				.subtract(Vec3.atLowerCornerOf(pos))))
 				continue;
 
@@ -111,7 +113,8 @@ public class ElevatorControlsHandler {
 
 			ElevatorFloorSelection efs = (ElevatorFloorSelection) ctx.temporaryData;
 			int prev = efs.currentIndex;
-			efs.currentIndex += delta;
+			// Round away from 0. delta may be ~0.9, which is implicitly floor'd during a pure cast.
+			efs.currentIndex += (int) (delta > 0 ? Math.ceil(delta) : Math.floor(delta));
 			ContraptionControlsMovement.tickFloorSelection(efs, ec);
 
 			if (prev != efs.currentIndex && !ec.namesList.isEmpty()) {

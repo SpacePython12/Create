@@ -6,14 +6,14 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Pair;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -33,8 +33,8 @@ public interface IScheduleInput {
 
 	public default List<Component> getTitleAs(String type) {
 		ResourceLocation id = getId();
-		return ImmutableList
-			.of(Components.translatable(id.getNamespace() + ".schedule." + type + "." + id.getPath()));
+        return ImmutableList
+			.of(Component.translatable(id.getNamespace() + ".schedule." + type + "." + id.getPath()));
 	}
 
 	public default ItemStack getSecondLineIcon() {

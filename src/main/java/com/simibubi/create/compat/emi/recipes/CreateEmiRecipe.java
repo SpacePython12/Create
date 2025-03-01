@@ -18,7 +18,6 @@ import com.simibubi.create.content.processing.sequenced.SequencedRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
-import com.simibubi.create.foundation.utility.Pair;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -27,13 +26,15 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public abstract class CreateEmiRecipe<T extends Recipe<?>> implements EmiRecipe {
 	protected final EmiRecipeCategory category;
@@ -144,7 +145,7 @@ public abstract class CreateEmiRecipe<T extends Recipe<?>> implements EmiRecipe 
 	}
 
 	public static SlotWidget addSlot(WidgetHolder widgets, EmiIngredient stack, int x, int y, AllGuiTextures texture) {
-		return widgets.add(new CreateSlotWidget(stack, x, y)).backgroundTexture(texture.location, texture.startX, texture.startY);
+		return widgets.add(new CreateSlotWidget(stack, x, y)).backgroundTexture(texture.location, texture.getStartX(), texture.getStartY());
 	}
 
 	public static EmiStack fluidStack(FluidStack stack) {
@@ -152,7 +153,7 @@ public abstract class CreateEmiRecipe<T extends Recipe<?>> implements EmiRecipe 
 	}
 
 	public static TextureWidget addTexture(WidgetHolder widgets, AllGuiTextures texture, int x, int y) {
-		return widgets.addTexture(texture.location, x, y, texture.width, texture.height, texture.startX, texture.startY);
+		return widgets.addTexture(texture.location, x, y, texture.getWidth(), texture.getHeight(), texture.getStartX(), texture.getStartY());
 	}
 
 	public static <T, U> U firstOrElse(List<T> list, U empty, Function<T, U> function) {

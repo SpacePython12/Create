@@ -1,144 +1,92 @@
 package com.simibubi.create.content.contraptions.behaviour.dispenser;
 
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.util.RandomSource;
+import java.util.function.Predicate;
 
-import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
+import org.jetbrains.annotations.Nullable;
+
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
+import com.simibubi.create.api.contraption.dispenser.DefaultMountedDispenseBehavior;
+import com.simibubi.create.api.contraption.dispenser.MountedDispenseBehavior;
+import com.simibubi.create.api.contraption.storage.item.MountedItemStorage;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.foundation.item.ItemHelper;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.ContainerHelper;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.LevelEvent;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
 public class DropperMovementBehaviour implements MovementBehaviour {
-	protected static final MovedDefaultDispenseItemBehaviour DEFAULT_BEHAVIOUR =
-		new MovedDefaultDispenseItemBehaviour();
-	private static final RandomSource RNG = RandomSource.create();
-
-	protected void activate(MovementContext context, BlockPos pos) {
-		DispenseItemLocation location = getDispenseLocation(context);
-		if (location.isEmpty()) {
-			context.world.levelEvent(1001, pos, 0);
-		} else {
-			setItemStackAt(location, DEFAULT_BEHAVIOUR.dispense(getItemStackAt(location, context), context, pos),
-				context);
-		}
-	}
-
 	@Override
 	public void visitNewPosition(MovementContext context, BlockPos pos) {
 		if (context.world.isClientSide)
 			return;
-		collectItems(context);
-		activate(context, pos);
-	}
 
-	private void collectItems(MovementContext context) {
-		getStacks(context).stream()
-			.filter(itemStack -> !itemStack.isEmpty() && itemStack.getItem() != Items.AIR
-				&& itemStack.getMaxStackSize() > itemStack.getCount())
-			.forEach(itemStack -> itemStack.grow(ItemHelper
-				.extract(context.contraption.getSharedInventory(), (otherItemStack) -> ItemStack.isSameItemSameTags(itemStack, otherItemStack),
-					ItemHelper.ExtractionCountMode.UPTO, itemStack.getMaxStackSize() - itemStack.getCount(), false)
-				.getCount()));
-	}
-
-	private void updateTemporaryData(MovementContext context) {
-		if (!(context.temporaryData instanceof NonNullList) && context.world != null) {
-			NonNullList<ItemStack> stacks = NonNullList.withSize(getInvSize(), ItemStack.EMPTY);
-			ContainerHelper.loadAllItems(context.blockEntityData, stacks);
-			context.temporaryData = stacks;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private NonNullList<ItemStack> getStacks(MovementContext context) {
-		updateTemporaryData(context);
-		return (NonNullList<ItemStack>) context.temporaryData;
-	}
-
-	private ArrayList<DispenseItemLocation> getUseableLocations(MovementContext context) {
-		ArrayList<DispenseItemLocation> useable = new ArrayList<>();
-		try (Transaction t = TransferUtil.getTransaction()) {
-			for (int slot = 0; slot < getInvSize(); slot++) {
-				DispenseItemLocation location = new DispenseItemLocation(slot);
-				ItemStack testStack = getItemStackAt(location, context);
-				if (testStack == null || testStack.isEmpty())
-					continue;
-				if (testStack.getMaxStackSize() == 1) {
-					ResourceAmount<ItemVariant> available = StorageUtil.findExtractableContent(context.contraption.getSharedInventory(), v -> v.matches(testStack), t);
-					if (available != null) {
-						location = new DispenseItemLocation(available);
-						useable.add(location);
-					}
-				} else if (testStack.getCount() >= 2)
-					useable.add(location);
-			}
-			return useable;
-		}
-	}
-
-	@Override
-	public void writeExtraData(MovementContext context) {
-		NonNullList<ItemStack> stacks = getStacks(context);
-		if (stacks == null)
+		MountedItemStorage storage = context.getItemStorage();
+		if (storage == null)
 			return;
-		ContainerHelper.saveAllItems(context.blockEntityData, stacks);
+
+		int slot = getSlot(storage, context.world.random, context.contraption.getStorage().getAllItems());
+		if (slot == -1) {
+			// all slots empty
+			failDispense(context, pos);
+			return;
+		}
+
+		// copy because dispense behaviors will modify it directly
+		ItemStack stack = storage.getStackInSlot(slot).copy();
+		MountedDispenseBehavior behavior = getDispenseBehavior(context, pos, stack);
+		ItemStack remainder = behavior.dispense(stack, context, pos);
+		storage.setStackInSlot(slot, remainder);
 	}
 
-	@Override
-	public void stopMoving(MovementContext context) {
-		MovementBehaviour.super.stopMoving(context);
-		writeExtraData(context);
+	protected MountedDispenseBehavior getDispenseBehavior(MovementContext context, BlockPos pos, ItemStack stack) {
+		return DefaultMountedDispenseBehavior.INSTANCE;
 	}
 
-	protected DispenseItemLocation getDispenseLocation(MovementContext context) {
-		int i = -1;
-		int j = 1;
-		List<DispenseItemLocation> useableLocations = getUseableLocations(context);
-		for (int k = 0; k < useableLocations.size(); ++k) {
-			if (RNG.nextInt(j++) == 0) {
-				i = k;
+	/**
+	 * Finds a dispensable slot. Empty slots are skipped and nearly-empty slots are topped off.
+	 */
+	private static int getSlot(MountedItemStorage storage, RandomSource random, Storage<ItemVariant> contraptionInventory) {
+		IntList filledSlots = new IntArrayList();
+		for (int i = 0; i < storage.getSlotCount(); i++) {
+			ItemStack stack = storage.getStackInSlot(i);
+			if (stack.isEmpty())
+				continue;
+
+			if (stack.getCount() == 1 && stack.getMaxStackSize() != 1) {
+				stack = tryTopOff(stack, contraptionInventory);
+				if (stack != null) {
+					storage.setStackInSlot(i, stack);
+				}
 			}
+
+			filledSlots.add(i);
 		}
-		if (i < 0)
-			return DispenseItemLocation.NONE;
-		else
-			return useableLocations.get(i);
+
+		return switch (filledSlots.size()) {
+			case 0 -> -1;
+			case 1 -> filledSlots.getInt(0);
+			default -> Util.getRandom(filledSlots, random);
+		};
 	}
 
-	protected ItemStack getItemStackAt(DispenseItemLocation location, MovementContext context) {
-		if (location.isInternal()) {
-			return getStacks(context).get(location.getSlot());
-		} else {
-			return location.getVariant().toStack(location.getCount());
-		}
+	@Nullable
+	private static ItemStack tryTopOff(ItemStack stack, Storage<ItemVariant> from) {
+		Predicate<ItemStack> test = otherStack -> ItemStack.isSameItemSameTags(stack, otherStack);
+		int needed = stack.getMaxStackSize() - stack.getCount();
+
+		ItemStack extracted = ItemHelper.extract(from, test, ItemHelper.ExtractionCountMode.UPTO, needed, false);
+		return extracted.isEmpty() ? null : stack.copyWithCount(stack.getCount() + extracted.getCount());
 	}
 
-	protected void setItemStackAt(DispenseItemLocation location, ItemStack stack, MovementContext context) {
-		if (location.isInternal()) {
-			getStacks(context).set(location.getSlot(), stack);
-		} else {
-			try (Transaction t = TransferUtil.getTransaction()) {
-				context.contraption.getSharedInventory()
-				.extract(location.getVariant(), location.getCount(), t);
-				context.contraption.getSharedInventory().insert(ItemVariant.of(stack), stack.getCount(), t);
-				t.commit();
-			}
-		}
-	}
-
-	private static int getInvSize() {
-		return 9;
+	private static void failDispense(MovementContext ctx, BlockPos pos) {
+		ctx.world.levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, pos, 0);
 	}
 }

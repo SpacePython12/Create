@@ -6,6 +6,7 @@ import com.simibubi.create.content.equipment.blueprint.BlueprintScreen;
 
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandler;
 import me.shedaniel.rei.api.common.display.Display;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

@@ -4,12 +4,12 @@ import com.simibubi.create.content.kinetics.gauge.GaugeBlock;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 
-import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
-
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.models.generators.ModelFile;
 
 public abstract class DirectionalAxisBlockStateGen extends SpecialBlockStateGen {
 

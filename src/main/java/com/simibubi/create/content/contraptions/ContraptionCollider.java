@@ -9,24 +9,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import com.simibubi.create.AllDamageTypes;
-
-import com.simibubi.create.foundation.mixin.fabric.ServerGamePacketListenerImplAccessor;
-
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.commons.lang3.tuple.MutablePair;
 
-import com.google.common.base.Predicates;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllMovementBehaviours;
 import com.simibubi.create.AllPackets;
+import com.simibubi.create.api.behaviour.interaction.MovingInteractionBehaviour;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity.ContraptionRotationState;
 import com.simibubi.create.content.contraptions.ContraptionColliderLockPacket.ContraptionColliderLockPacketRequest;
 import com.simibubi.create.content.contraptions.actors.harvester.HarvesterMovementBehaviour;
-import com.simibubi.create.content.contraptions.behaviour.MovementBehaviour;
-import com.simibubi.create.content.contraptions.behaviour.MovingInteractionBehaviour;
 import com.simibubi.create.content.contraptions.sync.ClientMotionPacket;
 import com.simibubi.create.content.kinetics.base.BlockBreakingMovementBehaviour;
 import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
@@ -35,14 +29,12 @@ import com.simibubi.create.foundation.collision.ContinuousOBBCollider.Continuous
 import com.simibubi.create.foundation.collision.Matrix3d;
 import com.simibubi.create.foundation.collision.OrientedBB;
 import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
+import com.simibubi.create.foundation.mixin.fabric.ServerGamePacketListenerImplAccessor;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -71,6 +63,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 
 public class ContraptionCollider {
 
@@ -145,6 +142,10 @@ public class ContraptionCollider {
 			float yawOffset = rotation.getYawOffset();
 			Vec3 position = getWorldToLocalTranslation(entity, anchorVec, rotationMatrix, yawOffset);
 
+			// Make player 'shorter' to make it less likely to become stuck
+			if (playerType == PlayerType.CLIENT && entityBounds.getYsize() > 1)
+				entityBounds = entityBounds.contract(0, 2 / 16f, 0);
+
 			motion = motion.subtract(contraptionMotion);
 			motion = rotationMatrix.transform(motion);
 
@@ -164,8 +165,7 @@ public class ContraptionCollider {
 					List<AABB> bbs = new ArrayList<>();
 					List<VoxelShape> potentialHits =
 						getPotentiallyCollidedShapes(world, contraption, localBB.expandTowards(motionCopy));
-					potentialHits.forEach(shape -> shape.toAabbs()
-						.forEach(bbs::add));
+					potentialHits.forEach(shape -> bbs.addAll(shape.toAabbs()));
 					return bbs;
 
 				});
@@ -672,19 +672,23 @@ public class ContraptionCollider {
 		BlockPos min = BlockPos.containing(blockScanBB.minX, blockScanBB.minY, blockScanBB.minZ);
 		BlockPos max = BlockPos.containing(blockScanBB.maxX, blockScanBB.maxY, blockScanBB.maxZ);
 
-		List<VoxelShape> potentialHits = BlockPos.betweenClosedStream(min, max)
-			.filter(contraption.getBlocks()::containsKey)
-			.filter(Predicates.not(contraption::isHiddenInPortal))
-			.map(p -> {
-				BlockState blockState = contraption.getBlocks()
-					.get(p).state();
-				BlockPos pos = contraption.getBlocks()
-					.get(p).pos();
-				VoxelShape collisionShape = blockState.getCollisionShape(world, p);
-				return collisionShape.move(pos.getX(), pos.getY(), pos.getZ());
-			})
-			.filter(Predicates.not(VoxelShape::isEmpty))
-			.toList();
+		List<VoxelShape> potentialHits = new ArrayList<>();
+
+		for (BlockPos p : BlockPos.betweenClosed(min, max)) {
+			if (contraption.blocks.containsKey(p) && !contraption.isHiddenInPortal(p)) {
+				StructureBlockInfo info = contraption.getBlocks().get(p);
+
+				BlockState blockState = info.state();
+				BlockPos pos = info.pos();
+
+				VoxelShape collisionShape = blockState.getCollisionShape(world, p)
+						.move(pos.getX(), pos.getY(), pos.getZ());
+
+				if (!collisionShape.isEmpty()) {
+					potentialHits.add(collisionShape);
+				}
+			}
+		}
 
 		return potentialHits;
 	}
@@ -766,17 +770,14 @@ public class ContraptionCollider {
 			if (collidedState.getBlock() instanceof CocoaBlock)
 				continue;
 
-			MovementBehaviour movementBehaviour = AllMovementBehaviours.getBehaviour(blockInfo.state());
+			MovementBehaviour movementBehaviour = MovementBehaviour.REGISTRY.get(blockInfo.state());
 			if (movementBehaviour != null) {
-				if (movementBehaviour instanceof BlockBreakingMovementBehaviour) {
-					BlockBreakingMovementBehaviour behaviour = (BlockBreakingMovementBehaviour) movementBehaviour;
+				if (movementBehaviour instanceof BlockBreakingMovementBehaviour behaviour) {
 					if (!behaviour.canBreak(world, colliderPos, collidedState) && !emptyCollider)
 						return true;
 					continue;
 				}
-				if (movementBehaviour instanceof HarvesterMovementBehaviour) {
-					HarvesterMovementBehaviour harvesterMovementBehaviour =
-						(HarvesterMovementBehaviour) movementBehaviour;
+				if (movementBehaviour instanceof HarvesterMovementBehaviour harvesterMovementBehaviour) {
 					if (!harvesterMovementBehaviour.isValidCrop(world, colliderPos, collidedState)
 						&& !harvesterMovementBehaviour.isValidOther(world, colliderPos, collidedState)
 						&& !emptyCollider)

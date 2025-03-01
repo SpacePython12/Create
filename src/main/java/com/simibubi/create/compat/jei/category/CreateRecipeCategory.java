@@ -9,34 +9,33 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.simibubi.create.AllFluids;
-import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
-import io.github.fabricators_of_create.porting_lib.util.FluidTextUtil;
-import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 import mezz.jei.api.fabric.constants.FabricTypes;
 import mezz.jei.api.fabric.ingredients.fluids.IJeiFluidIngredient;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
+import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.material.Fluid;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import io.github.fabricators_of_create.porting_lib.util.FluidTextUtil;
+import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -112,11 +111,11 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements IReci
 		return recipe.getResultItem(level.registryAccess());
 	}
 
-	public static IRecipeSlotTooltipCallback addStochasticTooltip(ProcessingOutput output) {
+	public static IRecipeSlotRichTooltipCallback addStochasticTooltip(ProcessingOutput output) {
 		return (view, tooltip) -> {
 			float chance = output.getChance();
 			if (chance != 1)
-				tooltip.add(1, Lang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
+				tooltip.add(CreateLang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
 					.withStyle(ChatFormatting.GOLD));
 		};
 	}
@@ -165,11 +164,11 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements IReci
 		return stacks.stream().map(CreateRecipeCategory::toJei).toList();
 	}
 
-	public static IRecipeSlotTooltipCallback addFluidTooltip() {
+	public static IRecipeSlotRichTooltipCallback addFluidTooltip() {
 		return addFluidTooltip(-1);
 	}
 
-	public static IRecipeSlotTooltipCallback addFluidTooltip(long mbAmount) {
+	public static IRecipeSlotRichTooltipCallback addFluidTooltip(long mbAmount) {
 		return (view, tooltip) -> {
 			Optional<IJeiFluidIngredient> displayed = view.getDisplayedIngredient(FabricTypes.FLUID_STACK);
 			if (displayed.isEmpty())
@@ -179,18 +178,11 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements IReci
 
 			// fabric: don't need potion tooltip stuff, handled by attribute handler
 
-			long amountToUse = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
+			long amount = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
 			FluidUnit unit = AllConfigs.client().fluidUnitType.get();
-			String amount = FluidTextUtil.getUnicodeMillibuckets(amountToUse, unit, AllConfigs.client().simplifyFluidUnit.get());
-			Component text = Component.literal(String.valueOf(amount)).append(Lang.translateDirect(unit.getTranslationKey())).withStyle(ChatFormatting.GOLD);
-			if (tooltip.isEmpty())
-				tooltip.add(0, text);
-			else {
-				// fabric: sibling strategy doesn't work some reason
-				Component name = tooltip.get(0);
-				Component nameWithAmount = name.copy().append(" ").append(text);
-				tooltip.set(0, nameWithAmount);
-			}
+			String amountText = FluidTextUtil.getUnicodeMillibuckets(amount, unit, AllConfigs.client().simplifyFluidUnit.get());
+			Component text = Component.literal(amountText).append(CreateLang.translateDirect(unit.getTranslationKey())).withStyle(ChatFormatting.GOLD);
+			tooltip.add(text);
 		};
 	}
 
@@ -198,12 +190,12 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements IReci
 		return new IDrawable() {
 			@Override
 			public int getWidth() {
-				return texture.width;
+				return texture.getWidth();
 			}
 
 			@Override
 			public int getHeight() {
-				return texture.height;
+				return texture.getHeight();
 			}
 
 			@Override
@@ -213,7 +205,9 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements IReci
 		};
 	}
 
-	public record Info<T extends Recipe<?>>(RecipeType<T> recipeType, Component title, IDrawable background, IDrawable icon, Supplier<List<T>> recipes, List<Supplier<? extends ItemStack>> catalysts) {
+	public record Info<T extends Recipe<?>>(RecipeType<T> recipeType, Component title, IDrawable background,
+											IDrawable icon, Supplier<List<T>> recipes,
+											List<Supplier<? extends ItemStack>> catalysts) {
 	}
 
 	public interface Factory<T extends Recipe<?>> {

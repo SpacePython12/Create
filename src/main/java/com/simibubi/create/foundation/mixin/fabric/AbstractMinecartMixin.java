@@ -1,16 +1,14 @@
 package com.simibubi.create.foundation.mixin.fabric;
 
-import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-
-import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
-import com.simibubi.create.foundation.utility.fabric.AbstractMinecartExtensions;
-
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
+import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
+import com.simibubi.create.foundation.utility.fabric.AbstractMinecartExtensions;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;

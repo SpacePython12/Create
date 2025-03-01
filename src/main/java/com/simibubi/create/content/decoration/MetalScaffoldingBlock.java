@@ -3,8 +3,6 @@ package com.simibubi.create.content.decoration;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 
-import io.github.fabricators_of_create.porting_lib.block.CustomScaffoldingBlock;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -19,6 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomScaffoldingBlock;
 
 public class MetalScaffoldingBlock extends ScaffoldingBlock implements IWrenchable, CustomScaffoldingBlock {
 

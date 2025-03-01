@@ -2,17 +2,15 @@ package com.simibubi.create.content.trains.station;
 
 import java.util.List;
 
-import com.simibubi.create.foundation.mixin.accessor.FontAccessor;
-
 import org.joml.Matrix4f;
+
+import com.simibubi.create.foundation.mixin.accessor.FontAccessor;
 
 import net.minecraft.client.StringSplitter;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
 public class NoShadowFontWrapper extends Font {

@@ -20,7 +20,6 @@ import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ContraptionCollider;
 import com.simibubi.create.content.contraptions.ContraptionHandler;
 
-import io.github.fabricators_of_create.porting_lib.block.CustomRunningEffectsBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -34,10 +33,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
 
+import io.github.fabricators_of_create.porting_lib.block.CustomRunningEffectsBlock;
+
 @Mixin(Entity.class)
 public abstract class EntityContraptionInteractionMixin {
 	@Shadow
-	public Level level;
+	private Level level;
 
 	@Shadow
 	private Vec3 position;
@@ -61,10 +62,10 @@ public abstract class EntityContraptionInteractionMixin {
 	@Unique
 	private Stream<AbstractContraptionEntity> create$getIntersectionContraptionsStream() {
 		return ContraptionHandler.loadedContraptions.get(level)
-				.values()
-				.stream()
-				.map(Reference::get)
-				.filter(cEntity -> cEntity != null && cEntity.collidingEntities.containsKey((Entity) (Object) this));
+			.values()
+			.stream()
+			.map(Reference::get)
+			.filter(cEntity -> cEntity != null && cEntity.collidingEntities.containsKey((Entity) (Object) this));
 	}
 
 	@Unique
@@ -94,7 +95,8 @@ public abstract class EntityContraptionInteractionMixin {
 	}
 
 	// involves block step sounds on contraptions
-	// IFNE line 661 injecting before `!blockstate.isAir(this.world, blockpos)`
+	// injecting before `!blockstate1.isAir(this.world, blockpos)`
+	// `if (this.moveDist > this.nextStep && !blockstate1.isAir())
 	@Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;isAir()Z", ordinal = 0))
 	private void create$contraptionStepSounds(MoverType mover, Vec3 movement, CallbackInfo ci) {
 		Vec3 worldPos = position.add(0, -0.2, 0);

@@ -5,11 +5,11 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.AllRecipeTypes;
 
 import io.github.tropheusj.milk.Milk;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 
 public class EmptyingRecipeGen extends ProcessingRecipeGen {
 

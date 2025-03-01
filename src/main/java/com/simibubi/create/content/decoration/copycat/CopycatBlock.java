@@ -10,20 +10,8 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags.AllBlockTags;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
-
 import com.simibubi.create.foundation.utility.AdventureUtil;
 
-import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
-import io.github.fabricators_of_create.porting_lib.block.CustomLandingEffectsBlock;
-import io.github.fabricators_of_create.porting_lib.block.CustomRunningEffectsBlock;
-import io.github.fabricators_of_create.porting_lib.block.CustomSoundTypeBlock;
-import io.github.fabricators_of_create.porting_lib.block.ExplosionResistanceBlock;
-import io.github.fabricators_of_create.porting_lib.block.LightEmissiveBlock;
-import io.github.fabricators_of_create.porting_lib.block.ValidSpawnBlock;
-import io.github.fabricators_of_create.porting_lib.enchant.EnchantmentBonusBlock;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
@@ -62,6 +50,19 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
+
+import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
+import io.github.fabricators_of_create.porting_lib.block.CustomLandingEffectsBlock;
+import io.github.fabricators_of_create.porting_lib.block.CustomRunningEffectsBlock;
+import io.github.fabricators_of_create.porting_lib.block.CustomSoundTypeBlock;
+import io.github.fabricators_of_create.porting_lib.block.ExplosionResistanceBlock;
+import io.github.fabricators_of_create.porting_lib.block.LightEmissiveBlock;
+import io.github.fabricators_of_create.porting_lib.block.ValidSpawnBlock;
+import io.github.fabricators_of_create.porting_lib.enchant.EnchantmentBonusBlock;
 
 public abstract class CopycatBlock extends Block implements IBE<CopycatBlockEntity>, IWrenchable,
 		CustomFrictionBlock, CustomSoundTypeBlock, LightEmissiveBlock, ExplosionResistanceBlock,

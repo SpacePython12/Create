@@ -7,7 +7,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.utility.AdventureUtil;
 import com.simibubi.create.foundation.utility.RaycastHelper;
 
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
 
 public class LinkHandler {
 
@@ -52,8 +53,8 @@ public class LinkHandler {
 				.add(Vec3.atLowerCornerOf(ray.getDirection()
 					.getNormal())
 					.scale(.25f));
-			fakePlayerChoice = localHit.distanceToSqr(behaviour.firstSlot.getLocalOffset(blockState)) > localHit
-				.distanceToSqr(behaviour.secondSlot.getLocalOffset(blockState));
+			fakePlayerChoice = localHit.distanceToSqr(behaviour.firstSlot.getLocalOffset(world, pos, blockState)) > localHit
+				.distanceToSqr(behaviour.secondSlot.getLocalOffset(world, pos, blockState));
 		}
 
 		for (boolean first : Arrays.asList(false, true)) {

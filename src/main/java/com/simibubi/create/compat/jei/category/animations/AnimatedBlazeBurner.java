@@ -1,21 +1,19 @@
 package com.simibubi.create.compat.jei.category.animations;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllSpriteShifts;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
-import com.simibubi.create.foundation.block.render.SpriteShiftEntry;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SpriteShiftEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
@@ -84,14 +82,10 @@ public class AnimatedBlazeBurner extends AnimatedKinetics {
 		uScroll = uScroll - Math.floor(uScroll);
 		uScroll = uScroll * spriteWidth / 2;
 
-		Minecraft mc = Minecraft.getInstance();
-		MultiBufferSource.BufferSource buffer = mc.renderBuffers()
-			.bufferSource();
-		VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
-		CachedBufferer.partial(AllPartialModels.BLAZE_BURNER_FLAME, Blocks.AIR.defaultBlockState())
-			.shiftUVScrolling(spriteShift, (float) uScroll, (float) vScroll)
-			.light(LightTexture.FULL_BRIGHT)
-			.renderInto(matrixStack, vb);
+		CachedBuffers.partial(AllPartialModels.BLAZE_BURNER_FLAME, Blocks.AIR.defaultBlockState())
+		.shiftUVScrolling(spriteShift, (float) uScroll, (float) vScroll)
+		.light(LightTexture.FULL_BRIGHT)
+			.renderInto(matrixStack, graphics.bufferSource().getBuffer(RenderType.cutoutMipped()));
 		matrixStack.popPose();
 	}
 

@@ -10,16 +10,17 @@ import com.simibubi.create.content.fluids.pipes.StraightPipeBlockEntity.Straight
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class FluidValveBlockEntity extends KineticBlockEntity implements PipeAttachmentBlockEntity {
 
@@ -87,7 +88,7 @@ public class FluidValveBlockEntity extends KineticBlockEntity implements PipeAtt
 
 	@Override
 	@Nullable
-	public Object getRenderAttachmentData() {
+	public Object getRenderData() {
 		return PipeAttachmentBlockEntity.getAttachments(this);
 	}
 

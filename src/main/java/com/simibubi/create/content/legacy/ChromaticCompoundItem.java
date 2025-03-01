@@ -1,9 +1,5 @@
 package com.simibubi.create.content.legacy;
 
-import java.util.Random;
-
-import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.BeaconBlockEntityAccessor;
-
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.simibubi.create.AllItems;
@@ -11,14 +7,11 @@ import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackH
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour.TransportedResult;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 
-import io.github.fabricators_of_create.porting_lib.block.LightEmissiveBlock;
-import io.github.fabricators_of_create.porting_lib.item.CustomMaxCountItem;
-import io.github.fabricators_of_create.porting_lib.item.EntityTickListenerItem;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -39,6 +32,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.block.LightEmissiveBlock;
+import io.github.fabricators_of_create.porting_lib.item.CustomMaxCountItem;
+import io.github.fabricators_of_create.porting_lib.item.EntityTickListenerItem;
+import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.BeaconBlockEntityAccessor;
 
 public class ChromaticCompoundItem extends Item implements CustomMaxCountItem, EntityTickListenerItem {
 
@@ -142,12 +140,10 @@ public class ChromaticCompoundItem extends Item implements CustomMaxCountItem, E
 			if (state.getBlock() == Blocks.BEACON) {
 				BlockEntity be = world.getBlockEntity(testPos);
 
-				if (!(be instanceof BeaconBlockEntity))
+				if (!(be instanceof BeaconBlockEntity bte))
 					break;
 
-				BeaconBlockEntity bte = (BeaconBlockEntity) be;
-
-				if (!((BeaconBlockEntityAccessor) bte).port_lib$getBeamSections().isEmpty())
+				if (!bte.beamSections.isEmpty())
 					isOverBeacon = true;
 
 				break;
@@ -187,10 +183,9 @@ public class ChromaticCompoundItem extends Item implements CustomMaxCountItem, E
 		behaviour.handleProcessingOnAllItems(ts -> {
 
 			ItemStack heldStack = ts.stack;
-			if (!(heldStack.getItem() instanceof BlockItem))
+			if (!(heldStack.getItem() instanceof BlockItem blockItem))
 				return TransportedResult.doNothing();
 
-			BlockItem blockItem = (BlockItem) heldStack.getItem();
 			if (blockItem.getBlock() == null)
 				return TransportedResult.doNothing();
 
@@ -214,7 +209,7 @@ public class ChromaticCompoundItem extends Item implements CustomMaxCountItem, E
 	}
 
 	public boolean checkLight(ItemStack stack, ItemEntity entity, Level world, CompoundTag itemData, Vec3 positionVec,
-		BlockPos randomOffset, BlockState state) {
+							  BlockPos randomOffset, BlockState state) {
 		if(state.getBlock() instanceof LightEmissiveBlock lightEmissiveBlock && lightEmissiveBlock.getLightEmission(state, world, randomOffset) == 0)
 			return false;
 		else if (state.getLightEmission() == 0)

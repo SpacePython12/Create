@@ -7,7 +7,7 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.trains.graph.EdgePointType;
 import com.simibubi.create.content.trains.track.TrackTargetingBlockItem.OverlapResult;
 import com.simibubi.create.foundation.networking.BlockEntityConfigurationPacket;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -61,7 +61,7 @@ public class CurvedTrackSelectionPacket extends BlockEntityConfigurationPacket<T
 		if (!(stack.getItem() instanceof TrackTargetingBlockItem))
 			return;
 		if (player.isShiftKeyDown() && stack.hasTag()) {
-			player.displayClientMessage(Lang.translateDirect("track_target.clear"), true);
+			player.displayClientMessage(CreateLang.translateDirect("track_target.clear"), true);
 			stack.setTag(null);
 			AllSoundEvents.CONTROLLER_CLICK.play(player.level(), null, pos, 1, .5f);
 			return;
@@ -73,7 +73,7 @@ public class CurvedTrackSelectionPacket extends BlockEntityConfigurationPacket<T
 			new BezierTrackPointLocation(targetPos, segment), type, (overlap, location) -> result.setValue(overlap));
 
 		if (result.getValue().feedback != null) {
-			player.displayClientMessage(Lang.translateDirect(result.getValue().feedback)
+			player.displayClientMessage(CreateLang.translateDirect(result.getValue().feedback)
 				.withStyle(ChatFormatting.RED), true);
 			AllSoundEvents.DENY.play(player.level(), null, pos, .5f, 1);
 			return;
@@ -89,7 +89,7 @@ public class CurvedTrackSelectionPacket extends BlockEntityConfigurationPacket<T
 		bezierNbt.putBoolean("FromStack", true);
 		stackTag.put("Bezier", bezierNbt);
 
-		player.displayClientMessage(Lang.translateDirect("track_target.set"), true);
+		player.displayClientMessage(CreateLang.translateDirect("track_target.set"), true);
 		stack.setTag(stackTag);
 		AllSoundEvents.CONTROLLER_CLICK.play(player.level(), null, pos, 1, 1);
 	}

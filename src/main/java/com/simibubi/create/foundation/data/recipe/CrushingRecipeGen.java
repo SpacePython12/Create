@@ -20,11 +20,8 @@ import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.utility.Lang;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -34,6 +31,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class CrushingRecipeGen extends ProcessingRecipeGen {
 
@@ -403,7 +405,21 @@ public class CrushingRecipeGen extends ProcessingRecipeGen {
 				.output(0.75f, Mods.AET, "ambrosium_shard", 1)
 				.output(0.125f, Mods.AET, "holystone", 1)
 				.output(0.75f, AllItems.EXP_NUGGET.get())
-				.whenModLoaded(Mods.AET.getId()))
+				.whenModLoaded(Mods.AET.getId())),
+		
+		// IE
+		
+		IE_COKE_DUST = create(Mods.IE.recipeId("coal_coke"), b -> b.duration(200)
+			.require(Mods.IE, "coal_coke").output(Mods.IE, "dust_coke")
+			.whenModLoaded(Mods.IE.getId())),
+		
+		IE_COKE_BLOCK = create(Mods.IE.recipeId("coke_block"), b -> b.duration(200)
+			.require(Mods.IE, "coke").output(1, Mods.IE.asResource("dust_coke"), 9)
+			.whenModLoaded(Mods.IE.getId())),
+	
+		IE_SLAG_GRAVEL = create(Mods.IE.recipeId("slag"), b -> b.duration(200)
+			.require(Mods.IE, "slag").output(Mods.IE, "slag_gravel")
+			.whenModLoaded(Mods.IE.getId()));
 
 
 	;

@@ -2,8 +2,6 @@ package com.simibubi.create.content.equipment.wrench;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.world.phys.BlockHitResult;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllItems;
@@ -43,13 +41,12 @@ public class WrenchItem extends Item {
 				.getBlockState(context.getClickedPos());
 		Block block = state.getBlock();
 
-		if (!(block instanceof IWrenchable)) {
+		if (!(block instanceof IWrenchable actor)) {
 			if (player.isShiftKeyDown() && canWrenchPickup(state))
 				return onItemUseOnOther(context);
 			return super.useOn(context);
 		}
 
-		IWrenchable actor = (IWrenchable) block;
 		if (player.isShiftKeyDown())
 			return actor.onSneakWrenched(state, context);
 		return actor.onWrenched(state, context);
@@ -76,20 +73,19 @@ public class WrenchItem extends Item {
 	}
 
 	public static InteractionResult wrenchInstaKillsMinecarts(Player player, Level world, InteractionHand hand, Entity target, @Nullable EntityHitResult entityRayTraceResult) {
-		if (!(target instanceof AbstractMinecart))
+		if (!(target instanceof AbstractMinecart minecart))
 			return InteractionResult.PASS;
 		ItemStack heldItem = player.getMainHandItem();
 		if (!AllItems.WRENCH.isIn(heldItem))
 			return InteractionResult.PASS;
 		if (player.isCreative())
 			return InteractionResult.PASS;
-		AbstractMinecart minecart = (AbstractMinecart) target;
 		minecart.hurt(minecart.damageSources().playerAttack(player), 100);
 		return InteractionResult.SUCCESS;
 	}
 
 //	@Override
-//	@OnlyIn(Dist.CLIENT)
+//	@Environment(EnvType.CLIENT)
 //	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 //		consumer.accept(SimpleCustomRenderer.create(this, new WrenchItemRenderer()));
 //	}

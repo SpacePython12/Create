@@ -4,21 +4,13 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.simibubi.create.Create;
-import com.simibubi.create.content.contraptions.Contraption.ContraptionInvWrapper;
 import com.simibubi.create.content.logistics.filter.FilterItemStack;
 import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.foundation.gui.ModularGuiLineBuilder;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -27,13 +19,21 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+
 public class ItemThresholdCondition extends CargoThresholdCondition {
 
 	private FilterItemStack stack = FilterItemStack.empty();
 
 	@Override
 	protected Component getUnit() {
-		return Components.literal(inStacks() ? "\u25A4" : "");
+		return Component.literal(inStacks() ? "\u25A4" : "");
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class ItemThresholdCondition extends CargoThresholdCondition {
 
 		int foundItems = 0;
 		for (Carriage carriage : train.carriages) {
-			ContraptionInvWrapper items = carriage.storage.getItems();
+			ContraptionInvWrapper items = carriage.storage.getAllItems();
 			try (Transaction t = TransferUtil.getTransaction()) {
 				for (StorageView<ItemVariant> view : items.nonEmptyViews()) {
 					ItemVariant variant = view.getResource();
@@ -99,14 +99,14 @@ public class ItemThresholdCondition extends CargoThresholdCondition {
 	@Override
 	public List<Component> getTitleAs(String type) {
 		return ImmutableList.of(
-			Lang.translateDirect("schedule.condition.threshold.train_holds",
-				Lang.translateDirect("schedule.condition.threshold." + Lang.asId(getOperator().name()))),
-			Lang.translateDirect("schedule.condition.threshold.x_units_of_item", getThreshold(),
-				Lang.translateDirect("schedule.condition.threshold." + (inStacks() ? "stacks" : "items")),
-				stack.isEmpty() ? Lang.translateDirect("schedule.condition.threshold.anything")
-					: stack.isFilterItem() ? Lang.translateDirect("schedule.condition.threshold.matching_content")
-						: stack.item()
-							.getHoverName())
+			CreateLang.translateDirect("schedule.condition.threshold.train_holds",
+				CreateLang.translateDirect("schedule.condition.threshold." + Lang.asId(getOperator().name()))),
+			CreateLang.translateDirect("schedule.condition.threshold.x_units_of_item", getThreshold(),
+				CreateLang.translateDirect("schedule.condition.threshold." + (inStacks() ? "stacks" : "items")),
+				stack.isEmpty() ? CreateLang.translateDirect("schedule.condition.threshold.anything")
+					: stack.isFilterItem()
+						? CreateLang.translateDirect("schedule.condition.threshold.matching_content")
+						: stack.item().getHoverName())
 				.withStyle(ChatFormatting.DARK_AQUA));
 	}
 
@@ -124,9 +124,9 @@ public class ItemThresholdCondition extends CargoThresholdCondition {
 	public void initConfigurationWidgets(ModularGuiLineBuilder builder) {
 		super.initConfigurationWidgets(builder);
 		builder.addSelectionScrollInput(71, 50, (i, l) -> {
-			i.forOptions(ImmutableList.of(Lang.translateDirect("schedule.condition.threshold.items"),
-				Lang.translateDirect("schedule.condition.threshold.stacks")))
-				.titled(Lang.translateDirect("schedule.condition.threshold.item_measure"));
+			i.forOptions(ImmutableList.of(CreateLang.translateDirect("schedule.condition.threshold.items"),
+				CreateLang.translateDirect("schedule.condition.threshold.stacks")))
+				.titled(CreateLang.translateDirect("schedule.condition.threshold.item_measure"));
 		}, "Measure");
 	}
 
@@ -134,10 +134,10 @@ public class ItemThresholdCondition extends CargoThresholdCondition {
 	public MutableComponent getWaitingStatus(Level level, Train train, CompoundTag tag) {
 		long lastDisplaySnapshot = getLastDisplaySnapshot(tag);
 		if (lastDisplaySnapshot == -1)
-			return Components.empty();
+            return Component.empty();
 		int offset = getOperator() == Ops.LESS ? -1 : getOperator() == Ops.GREATER ? 1 : 0;
-		return Lang.translateDirect("schedule.condition.threshold.status", lastDisplaySnapshot,
+		return CreateLang.translateDirect("schedule.condition.threshold.status", lastDisplaySnapshot,
 			Math.max(0, getThreshold() + offset),
-			Lang.translateDirect("schedule.condition.threshold." + (inStacks() ? "stacks" : "items")));
+			CreateLang.translateDirect("schedule.condition.threshold." + (inStacks() ? "stacks" : "items")));
 	}
 }

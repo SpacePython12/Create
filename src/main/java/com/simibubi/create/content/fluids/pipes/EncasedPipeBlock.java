@@ -10,21 +10,22 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 import java.util.Map;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.contraptions.ITransformableBlock;
+import com.simibubi.create.api.contraption.transformable.TransformableBlock;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.decoration.encasing.EncasedBlock;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Iterate;
 
-import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.DebugPackets;
@@ -51,10 +52,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.ticks.TickPriority;
 
-import javax.annotation.Nullable;
+import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 
 public class EncasedPipeBlock extends Block
-	implements IWrenchable, ISpecialBlockItemRequirement, IBE<FluidPipeBlockEntity>, BlockPickInteractionAware, EncasedBlock, ITransformableBlock {
+	implements IWrenchable, SpecialBlockItemRequirement, IBE<FluidPipeBlockEntity>, BlockPickInteractionAware, EncasedBlock, TransformableBlock {
 	public static final Map<Direction, BooleanProperty> FACING_TO_PROPERTY_MAP = PipeBlock.PROPERTY_BY_DIRECTION;
 
 	private final Supplier<Block> casing;

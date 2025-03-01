@@ -17,22 +17,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.simibubi.create.foundation.block.IHaveBigOutline;
+import com.simibubi.create.api.contraption.train.PortalTrackProvider;
+
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.registry.LandPathNodeTypesRegistry;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.base.Predicates;
-import com.jozufozu.flywheel.core.PartialModel;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.api.contraption.train.PortalTrackProvider;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.decoration.girder.GirderBlock;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType;
 import com.simibubi.create.content.trains.CubeParticleData;
@@ -41,28 +46,27 @@ import com.simibubi.create.content.trains.graph.TrackNodeLocation.DiscoveredLoca
 import com.simibubi.create.content.trains.station.StationBlockEntity;
 import com.simibubi.create.content.trains.track.TrackTargetingBehaviour.RenderedTrackOverlayType;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.block.IHaveBigOutline;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 import com.simibubi.create.foundation.block.render.MultiPosDestructionHandler;
 import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.BlockFace;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.registry.LandPathNodeTypesRegistry;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.BlockFace;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -92,7 +96,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -101,7 +104,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.LevelTickAccess;
 
-public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrenchable, ITrackBlock, ISpecialBlockItemRequirement, ProperWaterloggedBlock, IHaveBigOutline, ReducedDestroyEffects, MultiPosDestructionHandler {
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.registry.LandPathNodeTypesRegistry;
+
+public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrenchable, ITrackBlock, SpecialBlockItemRequirement, ProperWaterloggedBlock, IHaveBigOutline, ReducedDestroyEffects, MultiPosDestructionHandler {
 
 	public static final EnumProperty<TrackShape> SHAPE = EnumProperty.create("shape", TrackShape.class);
 	public static final BooleanProperty HAS_BE = BooleanProperty.create("turn");
@@ -234,18 +241,18 @@ public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrencha
 		for (Direction d : Iterate.directionsInAxis(portalTest)) {
 			BlockPos portalPos = pos.relative(d);
 			BlockState portalState = level.getBlockState(portalPos);
-			if (!AllPortalTracks.isSupportedPortal(portalState))
+			if (!PortalTrackProvider.isSupportedPortal(portalState))
 				continue;
 
 			pop = true;
-			Pair<ServerLevel, BlockFace> otherSide = AllPortalTracks.getOtherSide(level, new BlockFace(pos, d));
+			PortalTrackProvider.Exit otherSide = PortalTrackProvider.getOtherSide(level, new BlockFace(pos, d));
 			if (otherSide == null) {
 				fail = "missing";
 				continue;
 			}
 
-			ServerLevel otherLevel = otherSide.getFirst();
-			BlockFace otherTrack = otherSide.getSecond();
+			ServerLevel otherLevel = otherSide.level();
+			BlockFace otherTrack = otherSide.face();
 			BlockPos otherTrackPos = otherTrack.getPos();
 			BlockState existing = otherLevel.getBlockState(otherTrackPos);
 			if (!existing.canBeReplaced()) {
@@ -279,13 +286,13 @@ public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrencha
 		Player player = level.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 10, Predicates.alwaysTrue());
 		if (player == null)
 			return;
-		player.displayClientMessage(Components.literal("<!> ")
-			.append(Lang.translateDirect("portal_track.failed"))
+        player.displayClientMessage(Component.literal("<!> ")
+			.append(CreateLang.translateDirect("portal_track.failed"))
 			.withStyle(ChatFormatting.GOLD), false);
 		MutableComponent component = failPos != null
-			? Lang.translateDirect("portal_track." + fail, failPos.getX(), failPos.getY(), failPos.getZ())
-			: Lang.translateDirect("portal_track." + fail);
-		player.displayClientMessage(Components.literal(" - ")
+			? CreateLang.translateDirect("portal_track." + fail, failPos.getX(), failPos.getY(), failPos.getZ())
+			: CreateLang.translateDirect("portal_track." + fail);
+        player.displayClientMessage(Component.literal(" - ")
 			.withStyle(ChatFormatting.GRAY)
 			.append(component.withStyle(st -> st.withColor(0xFFD3B4))), false);
 	}
@@ -306,7 +313,7 @@ public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrencha
 
 			BlockPos portalPos = pCurrentPos.relative(d);
 			BlockState portalState = level.getBlockState(portalPos);
-			if (!AllPortalTracks.isSupportedPortal(portalState))
+			if (!PortalTrackProvider.isSupportedPortal(portalState))
 				return Blocks.AIR.defaultBlockState();
 		}
 
@@ -352,7 +359,7 @@ public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrencha
 
 		Map<BlockPos, BezierConnection> connections = trackBE.getConnections();
 		connections.forEach((connectedPos, bc) -> ITrackBlock.addToListIfConnected(connectedTo, list,
-			(d, b) -> d == 1 ? Vec3.atLowerCornerOf(bc.tePositions.get(b)) : bc.starts.get(b), bc.normals::get,
+			(d, b) -> d == 1 ? Vec3.atLowerCornerOf(bc.bePositions.get(b)) : bc.starts.get(b), bc.normals::get,
 			b -> world instanceof Level l ? l.dimension() : Level.OVERWORLD, bc::yOffsetAt, null, bc,
 			(b, v) -> ITrackBlock.getMaterialSimple(world, v, bc.getMaterial())));
 
@@ -635,8 +642,8 @@ public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrencha
 	@Environment(EnvType.CLIENT)
 	public PartialModel prepareAssemblyOverlay(BlockGetter world, BlockPos pos, BlockState state, Direction direction,
 		PoseStack ms) {
-		TransformStack.cast(ms)
-			.rotateCentered(Direction.UP, AngleHelper.rad(AngleHelper.horizontalAngle(direction)));
+		TransformStack.of(ms)
+			.rotateCentered(AngleHelper.rad(AngleHelper.horizontalAngle(direction)), Direction.UP);
 		return AllPartialModels.TRACK_ASSEMBLING_OVERLAY;
 	}
 
@@ -644,7 +651,7 @@ public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrencha
 	@Environment(EnvType.CLIENT)
 	public PartialModel prepareTrackOverlay(BlockGetter world, BlockPos pos, BlockState state,
 		BezierTrackPointLocation bezierPoint, AxisDirection direction, PoseStack ms, RenderedTrackOverlayType type) {
-		TransformStack msr = TransformStack.cast(ms);
+		var msr = TransformStack.of(ms);
 
 		Vec3 axis = null;
 		Vec3 diff = null;
@@ -683,17 +690,17 @@ public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrencha
 
 		Vec3 angles = TrackRenderer.getModelAngles(normal, diff);
 
-		msr.centre()
-			.rotateYRadians(angles.y)
-			.rotateXRadians(angles.x)
-			.unCentre();
+		msr.center()
+			.rotateY((float) angles.y)
+			.rotateX((float) angles.x)
+			.uncenter();
 
 		if (axis != null)
 			msr.translate(0, axis.y != 0 ? 7 / 16f : 0, axis.y != 0 ? direction.getStep() * 2.5f / 16f : 0);
 		else {
 			msr.translate(0, 4 / 16f, 0);
 			if (direction == AxisDirection.NEGATIVE)
-				msr.rotateCentered(Direction.UP, Mth.PI);
+				msr.rotateCentered(Mth.PI, Direction.UP);
 		}
 
 		if (bezierPoint == null && world.getBlockEntity(pos) instanceof TrackBlockEntity trackTE
@@ -701,9 +708,9 @@ public class TrackBlock extends Block implements IBE<TrackBlockEntity>, IWrencha
 			double yOffset = 0;
 			for (BezierConnection bc : trackTE.connections.values())
 				yOffset += bc.starts.getFirst().y - pos.getY();
-			msr.centre()
-				.rotateX(-direction.getStep() * trackTE.tilt.smoothingAngle.get())
-				.unCentre()
+			msr.center()
+				.rotateXDegrees((float) (-direction.getStep() * trackTE.tilt.smoothingAngle.get()))
+				.uncenter()
 				.translate(0, yOffset / 2, 0);
 		}
 

@@ -1,7 +1,6 @@
 package com.simibubi.create.content.decoration.palettes;
 
-import com.simibubi.create.foundation.utility.Iterate;
-
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;

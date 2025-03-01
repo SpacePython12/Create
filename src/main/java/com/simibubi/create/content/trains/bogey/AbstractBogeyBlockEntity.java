@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.simibubi.create.AllBogeyStyles;
 import com.simibubi.create.foundation.blockEntity.CachedRenderBBBlockEntity;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 
+import net.createmod.catnip.nbt.NBTHelper;
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -37,14 +37,14 @@ public abstract class AbstractBogeyBlockEntity extends CachedRenderBBBlockEntity
 
 	public void setBogeyData(@NotNull CompoundTag newData) {
 		if (!newData.contains(BOGEY_STYLE_KEY)) {
-			ResourceLocation style = getDefaultStyle().name;
+			ResourceLocation style = getDefaultStyle().id;
 			NBTHelper.writeResourceLocation(newData, BOGEY_STYLE_KEY, style);
 		}
 		this.bogeyData = newData;
 	}
 
 	public void setBogeyStyle(@NotNull BogeyStyle style) {
-		ResourceLocation location = style.name;
+		ResourceLocation location = style.id;
 		CompoundTag data = this.getBogeyData();
 		NBTHelper.writeResourceLocation(data, BOGEY_STYLE_KEY, location);
 		markUpdated();
@@ -80,7 +80,7 @@ public abstract class AbstractBogeyBlockEntity extends CachedRenderBBBlockEntity
 
 	private CompoundTag createBogeyData() {
 		CompoundTag nbt = new CompoundTag();
-		NBTHelper.writeResourceLocation(nbt, BOGEY_STYLE_KEY, getDefaultStyle().name);
+		NBTHelper.writeResourceLocation(nbt, BOGEY_STYLE_KEY, getDefaultStyle().id);
 		boolean upsideDown = false;
 		if (getBlockState().getBlock() instanceof AbstractBogeyBlock<?> bogeyBlock)
 			upsideDown = bogeyBlock.isUpsideDown(getBlockState());
@@ -113,6 +113,6 @@ public abstract class AbstractBogeyBlockEntity extends CachedRenderBBBlockEntity
 		setChanged();
 		Level level = getLevel();
 		if (level != null)
-			getLevel().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+			level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
 	}
 }

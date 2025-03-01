@@ -8,7 +8,6 @@ import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.contraptions.IDisplayAssemblyExceptions;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.content.contraptions.minecart.CouplingHandler;
-import com.simibubi.create.content.contraptions.minecart.capability.CapabilityMinecartController;
 import com.simibubi.create.content.contraptions.minecart.capability.MinecartController;
 import com.simibubi.create.content.redstone.rail.ControllerRailBlock;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
@@ -19,14 +18,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -41,6 +38,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 public class CartAssemblerBlockEntity extends SmartBlockEntity implements IDisplayAssemblyExceptions {
 	private static final int assemblyCooldown = 8;
@@ -182,9 +181,8 @@ public class CartAssemblerBlockEntity extends SmartBlockEntity implements IDispl
 			return;
 		Entity entity = cart.getPassengers()
 			.get(0);
-		if (!(entity instanceof OrientedContraptionEntity))
+		if (!(entity instanceof OrientedContraptionEntity contraption))
 			return;
-		OrientedContraptionEntity contraption = (OrientedContraptionEntity) entity;
 		UUID couplingId = contraption.getCouplingId();
 
 		if (couplingId == null) {
@@ -232,7 +230,7 @@ public class CartAssemblerBlockEntity extends SmartBlockEntity implements IDispl
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		movementMode = new ScrollOptionBehaviour<>(CartMovementMode.class,
-			Lang.translateDirect("contraptions.cart_movement_mode"), this, getMovementModeSlot());
+			CreateLang.translateDirect("contraptions.cart_movement_mode"), this, getMovementModeSlot());
 		behaviours.add(movementMode);
 		registerAwardables(behaviours, AllAdvancements.CONTRAPTION_ACTORS);
 	}

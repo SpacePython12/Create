@@ -1,7 +1,6 @@
 package com.simibubi.create.content.trains.track;
 
 import com.google.common.base.Objects;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.graph.EdgePointType;
@@ -9,8 +8,9 @@ import com.simibubi.create.content.trains.graph.TrackGraphLocation;
 import com.simibubi.create.content.trains.track.TrackBlockOutline.BezierPointSelection;
 import com.simibubi.create.content.trains.track.TrackTargetingBehaviour.RenderedTrackOverlayType;
 import com.simibubi.create.content.trains.track.TrackTargetingBlockItem.OverlapResult;
-import com.simibubi.create.foundation.render.SuperRenderTypeBuffer;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -128,7 +128,7 @@ public class TrackTargetingClient {
 			: lastType == EdgePointType.OBSERVER ? RenderedTrackOverlayType.OBSERVER : RenderedTrackOverlayType.STATION;
 
 		ms.pushPose();
-		TransformStack.cast(ms)
+		TransformStack.of(ms)
 			.translate(Vec3.atLowerCornerOf(pos)
 				.subtract(camera));
 		TrackTargetingBehaviour.render(mc.level, pos, direction, lastHoveredBezierSegment, ms, buffer, light,

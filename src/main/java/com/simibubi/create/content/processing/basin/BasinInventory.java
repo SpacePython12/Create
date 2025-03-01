@@ -11,8 +11,10 @@ public class BasinInventory extends SmartInventory {
 
 	private BasinBlockEntity blockEntity;
 
+	public boolean packagerMode;
+
 	public BasinInventory(int slots, BasinBlockEntity be) {
-		super(slots, be, 16, true);
+		super(slots, be, 64, true);
 		this.blockEntity = be;
 	}
 
@@ -21,6 +23,10 @@ public class BasinInventory extends SmartInventory {
 		StoragePreconditions.notBlankNotNegative(resource, maxAmount);
 		if (!insertionAllowed)
 			return 0;
+
+		if (packagerMode) // Unique stack insertion only matters for belt setups
+			return inv.insertItem(slot, stack, simulate);
+
 		// Only insert if no other slot already has a stack of this item
 		try (Transaction test = transaction.openNested()) {
 			long contained = this.extract(resource, Long.MAX_VALUE, test);

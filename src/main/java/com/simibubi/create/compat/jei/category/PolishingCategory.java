@@ -6,18 +6,19 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
 
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 @ParametersAreNonnullByDefault
 public class PolishingCategory extends CreateRecipeCategory<SandPaperPolishingRecipe> {
@@ -41,7 +42,7 @@ public class PolishingCategory extends CreateRecipeCategory<SandPaperPolishingRe
 				.addSlot(RecipeIngredientRole.OUTPUT, 132, 29)
 				.setBackground(getRenderedSlot(output), -1, -1)
 				.addItemStack(output.getStack())
-				.addTooltipCallback(addStochasticTooltip(output));
+				.addRichTooltipCallback(addStochasticTooltip(output));
 	}
 
 	@Override

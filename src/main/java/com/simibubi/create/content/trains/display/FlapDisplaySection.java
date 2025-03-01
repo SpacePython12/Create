@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Random;
 
 import com.google.common.base.Strings;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -175,7 +175,7 @@ public class FlapDisplaySection {
 	}
 
 	public static String[] getFlapCycle(String key) {
-		return LOADED_FLAP_CYCLES.computeIfAbsent(key, k -> Lang.translateDirect("flap_display.cycles." + key)
+		return LOADED_FLAP_CYCLES.computeIfAbsent(key, k -> CreateLang.translateDirect("flap_display.cycles." + key)
 			.getString()
 			.split(";"));
 	}

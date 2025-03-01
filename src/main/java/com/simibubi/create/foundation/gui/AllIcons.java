@@ -6,18 +6,19 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.Create;
-import com.simibubi.create.foundation.gui.element.DelegatedStencilElement;
-import com.simibubi.create.foundation.gui.element.ScreenElement;
-import com.simibubi.create.foundation.utility.Color;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.gui.element.DelegatedStencilElement;
+import net.createmod.catnip.gui.element.ScreenElement;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class AllIcons implements ScreenElement {
 
@@ -161,7 +162,13 @@ public class AllIcons implements ScreenElement {
 		I_FX_FIELD_OFF = next(),
 		I_FX_FIELD_ON = next(),
 		I_FX_BLEND = next(),
-		I_FX_BLEND_OFF = next();
+		I_FX_BLEND_OFF = next(),
+
+		I_SEND_ONLY = newRow(),
+		I_SEND_AND_RECEIVE = next(),
+		I_PARTIAL_REQUESTS = next(),
+		I_FULL_REQUESTS = next(),
+		I_MOVE_GAUGE = next();
 	;
 
 	public AllIcons(int x, int y) {

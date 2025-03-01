@@ -7,9 +7,10 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -52,7 +53,7 @@ public class WindmillBearingBlockEntity extends MechanicalBearingBlockEntity {
 		if (!running)
 			assembleNextTick = true;
 	}
-	
+
 	public void disassembleForMovement() {
 		if (!running)
 			return;
@@ -101,7 +102,7 @@ public class WindmillBearingBlockEntity extends MechanicalBearingBlockEntity {
 		super.addBehaviours(behaviours);
 		behaviours.remove(movementMode);
 		movementDirection = new ScrollOptionBehaviour<>(RotationDirection.class,
-			Lang.translateDirect("contraptions.windmill.rotation_direction"), this, getMovementModeSlot());
+			CreateLang.translateDirect("contraptions.windmill.rotation_direction"), this, getMovementModeSlot());
 		movementDirection.withCallback($ -> onDirectionChanged());
 		behaviours.add(movementDirection);
 		registerAwardables(behaviours, AllAdvancements.WINDMILL, AllAdvancements.WINDMILL_MAXED);

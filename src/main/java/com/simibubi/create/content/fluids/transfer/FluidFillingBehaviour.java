@@ -12,13 +12,10 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.fluid.FluidHelper;
-import com.simibubi.create.foundation.utility.BBHelper;
-import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.BBHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -43,6 +40,11 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.ticks.LevelTickAccess;
 import net.minecraft.world.ticks.LevelTicks;
+
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 
 public class FluidFillingBehaviour extends FluidManipulationBehaviour {
 
@@ -227,10 +229,10 @@ public class FluidFillingBehaviour extends FluidManipulationBehaviour {
 					protected void onFinalCommit() {
 						playEffect(world, currentPos, fluid, false);
 						LevelTickAccess<Fluid> pendingFluidTicks = world.getFluidTicks();
-						if (pendingFluidTicks instanceof LevelTicks) {
-							LevelTicks<Fluid> serverTickList = (LevelTicks<Fluid>) pendingFluidTicks;
+						if (pendingFluidTicks instanceof LevelTicks<Fluid> serverTickList) {
 							serverTickList.clearArea(new BoundingBox(currentPos));
 						}
+
 						affectedArea = BBHelper.encapsulate(affectedArea, currentPos);
 					}
 				}.updateSnapshots(ctx);
@@ -302,7 +304,7 @@ public class FluidFillingBehaviour extends FluidManipulationBehaviour {
 
 		if (fluidState.getType() != Fluids.EMPTY
 			&& blockState.getCollisionShape(getWorld(), pos, CollisionContext.empty())
-				.isEmpty())
+			.isEmpty())
 			return toFill.isSame(fluidState.getType()) ? SpaceType.FILLED : SpaceType.BLOCKING;
 
 		return canBeReplacedByFluid(world, pos, blockState) ? SpaceType.FILLABLE : SpaceType.BLOCKING;

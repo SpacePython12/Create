@@ -2,7 +2,6 @@ package com.simibubi.create.foundation.blockEntity.behaviour.scrollValue;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableList;
@@ -13,11 +12,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.VecHelper;
 
-import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -27,6 +22,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
 
 public class ScrollValueBehaviour extends BlockEntityBehaviour implements ValueSettingsBehaviour {
 
@@ -138,7 +135,7 @@ public class ScrollValueBehaviour extends BlockEntityBehaviour implements ValueS
 	public boolean testHit(Vec3 hit) {
 		BlockState state = blockEntity.getBlockState();
 		Vec3 localHit = hit.subtract(Vec3.atLowerCornerOf(blockEntity.getBlockPos()));
-		return slotPositioning.testHit(state, localHit);
+		return slotPositioning.testHit(getWorld(), getPos(), state, localHit);
 	}
 
 	public void setLabel(Component label) {
@@ -159,7 +156,7 @@ public class ScrollValueBehaviour extends BlockEntityBehaviour implements ValueS
 
 	@Override
 	public ValueSettingsBoard createBoard(Player player, BlockHitResult hitResult) {
-		return new ValueSettingsBoard(label, max, 10, ImmutableList.of(Components.literal("Value")),
+		return new ValueSettingsBoard(label, max, 10, ImmutableList.of(Component.literal("Value")),
 			new ValueSettingsFormatter(ValueSettings::format));
 	}
 
@@ -182,11 +179,10 @@ public class ScrollValueBehaviour extends BlockEntityBehaviour implements ValueS
 	}
 
 	@Override
-	public void onShortInteract(Player player, InteractionHand hand, Direction side) {
+	public void onShortInteract(Player player, InteractionHand hand, Direction side, BlockHitResult hitResult) {
 		if (player instanceof FakePlayer)
 			blockEntity.getBlockState()
-				.use(getWorld(), player, hand,
-					new BlockHitResult(VecHelper.getCenterOf(getPos()), side, getPos(), true));
+				.use(getWorld(), player, hand, hitResult);
 	}
 
 }

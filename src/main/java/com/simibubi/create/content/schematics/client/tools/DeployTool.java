@@ -1,13 +1,13 @@
 package com.simibubi.create.content.schematics.client.tools;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllKeys;
 import com.simibubi.create.content.schematics.client.SchematicTransformation;
-import com.simibubi.create.foundation.outliner.AABBOutline;
-import com.simibubi.create.foundation.render.SuperRenderTypeBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.outliner.AABBOutline;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.Mth;
@@ -59,10 +59,10 @@ public class DeployTool extends PlacementToolBase {
 		Vec3 origin = new Vec3(xOrigin, 0, zOrigin);
 
 		ms.translate(x - centerX - camera.x, y - camera.y, z - centerZ - camera.z);
-		TransformStack.cast(ms)
+		TransformStack.of(ms)
 			.translate(origin)
 			.translate(rotationOffset)
-			.rotateY(transformation.getCurrentRotation())
+			.rotateYDegrees(transformation.getCurrentRotation())
 			.translateBack(rotationOffset)
 			.translateBack(origin);
 

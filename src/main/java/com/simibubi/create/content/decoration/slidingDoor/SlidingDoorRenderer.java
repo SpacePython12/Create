@@ -1,21 +1,20 @@
 package com.simibubi.create.content.decoration.slidingDoor;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.DoorBlock;
@@ -56,22 +55,22 @@ public class SlidingDoorRenderer extends SafeBlockEntityRenderer<SlidingDoorBloc
 
 			boolean flip = blockState.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT;
 			for (boolean left : Iterate.trueAndFalse) {
-				SuperByteBuffer partial = CachedBufferer.partial(partials.get(left ^ flip), blockState);
+				SuperByteBuffer partial = CachedBuffers.partial(partials.get(left ^ flip), blockState);
 				float f = flip ? -1 : 1;
 
 				partial.translate(0, -1 / 512f, 0)
 					.translate(Vec3.atLowerCornerOf(facing.getNormal())
 						.scale(value2 * 1 / 32f));
-				partial.rotateCentered(Direction.UP,
-					Mth.DEG_TO_RAD * AngleHelper.horizontalAngle(facing.getClockWise()));
+				partial.rotateCentered(
+					Mth.DEG_TO_RAD * AngleHelper.horizontalAngle(facing.getClockWise()), Direction.UP);
 
 				if (flip)
 					partial.translate(0, 0, 1);
-				partial.rotateY(91 * f * value * value);
+				partial.rotateYDegrees(91 * f * value * value);
 
 				if (!left)
 					partial.translate(0, 0, f / 2f)
-						.rotateY(-181 * f * value * value);
+						.rotateYDegrees(-181 * f * value * value);
 
 				if (flip)
 					partial.translate(0, 0, -1 / 2f);
@@ -84,7 +83,7 @@ public class SlidingDoorRenderer extends SafeBlockEntityRenderer<SlidingDoorBloc
 		}
 
 		for (DoubleBlockHalf half : DoubleBlockHalf.values()) {
-			CachedBufferer.block(blockState.setValue(DoorBlock.OPEN, false)
+			CachedBuffers.block(blockState.setValue(DoorBlock.OPEN, false)
 				.setValue(DoorBlock.HALF, half))
 				.translate(0, half == DoubleBlockHalf.UPPER ? 1 - 1 / 512f : 0, 0)
 				.translate(offset)

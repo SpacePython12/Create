@@ -2,17 +2,17 @@ package com.simibubi.create.content.equipment.zapper;
 
 import java.util.LinkedList;
 import java.util.List;
-import net.minecraft.util.RandomSource;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.CreateClient;
 
+import net.createmod.catnip.outliner.Outliner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -38,7 +38,7 @@ public class ZapperRenderHandler extends ShootableGadgetRenderHandler {
 			return;
 
 		cachedBeams.forEach(beam -> {
-			CreateClient.OUTLINER.endChasingLine(beam, beam.start, beam.end, 1 - beam.itensity, false)
+			Outliner.getInstance().endChasingLine(beam, beam.start, beam.end, 1 - beam.itensity, false)
 				.disableLineNormals()
 				.colored(0xffffff)
 				.lineWidth(beam.itensity * 1 / 8f);

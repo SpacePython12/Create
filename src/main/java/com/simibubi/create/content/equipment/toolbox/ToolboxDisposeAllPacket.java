@@ -4,11 +4,6 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -16,6 +11,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class ToolboxDisposeAllPacket extends SimplePacketBase {
 
@@ -45,9 +47,8 @@ public class ToolboxDisposeAllPacket extends SimplePacketBase {
 			if (player.distanceToSqr(toolboxPos.getX() + 0.5, toolboxPos.getY(), toolboxPos.getZ() + 0.5) > maxRange
 				* maxRange)
 				return;
-			if (!(blockEntity instanceof ToolboxBlockEntity))
+			if (!(blockEntity instanceof ToolboxBlockEntity toolbox))
 				return;
-			ToolboxBlockEntity toolbox = (ToolboxBlockEntity) blockEntity;
 
 			CompoundTag compound = player.getCustomData()
 				.getCompound("CreateToolboxData");

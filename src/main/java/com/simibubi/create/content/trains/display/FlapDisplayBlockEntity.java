@@ -8,16 +8,16 @@ import com.google.gson.JsonElement;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.DyeHelper;
 import com.simibubi.create.foundation.utility.DynamicComponent;
-import com.simibubi.create.foundation.utility.NBTHelper;
 
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -141,7 +141,7 @@ public class FlapDisplayBlockEntity extends KineticBlockEntity {
 		List<FlapDisplayLayout> lines = getLines();
 		if (lineIndex >= lines.size())
 			return;
-		
+
 		FlapDisplayLayout layout = lines.get(lineIndex);
 		if (!layout.isLayout("Default"))
 			layout.loadDefault(getMaxCharCount());
@@ -150,7 +150,7 @@ public class FlapDisplayBlockEntity extends KineticBlockEntity {
 		FlapDisplaySection flapDisplaySection = sections.get(0);
 		if (rawComponentText == null) {
 			manualLines[lineIndex] = false;
-			flapDisplaySection.setText(Components.immutableEmpty());
+			flapDisplaySection.setText(CommonComponents.EMPTY);
 			notifyUpdate();
 			return;
 		}
@@ -173,7 +173,7 @@ public class FlapDisplayBlockEntity extends KineticBlockEntity {
 		colour[lineIndex] = color == DyeColor.WHITE ? null : color;
 		notifyUpdate();
 	}
-	
+
 	public void setGlowing(int lineIndex) {
 		glowingLines[lineIndex] = true;
 		notifyUpdate();
@@ -210,7 +210,7 @@ public class FlapDisplayBlockEntity extends KineticBlockEntity {
 		for (int j = 0; j < manualLines.length; j++)
 			if (manualLines[j])
 				NBTHelper.putMarker(tag, "CustomLine" + j);
-		
+
 		for (int j = 0; j < glowingLines.length; j++)
 			if (glowingLines[j])
 				NBTHelper.putMarker(tag, "GlowingLine" + j);
@@ -239,7 +239,7 @@ public class FlapDisplayBlockEntity extends KineticBlockEntity {
 		manualLines = new boolean[ySize * 2];
 		for (int i = 0; i < ySize * 2; i++)
 			manualLines[i] = tag.contains("CustomLine" + i);
-		
+
 		glowingLines = new boolean[ySize * 2];
 		for (int i = 0; i < ySize * 2; i++)
 			glowingLines[i] = tag.contains("GlowingLine" + i);
@@ -318,17 +318,18 @@ public class FlapDisplayBlockEntity extends KineticBlockEntity {
 	}
 
 	@Override
-	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {}
+	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+	}
 
 	public int getLineColor(int line) {
 		DyeColor color = colour[line];
 		return color == null ? 0xFF_D3C6BA
-			: DyeHelper.DYE_TABLE.get(color)
-				.getFirst() | 0xFF_000000;
+			: DyeHelper.getDyeColors(color)
+			.getFirst() | 0xFF_000000;
 	}
-	
+
 	public boolean isLineGlowing(int line) {
 		return glowingLines[line];
 	}
-	
+
 }

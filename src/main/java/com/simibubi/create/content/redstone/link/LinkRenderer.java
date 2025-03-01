@@ -11,11 +11,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBox;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxRenderer;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.math.VecHelper;
+import net.createmod.catnip.outliner.Outliner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -34,10 +35,9 @@ public class LinkRenderer {
 	public static void tick() {
 		Minecraft mc = Minecraft.getInstance();
 		HitResult target = mc.hitResult;
-		if (target == null || !(target instanceof BlockHitResult))
+		if (target == null || !(target instanceof BlockHitResult result))
 			return;
 
-		BlockHitResult result = (BlockHitResult) target;
 		ClientLevel world = mc.level;
 		BlockPos pos = result.getBlockPos();
 
@@ -45,8 +45,8 @@ public class LinkRenderer {
 		if (behaviour == null)
 			return;
 
-		Component freq1 = Lang.translateDirect("logistics.firstFrequency");
-		Component freq2 = Lang.translateDirect("logistics.secondFrequency");
+		Component freq1 = CreateLang.translateDirect("logistics.firstFrequency");
+		Component freq2 = CreateLang.translateDirect("logistics.secondFrequency");
 
 		for (boolean first : Iterate.trueAndFalse) {
 			AABB bb = new AABB(Vec3.ZERO, Vec3.ZERO).inflate(.25f);
@@ -63,7 +63,7 @@ public class LinkRenderer {
 			if (!empty)
 				box.wideOutline();
 
-			CreateClient.OUTLINER.showValueBox(Pair.of(Boolean.valueOf(first), pos), box.transform(transform))
+			Outliner.getInstance().showOutline(Pair.of(Boolean.valueOf(first), pos), box.transform(transform))
 				.highlightFace(result.getDirection());
 
 			if (!hit)
@@ -72,13 +72,13 @@ public class LinkRenderer {
 			List<MutableComponent> tip = new ArrayList<>();
 			tip.add(label.copy());
 			tip.add(
-				Lang.translateDirect(empty ? "logistics.filter.click_to_set" : "logistics.filter.click_to_replace"));
+				CreateLang.translateDirect(empty ? "logistics.filter.click_to_set" : "logistics.filter.click_to_replace"));
 			CreateClient.VALUE_SETTINGS_HANDLER.showHoverTip(tip);
 		}
 	}
 
 	public static void renderOnBlockEntity(SmartBlockEntity be, float partialTicks, PoseStack ms,
-		MultiBufferSource buffer, int light, int overlay) {
+										   MultiBufferSource buffer, int light, int overlay) {
 
 		if (be == null || be.isRemoved())
 			return;
@@ -98,7 +98,7 @@ public class LinkRenderer {
 			ItemStack stack = first ? behaviour.frequencyFirst.getStack() : behaviour.frequencyLast.getStack();
 
 			ms.pushPose();
-			transform.transform(be.getBlockState(), ms);
+			transform.transform(be.getLevel(), be.getBlockPos(), be.getBlockState(), ms);
 			ValueBoxRenderer.renderItemIntoValueBox(stack, ms, buffer, light, overlay);
 			ms.popPose();
 		}

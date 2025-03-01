@@ -8,8 +8,8 @@ import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;
 import com.simibubi.create.content.redstone.displayLink.target.DisplayTargetStats;
 import com.simibubi.create.content.trains.display.FlapDisplayBlockEntity;
 import com.simibubi.create.content.trains.display.FlapDisplaySection;
-import com.simibubi.create.foundation.utility.Components;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
@@ -18,9 +18,11 @@ public abstract class PercentOrProgressBarDisplaySource extends NumericSingleLin
 
 	@Override
 	protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
-		Float currentLevel = getProgress(context);
-		if (currentLevel == null)
+		Float rawProgress = this.getProgress(context);
+		if (rawProgress == null)
 			return EMPTY_LINE;
+		// clamp just in case - #7371
+		float currentLevel = Mth.clamp(rawProgress, 0, 1);
 		if (!progressBarActive(context))
 			return formatNumeric(context, currentLevel);
 
@@ -47,11 +49,11 @@ public abstract class PercentOrProgressBarDisplaySource extends NumericSingleLin
 		for (int i = 0; i < emptySpaces; i++)
 			s.append("\u2592");
 
-		return Components.literal(s.toString());
+		return Component.literal(s.toString());
 	}
 
 	protected MutableComponent formatNumeric(DisplayLinkContext context, Float currentLevel) {
-		return Components.literal(Mth.clamp((int) (currentLevel * 100), 0, 100) + "%");
+		return Component.literal(Mth.clamp((int) (currentLevel * 100), 0, 100) + "%");
 	}
 
 	@Nullable

@@ -4,26 +4,24 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.simibubi.create.foundation.utility.AdventureUtil;
-
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import com.simibubi.create.AllItems;
-import com.simibubi.create.AllMovementBehaviours;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
+import com.simibubi.create.api.contraption.ContraptionMovementSetting;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.contraptions.ContraptionData;
-import com.simibubi.create.content.contraptions.ContraptionMovementSetting;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.content.contraptions.actors.psi.PortableStorageInterfaceMovement;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
+import com.simibubi.create.content.contraptions.data.ContraptionPickupLimiting;
 import com.simibubi.create.content.kinetics.deployer.DeployerFakePlayer;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.NBTHelper;
+import com.simibubi.create.foundation.utility.AdventureUtil;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
@@ -50,6 +48,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.EntityHitResult;
+
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
 public class MinecartContraptionItem extends Item {
 
@@ -115,7 +115,7 @@ public class MinecartContraptionItem extends Item {
 				BlockState blockstate1 = world.getBlockState(blockpos.below());
 				RailShape railshape1 = blockstate1.getBlock() instanceof BaseRailBlock
 					? MinecartAndRailUtil.getDirectionOfRail(blockstate1, world, blockpos.below(),
-						null)
+					null)
 					: RailShape.NORTH_SOUTH;
 				if (direction != Direction.DOWN && railshape1.isAscending()) {
 					d3 = -0.4D;
@@ -153,7 +153,7 @@ public class MinecartContraptionItem extends Item {
 		} else if (!canPlace()) {
 			Player player = context.getPlayer();
 			if (player != null) {
-				Component message = Lang.translateDirect("contraption.minecart_contraption_illegal_placement").withStyle(ChatFormatting.RED);
+				Component message = CreateLang.translateDirect("contraption.minecart_contraption_illegal_placement").withStyle(ChatFormatting.RED);
 				player.displayClientMessage(message, true);
 			}
 			return InteractionResult.FAIL;
@@ -190,7 +190,7 @@ public class MinecartContraptionItem extends Item {
 	}
 
 	public static void addContraptionToMinecart(Level world, ItemStack itemstack, AbstractMinecart cart,
-		@Nullable Direction newFacing) {
+												@Nullable Direction newFacing) {
 		CompoundTag tag = itemstack.getOrCreateTag();
 		if (tag.contains("Contraption")) {
 			CompoundTag contraptionTag = tag.getCompound("Contraption");
@@ -201,7 +201,7 @@ public class MinecartContraptionItem extends Item {
 			OrientedContraptionEntity contraptionEntity =
 				newFacing == null ? OrientedContraptionEntity.create(world, mountedContraption, intialOrientation)
 					: OrientedContraptionEntity.createAtYaw(world, mountedContraption, intialOrientation,
-						newFacing.toYRot());
+					newFacing.toYRot());
 
 			contraptionEntity.startRiding(cart);
 			contraptionEntity.setPos(cart.getX(), cart.getY(), cart.getZ());
@@ -230,25 +230,23 @@ public class MinecartContraptionItem extends Item {
 			return InteractionResult.PASS;
 		if (entity instanceof AbstractContraptionEntity)
 			entity = entity.getVehicle();
-		if (!(entity instanceof AbstractMinecart))
+		if (!(entity instanceof AbstractMinecart cart))
 			return InteractionResult.PASS;
 		if (!entity.isAlive())
 			return InteractionResult.PASS;
 		if (player instanceof DeployerFakePlayer dfp && dfp.onMinecartContraption)
 			return InteractionResult.PASS;
-		AbstractMinecart cart = (AbstractMinecart) entity;
 		Type type = cart.getMinecartType();
 		if (type != Type.RIDEABLE && type != Type.FURNACE && type != Type.CHEST)
 			return InteractionResult.PASS;
 		List<Entity> passengers = cart.getPassengers();
-		if (passengers.isEmpty() || !(passengers.get(0) instanceof OrientedContraptionEntity))
+		if (passengers.isEmpty() || !(passengers.get(0) instanceof OrientedContraptionEntity oce))
 			return InteractionResult.PASS;
-		OrientedContraptionEntity oce = (OrientedContraptionEntity) passengers.get(0);
 		Contraption contraption = oce.getContraption();
 
 		if (ContraptionMovementSetting.isNoPickup(contraption.getBlocks()
 			.values())) {
-			player.displayClientMessage(Lang.translateDirect("contraption.minecart_contraption_illegal_pickup")
+			player.displayClientMessage(CreateLang.translateDirect("contraption.minecart_contraption_illegal_pickup")
 				.withStyle(ChatFormatting.RED), true);
 			return InteractionResult.PASS;
 		}
@@ -260,14 +258,14 @@ public class MinecartContraptionItem extends Item {
 		contraption.stop(world);
 
 		for (MutablePair<StructureBlockInfo, MovementContext> pair : contraption.getActors())
-			if (AllMovementBehaviours.getBehaviour(pair.left.state())instanceof PortableStorageInterfaceMovement psim)
+			if (MovementBehaviour.REGISTRY.get(pair.left.state()) instanceof PortableStorageInterfaceMovement psim)
 				psim.reset(pair.right);
 
 		ItemStack generatedStack = create(type, oce).setHoverName(entity.getCustomName());
 
-		if (ContraptionData.isTooLargeForPickup(generatedStack.save(new CompoundTag()))) {
-			MutableComponent message = Lang.translateDirect("contraption.minecart_contraption_too_big")
-					.withStyle(ChatFormatting.RED);
+		if (ContraptionPickupLimiting.isTooLargeForPickup(generatedStack.save(new CompoundTag()))) {
+			MutableComponent message = CreateLang.translateDirect("contraption.minecart_contraption_too_big")
+				.withStyle(ChatFormatting.RED);
 			player.displayClientMessage(message, true);
 			return InteractionResult.PASS;
 		}
@@ -287,17 +285,17 @@ public class MinecartContraptionItem extends Item {
 		ItemStack stack = ItemStack.EMPTY;
 
 		switch (type) {
-		case RIDEABLE:
-			stack = AllItems.MINECART_CONTRAPTION.asStack();
-			break;
-		case FURNACE:
-			stack = AllItems.FURNACE_MINECART_CONTRAPTION.asStack();
-			break;
-		case CHEST:
-			stack = AllItems.CHEST_MINECART_CONTRAPTION.asStack();
-			break;
-		default:
-			break;
+			case RIDEABLE:
+				stack = AllItems.MINECART_CONTRAPTION.asStack();
+				break;
+			case FURNACE:
+				stack = AllItems.FURNACE_MINECART_CONTRAPTION.asStack();
+				break;
+			case CHEST:
+				stack = AllItems.CHEST_MINECART_CONTRAPTION.asStack();
+				break;
+			default:
+				break;
 		}
 
 		if (stack.isEmpty())

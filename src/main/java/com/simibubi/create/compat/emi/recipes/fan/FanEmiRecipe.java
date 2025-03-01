@@ -5,7 +5,7 @@ import com.simibubi.create.compat.emi.CreateEmiAnimations;
 import com.simibubi.create.compat.emi.recipes.CreateEmiRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
@@ -37,7 +37,7 @@ public abstract class FanEmiRecipe<T extends Recipe<?>> extends CreateEmiRecipe<
 
 	public static EmiStack getFan(String name) {
 		return EmiStack.of(AllBlocks.ENCASED_FAN.asStack()
-				.setHoverName(Lang.translateDirect("recipe." + name + ".fan").withStyle(style -> style.withItalic(false))));
+				.setHoverName(CreateLang.translateDirect("recipe." + name + ".fan").withStyle(style -> style.withItalic(false))));
 	}
 
 	public static abstract class MultiOutput<T extends ProcessingRecipe<?>> extends FanEmiRecipe<T> {

@@ -2,14 +2,15 @@ package com.simibubi.create.content.logistics.filter;
 
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public abstract class AbstractFilterMenu extends GhostItemMenu<ItemStack> {
 

@@ -6,13 +6,14 @@ import com.simibubi.create.content.fluids.PipeConnection.Flow;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.fluid.FluidRenderer;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
+
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 public class TransparentStraightPipeRenderer extends SafeBlockEntityRenderer<StraightPipeBlockEntity> {
 

@@ -4,8 +4,8 @@ import org.joml.Vector3f;
 
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPackets;
-import com.simibubi.create.foundation.utility.VecHelper;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;

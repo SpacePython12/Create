@@ -7,9 +7,9 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.entity.TrainIconType;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -19,17 +19,20 @@ public class TrainEditPacket extends SimplePacketBase {
 	private String name;
 	private UUID id;
 	private ResourceLocation iconType;
+	private int mapColor;
 
-	public TrainEditPacket(UUID id, String name, ResourceLocation iconType) {
+	public TrainEditPacket(UUID id, String name, ResourceLocation iconType, int mapColor) {
 		this.name = name;
 		this.id = id;
 		this.iconType = iconType;
+		this.mapColor = mapColor;
 	}
 
 	public TrainEditPacket(FriendlyByteBuf buffer) {
 		id = buffer.readUUID();
 		name = buffer.readUtf(256);
 		iconType = buffer.readResourceLocation();
+		mapColor = buffer.readVarInt();
 	}
 
 	@Override
@@ -37,6 +40,7 @@ public class TrainEditPacket extends SimplePacketBase {
 		buffer.writeUUID(id);
 		buffer.writeUtf(name);
 		buffer.writeResourceLocation(iconType);
+		buffer.writeVarInt(mapColor);
 	}
 
 	@Override
@@ -47,11 +51,13 @@ public class TrainEditPacket extends SimplePacketBase {
 			Train train = Create.RAILWAYS.sided(level).trains.get(id);
 			if (train == null)
 				return;
-			if (!name.isBlank())
-				train.name = Components.literal(name);
+			if (!name.isBlank()) {
+                train.name = Component.literal(name);
+            }
 			train.icon = TrainIconType.byId(iconType);
+			train.mapColorIndex = mapColor;
 			if (sender != null)
-				AllPackets.getChannel().sendToClientsInServer(new TrainEditReturnPacket(id, name, iconType),
+				AllPackets.getChannel().sendToClientsInServer(new TrainEditReturnPacket(id, name, iconType, mapColor),
 						level.getServer());
 		});
 		return true;
@@ -63,8 +69,8 @@ public class TrainEditPacket extends SimplePacketBase {
 			super(buffer);
 		}
 
-		public TrainEditReturnPacket(UUID id, String name, ResourceLocation iconType) {
-			super(id, name, iconType);
+		public TrainEditReturnPacket(UUID id, String name, ResourceLocation iconType,  int mapColor) {
+			super(id, name, iconType, mapColor);
 		}
 
 	}

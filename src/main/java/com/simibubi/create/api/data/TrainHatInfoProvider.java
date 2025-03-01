@@ -1,9 +1,12 @@
 package com.simibubi.create.api.data;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 import com.mojang.serialization.JsonOps;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.trains.schedule.hat.TrainHatInfo;
-
 import com.simibubi.create.content.trains.schedule.hat.TrainHatInfoReloadListener;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,13 +17,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
 public abstract class TrainHatInfoProvider implements DataProvider {
-	private final PackOutput.PathProvider path;
 	protected final Map<ResourceLocation, TrainHatInfo> trainHatOffsets = new HashMap<>();
+	private final PackOutput.PathProvider path;
 
 	public TrainHatInfoProvider(PackOutput output) {
 		this.path = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, TrainHatInfoReloadListener.HAT_INFO_DIRECTORY);
@@ -53,11 +52,11 @@ public abstract class TrainHatInfoProvider implements DataProvider {
 		this.trainHatOffsets.clear();
 		this.createOffsets();
 		return CompletableFuture.allOf(
-				this.trainHatOffsets.entrySet().stream().map(entry ->
-						DataProvider.saveStable(output,
-								TrainHatInfo.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).resultOrPartial(Create.LOGGER::error).orElseThrow(),
-								this.path.json(entry.getKey()))
-				).toArray(CompletableFuture[]::new));
+			this.trainHatOffsets.entrySet().stream().map(entry ->
+				DataProvider.saveStable(output,
+					TrainHatInfo.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).resultOrPartial(Create.LOGGER::error).orElseThrow(),
+					this.path.json(entry.getKey()))
+			).toArray(CompletableFuture[]::new));
 	}
 
 	@Override

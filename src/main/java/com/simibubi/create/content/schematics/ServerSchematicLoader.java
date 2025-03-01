@@ -18,16 +18,15 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.schematics.SchematicExport.SchematicExportResult;
 import com.simibubi.create.content.schematics.table.SchematicTableBlockEntity;
-import com.simibubi.create.foundation.utility.Components;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.FilesHelper;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CSchematics;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
@@ -104,7 +103,7 @@ public class ServerSchematicLoader {
 		}
 
 		Path playerSchematicsPath = Paths.get(getSchematicPath(), player.getGameProfile()
-			.getName())
+				.getName())
 			.toAbsolutePath();
 
 		Path uploadPath = playerSchematicsPath.resolve(schematic)
@@ -164,10 +163,10 @@ public class ServerSchematicLoader {
 	protected boolean validateSchematicSizeOnServer(ServerPlayer player, long size) {
 		Integer maxFileSize = getConfig().maxTotalSchematicSize.get();
 		if (size > maxFileSize * 1000) {
-			player.sendSystemMessage(Lang.translateDirect("schematics.uploadTooLarge")
-				.append(Components.literal(" (" + size / 1000 + " KB).")));
-			player.sendSystemMessage(Lang.translateDirect("schematics.maxAllowedSize")
-				.append(Components.literal(" " + maxFileSize + " KB")));
+			player.sendSystemMessage(CreateLang.translateDirect("schematics.uploadTooLarge")
+				.append(Component.literal(" (" + size / 1000 + " KB).")));
+			player.sendSystemMessage(CreateLang.translateDirect("schematics.maxAllowedSize")
+				.append(Component.literal(" " + maxFileSize + " KB")));
 			return false;
 		}
 		return true;
@@ -242,9 +241,8 @@ public class ServerSchematicLoader {
 
 	public SchematicTableBlockEntity getTable(Level world, BlockPos pos) {
 		BlockEntity be = world.getBlockEntity(pos);
-		if (!(be instanceof SchematicTableBlockEntity))
+		if (!(be instanceof SchematicTableBlockEntity table))
 			return null;
-		SchematicTableBlockEntity table = (SchematicTableBlockEntity) be;
 		return table;
 	}
 
@@ -271,7 +269,7 @@ public class ServerSchematicLoader {
 				if (table == null)
 					return;
 				table.finishUpload();
-				table.inventory.setStackInSlot(1, SchematicItem.create(world.holderLookup(Registries.BLOCK), schematic, player.getGameProfile()
+				table.inventory.setStackInSlot(1, SchematicItem.create(world, schematic, player.getGameProfile()
 					.getName()));
 
 			} catch (IOException e) {
@@ -282,7 +280,7 @@ public class ServerSchematicLoader {
 	}
 
 	public void handleInstantSchematic(ServerPlayer player, String schematic, Level world, BlockPos pos,
-		BlockPos bounds) {
+									   BlockPos bounds) {
 		String playerName = player.getGameProfile().getName();
 		String playerPath = getSchematicPath() + "/" + playerName;
 		String playerSchematicId = playerName + "/" + schematic;
@@ -315,14 +313,14 @@ public class ServerSchematicLoader {
 			return;
 
 		SchematicExportResult result = SchematicExport.saveSchematic(
-				playerSchematics, schematic, true,
-				world, pos, pos.offset(bounds).offset(-1, -1, -1)
+			playerSchematics, schematic, true,
+			world, pos, pos.offset(bounds).offset(-1, -1, -1)
 		);
 		if (result != null)
 			player.setItemInHand(InteractionHand.MAIN_HAND,
-				SchematicItem.create(world.holderLookup(Registries.BLOCK), schematic, playerName));
+				SchematicItem.create(world, schematic, playerName));
 		else
-			Lang.translate("schematicAndQuill.instant_failed")
+			CreateLang.translate("schematicAndQuill.instant_failed")
 				.style(ChatFormatting.RED)
 				.sendStatus(player);
 	}

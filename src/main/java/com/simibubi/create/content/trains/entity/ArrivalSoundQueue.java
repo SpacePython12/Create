@@ -12,9 +12,9 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.decoration.steamWhistle.WhistleBlock;
 import com.simibubi.create.content.decoration.steamWhistle.WhistleBlock.WhistleSize;
-import com.simibubi.create.foundation.utility.NBTHelper;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -135,8 +135,7 @@ public class ArrivalSoundQueue {
 		if (state.getBlock() instanceof NoteBlock nb) {
 			float f = (float) Math.pow(2, (state.getValue(NoteBlock.NOTE) - 12) / 12.0);
 			playSimple(entity, state.getValue(NoteBlock.INSTRUMENT)
-				.getSoundEvent()
-				.value(), 1, f);
+				.getSoundEvent().value(), 1, f);
 		}
 
 		if (state.getBlock() instanceof WhistleBlock && info.nbt() != null) {

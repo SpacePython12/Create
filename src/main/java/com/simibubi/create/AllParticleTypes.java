@@ -8,21 +8,22 @@ import com.simibubi.create.content.fluids.particle.FluidParticleData;
 import com.simibubi.create.content.kinetics.base.RotationIndicatorParticleData;
 import com.simibubi.create.content.kinetics.fan.AirFlowParticleData;
 import com.simibubi.create.content.kinetics.steamEngine.SteamJetParticleData;
+import com.simibubi.create.content.logistics.packagerLink.WiFiParticle;
 import com.simibubi.create.content.trains.CubeParticleData;
 import com.simibubi.create.foundation.particle.AirParticleData;
 import com.simibubi.create.foundation.particle.ICustomParticleData;
-import com.simibubi.create.foundation.utility.Lang;
 
-import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 
 public enum AllParticleTypes {
 
@@ -34,6 +35,7 @@ public enum AllParticleTypes {
 	FLUID_PARTICLE(FluidParticleData::new),
 	BASIN_FLUID(FluidParticleData::new),
 	FLUID_DRIP(FluidParticleData::new),
+	WIFI(WiFiParticle.Data::new),
 	SOUL(SoulParticle.Data::new),
 	SOUL_BASE(SoulBaseParticle.Data::new),
 	SOUL_PERIMETER(SoulParticle.PerimeterData::new),

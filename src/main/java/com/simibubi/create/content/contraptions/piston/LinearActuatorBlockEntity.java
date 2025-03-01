@@ -14,7 +14,7 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
 
 import net.minecraft.core.BlockPos;
@@ -52,13 +52,13 @@ public abstract class LinearActuatorBlockEntity extends KineticBlockEntity
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		super.addBehaviours(behaviours);
-		movementMode = new ScrollOptionBehaviour<>(MovementMode.class, Lang.translateDirect("contraptions.movement_mode"),
+		movementMode = new ScrollOptionBehaviour<>(MovementMode.class, CreateLang.translateDirect("contraptions.movement_mode"),
 			this, getMovementModeSlot());
 		movementMode.withCallback(t -> waitingForSpeedChange = false);
 		behaviours.add(movementMode);
 		registerAwardables(behaviours, AllAdvancements.CONTRAPTION_ACTORS);
 	}
-	
+
 	@Override
 	protected boolean syncSequenceContext() {
 		return true;
@@ -74,7 +74,7 @@ public abstract class LinearActuatorBlockEntity extends KineticBlockEntity
 
 		if (isPassive())
 			return;
-		
+
 		if (level.isClientSide)
 			clientOffsetDiff *= .75f;
 
@@ -134,7 +134,7 @@ public abstract class LinearActuatorBlockEntity extends KineticBlockEntity
 			resetContraptionToOffset();
 			sendData();
 		}
-		
+
 		if (contraptionPresent) {
 			if (moveAndCollideContraption()) {
 				movedContraption.setContraptionMotion(Vec3.ZERO);
@@ -167,7 +167,7 @@ public abstract class LinearActuatorBlockEntity extends KineticBlockEntity
 	protected boolean isPassive() {
 		return false;
 	}
-	
+
 	@Override
 	public void lazyTick() {
 		super.lazyTick();
@@ -189,10 +189,10 @@ public abstract class LinearActuatorBlockEntity extends KineticBlockEntity
 	public void onSpeedChanged(float prevSpeed) {
 		super.onSpeedChanged(prevSpeed);
 		sequencedOffsetLimit = -1;
-		
+
 		if (isPassive())
 			return;
-		
+
 		assembleNextTick = true;
 		waitingForSpeedChange = false;
 

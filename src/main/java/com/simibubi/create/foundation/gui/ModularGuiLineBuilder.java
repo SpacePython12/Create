@@ -6,12 +6,12 @@ import com.simibubi.create.foundation.gui.widget.Label;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.gui.widget.SelectionScrollInput;
 import com.simibubi.create.foundation.gui.widget.TooltipArea;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.Pair;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.CommonComponents;
 
 public class ModularGuiLineBuilder {
 
@@ -28,14 +28,14 @@ public class ModularGuiLineBuilder {
 	}
 
 	public ModularGuiLineBuilder addScrollInput(int x, int width, BiConsumer<ScrollInput, Label> inputTransform,
-		String dataKey) {
+												String dataKey) {
 		ScrollInput input = new ScrollInput(x + this.x, y - 4, width, 18);
 		addScrollInput(input, inputTransform, dataKey);
 		return this;
 	}
 
 	public ModularGuiLineBuilder addSelectionScrollInput(int x, int width,
-		BiConsumer<SelectionScrollInput, Label> inputTransform, String dataKey) {
+														 BiConsumer<SelectionScrollInput, Label> inputTransform, String dataKey) {
 		SelectionScrollInput input = new SelectionScrollInput(x + this.x, y - 4, width, 18);
 		addScrollInput(input, inputTransform, dataKey);
 		return this;
@@ -52,7 +52,7 @@ public class ModularGuiLineBuilder {
 	}
 
 	private <T extends ScrollInput> void addScrollInput(T input, BiConsumer<T, Label> inputTransform, String dataKey) {
-		Label label = new Label(input.getX() + 5, y, Components.immutableEmpty());
+		Label label = new Label(input.getX() + 5, y, CommonComponents.EMPTY);
 		label.withShadow();
 		inputTransform.accept(input, label);
 		input.writingTo(label);
@@ -61,7 +61,7 @@ public class ModularGuiLineBuilder {
 	}
 
 	public ModularGuiLineBuilder addIntegerTextInput(int x, int width, BiConsumer<EditBox, TooltipArea> inputTransform,
-		String dataKey) {
+													 String dataKey) {
 		return addTextInput(x, width, inputTransform.andThen((editBox, $) -> editBox.setFilter(s -> {
 			if (s.isEmpty())
 				return true;
@@ -75,8 +75,8 @@ public class ModularGuiLineBuilder {
 	}
 
 	public ModularGuiLineBuilder addTextInput(int x, int width, BiConsumer<EditBox, TooltipArea> inputTransform,
-		String dataKey) {
-		EditBox input = new EditBox(font, x + this.x + 5, y, width - 9, 8, Components.immutableEmpty());
+											  String dataKey) {
+		EditBox input = new EditBox(font, x + this.x + 5, y, width - 9, 8, CommonComponents.EMPTY);
 		input.setBordered(false);
 		input.setTextColor(0xffffff);
 		input.setFocused(false);

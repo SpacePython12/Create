@@ -1,32 +1,47 @@
 package com.simibubi.create;
 
+import java.util.function.BiConsumer;
+
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+
 public enum AllKeys {
 
-	TOOL_MENU("toolmenu", GLFW.GLFW_KEY_LEFT_ALT),
-	ACTIVATE_TOOL("", GLFW.GLFW_KEY_LEFT_CONTROL),
-	TOOLBELT("toolbelt", GLFW.GLFW_KEY_LEFT_ALT),
-	PONDER("ponder", GLFW.GLFW_KEY_W)
+	TOOL_MENU("toolmenu", GLFW.GLFW_KEY_LEFT_ALT, "Focus Schematic Overlay"),
+	ACTIVATE_TOOL(GLFW.GLFW_KEY_LEFT_CONTROL),
+	TOOLBELT("toolbelt", GLFW.GLFW_KEY_LEFT_ALT, "Access Nearby Toolboxes"),
+	ROTATE_MENU("rotate_menu", GLFW.GLFW_KEY_UNKNOWN, "Open Block Rotation Menu"),
 
 	;
 
 	private KeyMapping keybind;
-	private String description;
-	private int key;
-	private boolean modifiable;
+	private final String description;
+	private final String translation;
+	private final int key;
+	private final boolean modifiable;
 
-	private AllKeys(String description, int defaultKey) {
+	AllKeys(int defaultKey) {
+		this("", defaultKey, "");
+	}
+
+	AllKeys(String description, int defaultKey, String translation) {
 		this.description = Create.ID + ".keyinfo." + description;
 		this.key = defaultKey;
 		this.modifiable = !description.isEmpty();
+		this.translation = translation;
+	}
+
+	public static void provideLang(BiConsumer<String, String> consumer) {
+		for (AllKeys key : values())
+			if (key.modifiable)
+				consumer.accept(key.description, key.translation);
 	}
 
 	public static void register() {

@@ -1,62 +1,53 @@
 name: Build
 on:
-    push:
-    pull_request:
-    workflow_dispatch:
-        inputs:
-            publish:
-                description: Publish to Modrinth and CurseForge
-                required: true
-                default: "false"
-            patch:
-                description: Patch number, 0 for first (ex. Create 1.19.2 v0.5.0.g Patch N)
-                required: true
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Is this a release build?
+        type: boolean
+        required: true
+        default: false
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        env:
-            PUBLISH_SUFFIX: snapshots
-            MAVEN_USER: ${{ secrets.MAVEN_USER }}
-            MAVEN_PASS: ${{ secrets.MAVEN_PASS }}
-            MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-            CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-            PATCH_NUMBER: ${{ github.event.inputs.patch }}
-            PUBLISHING: ${{ github.event.inputs.publish }}
-        steps:
-            -   name: Checkout Repository
-                uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-            -   name: Setup Java
-                run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> "$GITHUB_ENV"
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: 17
 
-            -   name: Loom Cache
-                uses: actions/cache@v4
-                with:
-                    path: "**/.gradle/loom-cache"
-                    key: "${{ runner.os }}-gradle-${{ hashFiles('**/libs.versions.*', '**/*.gradle*', '**/gradle-wrapper.properties') }}"
-                    restore-keys: "${{ runner.os }}-gradle-"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-            -   name: Setup Gradle
-                uses: gradle/actions/setup-gradle@v4
-                with:
-                    gradle-home-cache-cleanup: true
+      - name: Validate Gradle Wrapper Integrity
+        uses: gradle/wrapper-validation-action@v2
 
-            -   name: Validate Gradle Wrapper Integrity
-                uses: gradle/wrapper-validation-action@v2
+      - name: Build
+        run: ./gradlew build
 
-            -   name: Run Gametests
-                run: ./gradlew runGametestServer --no-daemon
+      - name: Run Gametests
+        run: ./gradlew runGametestServer
 
-            -   name: Build and/or Publish
-                run: ./gradlew buildOrPublish
+      - name: Publish to Maven
+        if: ${{ github.event.inputs.release }}
+        run: >-
+          ./gradlew publishAllPublicationsToDevOsReleasesRepository
+          -PdevOsReleasesUsername="${{ secrets.MAVEN_USER }}"
+          -PdevOsReleasesPassword="${{ secrets.MAVEN_PASS }}"
 
-            -   name: Capture build artifacts
-                uses: actions/upload-artifact@v4
-                with:
-                    name: Artifacts
-                    path: build/libs/
+      # TODO: add back CF and MR publishing at some point
 
-            -   name: Publish to Modrinth and CurseForge
-                if: ${{ github.event.inputs.publish }}
-                run: ./gradlew publishMod
+      - name: Capture Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Artifacts
+          path: build/libs/

@@ -7,16 +7,16 @@ import javax.annotation.Nullable;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.contraptions.elevator.ElevatorColumn.ColumnCoords;
 import com.simibubi.create.content.redstone.contact.RedstoneContactBlock;
 import com.simibubi.create.content.redstone.diodes.BrassDiodeBlock;
-import com.simibubi.create.content.schematics.requirement.ISpecialBlockItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.BlockHelper;
 
+import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,14 +40,16 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import io.github.fabricators_of_create.porting_lib.block.ConnectableRedstoneBlock;
-import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import io.github.fabricators_of_create.porting_lib.block.ConnectableRedstoneBlock;
+import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+
 public class ElevatorContactBlock extends WrenchableDirectionalBlock
-	implements IBE<ElevatorContactBlockEntity>, ISpecialBlockItemRequirement, WeakPowerCheckingBlock, ConnectableRedstoneBlock {
+	implements IBE<ElevatorContactBlockEntity>, SpecialBlockItemRequirement, WeakPowerCheckingBlock, ConnectableRedstoneBlock {
 
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	public static final BooleanProperty CALLING = BooleanProperty.create("calling");

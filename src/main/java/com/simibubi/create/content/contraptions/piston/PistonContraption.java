@@ -14,17 +14,15 @@ import java.util.Queue;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.simibubi.create.AllContraptionTypes;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
+import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AssemblyException;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
-import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.TranslatingContraption;
 import com.simibubi.create.content.contraptions.piston.MechanicalPistonBlock.PistonState;
-import com.simibubi.create.content.contraptions.render.ContraptionLighter;
-import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -50,10 +48,11 @@ public class PistonContraption extends TranslatingContraption {
 
 	@Override
 	public ContraptionType getType() {
-		return ContraptionType.PISTON;
+		return AllContraptionTypes.PISTON.value();
 	}
 
-	public PistonContraption() {}
+	public PistonContraption() {
+	}
 
 	public PistonContraption(Direction direction, boolean retract) {
 		orientation = direction;
@@ -129,9 +128,9 @@ public class PistonContraption extends TranslatingContraption {
 		extensionLength = extensionsInBack + extensionsInFront;
 		initialExtensionProgress = extensionsInFront;
 		pistonExtensionCollisionBox = new AABB(
-				BlockPos.ZERO.relative(direction, -1),
-				BlockPos.ZERO.relative(direction, -extensionLength - 1)).expandTowards(1,
-						1, 1);
+			BlockPos.ZERO.relative(direction, -1),
+			BlockPos.ZERO.relative(direction, -extensionLength - 1)).expandTowards(1,
+			1, 1);
 
 		if (extensionLength == 0)
 			throw AssemblyException.noPistonPoles();
@@ -190,8 +189,8 @@ public class PistonContraption extends TranslatingContraption {
 	}
 
 	@Override
-	public void addBlock(BlockPos pos, Pair<StructureBlockInfo, BlockEntity> capture) {
-		super.addBlock(pos.relative(orientation, -initialExtensionProgress), capture);
+	public void addBlock(Level level, BlockPos pos, Pair<StructureBlockInfo, BlockEntity> capture) {
+		super.addBlock(level, pos.relative(orientation, -initialExtensionProgress), capture);
 	}
 
 	@Override
@@ -244,9 +243,4 @@ public class PistonContraption extends TranslatingContraption {
 		return tag;
 	}
 
-	@Environment(EnvType.CLIENT)
-	@Override
-	public ContraptionLighter<?> makeLighter() {
-		return new PistonLighter(this);
-	}
 }

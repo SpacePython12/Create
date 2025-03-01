@@ -12,12 +12,12 @@ import com.simibubi.create.content.fluids.tank.FluidTankBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.placement.IPlacementHelper;
-import com.simibubi.create.foundation.placement.PlacementHelpers;
-import com.simibubi.create.foundation.placement.PlacementOffset;
 import com.simibubi.create.foundation.utility.BlockHelper;
-import com.simibubi.create.foundation.utility.Couple;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.placement.IPlacementHelper;
+import net.createmod.catnip.placement.PlacementHelpers;
+import net.createmod.catnip.placement.PlacementOffset;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -67,7 +67,7 @@ public class SteamEngineBlock extends FaceAttachedHorizontalDirectionalBlock
 		super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
 		AdvancementBehaviour.setPlacedBy(pLevel, pPos, pPlacer);
 	}
-	
+
 	@Override
 	public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
 		return canAttach(pLevel, pPos, getConnectedDirection(pState).getOpposite());
@@ -194,18 +194,20 @@ public class SteamEngineBlock extends FaceAttachedHorizontalDirectionalBlock
 				if (isShaftValid(state, shaft))
 					break;
 			}
-			
+
 			BlockState newState = world.getBlockState(shaftPos);
 			if (!newState.canBeReplaced())
 				return PlacementOffset.fail();
 
 			Axis axis = shaft.getValue(ShaftBlock.AXIS);
 			return PlacementOffset.success(shaftPos,
-				s -> BlockHelper.copyProperties(s, AllBlocks.POWERED_SHAFT.getDefaultState())
+				s -> BlockHelper
+					.copyProperties(s,
+						(world.isClientSide ? AllBlocks.SHAFT : AllBlocks.POWERED_SHAFT).getDefaultState())
 					.setValue(PoweredShaftBlock.AXIS, axis));
 		}
 	}
-	
+
 	public static Couple<Integer> getSpeedRange() {
 		return Couple.create(16, 64);
 	}

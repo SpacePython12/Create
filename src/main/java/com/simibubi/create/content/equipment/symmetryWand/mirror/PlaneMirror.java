@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
-import com.jozufozu.flywheel.core.PartialModel;
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -93,15 +94,15 @@ public class PlaneMirror extends SymmetryMirror {
 	@Override
 	public void applyModelTransform(PoseStack ms) {
 		super.applyModelTransform(ms);
-		TransformStack.cast(ms)
-			.centre()
-			.rotateY(((Align) orientation) == Align.XY ? 0 : 90)
-			.unCentre();
+		TransformStack.of(ms)
+			.center()
+			.rotateYDegrees(((Align) orientation) == Align.XY ? 0 : 90)
+			.uncenter();
 	}
 
 	@Override
 	public List<Component> getAlignToolTips() {
-		return ImmutableList.of(Lang.translateDirect("orientation.alongZ"), Lang.translateDirect("orientation.alongX"));
+		return ImmutableList.of(CreateLang.translateDirect("orientation.alongZ"), CreateLang.translateDirect("orientation.alongX"));
 	}
 
 }

@@ -7,28 +7,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.simibubi.create.content.kinetics.belt.transport.ItemHandlerBeltSegment;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-import com.jozufozu.flywheel.backend.instancing.InstancedRenderDispatcher;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
+import com.simibubi.create.content.kinetics.belt.transport.ItemHandlerBeltSegment;
 import com.simibubi.create.content.logistics.funnel.BeltFunnelBlock;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelBlock.Shape;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
-import com.tterrag.registrate.fabric.EnvExecutor;
 
-import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import dev.engine_room.flywheel.lib.visualization.VisualizationHelper;
+import net.createmod.catnip.data.Iterate;
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -42,6 +35,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
 
 public class BeltTunnelBlockEntity extends SmartBlockEntity implements SidedStorageBlockEntity {
 
@@ -122,7 +123,7 @@ public class BeltTunnelBlockEntity extends SmartBlockEntity implements SidedStor
 			sides.addAll(flaps.keySet());
 		super.read(compound, clientPacket);
 		if (clientPacket)
-			EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> InstancedRenderDispatcher.enqueueUpdate(this));
+			EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> VisualizationHelper.queueUpdate(this));
 	}
 
 	private LerpedFloat createChasingFlap() {
@@ -168,7 +169,7 @@ public class BeltTunnelBlockEntity extends SmartBlockEntity implements SidedStor
 		if (level.isClientSide) {
 			if (flaps.containsKey(side))
 				flaps.get(side)
-					.setValue(inward ^ side.getAxis() == Axis.Z ? -1 : 1);
+					.setValue(inward ? -1 : 1);
 			return;
 		}
 

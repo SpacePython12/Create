@@ -8,8 +8,8 @@ import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -18,7 +18,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -52,11 +51,6 @@ public class PumpBlock extends DirectionalKineticBlock
 	}
 
 	@Override
-	public BlockState updateAfterWrenched(BlockState newState, UseOnContext context) {
-		return super.updateAfterWrenched(newState, context);
-	}
-
-	@Override
 	public Axis getRotationAxis(BlockState state) {
 		return state.getValue(FACING)
 			.getAxis();
@@ -64,13 +58,13 @@ public class PumpBlock extends DirectionalKineticBlock
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter p_220053_2_, BlockPos p_220053_3_,
-		CollisionContext p_220053_4_) {
+							   CollisionContext p_220053_4_) {
 		return AllShapes.PUMP.get(state.getValue(FACING));
 	}
 
 	@Override
 	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block otherBlock, BlockPos neighborPos,
-		boolean isMoving) {
+								boolean isMoving) {
 		DebugPackets.sendNeighborsUpdatePacket(world, pos);
 		Direction d = FluidPropagator.validateNeighbourChange(state, world, pos, otherBlock, neighborPos, isMoving);
 		if (d == null)
@@ -94,7 +88,7 @@ public class PumpBlock extends DirectionalKineticBlock
 
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState neighbourState, LevelAccessor world,
-		BlockPos pos, BlockPos neighbourPos) {
+								  BlockPos pos, BlockPos neighbourPos) {
 		if (state.getValue(BlockStateProperties.WATERLOGGED))
 			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		return state;
@@ -152,9 +146,8 @@ public class PumpBlock extends DirectionalKineticBlock
 		if (isPump(state) && isPump(oldState) && state.getValue(FACING) == oldState.getValue(FACING)
 			.getOpposite()) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
-			if (!(blockEntity instanceof PumpBlockEntity))
+			if (!(blockEntity instanceof PumpBlockEntity pump))
 				return;
-			PumpBlockEntity pump = (PumpBlockEntity) blockEntity;
 			pump.pressureUpdate = true;
 		}
 	}

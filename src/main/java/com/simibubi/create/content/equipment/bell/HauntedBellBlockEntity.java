@@ -1,8 +1,8 @@
 package com.simibubi.create.content.equipment.bell;
 
-import com.jozufozu.flywheel.core.PartialModel;
 import com.simibubi.create.AllPartialModels;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,6 +13,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

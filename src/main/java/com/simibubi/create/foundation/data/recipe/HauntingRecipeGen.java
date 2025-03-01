@@ -5,16 +5,17 @@ import java.util.function.Supplier;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.Create;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 
-import io.github.fabricators_of_create.porting_lib.tags.Tags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 
 public class HauntingRecipeGen extends ProcessingRecipeGen {
 
@@ -63,8 +64,8 @@ public class HauntingRecipeGen extends ProcessingRecipeGen {
 	}
 
 	public GeneratedRecipe convert(Supplier<Ingredient> input, Supplier<ItemLike> result) {
-		return create(Create.asResource(RegisteredObjects.getKeyOrThrow(result.get()
-			.asItem())
+		return create(Create.asResource(CatnipServices.REGISTRIES.getKeyOrThrow(result.get()
+								.asItem())
 			.getPath()),
 			p -> p.withItemIngredients(input.get())
 				.output(result.get()));

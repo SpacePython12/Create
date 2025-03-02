@@ -3,7 +3,7 @@
   "category": "building",
   "ingredients": [
     {
-      "tag": "forge:dyes/light_blue"
+      "tag": "c:light_blue_dyes"
     },
     {
       "tag": "create:dyed_table_cloths"

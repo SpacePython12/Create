@@ -3,7 +3,7 @@
   "category": "building",
   "ingredients": [
     {
-      "tag": "forge:dyes/purple"
+      "tag": "c:purple_dyes"
     },
     {
       "tag": "create:dyed_table_cloths"

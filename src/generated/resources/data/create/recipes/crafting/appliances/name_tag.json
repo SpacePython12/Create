@@ -3,10 +3,10 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "forge:dyes/black"
+      "tag": "c:black_dyes"
     },
     {
-      "tag": "forge:string"
+      "tag": "c:string"
     },
     {
       "item": "create:cardboard"

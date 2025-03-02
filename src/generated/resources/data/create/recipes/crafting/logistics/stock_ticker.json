@@ -6,10 +6,10 @@
       "item": "create:stock_link"
     },
     "B": {
-      "tag": "forge:ingots/gold"
+      "tag": "c:gold_ingots"
     },
     "C": {
-      "tag": "forge:glass"
+      "tag": "c:glass_blocks"
     }
   },
   "pattern": [

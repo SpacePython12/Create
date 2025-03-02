@@ -5,7 +5,7 @@
       "item": "create:cardboard_block"
     },
     {
-      "tag": "forge:string"
+      "tag": "c:string"
     }
   ],
   "results": [

@@ -6,10 +6,10 @@
       "item": "create:cardboard_block"
     },
     "C": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [

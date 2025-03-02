@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "create:andesite_table_cloth",
     "create:brass_table_cloth",

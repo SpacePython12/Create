@@ -3,7 +3,7 @@
   "category": "building",
   "ingredients": [
     {
-      "tag": "forge:dyes/green"
+      "tag": "c:green_dyes"
     },
     {
       "tag": "create:postboxes"

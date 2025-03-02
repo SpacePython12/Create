@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "A": {
-      "tag": "forge:nuggets/zinc"
+      "tag": "c:zinc_nuggets"
     },
     "S": {
       "tag": "minecraft:wool"

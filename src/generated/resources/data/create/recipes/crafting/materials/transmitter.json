@@ -3,13 +3,13 @@
   "category": "misc",
   "key": {
     "L": {
-      "tag": "forge:plates/copper"
+      "tag": "c:copper_plates"
     },
     "N": {
       "item": "minecraft:lightning_rod"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [

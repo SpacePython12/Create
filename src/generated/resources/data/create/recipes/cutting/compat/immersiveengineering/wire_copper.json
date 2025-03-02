@@ -1,14 +1,16 @@
 {
-  "type": "create:cutting",
-  "conditions": [
+  "fabric:load_conditions": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "immersiveengineering"
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "immersiveengineering"
+      ]
     }
   ],
+  "type": "create:cutting",
   "ingredients": [
     {
-      "tag": "forge:plates/copper"
+      "tag": "c:plates/copper"
     }
   ],
   "processingTime": 50,

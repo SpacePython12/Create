@@ -9,7 +9,7 @@
       "item": "minecraft:barrel"
     },
     "D": {
-      "tag": "forge:dyes/cyan"
+      "tag": "c:cyan_dyes"
     }
   },
   "pattern": [

@@ -10,6 +10,7 @@ import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttrib
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -71,7 +72,8 @@ public class InItemGroupAttribute implements ItemAttribute {
 	@Override
 	public void save(CompoundTag nbt) {
 		if (group != null) {
-			ResourceLocation groupId = CreativeModeTabRegistry.getName(group);
+
+			ResourceLocation groupId = BuiltInRegistries.CREATIVE_MODE_TAB.getKey(group);
 
 			if (groupId != null) {
 				nbt.putString("group", groupId.toString());
@@ -82,7 +84,7 @@ public class InItemGroupAttribute implements ItemAttribute {
 	@Override
 	public void load(CompoundTag nbt) {
 		if (nbt.contains("group")) {
-			group = CreativeModeTabRegistry.getTab(new ResourceLocation(nbt.getString("group")));
+			group = BuiltInRegistries.CREATIVE_MODE_TAB.get(new ResourceLocation(nbt.getString("group")));
 		}
 	}
 

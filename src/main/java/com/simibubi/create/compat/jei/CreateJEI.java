@@ -92,7 +92,9 @@ import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.fabric.ingredients.fluid.JeiFluidIngredient;
 import net.createmod.catnip.config.ConfigBase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.IdMap;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
@@ -107,6 +109,7 @@ import net.minecraft.world.item.crafting.SmokingRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.RecipeManagerAccessor;
 
 @JeiPlugin
@@ -377,7 +380,7 @@ public class CreateJEI implements IModPlugin {
 
 	@Override
 	public void registerExtraIngredients(IExtraIngredientRegistration registration) {
-		Collection<Potion> potions = ForgeRegistries.POTIONS.getValues();
+		IdMap<Potion> potions = BuiltInRegistries.POTION;
 		Collection<FluidStack> potionFluids = new ArrayList<>(potions.size() * 3);
 		Set<Set<MobEffect>> visitedEffects = new HashSet<>();
 		for (Potion potion : potions) {
@@ -396,7 +399,7 @@ public class CreateJEI implements IModPlugin {
 
 			potionFluids.add(PotionFluid.of(1000, potion, PotionFluid.BottleType.REGULAR));
 		}
-		registration.addExtraIngredients(ForgeTypes.FLUID_STACK, potionFluids);
+		registration.addExtraIngredients(FabricTypes.FLUID_STACK, CreateRecipeCategory.toJei(potionFluids));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

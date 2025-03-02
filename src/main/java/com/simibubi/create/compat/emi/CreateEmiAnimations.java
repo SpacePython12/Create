@@ -22,6 +22,7 @@ import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.gui.ILightingSettings;
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.gui.element.GuiGameElement;
+import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SpriteShiftEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -182,7 +183,7 @@ public class CreateEmiAnimations {
 			MultiBufferSource.BufferSource buffer = mc.renderBuffers()
 					.bufferSource();
 			VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
-			CachedBufferer.partial(AllPartialModels.BLAZE_BURNER_FLAME, Blocks.AIR.defaultBlockState())
+			CachedBuffers.partial(AllPartialModels.BLAZE_BURNER_FLAME, Blocks.AIR.defaultBlockState())
 					.shiftUVScrolling(spriteShift, (float) uScroll, (float) vScroll)
 					.light(LightTexture.FULL_BRIGHT)
 					.renderInto(matrixStack, vb);
@@ -415,8 +416,9 @@ public class CreateEmiAnimations {
 		matrices.scale(16, 16, 16);
 		float from = 3f / 16f;
 		float to = 17f / 16f;
-		FluidRenderer.renderFluidBox(fluids.get(0), from, from, from, to, to, to, buffer, matrices,
-			LightTexture.FULL_BRIGHT, false);
+		FluidStack fluid = fluids.get(0);
+		FluidRenderer.renderFluidBox(fluid.getFluid(), fluid.getAmount(), from, from, from, to, to, to, buffer, matrices,
+			LightTexture.FULL_BRIGHT, false, true, fluid.getTag());
 		matrices.popPose();
 
 		float width = 1 / 128f * squeeze;
@@ -426,8 +428,8 @@ public class CreateEmiAnimations {
 		matrices.translate(-0.5f, 0, -0.5f);
 		from = -width / 2 + 0.5f;
 		to = width / 2 + 0.5f;
-		FluidRenderer.renderFluidBox(fluids.get(0), from, 0, from, to, 2, to, buffer, matrices,
-			LightTexture.FULL_BRIGHT, false);
+		FluidRenderer.renderFluidBox(fluid.getFluid(), fluid.getAmount(), from, 0, from, to, 2, to, buffer, matrices,
+			LightTexture.FULL_BRIGHT, false, true, fluid.getTag());
 		buffer.endBatch();
 		Lighting.setupFor3DItems();
 	}
@@ -450,8 +452,8 @@ public class CreateEmiAnimations {
 			matrices.scale(scale, scale, scale);
 			float from = 2 / 16f;
 			float to = 1f - from;
-			FluidRenderer.renderFluidBox(fluid, from, from, from, to, 3/4f, to, buffer, matrices,
-				LightTexture.FULL_BRIGHT, false);
+			FluidRenderer.renderFluidBox(fluid.getFluid(), fluid.getAmount(), from, from, from, to, 3/4f, to, buffer, matrices,
+				LightTexture.FULL_BRIGHT, false, true, fluid.getTag());
 			buffer.endBatch();
 		});
 	}

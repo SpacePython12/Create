@@ -44,6 +44,7 @@ import net.minecraft.world.phys.Vec3;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class PackageItem extends Item {
@@ -89,7 +90,7 @@ public class PackageItem extends Item {
 
 	public static ItemStack containing(List<ItemStack> stacks) {
 		ItemStackHandler newInv = new ItemStackHandler(9);
-		stacks.forEach(s -> ItemHandlerHelper.insertItemStacked(newInv, s, false));
+		stacks.forEach(s -> TransferUtil.insertItem(newInv, s));
 		return containing(newInv);
 	}
 
@@ -128,6 +129,14 @@ public class PackageItem extends Item {
 
 	public static int getOrderId(ItemStack box) {
 		CompoundTag tag = box.getTag();
+		if (tag == null || !tag.contains("Fragment"))
+			return -1;
+		return tag.getCompound("Fragment")
+			.getInt("OrderId");
+	}
+
+	public static int getOrderId(ItemVariant box) {
+		CompoundTag tag = box.getNbt();
 		if (tag == null || !tag.contains("Fragment"))
 			return -1;
 		return tag.getCompound("Fragment")
@@ -241,7 +250,7 @@ public class PackageItem extends Item {
 		int visibleNames = 0;
 		int skippedNames = 0;
 		ItemStackHandler contents = getContents(pStack);
-		for (int i = 0; i < contents.getSlots(); i++) {
+		for (int i = 0; i < contents.getSlotCount(); i++) {
 			ItemStack itemstack = contents.getStackInSlot(i);
 			if (itemstack.isEmpty())
 				continue;
@@ -285,7 +294,7 @@ public class PackageItem extends Item {
 		playerIn.setItemInHand(handIn, box.getCount() <= 1 ? ItemStack.EMPTY : box.copyWithCount(box.getCount() - 1));
 
 		if (!worldIn.isClientSide()) {
-			for (int i = 0; i < contents.getSlots(); i++) {
+			for (int i = 0; i < contents.getSlotCount(); i++) {
 				ItemStack itemstack = contents.getStackInSlot(i);
 				if (itemstack.isEmpty())
 					continue;

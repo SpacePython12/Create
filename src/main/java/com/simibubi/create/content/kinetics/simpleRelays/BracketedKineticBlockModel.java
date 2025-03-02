@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import com.simibubi.create.content.decoration.bracket.BracketedBlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import dev.engine_room.flywheel.lib.model.baked.VirtualEmptyBlockGetter;
+import dev.engine_room.flywheel.lib.model.baked.EmptyVirtualBlockGetter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -13,7 +13,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 
@@ -30,19 +29,20 @@ public class BracketedKineticBlockModel extends ForwardingBakedModel {
 
 	@Override
 	public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
-		if (!VirtualEmptyBlockGetter.is(blockView)) {
-			BracketedModelData data = new BracketedModelData();
-			BracketedBlockEntityBehaviour attachmentBehaviour =
-				BlockEntityBehaviour.get(blockView, pos, BracketedBlockEntityBehaviour.TYPE);
-			if (attachmentBehaviour != null)
-				data.putBracket(attachmentBehaviour.getBracket());
-
-			BakedModel bracket = data.getBracket();
-			if (bracket != null)
-				((FabricBakedModel) bracket).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+		if (blockView instanceof EmptyVirtualBlockGetter) {
+			super.emitBlockQuads(blockView, state, pos, randomSupplier, context);
 			return;
 		}
-		super.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+
+		BracketedModelData data = new BracketedModelData();
+		BracketedBlockEntityBehaviour attachmentBehaviour =
+			BlockEntityBehaviour.get(blockView, pos, BracketedBlockEntityBehaviour.TYPE);
+		if (attachmentBehaviour != null)
+			data.putBracket(attachmentBehaviour.getBracket());
+
+		BakedModel bracket = data.getBracket();
+		if (bracket != null)
+			bracket.emitBlockQuads(blockView, state, pos, randomSupplier, context);
 	}
 
 	private static class BracketedModelData {

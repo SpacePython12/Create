@@ -88,7 +88,7 @@ public class MechanicalCrafterBlockEntity extends KineticBlockEntity implements 
 
 	protected Inventory inventory;
 	protected GroupedItems groupedItems = new GroupedItems();
-	protected ConnectedInput input = new ConnectedInput();
+	public ConnectedInput input = new ConnectedInput();
 	protected boolean reRender;
 	protected Phase phase;
 	protected int countDown;

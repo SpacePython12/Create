@@ -127,7 +127,8 @@ public class ContraptionRenderInfo {
 					model = LayerFilteringBakedModel.wrap(model, layer);
 				}
 				if (model != null) {
-					model = shadeSeparatingWrapper.wrapModel(model);
+					// FIXME HIGH LOGISTICS
+//					model = shadeSeparatingWrapper.wrapModel(model);
 					dispatcher.getModelRenderer()
 							.tesselateBlock(renderWorld, model, state, pos, poseStack, sbbBuilder, true, random, state.getSeed(pos), OverlayTexture.NO_OVERLAY);
 				}

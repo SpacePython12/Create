@@ -11,6 +11,7 @@ import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
+import com.simibubi.create.foundation.mixin.accessor.ItemStackLinkedSetAccessor;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import mezz.jei.api.constants.VanillaTypes;
@@ -24,7 +25,6 @@ import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackLinkedSet;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -32,7 +32,6 @@ import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
@@ -49,7 +48,7 @@ public class ItemDrainCategory extends CreateRecipeCategory<EmptyingRecipe> {
 	}
 
 	public static void consumeRecipes(Consumer<EmptyingRecipe> consumer, IIngredientManager ingredientManager) {
-		ObjectOpenCustomHashSet<ItemStack> emptiedItems = new ObjectOpenCustomHashSet<>(ItemStackLinkedSet.TYPE_AND_TAG);
+		ObjectOpenCustomHashSet<ItemStack> emptiedItems = new ObjectOpenCustomHashSet<>(ItemStackLinkedSetAccessor.getTYPE_AND_TAG());
 		for (ItemStack stack : ingredientManager.getAllIngredients(VanillaTypes.ITEM_STACK)) {
 			if (PotionFluidHandler.isPotionItem(stack)) {
 				FluidStack fluidFromPotionItem = PotionFluidHandler.getFluidFromPotionItem(stack);
@@ -71,10 +70,10 @@ public class ItemDrainCategory extends CreateRecipeCategory<EmptyingRecipe> {
 			MutableContainerItemContext ctx = new MutableContainerItemContext(copy);
 			Storage<FluidVariant> storage = ctx.find(FluidStorage.ITEM);
 			FluidStack extracted = TransferUtil.extractAnyFluid(storage, FluidConstants.BUCKET);
-			ItemVariant result = ctx.getItemVariant();
+			ItemStack result = ctx.getItemVariant().toStack(ItemHelper.truncateLong(ctx.getAmount()));
 			if (extracted.isEmpty())
 				continue;
-			if (result.isBlank())
+			if (result.isEmpty())
 				continue;
 
 			// There can be a lot of duplicate empty tanks (e.g. from emptying tanks with different fluids). Merge
@@ -90,7 +89,7 @@ public class ItemDrainCategory extends CreateRecipeCategory<EmptyingRecipe> {
 				Create.asResource("empty_" + itemName.getNamespace() + "_" + itemName.getPath() + "_of_"
 					+ fluidName.getNamespace() + "_" + fluidName.getPath())).withItemIngredients(ingredient)
 						.withFluidOutputs(extracted)
-						.withSingleItemOutput(result.toStack(ItemHelper.truncateLong(ctx.getAmount())))
+						.withSingleItemOutput(result)
 						.build());
 		}
 	}

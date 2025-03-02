@@ -7,10 +7,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.render.BlockEntityRenderHelper;
 import com.simibubi.create.foundation.render.fabric.LayerFilteringBakedModel;
 
+import net.createmod.catnip.levelWrappers.SchematicLevel;
 import net.createmod.catnip.render.ShadedBlockSbbBuilder;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.createmod.catnip.render.SuperRenderTypeBuffer;
-import net.createmod.catnip.levelWrappers.SchematicLevel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -56,14 +56,14 @@ public class SchematicRenderer {
 	public void render(PoseStack ms, SuperRenderTypeBuffer buffers) {
 		if (!active)
 			return;
-		
+
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.level == null || mc.player == null)
 			return;
 		if (changed)
 			redraw();
 		changed = false;
-		
+
 		bufferCache.forEach((layer, buffer) -> {
 			buffer.renderInto(ms, buffers.getBuffer(layer));
 		});
@@ -111,7 +111,8 @@ public class SchematicRenderer {
 				} else {
 					model = LayerFilteringBakedModel.wrap(model, layer);
 				}
-				model = shadeSeparatingWrapper.wrapModel(model);
+				// FIXME HIGH LOGISTICS
+//				model = shadeSeparatingWrapper.wrapModel(model);
 
 				poseStack.pushPose();
 				poseStack.translate(localPos.getX(), localPos.getY(), localPos.getZ());

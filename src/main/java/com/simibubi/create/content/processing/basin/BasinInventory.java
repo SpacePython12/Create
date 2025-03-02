@@ -25,7 +25,7 @@ public class BasinInventory extends SmartInventory {
 			return 0;
 
 		if (packagerMode) // Unique stack insertion only matters for belt setups
-			return inv.insertItem(slot, stack, simulate);
+			return super.insert(resource, maxAmount, transaction);
 
 		// Only insert if no other slot already has a stack of this item
 		try (Transaction test = transaction.openNested()) {

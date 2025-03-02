@@ -12,7 +12,7 @@ import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRender
 import com.simibubi.create.foundation.render.fabric.DefaultLayerFilteringBakedModel;
 
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
-import dev.engine_room.flywheel.lib.model.baked.VirtualEmptyBlockGetter;
+import dev.engine_room.flywheel.lib.model.baked.EmptyVirtualBlockGetter;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
@@ -197,7 +197,7 @@ public class SchematicannonRenderer extends SafeBlockEntityRenderer<Schematicann
 						model = DefaultLayerFilteringBakedModel.wrap(model);
 						model = FixedLightBakedModel.wrap(model, light);
 						dispatcher.getModelRenderer()
-								.tesselateBlock(VirtualEmptyBlockGetter.INSTANCE, model, state, BlockPos.ZERO, ms, buffer.getBuffer(ItemBlockRenderTypes.getRenderType(state, false)), false, RandomSource.create(), 42L, overlay);
+								.tesselateBlock(EmptyVirtualBlockGetter.FULL_DARK, model, state, BlockPos.ZERO, ms, buffer.getBuffer(ItemBlockRenderTypes.getRenderType(state, false)), false, RandomSource.create(), 42L, overlay);
 					}
 					case ENTITYBLOCK_ANIMATED -> ((BlockRenderDispatcherAccessor) dispatcher).getBlockEntityRenderer().renderByItem(new ItemStack(state.getBlock()), ItemDisplayContext.NONE, ms, buffer, light, overlay);
 				}

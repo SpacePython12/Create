@@ -2,8 +2,6 @@ package com.simibubi.create;
 
 import java.util.Random;
 
-import com.simibubi.create.compat.inventorySorter.InventorySorterCompat;
-
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;

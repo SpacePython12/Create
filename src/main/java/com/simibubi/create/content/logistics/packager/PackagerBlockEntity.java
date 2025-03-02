@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlocks;
@@ -16,6 +13,7 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.actors.psi.PortableStorageInterfaceBlockEntity;
 import com.simibubi.create.content.kinetics.crafter.MechanicalCrafterBlockEntity;
+import com.simibubi.create.content.kinetics.crafter.MechanicalCrafterBlockEntity.Inventory;
 import com.simibubi.create.content.logistics.BigItemStack;
 import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.content.logistics.crate.BottomlessItemHandler;
@@ -61,8 +59,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.util.StorageProvider;
@@ -330,7 +333,7 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		buttonCooldown = 40;
 	}
 
-	public boolean unwrapBox(ItemStack box, boolean simulate) {
+	public boolean unwrapBox(ItemStack box, TransactionContext ctx) {
 		if (animationTicks > 0)
 			return false;
 
@@ -345,92 +348,76 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		if (targetInv == null)
 			return false;
 
-		boolean targetIsCreativeCrate = targetInv instanceof BottomlessItemHandler;
-		boolean targetIsCrafter = targetBE instanceof MechanicalCrafterBlockEntity;
-
 		if (targetBE instanceof BasinBlockEntity basin)
 			basin.inputInventory.packagerMode = true;
 
-		for (int slot = 0; slot < targetInv.getSlots(); slot++) {
-			ItemStack itemInSlot = targetInv.getStackInSlot(slot);
-			if (!simulate)
-				itemInSlot = itemInSlot.copy();
+		// Follow crafting arrangement
+		if (targetBE instanceof MechanicalCrafterBlockEntity crafter && orderContext != null) {
+			return this.unwrapIntoCrafter(crafter, contents, orderContext, ctx);
+		}
 
-			int itemsAddedToSlot = 0;
-
-			for (int boxSlot = 0; boxSlot < contents.getSlots(); boxSlot++) {
-				ItemStack toInsert = contents.getStackInSlot(boxSlot);
-				if (toInsert.isEmpty())
+		try (Transaction t = ctx.openNested()) {
+			for (int i = 0; i < contents.getSlotCount(); i++) {
+				ItemStack stack = contents.getStackInSlot(i);
+				if (stack.isEmpty())
 					continue;
 
-				// Follow crafting arrangement
-				if (targetIsCrafter && orderContext != null && orderContext.stacks()
-					.size() > slot) {
-					BigItemStack targetStack = orderContext.stacks()
-						.get(slot);
-					if (targetStack.stack.isEmpty())
-						break;
-					if (!ItemHandlerHelper.canItemStacksStack(toInsert, targetStack.stack))
-						continue;
+				long inserted = targetInv.insert(ItemVariant.of(stack), stack.getCount(), t);
+				if (inserted != stack.getCount()) {
+					return false;
 				}
-
-				if (targetInv.insertItem(slot, toInsert, true)
-					.getCount() == toInsert.getCount())
-					continue;
-
-				if (itemInSlot.isEmpty()) {
-					int maxStackSize = targetInv.getSlotLimit(slot);
-					if (maxStackSize < toInsert.getCount()) {
-						toInsert.shrink(maxStackSize);
-						toInsert = ItemHandlerHelper.copyStackWithSize(toInsert, maxStackSize);
-					} else
-						contents.setStackInSlot(boxSlot, ItemStack.EMPTY);
-
-					itemInSlot = toInsert;
-					if (!simulate)
-						itemInSlot = itemInSlot.copy();
-
-					targetInv.insertItem(slot, toInsert, simulate);
-					continue;
-				}
-
-				if (!ItemHandlerHelper.canItemStacksStack(toInsert, itemInSlot))
-					continue;
-
-				int insertedAmount = toInsert.getCount() - targetInv.insertItem(slot, toInsert, simulate)
-					.getCount();
-				int slotLimit = (int) ((targetInv.getStackInSlot(slot)
-					.isEmpty() ? itemInSlot.getMaxStackSize() / 64f : 1) * targetInv.getSlotLimit(slot));
-				int insertableAmountWithPreviousItems =
-					Math.min(toInsert.getCount(), slotLimit - itemInSlot.getCount() - itemsAddedToSlot);
-
-				int added = Math.min(insertedAmount, Math.max(0, insertableAmountWithPreviousItems));
-				itemsAddedToSlot += added;
-
-				contents.setStackInSlot(boxSlot,
-					ItemHandlerHelper.copyStackWithSize(toInsert, toInsert.getCount() - added));
+			}
+			t.commit();
+		} finally {
+			if (targetBE instanceof BasinBlockEntity basin) {
+				basin.inputInventory.packagerMode = false;
 			}
 		}
 
-		if (targetBE instanceof BasinBlockEntity basin)
-			basin.inputInventory.packagerMode = false;
+		TransactionCallback.onSuccess(ctx, () -> {
+			if (targetBE instanceof MechanicalCrafterBlockEntity mcbe)
+				mcbe.checkCompletedRecipe(true);
 
-		if (!targetIsCreativeCrate)
-			for (int boxSlot = 0; boxSlot < contents.getSlots(); boxSlot++)
-				if (!contents.getStackInSlot(boxSlot)
-					.isEmpty())
-					return false;
+			previouslyUnwrapped = box;
+			animationInward = true;
+			animationTicks = CYCLE;
+			notifyUpdate();
+		});
 
-		if (simulate)
-			return true;
+		return true;
+	}
 
-		if (targetBE instanceof MechanicalCrafterBlockEntity mcbe)
-			mcbe.checkCompletedRecipe(true);
+	private boolean unwrapIntoCrafter(MechanicalCrafterBlockEntity be, ItemStackHandler box, PackageOrder order, TransactionContext ctx) {
+		CombinedStorage<ItemVariant, Inventory> combined = be.input.getItemHandler(be.getLevel(), be.getBlockPos());
+		if (combined == null)
+			return false;
 
-		previouslyUnwrapped = box;
-		animationInward = true;
-		animationTicks = CYCLE;
-		notifyUpdate();
+		try (Transaction t = ctx.openNested()) {
+			for (int crafter = 0; crafter < combined.parts.size(); crafter++) {
+				Inventory storage = combined.parts.get(crafter);
+
+				for (int slot = 0; slot < box.getSlotCount(); slot++) {
+					ItemStack toInsert = box.getStackInSlot(slot);
+					if (toInsert.isEmpty())
+						continue;
+
+					if (crafter < order.stacks().size()) {
+						BigItemStack targetStack = order.stacks().get(crafter);
+						if (targetStack.stack.isEmpty())
+							break;
+						if (!ItemHandlerHelper.canItemStacksStack(toInsert, targetStack.stack))
+							continue;
+
+						long inserted = storage.insert(ItemVariant.of(toInsert), toInsert.getCount(), ctx);
+						if (inserted != toInsert.getCount()) {
+							return false;
+						}
+					}
+				}
+			}
+			t.commit();
+		}
+
 		return true;
 	}
 
@@ -438,7 +425,7 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		if (queuedRequests == null && (!heldBox.isEmpty() || animationTicks != 0 || buttonCooldown > 0))
 			return;
 
-		IItemHandler targetInv = targetInventory.getInventory();
+		Storage<ItemVariant> targetInv = targetInventory.getInventory();
 		if (targetInv == null || targetInv instanceof PackagerItemHandler)
 			return;
 
@@ -475,64 +462,67 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 			while (continuePacking) {
 				continuePacking = false;
 
-				for (int slot = 0; slot < targetInv.getSlots(); slot++) {
-					int initialCount = requestQueue ? Math.min(64, nextRequest.getCount()) : 64;
-					ItemStack extracted = targetInv.extractItem(slot, initialCount, true);
-					if (extracted.isEmpty())
-						continue;
-					if (requestQueue && !ItemHandlerHelper.canItemStacksStack(extracted, nextRequest.item()))
-						continue;
+				for (StorageView<ItemVariant> view : targetInv.nonEmptyViews()) {
+					try (Transaction t = Transaction.openOuter()) {
+						int initialCount = requestQueue ? Math.min(64, nextRequest.getCount()) : 64;
+						ItemVariant resource = view.getResource();
+						long extractedAmount = view.extract(resource, initialCount, t);
+						if (extractedAmount == 0)
+							continue;
+						ItemStack extracted = resource.toStack((int) extractedAmount);
+						if (requestQueue && !ItemHandlerHelper.canItemStacksStack(extracted, nextRequest.item()))
+							continue;
 
-					boolean bulky = !extracted.getItem()
-						.canFitInsideContainerItems();
-					if (bulky && anyItemPresent)
-						continue;
+						boolean bulky = !extracted.getItem()
+							.canFitInsideContainerItems();
+						if (bulky && anyItemPresent)
+							continue;
 
-					anyItemPresent = true;
-					int leftovers = ItemHandlerHelper.insertItemStacked(extractedItems, extracted.copy(), false)
-						.getCount();
-					int transferred = extracted.getCount() - leftovers;
-					targetInv.extractItem(slot, transferred, false);
+						anyItemPresent = true;
+						long inserted = extractedItems.insert(resource, extractedAmount, t);
+						long transferred = extractedAmount - inserted;
+						t.commit();
 
-					if (extracted.getItem() instanceof PackageItem)
-						extractedPackageItem = extracted;
+						if (extracted.getItem() instanceof PackageItem)
+							extractedPackageItem = extracted;
 
-					if (!requestQueue) {
+						if (!requestQueue) {
+							if (bulky)
+								break Outer;
+							continue;
+						}
+
+						nextRequest.subtract((int) transferred);
+
+						if (!nextRequest.isEmpty()) {
+							if (bulky)
+								break Outer;
+							continue;
+						}
+
+						finalPackageAtLink = true;
+						queuedRequests.remove(0);
+						if (queuedRequests.isEmpty())
+							break Outer;
+						int previousCount = nextRequest.packageCounter()
+							.intValue();
+						nextRequest = queuedRequests.get(0);
+						if (!fixedAddress.equals(nextRequest.address()))
+							break Outer;
+						if (fixedOrderId != nextRequest.orderId())
+							break Outer;
+
+						nextRequest.packageCounter()
+							.setValue(previousCount);
+						finalPackageAtLink = false;
+						continuePacking = true;
+						if (nextRequest.context() != null)
+							orderContext = nextRequest.context();
+
 						if (bulky)
 							break Outer;
-						continue;
+						break;
 					}
-
-					nextRequest.subtract(transferred);
-
-					if (!nextRequest.isEmpty()) {
-						if (bulky)
-							break Outer;
-						continue;
-					}
-
-					finalPackageAtLink = true;
-					queuedRequests.remove(0);
-					if (queuedRequests.isEmpty())
-						break Outer;
-					int previousCount = nextRequest.packageCounter()
-						.intValue();
-					nextRequest = queuedRequests.get(0);
-					if (!fixedAddress.equals(nextRequest.address()))
-						break Outer;
-					if (fixedOrderId != nextRequest.orderId())
-						break Outer;
-
-					nextRequest.packageCounter()
-						.setValue(previousCount);
-					finalPackageAtLink = false;
-					continuePacking = true;
-					if (nextRequest.context() != null)
-						orderContext = nextRequest.context();
-
-					if (bulky)
-						break Outer;
-					break;
 				}
 			}
 		}

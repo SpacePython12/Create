@@ -4,11 +4,14 @@ import com.simibubi.create.content.logistics.box.PackageItem;
 
 import net.minecraft.world.item.ItemStack;
 
-import net.fabricmc.fabric.api.transfer.v1.item.base.SingleStackStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 
-public class PackagerItemHandler extends SingleStackStorage {
+public class PackagerItemHandler implements SingleSlotStorage<ItemVariant> {
 
 	private final PackagerBlockEntity blockEntity;
 
@@ -17,51 +20,52 @@ public class PackagerItemHandler extends SingleStackStorage {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return blockEntity.heldBox;
-	}
-
-	@Override
-	public void setStackInSlot(int slot, ItemStack stack) {
-		if (slot != 0)
-			return;
-		blockEntity.heldBox = stack;
-		blockEntity.notifyUpdate();
-	}
-
-	@Override
-	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		StoragePreconditions.notBlankNotNegative(resource, maxAmount);
 		if (!blockEntity.heldBox.isEmpty() || !blockEntity.queuedExitingPackages.isEmpty())
-			return stack;
-		if (!isItemValid(slot, stack))
-			return stack;
-		if (!blockEntity.unwrapBox(stack, true))
-			return stack;
-		if (!simulate) {
-			blockEntity.unwrapBox(stack, false);
-			blockEntity.triggerStockCheck();
+			return 0;
+		if (!PackageItem.isPackage(resource))
+			return 0;
+		ItemStack stack = resource.toStack(1);
+		if (blockEntity.unwrapBox(stack, transaction)) {
+			TransactionCallback.onSuccess(transaction, blockEntity::triggerStockCheck);
+			return 1;
+		} else {
+			return 0;
 		}
-		return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - 1);
 	}
 
 	@Override
-	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		StoragePreconditions.notBlankNotNegative(resource, maxAmount);
 		if (blockEntity.animationTicks != 0)
-			return ItemStack.EMPTY;
+			return 0;
 		ItemStack box = blockEntity.heldBox;
-		if (!simulate)
-			setStackInSlot(slot, ItemStack.EMPTY);
-		return box;
+		if (!resource.matches(box))
+			return 0;
+
+		blockEntity.heldBox = ItemStack.EMPTY;
+		TransactionCallback.onSuccess(transaction, blockEntity::notifyUpdate);
+		return box.getCount();
 	}
 
 	@Override
-	public int getSlotLimit(int slot) {
+	public boolean isResourceBlank() {
+		return blockEntity.heldBox.isEmpty();
+	}
+
+	@Override
+	public ItemVariant getResource() {
+		return ItemVariant.of(blockEntity.heldBox);
+	}
+
+	@Override
+	public long getAmount() {
+		return blockEntity.heldBox.getCount();
+	}
+
+	@Override
+	public long getCapacity() {
 		return 1;
 	}
-
-	@Override
-	public boolean isItemValid(int slot, ItemStack stack) {
-		return PackageItem.isPackage(stack);
-	}
-
 }

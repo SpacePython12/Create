@@ -21,7 +21,7 @@ public enum SpoutCasting implements BlockSpoutingBehaviour {
 	INSTANCE;
 
 	@Override
-	public int fillBlock(Level level, BlockPos pos, SpoutBlockEntity spout, FluidStack availableFluid, boolean simulate) {
+	public long fillBlock(Level level, BlockPos pos, SpoutBlockEntity spout, FluidStack availableFluid, boolean simulate) {
 		if (!enabled())
 			return 0;
 

@@ -54,7 +54,6 @@ import com.simibubi.create.content.kinetics.crusher.CrushingRecipe;
 import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
-import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.content.logistics.filter.AttributeFilterScreen;
 import com.simibubi.create.content.logistics.filter.FilterScreen;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
@@ -81,7 +80,6 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
@@ -108,7 +106,6 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import io.github.fabricators_of_create.porting_lib.transfer.MutableContainerItemContext;
@@ -262,13 +259,6 @@ public class CreateEmiPlugin implements EmiPlugin {
 				.condenseRecipes(manager.getAllRecipesFor(RecipeType.STONECUTTING).stream()
 				.filter(r -> !AllRecipeTypes.shouldIgnoreInAutomation(r)).toList(), "block_cutting")) {
 			registry.addRecipe(new BlockCuttingEmiRecipe(BLOCK_CUTTING, recipe));
-		}
-		if (FabricLoader.getInstance().isModLoaded("druidcraft")) {
-			for (CondensedBlockCuttingRecipe recipe : CondensedBlockCuttingRecipe
-					.condenseRecipes(manager.getAllRecipesFor((RecipeType<Recipe<Container>>) SawBlockEntity.woodcuttingRecipeType.get())
-					.stream().filter(r -> !AllRecipeTypes.shouldIgnoreInAutomation(r)).toList(), "block_cutting")) {
-				registry.addRecipe(new BlockCuttingEmiRecipe(BLOCK_CUTTING, recipe));
-			}
 		}
 		addAll(registry, AllRecipeTypes.COMPACTING, PackingEmiRecipe::new);
 		for (CraftingRecipe recipe : manager.getAllRecipesFor(RecipeType.CRAFTING)) {

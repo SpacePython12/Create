@@ -13,6 +13,8 @@ import com.simibubi.create.content.logistics.stockTicker.PackageOrder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
@@ -25,12 +27,20 @@ public class PackageDefragmenter {
 	}
 
 	public boolean isFragmented(ItemStack box) {
-		if (!box.hasTag() || !box.getTag()
-			.contains("Fragment"))
+		CompoundTag tag = box.getTag();
+		return tag != null && isFragmented(tag);
+	}
+
+	public boolean isFragmented(ItemVariant variant) {
+		CompoundTag nbt = variant.getNbt();
+		return nbt != null && isFragmented(nbt);
+	}
+
+	public boolean isFragmented(CompoundTag tag) {
+		if (!tag.contains("Fragment"))
 			return false;
 
-		CompoundTag fragTag = box.getTag()
-			.getCompound("Fragment");
+		CompoundTag fragTag = tag.getCompound("Fragment");
 
 		return !(fragTag.getInt("LinkIndex") == 0 && fragTag.getBoolean("IsFinalLink") && fragTag.getInt("Index") == 0
 			&& fragTag.getBoolean("IsFinal"));

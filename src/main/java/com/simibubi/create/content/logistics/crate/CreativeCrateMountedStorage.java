@@ -1,13 +1,14 @@
 package com.simibubi.create.content.logistics.crate;
 
-import com.mojang.serialization.Codec;
-import com.simibubi.create.AllMountedStorageTypes;
-import com.simibubi.create.api.contraption.storage.item.MountedItemStorage;
-
-import com.simibubi.create.api.contraption.storage.item.MountedItemStorageType;
+import java.util.Iterator;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.mojang.serialization.Codec;
+import com.simibubi.create.AllMountedStorageTypes;
+import com.simibubi.create.api.contraption.storage.item.MountedItemStorage;
+import com.simibubi.create.api.contraption.storage.item.MountedItemStorageType;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +16,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class CreativeCrateMountedStorage extends MountedItemStorage {
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+public class CreativeCrateMountedStorage extends MountedItemStorage implements SingleSlotStorage<ItemVariant> {
 	public static final Codec<CreativeCrateMountedStorage> CODEC = ItemStack.CODEC.xmap(
 		CreativeCrateMountedStorage::new, storage -> storage.suppliedStack
 	);
@@ -39,11 +46,6 @@ public class CreativeCrateMountedStorage extends MountedItemStorage {
 	}
 
 	@Override
-	public int getSlots() {
-		return 2; // 0 holds the supplied stack endlessly, 1 is always empty to accept
-	}
-
-	@Override
 	@NotNull
 	public ItemStack getStackInSlot(int slot) {
 		return slot == 0 ? this.cachedStackInSlot : ItemStack.EMPTY;
@@ -54,29 +56,47 @@ public class CreativeCrateMountedStorage extends MountedItemStorage {
 	}
 
 	@Override
-	@NotNull
-	public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-		return ItemStack.EMPTY; // no remainder, accept any input
+	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		return maxAmount;
 	}
 
 	@Override
-	@NotNull
-	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		if (slot == 0 && !this.suppliedStack.isEmpty()) {
-			int count = Math.min(amount, this.suppliedStack.getMaxStackSize());
-			return this.suppliedStack.copyWithCount(count);
+	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		StoragePreconditions.notBlankNotNegative(resource, maxAmount);
+		if (resource.matches(this.suppliedStack)) {
+			return Math.min(this.suppliedStack.getMaxStackSize(), maxAmount);
+		} else {
+			return 0;
 		}
-
-		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public int getSlotLimit(int slot) {
+	public boolean isResourceBlank() {
+		return this.suppliedStack.isEmpty();
+	}
+
+	@Override
+	public ItemVariant getResource() {
+		return ItemVariant.of(this.suppliedStack);
+	}
+
+	@Override
+	public long getAmount() {
+		return Long.MAX_VALUE;
+	}
+
+	@Override
+	public long getCapacity() {
+		return Long.MAX_VALUE;
+	}
+
+	@Override
+	public int getSlotLimit(int i) {
 		return 64;
 	}
 
 	@Override
-	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-		return true;
+	public Iterator<StorageView<ItemVariant>> iterator() {
+		return SingleSlotStorage.super.iterator();
 	}
 }

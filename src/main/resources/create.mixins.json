@@ -30,6 +30,7 @@
     "accessor.FluidInteractionRegistryAccessor",
     "accessor.GameTestHelperAccessor",
     "accessor.ItemModelGeneratorsAccessor",
+    "accessor.ItemStackLinkedSetAccessor",
     "accessor.LivingEntityAccessor",
     "accessor.MobEffectInstanceAccessor",
     "accessor.NbtAccounterAccessor",

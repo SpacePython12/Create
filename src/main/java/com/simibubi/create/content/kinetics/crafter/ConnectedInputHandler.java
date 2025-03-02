@@ -32,7 +32,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 
 public class ConnectedInputHandler {
@@ -177,7 +176,7 @@ public class ConnectedInputHandler {
 		}
 
 		@Nullable // fabric: don't create useless ItemStackHandlers
-		public Storage<ItemVariant> getItemHandler(Level world, BlockPos pos) {
+		public CombinedStorage<ItemVariant, Inventory> getItemHandler(Level world, BlockPos pos) {
 			if (!isController) {
 				BlockPos controllerPos = pos.offset(data.get(0));
 				ConnectedInput input = CrafterHelper.getInput(world, controllerPos);

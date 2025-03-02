@@ -17,6 +17,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 
 public class RepackagerBlockEntity extends PackagerBlockEntity {
 
@@ -27,7 +33,7 @@ public class RepackagerBlockEntity extends PackagerBlockEntity {
 		defragmenter = new PackageDefragmenter();
 	}
 
-	public boolean unwrapBox(ItemStack box, boolean simulate) {
+	public boolean unwrapBox(ItemStack box, TransactionContext ctx) {
 		if (animationTicks > 0)
 			return false;
 
@@ -42,13 +48,14 @@ public class RepackagerBlockEntity extends PackagerBlockEntity {
 
 		if (!targetIsCreativeCrate && !anySpace)
 			return false;
-		if (simulate)
-			return true;
 
-		previouslyUnwrapped = box;
-		animationInward = true;
-		animationTicks = CYCLE;
-		notifyUpdate();
+		TransactionCallback.onSuccess(ctx, () -> {
+			previouslyUnwrapped = box;
+			animationInward = true;
+			animationTicks = CYCLE;
+			notifyUpdate();
+		});
+
 		return true;
 	}
 
@@ -81,21 +88,26 @@ public class RepackagerBlockEntity extends PackagerBlockEntity {
 		defragmenter.clear();
 		int completedOrderId = -1;
 
-		for (int slot = 0; slot < targetInv.getSlots(); slot++) {
-			ItemStack extracted = targetInv.extractItem(slot, 1, true);
-			if (extracted.isEmpty() || !PackageItem.isPackage(extracted))
+		for (StorageView<ItemVariant> view : targetInv.nonEmptyViews()) {
+			ItemVariant resource = view.getResource();
+			if (!PackageItem.isPackage(resource))
 				continue;
 
-			if (!defragmenter.isFragmented(extracted)) {
-				targetInv.extractItem(slot, 1, false);
-				heldBox = extracted.copy();
-				animationInward = false;
-				animationTicks = CYCLE;
-				notifyUpdate();
+			if (!defragmenter.isFragmented(resource)) {
+				try (Transaction t = Transaction.openOuter()) {
+					if (view.extract(resource, 1, t) == 1) {
+						t.commit();
+						heldBox = resource.toStack();
+						animationInward = false;
+						animationTicks = CYCLE;
+						notifyUpdate();
+					}
+				}
 				return;
 			}
 
-			completedOrderId = defragmenter.addPackageFragment(extracted);
+			ItemStack stack = resource.toStack(TransferUtil.truncateLong(view.getAmount()));
+			completedOrderId = defragmenter.addPackageFragment(stack);
 			if (completedOrderId != -1)
 				break;
 		}
@@ -105,25 +117,35 @@ public class RepackagerBlockEntity extends PackagerBlockEntity {
 
 		List<ItemStack> boxesToExport = defragmenter.repack(completedOrderId);
 
-		for (int slot = 0; slot < targetInv.getSlots(); slot++) {
-			ItemStack extracted = targetInv.extractItem(slot, 1, true);
-			if (extracted.isEmpty() || !PackageItem.isPackage(extracted))
-				continue;
-			if (PackageItem.getOrderId(extracted) != completedOrderId)
-				continue;
-			targetInv.extractItem(slot, 1, false);
+		try (Transaction t = Transaction.openOuter()) {
+			for (StorageView<ItemVariant> view : targetInv.nonEmptyViews()) {
+				ItemVariant resource = view.getResource();
+				if (!PackageItem.isPackage(resource))
+					continue;
+				if (PackageItem.getOrderId(resource) != completedOrderId)
+					continue;
+				view.extract(resource, view.getAmount(), t);
+			}
+
+			if (boxesToExport.isEmpty()) {
+				t.commit();
+				return;
+			}
+
+			heldBox = boxesToExport.get(0)
+				.copy();
+			animationInward = false;
+			animationTicks = CYCLE;
+
+			for (int i = 1; i < boxesToExport.size(); i++) {
+				ItemStack stack = boxesToExport.get(i);
+				if (targetInv.insert(ItemVariant.of(stack), stack.getCount(), t) != stack.getCount()) {
+					return;
+				}
+			}
+
+			t.commit();
 		}
-
-		if (boxesToExport.isEmpty())
-			return;
-
-		heldBox = boxesToExport.get(0)
-			.copy();
-		animationInward = false;
-		animationTicks = CYCLE;
-
-		for (int i = 1; i < boxesToExport.size(); i++)
-			ItemHandlerHelper.insertItem(targetInv, boxesToExport.get(i), false);
 
 		notifyUpdate();
 	}

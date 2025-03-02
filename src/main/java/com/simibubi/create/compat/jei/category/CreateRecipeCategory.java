@@ -1,5 +1,6 @@
 package com.simibubi.create.compat.jei.category;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -160,7 +161,7 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements IReci
 		return stacks.stream().map(CreateRecipeCategory::fromJei).toList();
 	}
 
-	public static List<IJeiFluidIngredient> toJei(List<FluidStack> stacks) {
+	public static List<IJeiFluidIngredient> toJei(Collection<FluidStack> stacks) {
 		return stacks.stream().map(CreateRecipeCategory::toJei).toList();
 	}
 

@@ -35,16 +35,10 @@ public class JourneyTrainMap {
 	}
 
 	public static boolean mouseClick(Screen screen, int mouseX, int mouseY) {
-		Minecraft mc = Minecraft.getInstance();
-		if (!(mc.screen instanceof Fullscreen screen))
-			return;
+		if (!(screen instanceof Fullscreen))
+			return false;
 
-		Window window = mc.getWindow();
-		double mX = mc.mouseHandler.xpos() * window.getGuiScaledWidth() / window.getScreenWidth();
-		double mY = mc.mouseHandler.ypos() * window.getGuiScaledHeight() / window.getScreenHeight();
-
-		if (TrainMapManager.handleToggleWidgetClick(Mth.floor(mX), Mth.floor(mY), 3, 30))
-			event.setCanceled(true);
+		return TrainMapManager.handleToggleWidgetClick(mouseX, mouseY, 3, 30);
 	}
 
 	// Called by JourneyFullscreenMapMixin

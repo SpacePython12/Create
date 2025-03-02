@@ -19,17 +19,10 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
-
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.Container;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -96,7 +89,6 @@ public class BasinRecipe extends ProcessingRecipe<Container> {
 		List<FluidIngredient> fluidIngredients =
 				isBasinRecipe ? ((BasinRecipe) recipe).getFluidIngredients() : Collections.emptyList();
 
-		// fabric: track consumed items to get remainders later
 		NonNullList<ItemStack> consumedItems = NonNullList.create();
 
 		try (Transaction t = TransferUtil.getTransaction()) {
@@ -147,7 +139,7 @@ public class BasinRecipe extends ProcessingRecipe<Container> {
 				});
 			}
 
-			CraftingContainer remainderContainer = new DummyCraftingContainer(availableItems, extractedItemsFromSlot);
+			CraftingContainer remainderContainer = new DummyCraftingContainer(consumedItems);
 
 			if (recipe instanceof BasinRecipe basinRecipe) {
 				recipeOutputItems.addAll(basinRecipe.rollResults());

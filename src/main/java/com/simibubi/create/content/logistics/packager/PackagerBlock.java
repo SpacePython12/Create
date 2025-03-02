@@ -11,15 +11,6 @@ import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
 import com.simibubi.create.foundation.utility.CreateLang;
 
-import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
-
-import net.fabricmc.fabric.api.entity.FakePlayer;
-
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
-
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -42,7 +33,14 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 
+import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
 import io.github.fabricators_of_create.porting_lib.block.NeighborChangeListeningBlock;
+import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 
 public class PackagerBlock extends WrenchableDirectionalBlock implements IBE<PackagerBlockEntity>, IWrenchable, NeighborChangeListeningBlock, WeakPowerCheckingBlock {
 
@@ -123,15 +121,17 @@ public class PackagerBlock extends WrenchableDirectionalBlock implements IBE<Pac
 				if (PackageItem.isPackage(itemInHand)) {
 					if (worldIn.isClientSide())
 						return InteractionResult.SUCCESS;
-					if (!be.unwrapBox(itemInHand.copy(), true))
+					try (Transaction t = Transaction.openOuter()) {
+						if (!be.unwrapBox(itemInHand.copy(), t))
+							return InteractionResult.SUCCESS;
+						t.commit();
+						be.triggerStockCheck();
+						itemInHand.shrink(1);
+						AllSoundEvents.DEPOT_PLOP.playOnServer(worldIn, pos);
+						if (itemInHand.isEmpty())
+							player.setItemInHand(handIn, ItemStack.EMPTY);
 						return InteractionResult.SUCCESS;
-					be.unwrapBox(itemInHand.copy(), false);
-					be.triggerStockCheck();
-					itemInHand.shrink(1);
-					AllSoundEvents.DEPOT_PLOP.playOnServer(worldIn, pos);
-					if (itemInHand.isEmpty())
-						player.setItemInHand(handIn, ItemStack.EMPTY);
-					return InteractionResult.SUCCESS;
+					}
 				}
 				return InteractionResult.SUCCESS;
 			}
@@ -210,8 +210,7 @@ public class PackagerBlock extends WrenchableDirectionalBlock implements IBE<Pac
 	@Override
 	public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
 		return getBlockEntityOptional(pLevel, pPos).map(pbe -> {
-				boolean empty = pbe.inventory.getStackInSlot(0)
-					.isEmpty();
+				boolean empty = pbe.heldBox.isEmpty();
 				if (pbe.animationTicks != 0)
 					empty = false;
 				return empty ? 0 : 15;

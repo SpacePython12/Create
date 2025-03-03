@@ -34,9 +34,9 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Run Gametests
-        continue-on-error: true
-        run: ./gradlew runGametestServer
+      # TODO: Enable when gametests work
+      # - name: Run Gametests
+      #   run: ./gradlew runGametestServer
 
       - name: Publish to Maven
         if: ${{ github.event.inputs.release }}

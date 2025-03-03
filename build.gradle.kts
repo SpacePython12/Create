@@ -97,6 +97,8 @@ repositories {
     maven("https://jm.gserv.me/repository/maven-public/") // Journey map
 }
 
+val ponder = file("Ponder")
+
 dependencies {
     // setup
     minecraft("com.mojang:minecraft:$minecraftVersion")
@@ -118,10 +120,16 @@ dependencies {
     modApi(include("com.electronwill.night-config:toml:$nightConfigVersion")!!)
     modApi(include("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:$configApiVersion")!!)
     modApi(include("dev.engine-room.flywheel:flywheel-fabric-$minecraftVersion:$flywheelVersion")!!)
-    modApi(include("net.createmod.ponder:Ponder-Fabric-$minecraftVersion:$ponderVersion")!!)
     modApi(include("com.jamieswhiteshirt:reach-entity-attributes:$reaVersion")!!)
     modApi(include("io.github.tropheusj:milk-lib:$milkLibVersion")!!)
     api(include("com.google.code.findbugs:jsr305:$jsr305Version")!!)
+
+    if (ponder.exists()) {
+        implementation("net.createmod.ponder:Ponder-Fabric-$minecraftVersion:$ponderVersion")
+        implementation("net.createmod.ponder:Ponder-Common-$minecraftVersion:$ponderVersion")
+    } else {
+        modApi(include("net.createmod.ponder:Ponder-Fabric-$minecraftVersion:$ponderVersion")!!)
+    }
 
     // compat
     modCompileOnly("cc.tweaked:cc-tweaked-$minecraftVersion-fabric-api:$ccVersion")

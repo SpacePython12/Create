@@ -51,3 +51,7 @@ local.properties
 
 .DS_Store
 #/libs/
+
+# don't push local Ponder
+.gitmodules
+Ponder/

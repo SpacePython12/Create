@@ -4,7 +4,7 @@ val parchmentVersion = "2023.09.03"
 // https://fabricmc.net/develop/
 val minecraftVersion = "1.20.1"
 val loaderVersion = "0.16.9"
-val fapiVersion = "0.92.2+1.20.1"
+val fapiVersion = "0.92.3+1.20.1"
 
 // in-house dependencies
 val flywheelVersion = "1.0.0-217"
@@ -125,7 +125,7 @@ dependencies {
     api(include("com.google.code.findbugs:jsr305:$jsr305Version")!!)
 
     if (ponder.exists()) {
-        implementation("net.createmod.ponder:Ponder-Fabric-$minecraftVersion:$ponderVersion")
+        implementation("net.createmod.ponder:Ponder-Fabric-$minecraftVersion:$ponderVersion") { isTransitive = false }
         implementation("net.createmod.ponder:Ponder-Common-$minecraftVersion:$ponderVersion")
     } else {
         modApi(include("net.createmod.ponder:Ponder-Fabric-$minecraftVersion:$ponderVersion")!!)

@@ -7,8 +7,6 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.util.KeyBindingHelper;
-
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.collect.ImmutableList;
@@ -24,8 +22,6 @@ import com.simibubi.create.foundation.gui.menu.GhostItemSubmitPacket;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.utility.CreateLang;
-
-import net.minecraftforge.items.SlotItemHandler;
 
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.animation.LerpedFloat.Chaser;
@@ -45,6 +41,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
+import io.github.fabricators_of_create.porting_lib.util.KeyBindingHelper;
 
 public class StockKeeperCategoryScreen extends AbstractSimiContainerScreen<StockKeeperCategoryMenu>
 	implements ScreenWithStencils {

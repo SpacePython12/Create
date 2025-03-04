@@ -10,7 +10,6 @@ import com.mojang.logging.LogUtils;
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.compat.computercraft.ComputerCraftProxy;
 import com.simibubi.create.compat.trinkets.Trinkets;
-import com.simibubi.create.compat.inventorySorter.InventorySorterCompat;
 import com.simibubi.create.content.decoration.palettes.AllPaletteBlocks;
 import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileBlockHitActions;
 import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileEntityHitActions;

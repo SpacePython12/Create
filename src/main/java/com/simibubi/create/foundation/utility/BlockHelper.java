@@ -21,10 +21,6 @@ import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.foundation.blockEntity.IMergeableBE;
 import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
-
 import net.createmod.catnip.nbt.NBTProcessors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,7 +35,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -230,7 +225,7 @@ public class BlockHelper {
 					return;
 
 				BlockState blockstate = world.getBlockState(pos.below());
-				if (blockstate.blocksMotion() || blockstate.liquid())
+				if (blockstate.blocksMotion() || blockstate.liquid()) {
 					world.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
 					afterBreak(world, player, pos, state, blockEntity);
 				}

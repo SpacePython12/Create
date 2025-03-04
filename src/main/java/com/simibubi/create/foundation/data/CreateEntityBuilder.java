@@ -1,5 +1,6 @@
 package com.simibubi.create.foundation.data;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -11,6 +12,7 @@ import com.tterrag.registrate.builders.EntityBuilder;
 import com.tterrag.registrate.fabric.EnvExecutor;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer;
 import dev.engine_room.flywheel.lib.visualization.SimpleEntityVisualizer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -53,13 +55,13 @@ public class CreateEntityBuilder<T extends Entity, P> extends EntityBuilder<T, P
 	}
 
 	protected void registerVisualizer() {
-		var visualFactory = this.visualFactory;
-		if (visualFactory != null) {
+		this.onRegister((entry) -> {
+			Objects.requireNonNull(this.visualFactory);
 			Predicate<T> renderNormally = this.renderNormally;
-			SimpleEntityVisualizer.builder(getEntry())
-					.factory(visualFactory.get())
-					.skipVanillaRender(entity -> !renderNormally.test(entity))
-					.apply();
-		}
+			SimpleEntityVisualizer.builder(this.getEntry())
+				.factory(this.visualFactory.get())
+				.skipVanillaRender(entity -> !renderNormally.test(entity))
+				.apply();
+		});
 	}
 }

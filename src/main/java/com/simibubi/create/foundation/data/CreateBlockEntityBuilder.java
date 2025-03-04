@@ -2,6 +2,7 @@ package com.simibubi.create.foundation.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -99,13 +100,13 @@ public class CreateBlockEntityBuilder<T extends BlockEntity, P> extends BlockEnt
 	}
 
 	protected void registerVisualizer() {
-		var visualFactory = this.visualFactory;
-		if (visualFactory != null) {
+		this.onRegister((entry) -> {
+			Objects.requireNonNull(this.visualFactory);
 			Predicate<T> renderNormally = this.renderNormally;
-			SimpleBlockEntityVisualizer.builder(getEntry())
-					.factory(visualFactory.get())
-					.skipVanillaRender(be -> !renderNormally.test(be))
-					.apply();
-		}
+			SimpleBlockEntityVisualizer.builder(this.getEntry())
+				.factory(this.visualFactory.get())
+				.skipVanillaRender(be -> !renderNormally.test(be))
+				.apply();
+		});
 	}
 }

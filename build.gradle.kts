@@ -3,12 +3,12 @@
 val parchmentVersion = "2023.09.03"
 // https://fabricmc.net/develop/
 val minecraftVersion = "1.20.1"
-val loaderVersion = "0.16.9"
-val fapiVersion = "0.92.3+1.20.1"
+val loaderVersion = "0.16.14"
+val fapiVersion = "0.92.5+1.20.1"
 
 // in-house dependencies
 val flywheelVersion = "1.0.0-217"
-val ponderVersion = "1.0.36"
+val ponderVersion = "1.0.67"
 val registrateVersion = "1.3.79-MC1.20.1"
 val milkLibVersion = "1.2.60"
 val portLibVersion = "2.3.8+1.20.1"
@@ -26,29 +26,29 @@ val jsr305Version = "3.0.2"
 
 // compat
 // https://modrinth.com/mod/cc-tweaked/versions
-val ccVersion = "1.106.1"
+val ccVersion = "1.115.1"
 // for CC - https://modrinth.com/mod/cloth-config/versions
-val clothVersion = "11.1.106+fabric"
+val clothVersion = "11.1.136+fabric"
 // https://modrinth.com/mod/jei/versions
-val jeiVersion = "15.19.0.85"
+val jeiVersion = "15.20.0.106"
 // https://modrinth.com/mod/rei/versions
-val reiVersion = "12.0.626"
+val reiVersion = "12.1.785"
 // https://modrinth.com/mod/emi/versions
-val emiVersion = "1.0.9+1.20.1"
+val emiVersion = "1.1.22+1.20.1"
 // https://modrinth.com/mod/botania
-val botaniaVersion = "1.19.2-436-FABRIC"
+val botaniaVersion = "1.20.1-448-FABRIC"
 // https://modrinth.com/mod/modmenu/versions
-val modmenuVersion = "7.1.0"
+val modmenuVersion = "7.2.2"
 // https://modrinth.com/mod/sandwichable/versions
 val sandwichableVersion = "1.3.1+1.20.1"
 // https://modrinth.com/mod/sodium
-val sodiumVersion = "mc1.20.1-0.5.8"
+val sodiumVersion = "mc1.20.1-0.5.13-fabric"
 // https://modrinth.com/mod/indium
-val indiumVersion = "1.0.30+mc1.20.4"
+val indiumVersion = "1.0.36+mc1.20.1"
 // https://github.com/emilyploszaj/trinkets/releases/
-val trinketsVersion = "3.7.0"
+val trinketsVersion = "3.7.1"
 // for Trinkets - https://modrinth.com/mod/cardinal-components-api/versions
-val ccaVersion = "5.2.1"
+val ccaVersion = "5.2.3"
 // https://modrinth.com/mod/journeymap
 val jmVersion = "1.20.1-5.10.3-fabric"
 // check the jm jar, it's JiJ
@@ -59,7 +59,7 @@ val ccRuntime = false
 val recipeViewer = "emi" // jei, rei, or emi
 
 plugins {
-    id("fabric-loom") version "1.9.+"
+    id("fabric-loom") version "1.10.+"
     id("maven-publish")
 }
 
@@ -86,13 +86,13 @@ repositories {
         content { includeGroupAndSubgroups("maven.modrinth") }
     }
     maven("https://maven.terraformersmc.com") // Mod Menu, Trinkets
-    maven("https://squiddev.cc/maven") // CC:T
+    maven("https://maven.squiddev.cc") // CC:T
     maven("https://modmaven.dev") // Botania
     maven("https://maven.jamieswhiteshirt.com/libs-release") { // Reach Entity Attributes
         content { includeGroup("com.jamieswhiteshirt") }
     }
     maven("https://maven.ladysnake.org/releases") // CCA, for Trinkets
-    maven("https://maven.saps.dev/releases") // FTB
+    maven("https://maven.ftb.dev/releases") // FTB
     maven("https://maven.architectury.dev") // Architectury API
     maven("https://jm.gserv.me/repository/maven-public/") // Journey map
 }

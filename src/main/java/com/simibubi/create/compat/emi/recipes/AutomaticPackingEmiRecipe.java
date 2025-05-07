@@ -9,7 +9,6 @@ import com.simibubi.create.foundation.gui.AllGuiTextures;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public class AutomaticPackingEmiRecipe extends CreateEmiRecipe<BasinRecipe> {
@@ -19,8 +18,7 @@ public class AutomaticPackingEmiRecipe extends CreateEmiRecipe<BasinRecipe> {
 		if (recipe.getRequiredHeat() == HeatCondition.NONE) {
 			height = 90;
 		}
-		ResourceLocation id = recipe.getId();
-		this.id = new ResourceLocation("emi", "create/automatic_packing/" + id.getNamespace() + "/" + id.getPath());
+		this.id = CreateEmiPlugin.syntheticOf("automatic_packing", recipe.getId());
 	}
 
 	@Override

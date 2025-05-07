@@ -16,6 +16,7 @@ import com.simibubi.create.Create;
 import com.simibubi.create.compat.emi.recipes.AutomaticPackingEmiRecipe;
 import com.simibubi.create.compat.emi.recipes.BlockCuttingEmiRecipe;
 import com.simibubi.create.compat.emi.recipes.BlockCuttingEmiRecipe.CondensedBlockCuttingRecipe;
+import com.simibubi.create.compat.emi.recipes.ConversionRecipe;
 import com.simibubi.create.compat.emi.recipes.CreateEmiRecipe;
 import com.simibubi.create.compat.emi.recipes.CrushingEmiRecipe;
 import com.simibubi.create.compat.emi.recipes.DeployingEmiRecipe;
@@ -38,7 +39,6 @@ import com.simibubi.create.compat.emi.recipes.fan.FanHauntingEmiRecipe;
 import com.simibubi.create.compat.emi.recipes.fan.FanSmokingEmiRecipe;
 import com.simibubi.create.compat.emi.recipes.fan.FanWashingEmiRecipe;
 import com.simibubi.create.compat.recipeViewerCommon.HiddenItems;
-import com.simibubi.create.compat.rei.ConversionRecipe;
 import com.simibubi.create.compat.rei.ToolboxColoringRecipeMaker;
 import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
 import com.simibubi.create.content.equipment.blueprint.BlueprintScreen;
@@ -321,19 +321,12 @@ public class CreateEmiPlugin implements EmiPlugin {
 
 		registry.addRecipe(
 				EmiWorldInteractionRecipe.builder()
-						.id(synthetic("emi/fluid_interaction/" + blockName))
+						.id(synthetic("fluid_interaction/" + blockName))
 						.leftInput(fluidStack)
 						.rightInput(lava, false)
 						.output(output)
 						.build()
 		);
-	}
-
-	private static ResourceLocation synthetic(String path) {
-		if (path.startsWith("/"))
-			throw new IllegalArgumentException("Starting slash is added automatically");
-		// EMI recommends starting synthetic IDs with a slash so that they can't possibly conflict with data packs.
-		return Create.asResource('/' + path);
 	}
 
 	private void addDeferredRecipes(Consumer<EmiRecipe> consumer) {
@@ -351,14 +344,14 @@ public class CreateEmiPlugin implements EmiPlugin {
 					ResourceLocation iid = BuiltInRegistries.ITEM.getKey(i);
 					ResourceLocation pid = BuiltInRegistries.POTION.getKey(PotionUtils.getPotion(is));
 					consumer.accept(new SpoutEmiRecipe(new ProcessingRecipeBuilder<>(FillingRecipe::new,
-						new ResourceLocation("emi", "create/potion_filling/" + pid.getNamespace() + "/" + pid.getPath()
+						synthetic("potion_filling/" + pid.getNamespace() + "/" + pid.getPath()
 							+ "/from/" + iid.getNamespace() + "/" + iid.getPath()))
 								.withItemIngredients(bottle)
 								.withFluidIngredients(FluidIngredient.fromFluidStack(potion))
 								.withSingleItemOutput(is.copy())
 								.build()));
 					consumer.accept(new DrainEmiRecipe(new ProcessingRecipeBuilder<>(EmptyingRecipe::new,
-						new ResourceLocation("emi", "create/potion_draining/" + pid.getNamespace() + "/" + pid.getPath()
+						synthetic("potion_draining/" + pid.getNamespace() + "/" + pid.getPath()
 							+ "/from/" + iid.getNamespace() + "/" + iid.getPath()))
 								.withItemIngredients(Ingredient.of(is))
 								.withFluidOutputs(potion)
@@ -388,7 +381,7 @@ public class CreateEmiPlugin implements EmiPlugin {
 							ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(is.getItem());
 							ResourceLocation fluidId = BuiltInRegistries.FLUID.getKey(fs.getFluid());
 							consumer.accept(new SpoutEmiRecipe(new ProcessingRecipeBuilder<>(FillingRecipe::new,
-							new ResourceLocation("emi", "create/filling/" + itemId.getNamespace() + "/" + itemId.getPath()
+							synthetic("filling/" + itemId.getNamespace() + "/" + itemId.getPath()
 									+ "/with/" + fluidId.getNamespace() + "/" + fluidId.getPath()))
 								.withItemIngredients(bucket)
 								.withFluidIngredients(FluidIngredient.fromFluidStack(fs))
@@ -407,7 +400,7 @@ public class CreateEmiPlugin implements EmiPlugin {
 						ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(is.getItem());
 						ResourceLocation fluidId = BuiltInRegistries.FLUID.getKey(extracted.getFluid());
 						consumer.accept(new DrainEmiRecipe(new ProcessingRecipeBuilder<>(EmptyingRecipe::new,
-							new ResourceLocation("emi", "create/draining/" + itemId.getNamespace() + "/" + itemId.getPath()
+							synthetic("draining/" + itemId.getNamespace() + "/" + itemId.getPath()
 								+ "/from/" + fluidId.getNamespace() + "/" + fluidId.getPath()))
 							.withItemIngredients(Ingredient.of(is))
 							.withFluidOutputs(extracted)
@@ -436,11 +429,11 @@ public class CreateEmiPlugin implements EmiPlugin {
 			if (toolbox == null || dye == null) return;
 			ResourceLocation toolboxId = BuiltInRegistries.ITEM.getKey(toolbox.getItem());
 			ResourceLocation dyeId = BuiltInRegistries.ITEM.getKey(dye.getItem());
-			String recipeName = "create/toolboxes/%s/%s/%s/%s"
+			String recipeName = "toolboxes/%s/%s/%s/%s"
 					.formatted(toolboxId.getNamespace(), toolboxId.getPath(), dyeId.getNamespace(), dyeId.getPath());
 			registry.addRecipe(new EmiCraftingRecipe(
 					r.getIngredients().stream().map(EmiIngredient::of).toList(),
-					CreateEmiRecipe.getResultEmi(r), new ResourceLocation("emi", recipeName)));
+					CreateEmiRecipe.getResultEmi(r), synthetic(recipeName)));
 		});
 		// for EMI we don't do this since it already has a category, World Interaction
 //		LogStrippingFakeRecipes.createRecipes().forEach(r -> {
@@ -458,6 +451,21 @@ public class CreateEmiPlugin implements EmiPlugin {
 			}
 		}
 		return false;
+	}
+
+	public static ResourceLocation synthetic(String path) {
+		if (path.startsWith("/"))
+			throw new IllegalArgumentException("Starting slash is added automatically");
+		// EMI recommends starting synthetic IDs with a slash so that they can't possibly conflict with data packs.
+		return Create.asResource('/' + path);
+	}
+
+	public static ResourceLocation synthetic(ResourceLocation id) {
+		return id.withPrefix("/");
+	}
+
+	public static ResourceLocation syntheticOf(String prefix, ResourceLocation base) {
+		return synthetic(prefix + '/' + base.getNamespace() + '/' + base.getPath());
 	}
 
 	private static EmiRecipeCategory register(String name, EmiRenderable icon) {

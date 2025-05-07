@@ -3,17 +3,25 @@ package com.simibubi.create.compat.emi.recipes;
 import com.simibubi.create.compat.emi.CreateEmiAnimations;
 import com.simibubi.create.compat.emi.CreateEmiPlugin;
 import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
+import com.simibubi.create.content.kinetics.crusher.CrushingRecipe;
+import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
 
 public class CrushingEmiRecipe extends CreateEmiRecipe<AbstractCrushingRecipe> {
 
-	public CrushingEmiRecipe(AbstractCrushingRecipe recipe) {
+	private CrushingEmiRecipe(AbstractCrushingRecipe recipe) {
 		super(CreateEmiPlugin.CRUSHING, recipe, 134, 110);
-		ResourceLocation rid = recipe.getId();
-		this.id = new ResourceLocation("emi", "create/crushing/" + rid.getNamespace() + "/" + rid.getPath());
+	}
+
+	public CrushingEmiRecipe(CrushingRecipe recipe) {
+		this((AbstractCrushingRecipe) recipe);
+	}
+
+	public CrushingEmiRecipe(MillingRecipe recipe) {
+		this((AbstractCrushingRecipe) recipe);
+		this.id = CreateEmiPlugin.syntheticOf("crushing", recipe.getId());
 	}
 
 	@Override

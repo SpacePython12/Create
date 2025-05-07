@@ -12,6 +12,10 @@ public class MixingEmiRecipe extends BasinEmiRecipe {
 
 	public MixingEmiRecipe(EmiRecipeCategory category, BasinRecipe recipe) {
 		super(category, recipe, category != CreateEmiPlugin.AUTOMATIC_SHAPELESS);
+		if (category == CreateEmiPlugin.AUTOMATIC_BREWING) {
+			// these recipes are generated
+			this.id = CreateEmiPlugin.synthetic(this.id);
+		}
 	}
 
 	@Override

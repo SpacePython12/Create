@@ -13,6 +13,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.infrastructure.config.AllConfigs;
+import com.simibubi.create.infrastructure.fabric.ItemExtras;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +32,9 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ExtendoGripItem extends Item {
+import net.fabricmc.fabric.api.util.TriState;
+
+public class ExtendoGripItem extends Item implements ItemExtras {
 	public static final int MAX_DAMAGE = 200;
 
 	public static final AttributeModifier singleRangeAttributeModifier =
@@ -157,8 +160,8 @@ public class ExtendoGripItem extends Item {
 	}
 
 	@Override
-	public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {
-		return true;
+	public TriState hasSecondaryUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) {
+		return TriState.FALSE;
 	}
 
 	public static float bufferLivingAttackEvent(DamageSource damageSource, LivingEntity attacked, float amount) {

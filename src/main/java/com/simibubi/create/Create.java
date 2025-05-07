@@ -154,7 +154,6 @@ public class Create implements ModInitializer {
 		FabricStructureProcessing.init();
 		AllBiomeModifiers.bootstrap(); // moved out of datagen
 		CreateRegistriesImpl.registerDatapackRegistries();
-		AllInventoryIdentifiers.registerDefaults();
 	}
 
 	public static void init() {

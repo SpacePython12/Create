@@ -69,7 +69,7 @@ val buildNum = providers.environmentVariable("GITHUB_RUN_NUMBER")
     .orElse("-local")
     .getOrElse("")
 
-version = "6.0.4.0+mc$minecraftVersion$buildNum"
+version = "6.0.6.0+mc$minecraftVersion$buildNum"
 
 group = "com.simibubi.create"
 base.archivesName = "create-fabric"

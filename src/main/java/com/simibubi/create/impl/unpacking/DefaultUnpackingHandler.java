@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import com.simibubi.create.api.packager.unpacking.UnpackingHandler;
 import com.simibubi.create.content.logistics.stockTicker.PackageOrderWithCrafts;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +31,7 @@ public enum DefaultUnpackingHandler implements UnpackingHandler {
 		if (targetInv == null)
 			return false;
 
-		try (Transaction t = Transaction.openOuter()) {
+		try (Transaction t = TransferUtil.getTransaction()) {
 			for (ItemStack stack : items) {
 				long inserted = targetInv.insert(ItemVariant.of(stack), stack.getCount(), t);
 				if (inserted != stack.getCount()) {

@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -29,7 +30,8 @@ public class RemainingAirOverlay {
 		if (!player.getCustomData()
 			.contains("VisualBacktankAir"))
 			return;
-		if (!player.canDrownInFluidType(player.getEyeInFluidType()) && !player.isInLava())
+		// TODO: Find a way to make this work in Fabric if possible
+		if (/*!player.canDrownInFluidType(player.getEyeInFluidType())*/ !player.isEyeInFluid(FluidTags.WATER) && !player.isInLava())
 			return;
 
 		int timeLeft = player.getCustomData()

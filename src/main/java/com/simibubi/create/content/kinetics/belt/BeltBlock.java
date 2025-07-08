@@ -216,19 +216,19 @@ public class BeltBlock extends HorizontalKineticBlock
 			if (BeltTunnelInteractionHandler.getTunnelOnPosition(worldIn, pos) != null)
 				return;
 			withBlockEntityDo(worldIn, pos, be -> {
-				ItemEntity itemEntity = (ItemEntity) entityIn;
+				// ItemEntity itemEntity = (ItemEntity) entityIn;
 				Storage<ItemVariant> handler = be.getItemStorage(null);
 				if (handler == null)
 					return;
-				ItemStack inEntity = itemEntity.getItem();
 				try (Transaction t = TransferUtil.getTransaction()) {
-					long inserted = handler.insert(ItemVariant.of(inEntity), inEntity.getCount(), t);
+					long inserted = handler.insert(ItemVariant.of(asItem), asItem.getCount(), t);
+					asItem.shrink((int) inserted);
 					if (inserted == 0)
 						return;
-					if (inEntity.getCount() == inserted) {
-						itemEntity.discard();
-					} else {
-						inEntity.shrink((int) inserted);
+					if (asItem.getCount() == inserted) {
+						entityIn.discard();
+					} else if (entityIn instanceof ItemEntity itemEntity && asItem.getCount() != itemEntity.getItem().getCount()) {
+						itemEntity.setItem(asItem);
 					}
 					t.commit();
 				}

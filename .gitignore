@@ -36,6 +36,9 @@ local.properties
 .settings/
 .loadpath
 
+## VSCode/VSCodium
+.vscode/*
+
 # External tool builders
 .externalToolBuilders/
 
@@ -57,3 +60,4 @@ local.properties
 Ponder
 Ponder/
 .Ponder/
+.vscode/launch.json

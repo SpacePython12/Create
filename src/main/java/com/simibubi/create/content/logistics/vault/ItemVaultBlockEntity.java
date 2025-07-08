@@ -162,11 +162,13 @@ public class ItemVaultBlockEntity extends SmartBlockEntity implements IMultiBloc
 		}
 
 		BlockState blockstate = level.getBlockState(updatePos);
-		blockstate.onNeighborChange(level, updatePos, provokingPos);
+		// TODO: Find a way to make this work in Fabric if possible
+		// blockstate.onNeighborChange(level, updatePos, provokingPos);
 		if (blockstate.isRedstoneConductor(level, updatePos)) {
 			updatePos.move(direction);
 			blockstate = level.getBlockState(updatePos);
-			if (blockstate.getWeakChanges(level, updatePos)) {
+			// TODO: Find a way to make this work in Fabric if possible
+			if (/*blockstate.getWeakChanges(level, updatePos)*/ blockstate.is(Blocks.COMPARATOR)) {
 				level.neighborChanged(blockstate, updatePos, provokingBlock, provokingPos, false);
 			}
 		}
@@ -359,7 +361,7 @@ public class ItemVaultBlockEntity extends SmartBlockEntity implements IMultiBloc
 			}
 		}
 
-		Storage<ItemVariant> combinedInvWrapper = new CombinedStorage<>(SameSizeCombinedInvWrapper.create(invs));
+		Storage<ItemVariant> combinedInvWrapper = SameSizeCombinedInvWrapper.create(List.of(invs));
 		combinedInvWrapper = new VersionedInventoryWrapper(combinedInvWrapper);
 		itemCapability = combinedInvWrapper;
 

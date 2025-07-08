@@ -358,26 +358,22 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		BlockPos target = worldPosition.relative(facing.getOpposite());
 		BlockState targetState = level.getBlockState(target);
 
-			UnpackingHandler handler = UnpackingHandler.REGISTRY.get(targetState);
+		UnpackingHandler handler = UnpackingHandler.REGISTRY.get(targetState);
 		UnpackingHandler toUse = handler != null ? handler : UnpackingHandler.DEFAULT;
 
 		// fabric: copy the items to actually unpack later
 		List<ItemStack> copy = items.stream().map(ItemStack::copy).toList();
 
 		// note: handler may modify the passed items
-		boolean unpacked = toUse.unpack(level, target, targetState, facing, items, orderContext, true);
+		boolean unpacked = toUse.unpack(level, target, targetState, facing, items, orderContext, false);
 
 		if (unpacked) {
-			TransactionCallback.onSuccess(ctx, () -> {
-				toUse.unpack(level, target, targetState, facing, copy, orderContext, false);
-				previouslyUnwrapped = box;
-				animationInward = true;
-				animationTicks = CYCLE;
-				notifyUpdate();
-			});
+			previouslyUnwrapped = box;
+			animationInward = true;
+			animationTicks = CYCLE;
 		}
 
-		return true;
+		return unpacked;
 	}
 
 	public void attemptToSend(List<PackagingRequest> queuedRequests) {

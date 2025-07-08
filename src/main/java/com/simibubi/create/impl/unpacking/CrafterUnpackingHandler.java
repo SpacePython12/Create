@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public enum CrafterUnpackingHandler implements UnpackingHandler {
@@ -43,7 +43,7 @@ public enum CrafterUnpackingHandler implements UnpackingHandler {
 		if (inventories.isEmpty())
 			return false;
 
-		try (Transaction t = Transaction.openOuter()) {
+		try (Transaction t = TransferUtil.getTransaction()) {
 			// insert in the order's defined ordering
 			int max = Math.min(inventories.size(), craftingContext.size());
 			outer: for (int i = 0; i < max; i++) {

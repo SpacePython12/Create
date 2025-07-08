@@ -10,6 +10,8 @@ import io.github.fabricators_of_create.porting_lib.enchant.CustomEnchantingBehav
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -119,7 +121,10 @@ public class DivingHelmetItem extends BaseArmorItem implements CustomEnchantingB
 		if (entity instanceof ServerPlayer sp)
 			AllAdvancements.DIVING_SUIT.awardTo(sp);
 
-		event.setCanBreathe(true);
-		event.setCanRefillAir(true);
+		// TODO: Find a way to make this work in Fabric if possible
+		// event.setCanBreathe(true);
+		// event.setCanRefillAir(true);
+		entity.setAirSupply(Math.min(entity.getMaxAirSupply(), entity.getAirSupply() + 10));
+		entity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 30, 0, true, false, true));
 	}
 }

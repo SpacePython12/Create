@@ -207,7 +207,7 @@ public class PackageEntity extends LivingEntity implements IEntityAdditionalSpaw
 
 	@Override
 	public void recreateFromPacket(ClientboundAddEntityPacket packet) {
-		this.setDeltaMovement(packet.getXa(), packet.getYa(), packet.getZa());
+		super.recreateFromPacket(packet); 
 		this.clientPosition = this.position();
 	}
 

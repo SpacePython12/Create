@@ -121,10 +121,7 @@ public class DivingHelmetItem extends BaseArmorItem implements CustomEnchantingB
 		if (entity instanceof ServerPlayer sp)
 			AllAdvancements.DIVING_SUIT.awardTo(sp);
 
-		// TODO: Find a way to make this work in Fabric if possible
-		// event.setCanBreathe(true);
-		// event.setCanRefillAir(true);
-		entity.setAirSupply(Math.min(entity.getMaxAirSupply(), entity.getAirSupply() + 10));
-		entity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 30, 0, true, false, true));
+		event.setCanBreathe(true);
+		event.setCanRefillAir(true);
 	}
 }

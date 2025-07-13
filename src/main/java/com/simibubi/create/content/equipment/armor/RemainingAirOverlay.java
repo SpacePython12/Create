@@ -30,8 +30,7 @@ public class RemainingAirOverlay {
 		if (!player.getCustomData()
 			.contains("VisualBacktankAir"))
 			return;
-		// TODO: Find a way to make this work in Fabric if possible
-		if (/*!player.canDrownInFluidType(player.getEyeInFluidType())*/ !player.isEyeInFluid(FluidTags.WATER) && !player.isInLava())
+		if (!player.canDrownInFluidType(player.getEyeInFluidType()) && !player.isInLava())
 			return;
 
 		int timeLeft = player.getCustomData()

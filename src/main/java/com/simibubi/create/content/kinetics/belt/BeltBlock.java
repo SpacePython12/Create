@@ -216,7 +216,6 @@ public class BeltBlock extends HorizontalKineticBlock
 			if (BeltTunnelInteractionHandler.getTunnelOnPosition(worldIn, pos) != null)
 				return;
 			withBlockEntityDo(worldIn, pos, be -> {
-				// ItemEntity itemEntity = (ItemEntity) entityIn;
 				Storage<ItemVariant> handler = be.getItemStorage(null);
 				if (handler == null)
 					return;

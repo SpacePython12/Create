@@ -30,7 +30,7 @@ public class RemainingAirOverlay {
 		if (!player.getCustomData()
 			.contains("VisualBacktankAir"))
 			return;
-		if (!player.canDrownInFluidType(player.getEyeInFluidType()) && !player.isInLava())
+		if (!player.isEyeInFluid(FluidTags.WATER) && !player.isInLava())
 			return;
 
 		int timeLeft = player.getCustomData()

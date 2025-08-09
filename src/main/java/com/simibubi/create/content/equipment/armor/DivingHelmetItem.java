@@ -121,7 +121,6 @@ public class DivingHelmetItem extends BaseArmorItem implements CustomEnchantingB
 		if (entity instanceof ServerPlayer sp)
 			AllAdvancements.DIVING_SUIT.awardTo(sp);
 
-		event.setCanBreathe(true);
-		event.setCanRefillAir(true);
+		entity.setAirSupply(entity.getMaxAirSupply());
 	}
 }

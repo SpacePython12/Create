@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.github.fabricators_of_create.porting_lib.block.NeighborChangeListeningBlock;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlockEntityTypes;
@@ -162,12 +164,14 @@ public class ItemVaultBlockEntity extends SmartBlockEntity implements IMultiBloc
 		}
 
 		BlockState blockstate = level.getBlockState(updatePos);
-		blockstate.onNeighborChange(level, updatePos, provokingPos);
-		if (blockstate.isRedstoneConductor(level, updatePos)) {
-			updatePos.move(direction);
-			blockstate = level.getBlockState(updatePos);
-			if (blockstate.getWeakChanges(level, updatePos)) {
-				level.neighborChanged(blockstate, updatePos, provokingBlock, provokingPos, false);
+		if (blockstate.getBlock() instanceof NeighborChangeListeningBlock nclb) {
+			nclb.onNeighborChange(blockstate, level, updatePos, provokingPos);
+			if (blockstate.isRedstoneConductor(level, updatePos)) {
+				updatePos.move(direction);
+				blockstate = level.getBlockState(updatePos);
+				if (nclb.getWeakChanges(blockstate, level, updatePos)) {
+					level.neighborChanged(blockstate, updatePos, provokingBlock, provokingPos, false);
+				}
 			}
 		}
 	}

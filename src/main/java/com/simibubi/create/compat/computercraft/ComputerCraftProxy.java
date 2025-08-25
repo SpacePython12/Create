@@ -19,9 +19,8 @@ public class ComputerCraftProxy {
 
 	private static void registerWithDependency() {
 		/* Comment if computercraft.implementation is not in the source set */
-		computerFactory = ComputerBehaviour::new;
-
-		PeripheralLookup.get().registerFallback((level, blockPos, blockState, blockEntity, direction) -> peripheralProvider(level, blockPos));
+		 computerFactory = ComputerBehaviour::new;
+     ComputerBehaviour.registerItemDetailProviders();
 	}
 
 	private static Function<SmartBlockEntity, ? extends AbstractComputerBehaviour> fallbackFactory;

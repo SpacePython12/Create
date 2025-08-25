@@ -8,8 +8,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
 public class PackagePortAutomationInventoryWrapper extends ItemHandlerWrapper {
-
-	private PackagePortBlockEntity ppbe;
+	private final PackagePortBlockEntity ppbe;
 
 	public PackagePortAutomationInventoryWrapper(Storage<ItemVariant> wrapped, PackagePortBlockEntity ppbe) {
 		super(wrapped);
@@ -17,14 +16,17 @@ public class PackagePortAutomationInventoryWrapper extends ItemHandlerWrapper {
 	}
 
 	@Override
-	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
-		if (!PackageItem.isPackage(resource))
-			return 0;
-		String filterString = ppbe.getFilterString();
-		if (filterString == null || PackageItem.matchAddress(resource, filterString))
-			return 0;
+	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		ItemStack preview = super.extractItem(slot, 64, true);
 
-		return super.extract(resource, maxAmount, transaction);
+		if (!PackageItem.isPackage(preview))
+			return ItemStack.EMPTY;
+
+		String filterString = ppbe.getFilterString();
+		if (filterString == null || !PackageItem.matchAddress(preview, filterString))
+			return ItemStack.EMPTY;
+
+		return simulate ? preview : super.extractItem(slot, amount, false);
 	}
 
 	@Override
@@ -32,9 +34,8 @@ public class PackagePortAutomationInventoryWrapper extends ItemHandlerWrapper {
 		if (!PackageItem.isPackage(resource))
 			return 0;
 		String filterString = ppbe.getFilterString();
-		if (filterString != null && PackageItem.matchAddress(resource, filterString))
-			return 0;
-
-		return super.insert(resource, maxAmount, transaction);
+		if (filterString != null && PackageItem.matchAddress(stack, filterString))
+			return stack;
+		return super.insertItem(slot, stack, simulate);
 	}
 }

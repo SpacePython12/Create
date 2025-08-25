@@ -28,12 +28,16 @@ public class TrainMapEvents {
 			FTBChunksTrainMap.tick();
 		if (Mods.JOURNEYMAP.isLoaded())
 			JourneyTrainMap.tick();
+		if (Mods.XAEROWORLDMAP.isLoaded())
+			XaeroTrainMap.tick();
 	}
 
 	public static boolean mouseClick(Screen screen, double mouseX, double mouseY, int button) {
 		if (Mods.FTBCHUNKS.isLoaded() && FTBChunksTrainMap.mouseClick(screen, (int) mouseX, (int) mouseY))
 			return false;
 		if (Mods.JOURNEYMAP.isLoaded() && JourneyTrainMap.mouseClick(screen, (int) mouseX, (int) mouseY))
+			return false;
+		if (Mods.XAEROWORLDMAP.isLoaded() && XaeroTrainMap.mouseClick(screen, (int) mouseX, (int) mouseY))
 			return false;
 
 		return true;

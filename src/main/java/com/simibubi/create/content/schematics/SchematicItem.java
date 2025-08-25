@@ -18,7 +18,7 @@ import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.schematics.client.SchematicEditScreen;
 import com.simibubi.create.foundation.utility.CreateLang;
-import com.tterrag.registrate.fabric.EnvExecutor;
+import com.simibubi.create.foundation.utility.CreatePaths;
 
 import net.createmod.catnip.gui.ScreenOpener;
 import net.createmod.catnip.nbt.NBTHelper;
@@ -77,9 +77,9 @@ public class SchematicItem extends Item {
 		if (stack.hasTag()) {
 			if (stack.getTag()
 				.contains("File")) {
-                tooltip.add(Component.literal(ChatFormatting.GOLD + stack.getTag()
-                    .getString("File")));
-            }
+				tooltip.add(Component.literal(ChatFormatting.GOLD + stack.getTag()
+					.getString("File")));
+			}
 		} else {
 			tooltip.add(CreateLang.translateDirect("schematic.invalid").withStyle(ChatFormatting.RED));
 		}
@@ -122,10 +122,10 @@ public class SchematicItem extends Item {
 		Path file;
 
 		if (!level.isClientSide()) {
-			dir = Paths.get("schematics", "uploaded").toAbsolutePath();
+			dir = CreatePaths.UPLOADED_SCHEMATICS_DIR;
 			file = Paths.get(owner, schematic);
 		} else {
-			dir = Paths.get("schematics").toAbsolutePath();
+			dir = CreatePaths.SCHEMATICS_DIR;
 			file = Paths.get(schematic);
 		}
 
@@ -134,7 +134,7 @@ public class SchematicItem extends Item {
 			return t;
 
 		try (DataInputStream stream = new DataInputStream(new BufferedInputStream(
-				new GZIPInputStream(Files.newInputStream(path, StandardOpenOption.READ))))) {
+			new GZIPInputStream(Files.newInputStream(path, StandardOpenOption.READ))))) {
 			CompoundTag nbt = NbtIo.read(stream, new NbtAccounter(0x20000000L));
 			t.load(level.holderLookup(Registries.BLOCK), nbt);
 		} catch (IOException e) {

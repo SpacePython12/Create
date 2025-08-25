@@ -116,7 +116,7 @@ public class ToolboxHandlerClient {
 		if (mc.gameMode == null || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
 			return;
 
-		if (key != AllKeys.TOOLBELT.getBoundCode() || !pressed)
+		if (!AllKeys.TOOLBELT.doesModifierAndCodeMatch(key))
 			return;
 		if (COOLDOWN > 0)
 			return;

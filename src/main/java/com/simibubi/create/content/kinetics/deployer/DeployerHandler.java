@@ -32,7 +32,7 @@ import com.simibubi.create.content.trains.track.ITrackBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.BlockHelper;
 
-import net.createmod.catnip.levelWrappers.WrappedServerLevel;
+import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -63,6 +63,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
@@ -82,7 +83,7 @@ public class DeployerHandler {
 	private static final Map<BlockPos, List<ItemEntity>> CAPTURED_BLOCK_DROPS = new HashMap<>();
 	public static final Map<BlockPos, List<ItemEntity>> CAPTURED_BLOCK_DROPS_VIEW = Collections.unmodifiableMap(CAPTURED_BLOCK_DROPS);
 
-	private static final class ItemUseWorld extends WrappedServerLevel {
+	private static final class ItemUseWorld extends WrappedLevel implements ServerLevelAccessor {
 		private final Direction face;
 		private final BlockPos pos;
 		boolean rayMode = false;
@@ -91,6 +92,12 @@ public class DeployerHandler {
 			super(level);
 			this.face = face;
 			this.pos = pos;
+		}
+
+		@Override
+		public ServerLevel getLevel() {
+			// This is safe, we always pass ServerLevel in the constructor
+			return (ServerLevel) level;
 		}
 
 		@Override

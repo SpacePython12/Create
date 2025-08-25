@@ -15,6 +15,7 @@ import com.simibubi.create.foundation.utility.worldWrappers.WrappedBlockAndTintG
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
 import dev.engine_room.flywheel.api.material.CardinalLightingMode;
+import dev.engine_room.flywheel.api.material.Material;
 import dev.engine_room.flywheel.api.model.Model;
 import dev.engine_room.flywheel.api.task.Plan;
 import dev.engine_room.flywheel.api.visual.BlockEntityVisual;
@@ -96,8 +97,16 @@ public class ContraptionVisual<E extends AbstractContraptionEntity> extends Abst
 		};
 
 		model = new FabricBlockModelBuilder(modelWorld, blocks.positions())
-			.materialFunc((renderType, aBoolean) -> SimpleMaterial.builderOf(ModelUtil.getMaterial(renderType, aBoolean))
-				.cardinalLightingMode(CardinalLightingMode.CHUNK))
+			.materialFunc((renderType, shaded) -> {
+				Material material = ModelUtil.getMaterial(renderType, shaded);
+				if (material != null && material.cardinalLightingMode() == CardinalLightingMode.ENTITY) {
+					return SimpleMaterial.builderOf(material)
+						.cardinalLightingMode(CardinalLightingMode.CHUNK)
+						.build();
+				} else {
+					return material;
+				}
+			})
 			.build();
 
 		var instancer = embedding.instancerProvider()

@@ -80,9 +80,18 @@ public enum AllKeys {
 			.toUpperCase();
 	}
 
-	public int getBoundCode() {
-		return KeyBindingHelper.getBoundKeyOf(keybind)
-				.getValue();
+	public boolean doesModifierAndCodeMatch(int code) {
+		boolean codeMatches = code == KeyBindingHelper.getBoundKeyOf(keybind).getValue();
+
+		boolean modifierMatches;
+		KeyModifier modifier = keybind.getKeyModifier();
+		if (modifier == KeyModifier.NONE) {
+			modifierMatches = true;
+		} else {
+			modifierMatches = modifier.equals(KeyModifier.getActiveModifier());
+		}
+
+		return codeMatches && modifierMatches;
 	}
 
 	public static boolean isKeyDown(int key) {

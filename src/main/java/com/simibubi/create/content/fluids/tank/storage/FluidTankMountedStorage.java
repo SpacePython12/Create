@@ -27,8 +27,8 @@ import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 
 public class FluidTankMountedStorage extends WrapperMountedFluidStorage<Handler> implements SyncedMountedStorage {
 	public static final Codec<FluidTankMountedStorage> CODEC = RecordCodecBuilder.create(i -> i.group(
-		CreateCodecs.NON_NEGATIVE_LONG.fieldOf("capacity").forGetter(FluidTankMountedStorage::getCapacity),
-		CreateCodecs.FLUID_STACK.fieldOf("fluid").forGetter(FluidTankMountedStorage::getFluid)
+		ExtraCodecs.NON_NEGATIVE_LONG.fieldOf("capacity").forGetter(FluidTankMountedStorage::getCapacity),
+		CreateCodecs.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(FluidTankMountedStorage::getFluid)
 	).apply(i, FluidTankMountedStorage::new));
 
 	private boolean dirty;
@@ -97,7 +97,8 @@ public class FluidTankMountedStorage extends WrapperMountedFluidStorage<Handler>
 	}
 
 	public static final class Handler extends FluidTank {
-		private Runnable onChange = () -> {};
+		private Runnable onChange = () -> {
+		};
 
 		public Handler(long capacity, FluidStack stack) {
 			super(capacity);

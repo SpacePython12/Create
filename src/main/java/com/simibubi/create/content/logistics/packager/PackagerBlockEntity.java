@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.Create;
+import com.simibubi.create.compat.computercraft.AbstractComputerBehaviour;
+import com.simibubi.create.compat.computercraft.ComputerCraftProxy;
 import com.simibubi.create.api.packager.unpacking.UnpackingHandler;
 import com.simibubi.create.content.contraptions.actors.psi.PortableStorageInterfaceBlockEntity;
 import com.simibubi.create.content.logistics.BigItemStack;
@@ -85,6 +87,10 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 	public int animationTicks;
 	public boolean animationInward;
 
+	public AbstractComputerBehaviour computerBehaviour;
+	public Boolean hasCustomComputerAddress;
+	public String customComputerAddress;
+
 	private InventorySummary availableItems;
 	private VersionedInventoryTrackerBehaviour invVersionTracker;
 
@@ -103,6 +109,8 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		animationInward = true;
 		queuedExitingPackages = new LinkedList<>();
 		signBasedAddress = "";
+		customComputerAddress = "";
+		hasCustomComputerAddress = false;
 		buttonCooldown = 0;
 	}
 
@@ -112,6 +120,7 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 			.withFilter(this::supportsBlockEntity));
 		behaviours.add(invVersionTracker = new VersionedInventoryTrackerBehaviour(this));
 		behaviours.add(advancements = new AdvancementBehaviour(this, AllAdvancements.PACKAGER));
+		behaviours.add(computerBehaviour = ComputerCraftProxy.behaviour(this));
 	}
 
 	private boolean supportsBlockEntity(Storage<ItemVariant> storage, StorageProvider<ItemVariant> provider) {
@@ -339,7 +348,9 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		attemptToSend(null);
 
 		// dont send multiple packages when a button signal length is received
-		buttonCooldown = 40;
+		if (buttonCooldown <= 0) { // still on button cooldown, don't prolong it
+			buttonCooldown = 40;
+		}
 	}
 
 	public boolean unwrapBox(ItemStack box, TransactionContext ctx) {
@@ -525,13 +536,18 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		notifyUpdate();
 	}
 
-	protected void updateSignAddress() {
+	public void updateSignAddress() {
 		signBasedAddress = "";
 		for (Direction side : Iterate.directions) {
 			String address = getSign(side);
 			if (address == null || address.isBlank())
 				continue;
 			signBasedAddress = address;
+		}
+		if (computerBehaviour.hasAttachedComputer() && hasCustomComputerAddress) {
+			signBasedAddress = customComputerAddress;
+		} else {
+			hasCustomComputerAddress = false;
 		}
 	}
 
@@ -565,6 +581,8 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		animationInward = compound.getBoolean("AnimationInward");
 		animationTicks = compound.getInt("AnimationTicks");
 		signBasedAddress = compound.getString("SignAddress");
+		customComputerAddress = compound.getString("ComputerAddress");
+		hasCustomComputerAddress = compound.getBoolean("HasComputerAddress");
 		heldBox = ItemStack.of(compound.getCompound("HeldBox"));
 		previouslyUnwrapped = ItemStack.of(compound.getCompound("InsertedBox"));
 		if (clientPacket)
@@ -581,6 +599,8 @@ public class PackagerBlockEntity extends SmartBlockEntity implements SidedStorag
 		compound.putBoolean("AnimationInward", animationInward);
 		compound.putInt("AnimationTicks", animationTicks);
 		compound.putString("SignAddress", signBasedAddress);
+		compound.putString("ComputerAddress", customComputerAddress);
+		compound.putBoolean("HasComputerAddress", hasCustomComputerAddress);
 		compound.put("HeldBox", heldBox.serializeNBT());
 		compound.put("InsertedBox", previouslyUnwrapped.serializeNBT());
 		if (clientPacket)

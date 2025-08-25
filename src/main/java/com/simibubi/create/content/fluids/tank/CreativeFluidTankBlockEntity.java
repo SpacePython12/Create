@@ -37,10 +37,11 @@ public class CreativeFluidTankBlockEntity extends FluidTankBlockEntity {
 
 	public static class CreativeSmartFluidTank extends SmartFluidTank {
 		public static final Codec<CreativeSmartFluidTank> CODEC = RecordCodecBuilder.create(i -> i.group(
-			FluidStack.CODEC.fieldOf("fluid").forGetter(FluidTank::getFluid),
+			CreateCodecs.FLUID_STACK_CODEC.fieldOf("fluid").forGetter(FluidTank::getFluid),
 			CreateCodecs.NON_NEGATIVE_LONG.fieldOf("capacity").forGetter(FluidTank::getCapacity)
 		).apply(i, (fluid, capacity) -> {
-			CreativeSmartFluidTank tank = new CreativeSmartFluidTank(capacity, $ -> {});
+			CreativeSmartFluidTank tank = new CreativeSmartFluidTank(capacity, $ -> {
+			});
 			tank.setFluid(fluid);
 			return tank;
 		}));

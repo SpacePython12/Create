@@ -1,5 +1,12 @@
 package com.simibubi.create.foundation.item;
 
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.simibubi.create.foundation.blockEntity.SyncedBlockEntity;
 
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +27,15 @@ public class SmartInventory extends ItemStackHandlerContainer implements INBTSer
 
 	public SmartInventory(int slots, SyncedBlockEntity be) {
 		this(slots, be, 64, false);
+	}
+
+	public SmartInventory(int slots, SyncedBlockEntity be, BiPredicate<Integer, ItemStack> isValid) {
+		this(slots, be, 64, false, isValid);
+	}
+
+	public SmartInventory(int slots, SyncedBlockEntity be, int stackSize, boolean stackNonStackables, BiPredicate<Integer, ItemStack> isValid) {
+		this(slots, be, stackNonStackables, stackSize, stackSize, stackNonStackables);
+		this.isValid = isValid;
 	}
 
 	public SmartInventory(int slots, SyncedBlockEntity be, int stackSize, boolean stackNonStackables) {
@@ -86,6 +102,7 @@ public class SmartInventory extends ItemStackHandlerContainer implements INBTSer
 	// fabric: merge SyncedStackHandler, it exists only to be wrapped, and removing it allows avoiding extending RecipeWrapper
 
 	private SyncedBlockEntity blockEntity;
+	private BiPredicate<Integer, ItemStack> isValid = super::isItemValid;
 	private Runnable updateCallback;
 
 	@Override
@@ -104,5 +121,14 @@ public class SmartInventory extends ItemStackHandlerContainer implements INBTSer
 	@Override
 	public int getMaxStackSize() {
 		return Math.min(64, stackSize);
+	}
+
+	@Override
+	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+		return isValid.test(slot, stack);
+	}
+
+	public void whenContentsChange(Consumer<Integer> updateCallback) {
+		this.updateCallback = updateCallback;
 	}
 }

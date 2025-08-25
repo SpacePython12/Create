@@ -50,8 +50,8 @@ public class CreateCodecs {
 		String::valueOf
 	);
 
-	public static final Codec<ItemStackHandler> ITEM_STACK_HANDLER = ItemSlots.CODEC.xmap(
-		slots -> slots.toHandler(ItemStackHandler::new), ItemSlots::fromHandler
+	public static final Codec<ItemStackHandler> ITEM_STACK_HANDLER = ExtraCodecs.lazyInitializedCodec(
+		() -> ItemSlots.CODEC.xmap(slots -> slots.toHandler(ItemStackHandler::new), ItemSlots::fromHandler)
 	);
 
 	public static final Codec<CompoundTag> COMPOUND_TAG = Codec.PASSTHROUGH.comapFlatMap(
@@ -95,6 +95,19 @@ public class CreateCodecs {
 				? DataResult.error(() -> "Unsigned byte was too large: " + p_324632_ + " > 255")
 				: DataResult.success(p_324632_.byteValue())
 		);
+
+	public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(
+		instance -> instance.group(
+			BuiltInRegistries.FLUID.byNameCodec().fieldOf("FluidName").forGetter(FluidStack::getFluid),
+			Codec.INT.fieldOf("Amount").forGetter(FluidStack::getAmount),
+			CompoundTag.CODEC.optionalFieldOf("Tag").forGetter(stack -> Optional.ofNullable(stack.getTag()))
+		).apply(instance, (fluid, amount, tag) -> {
+			FluidStack stack = new FluidStack(fluid, amount);
+			if (!stack.isEmpty())
+				tag.ifPresent(stack::setTag);
+			return stack;
+		})
+	);
 
 	public static final MapCodec<MobEffectInstance> MOB_EFFECT_INSTANCE = recursive(
 		"MobEffectInstance",

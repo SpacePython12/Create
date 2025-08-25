@@ -64,6 +64,7 @@ import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
+// TODO - Split up into specific overlays
 public class BlueprintOverlayRenderer {
 
 	static boolean active;

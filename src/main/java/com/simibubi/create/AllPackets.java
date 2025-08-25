@@ -75,6 +75,7 @@ import com.simibubi.create.content.logistics.stockTicker.StockKeeperCategoryEdit
 import com.simibubi.create.content.logistics.stockTicker.StockKeeperCategoryHidingPacket;
 import com.simibubi.create.content.logistics.stockTicker.StockKeeperCategoryRefundPacket;
 import com.simibubi.create.content.logistics.stockTicker.StockKeeperLockPacket;
+import com.simibubi.create.content.logistics.tableCloth.ShopUpdatePacket;
 import com.simibubi.create.content.logistics.tunnel.TunnelFlapPacket;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkConfigurationPacket;
 import com.simibubi.create.content.redstone.link.controller.LinkedControllerBindPacket;
@@ -202,6 +203,9 @@ public enum AllPackets {
 	STOCK_KEEPER_HIDE_CATEGORY(StockKeeperCategoryHidingPacket.class, StockKeeperCategoryHidingPacket::new, PLAY_TO_SERVER),
 
 	// Server to Client
+	// fabric: extra packet in place of custom entity data serializer
+	CARRIAGE_DATA_UPDATE(CarriageDataUpdatePacket.class, CarriageDataUpdatePacket::new, PLAY_TO_CLIENT),
+
 	SYMMETRY_EFFECT(SymmetryEffectPacket.class, SymmetryEffectPacket::new, PLAY_TO_CLIENT),
 	SERVER_SPEED(ServerSpeedProvider.Packet.class, ServerSpeedProvider.Packet::new, PLAY_TO_CLIENT),
 	BEAM_EFFECT(ZapperBeamPacket.class, ZapperBeamPacket::new, PLAY_TO_CLIENT),
@@ -252,10 +256,7 @@ public enum AllPackets {
 	KNOCKBACK(KnockbackPacket.class, KnockbackPacket::new, PLAY_TO_CLIENT),
 	TRAIN_MAP_SYNC(TrainMapSyncPacket.class, TrainMapSyncPacket::new, PLAY_TO_CLIENT),
 	CLIENTBOUND_CHAIN_CONVEYOR(ClientboundChainConveyorRidingPacket.class, ClientboundChainConveyorRidingPacket::new, PLAY_TO_CLIENT),
-
-	// fabric: extra packet in place of custom entity data serializer
-	CARRIAGE_DATA_UPDATE(CarriageDataUpdatePacket.class, CarriageDataUpdatePacket::new, PLAY_TO_CLIENT)
-	;
+	SHOP_UPDATE(ShopUpdatePacket.class, ShopUpdatePacket::new, PLAY_TO_CLIENT);
 
 	static {
 		ClientboundSimpleActionPacket.addAction("rainbowDebug", () -> SimpleCreateActions::rainbowDebug);

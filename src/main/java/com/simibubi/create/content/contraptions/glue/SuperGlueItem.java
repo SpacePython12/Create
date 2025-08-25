@@ -29,7 +29,7 @@ public class SuperGlueItem extends Item {
 			BlockState blockState = world
 				.getBlockState(hitResult
 					.getBlockPos());
-			if (blockState.getBlock()instanceof AbstractChassisBlock cb)
+			if (blockState.getBlock() instanceof AbstractChassisBlock cb)
 				if (cb.getGlueableSide(blockState, hitResult.getDirection()) != null)
 					return InteractionResult.PASS;
 		}
@@ -52,8 +52,6 @@ public class SuperGlueItem extends Item {
 	public boolean canBeDepleted() {
 		return true;
 	}
-
-	public static void onBroken(Player player) {}
 
 	@Environment(EnvType.CLIENT)
 	public static void spawnParticles(Level world, BlockPos pos, Direction direction, boolean fullBlock) {

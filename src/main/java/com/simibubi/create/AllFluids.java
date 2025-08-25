@@ -8,6 +8,23 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockSource;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+
+import net.minecraft.world.item.BucketItem;
+
+import net.minecraft.world.item.DispensibleContainerItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
+
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
+
+import com.mojang.blaze3d.shaders.FogShape;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.create.AllTags.AllFluidTags;
 import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
 import com.simibubi.create.content.fluids.VirtualFluid;
@@ -98,6 +115,7 @@ public class AllFluids {
 			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW))
 			.build()
 			.bucket()
+			.onRegister(AllFluids::registerFluidDispenseBehavior)
 			.tag(AllTags.forgeItemTag("honey_buckets"))
 			.build()
 			.onRegisterAfter(Registries.ITEM, honey -> {
@@ -124,6 +142,9 @@ public class AllFluids {
 			.fluidAttributes(() -> new CreateAttributeHandler("block.create.chocolate", 1500, 1400))
 			.block()
 			.properties(p -> p.mapColor(MapColor.TERRACOTTA_BROWN))
+			.build()
+			.bucket()
+			.onRegister(AllFluids::registerFluidDispenseBehavior)
 			.build()
 			.onRegisterAfter(Registries.ITEM, chocolate -> {
 				Fluid source = chocolate.getSource();
@@ -188,22 +209,23 @@ public class AllFluids {
 		return null;
 	}
 
-//	/**
-//	 * Removing alpha from tint prevents optifine from forcibly applying biome
-//	 * colors to modded fluids (Makes translucent fluids disappear)
-//	 */
-//	private static class NoColorFluidAttributes extends FluidAttributes {
-//
-//		protected NoColorFluidAttributes(Builder builder, Fluid fluid) {
-//			super(builder, fluid);
-//		}
-//
-//		@Override
-//		public int getColor(BlockAndTintGetter world, BlockPos pos) {
-//			return 0x00ffffff;
-//		}
-//
-//	}
+	private static final DispenseItemBehavior DEFAULT = new DefaultDispenseItemBehavior();
+	private static final DispenseItemBehavior DISPENSE_FLUID = new DefaultDispenseItemBehavior(){
+			@Override
+			protected ItemStack execute(BlockSource pSource, ItemStack pStack) {
+				DispensibleContainerItem dispensibleContainerItem = (DispensibleContainerItem) pStack.getItem();
+				BlockPos pos = pSource.getPos().relative(pSource.getBlockState().getValue(DispenserBlock.FACING));
+				Level level = pSource.getLevel();
+				if (dispensibleContainerItem.emptyContents(null, level, pos, null, pStack)) {
+					return new ItemStack(Items.BUCKET);
+				}
+				return DEFAULT.dispense(pSource, pStack);
+			}
+		};
+
+	private static void registerFluidDispenseBehavior(BucketItem bucket) {
+		DispenserBlock.registerBehavior(bucket, DISPENSE_FLUID);
+	}
 
 	@Environment(EnvType.CLIENT)
 	public static class PotionFluidVariantRenderHandler implements FluidVariantRenderHandler {

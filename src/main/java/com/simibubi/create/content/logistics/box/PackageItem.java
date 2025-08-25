@@ -127,6 +127,11 @@ public class PackageItem extends Item {
 			.put("Fragment", tag);
 	}
 
+  public static boolean hasFragmentData(ItemStack box) {
+    CompoundTag tag = box.getTag();
+    return tag != null && tag.contains("Fragment");
+  }
+
 	public static int getOrderId(ItemStack box) {
 		CompoundTag tag = box.getTag();
 		if (tag == null || !tag.contains("Fragment"))
@@ -142,6 +147,38 @@ public class PackageItem extends Item {
 		return tag.getCompound("Fragment")
 			.getInt("OrderId");
 	}
+
+  public static int getIndex(ItemStack box) {
+    CompoundTag tag = box.getTag();
+    if (tag == null || !tag.contains("Fragment"))
+      return -1;
+    return tag.getCompound("Fragment")
+        .getInt("Index");
+  }
+
+  public static boolean isFinal(ItemStack box) {
+    CompoundTag tag = box.getTag();
+    if (tag == null || !tag.contains("Fragment"))
+      return false;
+    return tag.getCompound("Fragment")
+        .getBoolean("IsFinal");
+  }
+
+  public static int getLinkIndex(ItemStack box) {
+    CompoundTag tag = box.getTag();
+    if (tag == null || !tag.contains("Fragment"))
+      return -1;
+    return tag.getCompound("Fragment")
+        .getInt("LinkIndex");
+  }
+
+  public static boolean isFinalLink(ItemStack box) {
+    CompoundTag tag = box.getTag();
+    if (tag == null || !tag.contains("Fragment"))
+      return false;
+    return tag.getCompound("Fragment")
+        .getBoolean("IsFinalLink");
+  }
 
 	@Nullable
 	/**

@@ -13,7 +13,6 @@ import com.simibubi.create.foundation.blockEntity.IMultiBlockEntityContainer;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.VersionedInventoryWrapper;
-import com.simibubi.create.foundation.utility.SameSizeCombinedInvWrapper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import net.minecraft.core.BlockPos;
@@ -25,6 +24,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.SignalGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -37,6 +37,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
 
+import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class ItemVaultBlockEntity extends SmartBlockEntity implements IMultiBlockEntityContainer.Inventory, SidedStorageBlockEntity {
@@ -162,14 +163,24 @@ public class ItemVaultBlockEntity extends SmartBlockEntity implements IMultiBloc
 		}
 
 		BlockState blockstate = level.getBlockState(updatePos);
-		blockstate.onNeighborChange(level, updatePos, provokingPos);
-		if (blockstate.isRedstoneConductor(level, updatePos)) {
-			updatePos.move(direction);
-			blockstate = level.getBlockState(updatePos);
-			if (blockstate.getWeakChanges(level, updatePos)) {
-				level.neighborChanged(blockstate, updatePos, provokingBlock, provokingPos, false);
+		if (shouldUpdate(blockstate, level, updatePos, direction)) {
+			level.neighborChanged(blockstate, updatePos, provokingBlock, provokingPos, false);
+			if (blockstate.isRedstoneConductor(level, updatePos)) {
+				updatePos.move(direction);
+				blockstate = level.getBlockState(updatePos);
+				if (shouldUpdate(blockstate, level, updatePos, direction)) {
+					level.neighborChanged(blockstate, updatePos, provokingBlock, provokingPos, false);
+				}
 			}
 		}
+	}
+
+	// fabric: extract this to a method to also check porting lib
+	private static boolean shouldUpdate(BlockState state, SignalGetter level, BlockPos pos, Direction side) {
+		if (state.is(Blocks.COMPARATOR))
+			return true;
+
+		return state.getBlock() instanceof WeakPowerCheckingBlock checking && checking.shouldCheckWeakPower(state, level, pos, side);
 	}
 
 	@Override
@@ -359,7 +370,7 @@ public class ItemVaultBlockEntity extends SmartBlockEntity implements IMultiBloc
 			}
 		}
 
-		Storage<ItemVariant> combinedInvWrapper = new CombinedStorage<>(SameSizeCombinedInvWrapper.create(invs));
+		Storage<ItemVariant> combinedInvWrapper = new CombinedStorage<>(List.of(invs));
 		combinedInvWrapper = new VersionedInventoryWrapper(combinedInvWrapper);
 		itemCapability = combinedInvWrapper;
 

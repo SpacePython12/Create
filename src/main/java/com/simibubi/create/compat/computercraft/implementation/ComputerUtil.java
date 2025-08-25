@@ -8,14 +8,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.mojang.datafixers.util.Either;
 import com.simibubi.create.compat.computercraft.implementation.luaObjects.LuaComparable;
 import com.simibubi.create.content.logistics.BigItemStack;
 import com.simibubi.create.content.logistics.packager.InventorySummary;
 
 import dan200.computercraft.api.detail.VanillaDetailRegistries;
 import dan200.computercraft.api.lua.LuaException;
-import net.minecraftforge.items.IItemHandler;
 import net.createmod.catnip.data.Glob;
+import net.minecraft.world.item.ItemStack;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class ComputerUtil {
 
@@ -277,24 +284,41 @@ public class ComputerUtil {
     return out;
   }
 
-	public static Map<Integer, Map<String, ?>> list(IItemHandler inventory) {
+	public static Map<Integer, Map<String, ?>> list(Storage<ItemVariant> inventory) {
 		Map<Integer, Map<String, ?>> result = new HashMap<>();
-		var size = inventory.getSlots();
-		for (var i = 0; i < size; i++) {
-			var stack = inventory.getStackInSlot(i);
-			if (!stack.isEmpty()) result.put(i + 1, VanillaDetailRegistries.ITEM_STACK.getBasicDetails(stack));
+
+		int i = 0;
+		for (StorageView<ItemVariant> view : inventory) {
+			if (view.isResourceBlank() || view.getAmount() <= 0)
+				continue;
+
+			int count = TransferUtil.truncateLong(view.getAmount());
+			ItemStack asStack = view.getResource().toStack(count);
+			result.put(i + 1, VanillaDetailRegistries.ITEM_STACK.getBasicDetails(asStack));
+
+			i++;
 		}
 
 		return result;
 	}
 
-    public static Map<String, ?> getItemDetail(IItemHandler inventory, int slot) throws LuaException {
+    public static Map<String, ?> getItemDetail(Storage<ItemVariant> inventory, int slot) throws LuaException {
+        if (slot < 1)
+            throw new LuaException(String.format("Slot %d out of range", slot));
 
-		int maxSlots = inventory.getSlots();
-        if (slot < 1 || slot > maxSlots || Double.isNaN(slot))
-            throw new LuaException(String.format("Slot " + slot + " out of range,available slots between " + 1 + " and " + maxSlots));
-        var stack = inventory.getStackInSlot(slot - 1);
-        return stack.isEmpty() ? null : VanillaDetailRegistries.ITEM_STACK.getDetails(stack);
+		Either<StorageView<ItemVariant>, Integer> either = getView(inventory, slot - 1);
+		if (either.right().isPresent()) {
+			int maxSlots = either.right().get();
+			throw new LuaException(String.format("Slot %d out of range, available slots between 1 and %d", slot, maxSlots));
+		}
+
+		StorageView<ItemVariant> view = either.left().orElseThrow();
+		if (view.isResourceBlank() || view.getAmount() <= 0)
+			return null;
+
+		int count = TransferUtil.truncateLong(view.getAmount());
+		ItemStack asStack = view.getResource().toStack(count);
+        return VanillaDetailRegistries.ITEM_STACK.getDetails(asStack);
     }
 
     public static Map<String, ?> getItemDetail(InventorySummary inventorySummary, int slot) throws LuaException {
@@ -309,4 +333,17 @@ public class ComputerUtil {
         return
 		entry.stack.isEmpty() ? null : details;
     }
+
+	// fabric: helper to get the nth view.
+	// returns either the view or the number of views
+	private static Either<StorageView<ItemVariant>, Integer> getView(Storage<ItemVariant> storage, int index) {
+		int i = 0;
+		for (StorageView<ItemVariant> view : storage) {
+			if (i == index) {
+				return Either.left(view);
+			}
+		}
+
+		return Either.right(i);
+	}
 }

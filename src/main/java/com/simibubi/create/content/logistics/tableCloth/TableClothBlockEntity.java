@@ -45,11 +45,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-
-import org.jetbrains.annotations.NotNull;
-
 public class TableClothBlockEntity extends SmartBlockEntity {
 
 	public AbstractComputerBehaviour computerBehaviour;
@@ -78,13 +73,6 @@ public class TableClothBlockEntity extends SmartBlockEntity {
 		behaviours.add(computerBehaviour = ComputerCraftProxy.behaviour(this));
 	}
 
-	@Override
-	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
-		if (computerBehaviour.isPeripheralCap(cap))
-			return computerBehaviour.getPeripheralCapability();
-		return super.getCapability(cap, side);
-	}
-
 	public List<ItemStack> getItemsForRender() {
 		if (isShop()) {
 			if (renderedItemsForShop == null)
@@ -105,7 +93,7 @@ public class TableClothBlockEntity extends SmartBlockEntity {
 
 	public void notifyShopUpdate() {
 		AllPackets.getChannel()
-			.send(packetTarget(), new ShopUpdatePacket(worldPosition));
+			.sendToClientsTracking(new ShopUpdatePacket(worldPosition), this);
 	}
 
 	@Override

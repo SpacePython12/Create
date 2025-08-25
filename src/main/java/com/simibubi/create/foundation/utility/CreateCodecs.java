@@ -99,7 +99,7 @@ public class CreateCodecs {
 	public static final Codec<FluidStack> FLUID_STACK_CODEC = RecordCodecBuilder.create(
 		instance -> instance.group(
 			BuiltInRegistries.FLUID.byNameCodec().fieldOf("FluidName").forGetter(FluidStack::getFluid),
-			Codec.INT.fieldOf("Amount").forGetter(FluidStack::getAmount),
+			Codec.LONG.fieldOf("Amount").forGetter(FluidStack::getAmount),
 			CompoundTag.CODEC.optionalFieldOf("Tag").forGetter(stack -> Optional.ofNullable(stack.getTag()))
 		).apply(instance, (fluid, amount, tag) -> {
 			FluidStack stack = new FluidStack(fluid, amount);

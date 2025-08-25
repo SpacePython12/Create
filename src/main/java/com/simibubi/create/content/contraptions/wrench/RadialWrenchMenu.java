@@ -52,6 +52,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
+import io.github.fabricators_of_create.porting_lib.util.KeyBindingHelper;
+
 public class RadialWrenchMenu extends AbstractSimiScreen {
 
 	public static final Map<Property<?>, String> VALID_PROPERTIES = new HashMap<>();

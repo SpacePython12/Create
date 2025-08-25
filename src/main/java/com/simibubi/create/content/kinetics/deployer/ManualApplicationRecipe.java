@@ -29,7 +29,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraft.world.phys.BlockHitResult;
 
 public class ManualApplicationRecipe extends ItemApplicationRecipe {
@@ -80,7 +79,7 @@ public class ManualApplicationRecipe extends ItemApplicationRecipe {
 
 		if (!keepHeld) {
 			if (heldItem.getMaxDamage() > 0) {
-				heldItem.hurtAndBreak(1, event.getEntity(),
+				heldItem.hurtAndBreak(1, player,
 					s -> s.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 			} else {
 				heldItem.shrink(1);

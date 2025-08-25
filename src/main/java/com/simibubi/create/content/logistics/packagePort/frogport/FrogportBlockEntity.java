@@ -17,16 +17,10 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.TooltipHelper;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-
 import net.createmod.catnip.animation.LerpedFloat;
 import net.createmod.catnip.animation.LerpedFloat.Chaser;
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.nbt.NBTHelper;
-
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -47,8 +41,10 @@ import net.minecraft.world.phys.Vec3;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
-import org.jetbrains.annotations.NotNull;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 
 public class FrogportBlockEntity extends PackagePortBlockEntity implements IHaveHoveringInformation {
 
@@ -82,13 +78,6 @@ public class FrogportBlockEntity extends PackagePortBlockEntity implements IHave
 			.startWithValue(0)
 			.chase(0, 0.35, Chaser.LINEAR);
 		goggles = false;
-	}
-
-	@Override
-	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
-		if (computerBehaviour.isPeripheralCap(cap))
-			return computerBehaviour.getPeripheralCapability();
-		return super.getCapability(cap, side);
 	}
 
 	@Override
@@ -396,12 +385,6 @@ public class FrogportBlockEntity extends PackagePortBlockEntity implements IHave
 		}
 
 		return super.use(player);
-	}
-
-	@Override
-	public void invalidateCaps() {
-		super.invalidate();
-		computerBehaviour.removePeripheral();
 	}
 
 }

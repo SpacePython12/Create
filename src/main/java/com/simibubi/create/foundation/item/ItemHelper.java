@@ -337,11 +337,11 @@ public class ItemHelper {
 			throw new IllegalArgumentException("Slot count mismatch");
 		}
 
-		for (int slot = to.getSlots() - 1; slot >= 0; slot--) {
+		for (int slot = to.getSlotCount() - 1; slot >= 0; slot--) {
 			to.setStackInSlot(slot, ItemStack.EMPTY);
 		}
 
-		for (int i = 0; i < from.getSlots(); i++) {
+		for (int i = 0; i < from.getSlotCount(); i++) {
 			to.setStackInSlot(i, from.getStackInSlot(i).copy());
 		}
 	}

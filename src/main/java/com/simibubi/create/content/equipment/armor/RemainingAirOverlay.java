@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.item.ItemStack;
@@ -32,8 +33,9 @@ public class RemainingAirOverlay {
 		if (!player.getCustomData()
 			.contains("VisualBacktankAir"))
 			return;
-		boolean isAir = player.getEyeInFluidType().isAir() || player.level().getBlockState(BlockPos.containing(player.getX(), player.getEyeY(), player.getZ())).is(Blocks.BUBBLE_COLUMN);
-		boolean canBreathe = !player.canDrownInFluidType(player.getEyeInFluidType()) || MobEffectUtil.hasWaterBreathing(player) || player.getAbilities().invulnerable;
+
+		boolean isAir = !player.isEyeInFluid(FluidTags.WATER) || player.level().getBlockState(BlockPos.containing(player.getX(), player.getEyeY(), player.getZ())).is(Blocks.BUBBLE_COLUMN);
+		boolean canBreathe = !DivingHelmetItem.canBreathe(player) || MobEffectUtil.hasWaterBreathing(player) || player.getAbilities().invulnerable;
 		if ((isAir || canBreathe) && !player.isInLava())
 			return;
 

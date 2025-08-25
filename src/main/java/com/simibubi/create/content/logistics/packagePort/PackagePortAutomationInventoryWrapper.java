@@ -16,17 +16,15 @@ public class PackagePortAutomationInventoryWrapper extends ItemHandlerWrapper {
 	}
 
 	@Override
-	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		ItemStack preview = super.extractItem(slot, 64, true);
-
-		if (!PackageItem.isPackage(preview))
-			return ItemStack.EMPTY;
+	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		if (!PackageItem.isPackage(resource))
+			return 0;
 
 		String filterString = ppbe.getFilterString();
-		if (filterString == null || !PackageItem.matchAddress(preview, filterString))
-			return ItemStack.EMPTY;
+		if (filterString == null || !PackageItem.matchAddress(resource, filterString))
+			return 0;
 
-		return simulate ? preview : super.extractItem(slot, amount, false);
+		return super.extract(resource, maxAmount, transaction);
 	}
 
 	@Override
@@ -34,8 +32,8 @@ public class PackagePortAutomationInventoryWrapper extends ItemHandlerWrapper {
 		if (!PackageItem.isPackage(resource))
 			return 0;
 		String filterString = ppbe.getFilterString();
-		if (filterString != null && PackageItem.matchAddress(stack, filterString))
-			return stack;
-		return super.insertItem(slot, stack, simulate);
+		if (filterString != null && PackageItem.matchAddress(resource, filterString))
+			return 0;
+		return super.insert(resource, maxAmount, transaction);
 	}
 }

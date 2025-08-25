@@ -21,8 +21,6 @@ import net.minecraft.world.level.Level;
 import xaero.map.gui.GuiMap;
 import xaero.map.gui.ScreenBase;
 
-import net.minecraftforge.client.event.InputEvent;
-
 public class XaeroTrainMap {
 	private static boolean requesting;
 	private static ResourceKey<Level> renderedDimension;
@@ -40,26 +38,25 @@ public class XaeroTrainMap {
 		TrainMapSyncClient.requestData();
 	}
 
-	public static void mouseClick(InputEvent.MouseButton.Pre event) {
+	public static boolean mouseClick(Screen screen, int mouseX, int mouseY) {
 		if (encounteredException)
-			return;
+			return false;
 
 		Minecraft mc = Minecraft.getInstance();
 		try {
 			if (!(mc.screen instanceof GuiMap))
-				return;
+				return false;
 		} catch (Exception e) {
 			Create.LOGGER.error("Failed to handle mouseClick for Xaero's World Map train map integration:", e);
 			encounteredException = true;
-			return;
+			return false;
 		}
 
 		Window window = mc.getWindow();
 		double mX = mc.mouseHandler.xpos() * window.getGuiScaledWidth() / window.getScreenWidth();
 		double mY = mc.mouseHandler.ypos() * window.getGuiScaledHeight() / window.getScreenHeight();
 
-		if (TrainMapManager.handleToggleWidgetClick(Mth.floor(mX), Mth.floor(mY), 3, 30))
-			event.setCanceled(true);
+		return TrainMapManager.handleToggleWidgetClick(Mth.floor(mX), Mth.floor(mY), 3, 30);
 	}
 
 	// Called by XaeroFullscreenMapMixin, guarded by try-catch

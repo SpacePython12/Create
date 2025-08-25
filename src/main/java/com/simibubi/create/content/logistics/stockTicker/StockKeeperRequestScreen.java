@@ -82,6 +82,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.phys.AABB;
+
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 public class StockKeeperRequestScreen extends AbstractSimiContainerScreen<StockKeeperRequestMenu>
@@ -1007,7 +1008,7 @@ public class StockKeeperRequestScreen extends AbstractSimiContainerScreen<StockK
 			int x, y;
 			BigItemStack entry;
 			if (recipeHovered) {
-				int jeiX = getGuiLeft() + (windowWidth - colWidth * recipesToOrder.size()) / 2 + 1;
+				int jeiX = this.leftPos + (windowWidth - colWidth * recipesToOrder.size()) / 2 + 1;
 				int jeiY = orderY - 31;
 
 				x = jeiX + (index * colWidth);

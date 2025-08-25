@@ -1,11 +1,6 @@
 package com.simibubi.create.foundation.item;
 
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NotNull;
+import java.util.function.Predicate;
 
 import com.simibubi.create.foundation.blockEntity.SyncedBlockEntity;
 
@@ -29,12 +24,12 @@ public class SmartInventory extends ItemStackHandlerContainer implements INBTSer
 		this(slots, be, 64, false);
 	}
 
-	public SmartInventory(int slots, SyncedBlockEntity be, BiPredicate<Integer, ItemStack> isValid) {
+	public SmartInventory(int slots, SyncedBlockEntity be, Predicate<ItemVariant> isValid) {
 		this(slots, be, 64, false, isValid);
 	}
 
-	public SmartInventory(int slots, SyncedBlockEntity be, int stackSize, boolean stackNonStackables, BiPredicate<Integer, ItemStack> isValid) {
-		this(slots, be, stackNonStackables, stackSize, stackSize, stackNonStackables);
+	public SmartInventory(int slots, SyncedBlockEntity be, int stackSize, boolean stackNonStackables, Predicate<ItemVariant> isValid) {
+		this(slots, be, stackSize, stackNonStackables);
 		this.isValid = isValid;
 	}
 
@@ -102,7 +97,8 @@ public class SmartInventory extends ItemStackHandlerContainer implements INBTSer
 	// fabric: merge SyncedStackHandler, it exists only to be wrapped, and removing it allows avoiding extending RecipeWrapper
 
 	private SyncedBlockEntity blockEntity;
-	private BiPredicate<Integer, ItemStack> isValid = super::isItemValid;
+	// fabric: default forge impl just returns true, inline it
+	private Predicate<ItemVariant> isValid = item -> true;
 	private Runnable updateCallback;
 
 	@Override
@@ -124,11 +120,7 @@ public class SmartInventory extends ItemStackHandlerContainer implements INBTSer
 	}
 
 	@Override
-	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-		return isValid.test(slot, stack);
-	}
-
-	public void whenContentsChange(Consumer<Integer> updateCallback) {
-		this.updateCallback = updateCallback;
+	public boolean isItemValid(int slot, ItemVariant resource, int count) {
+		return isValid.test(resource);
 	}
 }

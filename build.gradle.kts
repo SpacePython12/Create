@@ -182,8 +182,8 @@ tasks.named<ProcessResources>("processResources") {
         "loader_version" to libs.versions.fabric.loader.get(),
         "fabric_version" to libs.versions.fabric.api.get(),
         "forge_config_version" to libs.versions.forge.config.get(),
-        "milk_lib_version" to libs.milk.get(),
-        "reach_entity_attributes_version" to libs.rea.get()
+        "milk_lib_version" to libs.versions.milk.get(),
+        "reach_entity_attributes_version" to libs.versions.rea.get()
     )
 
     for (module: MinimalExternalModuleDependency in libs.bundles.porting.lib.get()) {

@@ -47,6 +47,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+
 public class SchematicItem extends Item {
 
 	private static final Logger LOGGER = LogUtils.getLogger();

@@ -53,7 +53,7 @@ public abstract class PackagePortBlockEntity extends SmartBlockEntity implements
 		super(type, pos, state);
 		addressFilter = "";
 		acceptsPackages = true;
-		inventory = new SmartInventory(18, this, (slot, stack) -> PackageItem.isPackage(stack));
+		inventory = new SmartInventory(18, this, PackageItem::isPackage);
 		this.exposedInventory = new PackagePortAutomationInventoryWrapper(inventory, this);
 	}
 

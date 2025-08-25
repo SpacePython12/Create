@@ -13,15 +13,17 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry.Entry;
 
 public class CreateWikiBlockInfoProvider implements DataProvider {
 	private final PackOutput.PathProvider path;
 
-	public CreateWikiBlockInfoProvider(PackOutput output) {
+	public CreateWikiBlockInfoProvider(FabricDataOutput output) {
 		this.path = output.createPathProvider(Target.DATA_PACK, ".wiki/block_info/");
 	}
 
@@ -47,7 +49,8 @@ public class CreateWikiBlockInfoProvider implements DataProvider {
 				element.addProperty("luminous", state.getLightEmission() > 0);
 				//element.addProperty("transparent", block.propagatesSkylightDown());
 				element.addProperty("waterloggable", block instanceof SimpleWaterloggedBlock);
-				element.addProperty("flammable", ((FireBlock) Blocks.FIRE).getBurnOdds(state) > 0);
+				Entry odds = FlammableBlockRegistry.getDefaultInstance().get(state.getBlock());
+				element.addProperty("flammable", odds.getSpreadChance() > 0);
 				element.addProperty("ignited_by_lava", state.ignitedByLava());
 
 				return DataProvider.saveStable(cachedOutput, element, path.json(id));

@@ -5,14 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.simibubi.create.compat.computercraft.implementation.ComputerUtil;
 import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.content.logistics.packager.PackagerBlockEntity;
-import com.simibubi.create.compat.computercraft.implementation.ComputerUtil;
 
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 public class PackageLuaObject implements LuaComparable {
 
@@ -76,7 +77,7 @@ public class PackageLuaObject implements LuaComparable {
 		ItemStackHandler results = PackageItem.getContents(box);
 		List<LuaItemStack> result = new ArrayList<>();
 
-		for (int i = 0; i < results.getSlots(); i++) {
+		for (int i = 0; i < results.getSlotCount(); i++) {
 			ItemStack stack = results.getStackInSlot(i);
 			if (!stack.isEmpty()) {
 				result.add(new LuaItemStack(stack));

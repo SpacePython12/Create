@@ -85,6 +85,7 @@ dependencies {
     modCompileOnly(libs.bundles.trinkets)
     modCompileOnly(libs.bundles.ftb)
     modCompileOnly(libs.bundles.journeymap)
+    modCompileOnly(libs.xaeros)
 
     modCompileOnly(libs.jei) { isTransitive = false }
     modCompileOnly(libs.bundles.rei)

@@ -63,6 +63,9 @@ journeymap = "1.20.1-5.10.3-fabric"
 # check the jm jar, it's JiJ
 journeymap_api = "1.20-1.9-SNAPSHOT"
 
+# https://modrinth.com/mod/xaeros-world-map
+xaeros = "1.39.12_Fabric_1.20"
+
 [libraries]
 # core
 parchment = { module = "org.parchmentmc.data:parchment-1.20.1", version.ref = "parchment" }
@@ -116,6 +119,8 @@ ftb_library = { module = "dev.ftb.mods:ftb-library-fabric", version.ref = "ftb_l
 
 journeymap = { module = "maven.modrinth:journeymap", version.ref = "journeymap" }
 journeymap_api = { module = "info.journeymap:journeymap-api", version.ref = "journeymap_api" }
+
+xaeros = { module = "maven.modrinth:xaeros-world-map", version.ref = "xaeros" }
 
 # use 'api' classifier variant for compile
 emi = { module = "dev.emi:emi-fabric", version.ref = "emi" }

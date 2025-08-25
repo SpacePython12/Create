@@ -2,7 +2,7 @@
   "blast_resistance": 2.0,
   "flammable": false,
   "hardness": 2.0,
-  "ignited_by_lava": true,
+  "ignited_by_lava": false,
   "luminous": false,
   "stackable": 64,
   "waterloggable": false

@@ -21,6 +21,7 @@ import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
 
 import net.createmod.ponder.foundation.PonderIndex;
+import net.minecraft.core.RegistrySetBuilder;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -34,6 +35,11 @@ public class CreateDatagen implements DataGeneratorEntrypoint {
 		FabricDataGenerator.Pack pack = generator.createPack();
 		Create.registrate().setupDatagen(pack, helper);
 		gatherData(pack, helper);
+	}
+
+	@Override
+	public void buildRegistry(RegistrySetBuilder builder) {
+		GeneratedEntriesProvider.addBootstraps(builder);
 	}
 
 	public static void gatherData(FabricDataGenerator.Pack pack, ExistingFileHelper existingFileHelper) {

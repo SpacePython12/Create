@@ -3,13 +3,14 @@ package com.simibubi.create.foundation.data.recipe;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
-import com.simibubi.create.api.data.recipe.BaseRecipeProvider.GeneratedRecipe;
 import com.simibubi.create.api.data.recipe.EmptyingRecipeGen;
 
 import io.github.tropheusj.milk.Milk;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 
 /**
  * Create's own Data Generation for Emptying recipes
@@ -25,25 +26,25 @@ public final class CreateEmptyingRecipeGen extends EmptyingRecipeGen {
 	GeneratedRecipe
 
 	HONEY_BOTTLE = create("honey_bottle", b -> b.require(Items.HONEY_BOTTLE)
-		.output(AllFluids.HONEY.get(), 250)
+		.output(AllFluids.HONEY.get(), AllFluids.HONEY_BOTTLE_AMOUNT)
 		.output(Items.GLASS_BOTTLE)),
 
 	BUILDERS_TEA = create("builders_tea", b -> b.require(AllItems.BUILDERS_TEA.get())
-		.output(AllFluids.TEA.get(), 250)
+		.output(AllFluids.TEA.get(), FluidConstants.BOTTLE)
 		.output(Items.GLASS_BOTTLE)),
 
 	FD_MILK = create(Mods.FD.recipeId("milk_bottle"), b -> b.require(Mods.FD, "milk_bottle")
-		.output(Milk.STILL_MILK, 250)
+		.output(Milk.STILL_MILK, FluidConstants.BOTTLE)
 		.output(Items.GLASS_BOTTLE)
 		.whenModLoaded(Mods.FD.getId())),
 
 	AM_LAVA = create(Mods.AM.recipeId("lava_bottle"), b -> b.require(Mods.AM, "lava_bottle")
 		.output(Items.GLASS_BOTTLE)
-		.output(Fluids.LAVA, 250)
+		.output(Fluids.LAVA, FluidConstants.BOTTLE)
 		.whenModLoaded(Mods.AM.getId())),
 
 	NEO_MILK = create(Mods.NEA.recipeId("milk_bottle"), b -> b.require(Mods.FD, "milk_bottle")
-		.output(Milk.STILL_MILK, 250)
+		.output(Milk.STILL_MILK, FluidConstants.BOTTLE)
 		.output(Items.GLASS_BOTTLE)
 		.whenModLoaded(Mods.NEA.getId()))
 

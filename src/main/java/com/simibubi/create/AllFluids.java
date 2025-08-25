@@ -130,6 +130,7 @@ public class AllFluids {
 				.tickRate(25)
 				.flowSpeed(3)
 				.blastResistance(100f))
+			.source(SimpleFlowableFluid.Source::new)
 			.fluidAttributes(() -> new CreateAttributeHandler("block.create.chocolate", 1500, 1400))
 			.block()
 			.properties(p -> p.mapColor(MapColor.TERRACOTTA_BROWN))

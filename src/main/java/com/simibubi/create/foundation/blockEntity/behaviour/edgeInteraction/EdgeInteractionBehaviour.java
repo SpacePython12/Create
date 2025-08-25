@@ -1,8 +1,7 @@
 package com.simibubi.create.foundation.blockEntity.behaviour.edgeInteraction;
 
-import java.util.function.Predicate;
+import java.util.Optional;
 
-import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -18,12 +17,12 @@ public class EdgeInteractionBehaviour extends BlockEntityBehaviour {
 
 	ConnectionCallback connectionCallback;
 	ConnectivityPredicate connectivityPredicate;
-	Predicate<Item> requiredPredicate;
+	Optional<Item> requiredItem;
 
 	public EdgeInteractionBehaviour(SmartBlockEntity be, ConnectionCallback callback) {
 		super(be);
 		this.connectionCallback = callback;
-		requiredPredicate = item -> false;
+		requiredItem = Optional.empty();
 		connectivityPredicate = (world, pos, face, face2) -> true;
 	}
 
@@ -33,12 +32,7 @@ public class EdgeInteractionBehaviour extends BlockEntityBehaviour {
 	}
 
 	public EdgeInteractionBehaviour require(Item item) {
-		this.requiredPredicate = item1 -> item1 == item;
-		return this;
-	}
-
-	public EdgeInteractionBehaviour require(AllTags.AllItemTags tag) {
-		this.requiredPredicate = tag::matches;
+		this.requiredItem = Optional.of(item);
 		return this;
 	}
 

@@ -249,10 +249,13 @@ public class SchematicPrinter {
 
 		BlockPos target = getCurrentTarget();
 		BlockState blockState = BlockHelper.setZeroAge(blockReader.getBlockState(target));
-		BlockEntity blockEntity = ((EntityBlock) blockState.getBlock()).newBlockEntity(target, blockState);
-		CompoundTag data = BlockHelper.prepareBlockEntityData(blockState, blockEntity);
-		if (blockEntity != null && data != null)
-			blockEntity.load(data);
+		BlockEntity blockEntity = null;
+		if (blockState.hasBlockEntity()) {
+			blockEntity = ((EntityBlock) blockState.getBlock()).newBlockEntity(target, blockState);
+			CompoundTag data = BlockHelper.prepareBlockEntityData(blockState, blockEntity);
+			if (blockEntity != null && data != null)
+				blockEntity.load(data);
+		}
 		return ItemRequirement.of(blockState, blockEntity);
 	}
 

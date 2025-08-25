@@ -6,25 +6,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.Contraption.RenderedBlocks;
 import com.simibubi.create.content.contraptions.ContraptionWorld;
-import com.simibubi.create.foundation.render.fabric.LayerFilteringBakedModel;
+import com.simibubi.create.foundation.utility.fabric.SingleRenderTypeSbbBuilder;
 import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 
 import dev.engine_room.flywheel.api.visualization.VisualizationManager;
-import net.createmod.catnip.render.ShadedBlockSbbBuilder;
+import net.createmod.catnip.client.render.model.BakedModelBufferer;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.createmod.catnip.render.SuperByteBufferCache;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public class ContraptionRenderInfo {
@@ -103,45 +94,22 @@ public class ContraptionRenderInfo {
 	}
 
 	private SuperByteBuffer buildStructureBuffer(RenderType layer) {
-		BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-		ModelBlockRenderer renderer = dispatcher.getModelRenderer();
 		ThreadLocalObjects objects = THREAD_LOCAL_OBJECTS.get();
 
+
 		PoseStack poseStack = objects.poseStack;
-		RandomSource random = objects.random;
+		SingleRenderTypeSbbBuilder sbbBuilder = objects.sbbBuilder;
+
 		RenderedBlocks blocks = contraption.getRenderedBlocks();
+		sbbBuilder.prepare(layer);
 
-		ShadedBlockSbbBuilder sbbBuilder = objects.sbbBuilder;
-		sbbBuilder.begin();
+		BakedModelBufferer.bufferBlocks(blocks.positions().iterator(), this.renderWorld, poseStack, true, sbbBuilder);
 
-		ModelBlockRenderer.enableCaching();
-		for (BlockPos pos : blocks.positions()) {
-			BlockState state = blocks.lookup().apply(pos);
-			if (state.getRenderShape() == RenderShape.MODEL) {
-				BakedModel model = dispatcher.getBlockModel(state);
-				if (model.isVanillaAdapter()) {
-					if (ItemBlockRenderTypes.getChunkRenderType(state) != layer) {
-						model = null;
-					}
-				} else {
-					model = LayerFilteringBakedModel.wrap(model, layer);
-				}
-				if (model != null) {
-					// FIXME HIGH LOGISTICS
-//					model = shadeSeparatingWrapper.wrapModel(model);
-					dispatcher.getModelRenderer()
-							.tesselateBlock(renderWorld, model, state, pos, poseStack, sbbBuilder, true, random, state.getSeed(pos), OverlayTexture.NO_OVERLAY);
-				}
-			}
-		}
-		ModelBlockRenderer.clearCache();
-
-		return sbbBuilder.end();
+		return objects.sbbBuilder.build();
 	}
 
 	private static class ThreadLocalObjects {
 		public final PoseStack poseStack = new PoseStack();
-		public final RandomSource random = RandomSource.createNewThreadLocalInstance();
-		public final ShadedBlockSbbBuilder sbbBuilder = ShadedBlockSbbBuilder.create();
+		public final SingleRenderTypeSbbBuilder sbbBuilder = new SingleRenderTypeSbbBuilder();
 	}
 }

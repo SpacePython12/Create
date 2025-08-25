@@ -1,27 +1,23 @@
 package com.simibubi.create.content.schematics.client;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import com.google.common.collect.Iterators;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.render.BlockEntityRenderHelper;
-import com.simibubi.create.foundation.render.fabric.LayerFilteringBakedModel;
+import com.simibubi.create.foundation.utility.fabric.SingleRenderTypeSbbBuilder;
 
+import net.createmod.catnip.client.render.model.BakedModelBufferer;
 import net.createmod.catnip.levelWrappers.SchematicLevel;
-import net.createmod.catnip.render.ShadedBlockSbbBuilder;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.createmod.catnip.render.SuperRenderTypeBuffer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 public class SchematicRenderer {
@@ -81,52 +77,26 @@ public class SchematicRenderer {
 	}
 
 	protected SuperByteBuffer drawLayer(RenderType layer) {
-		BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-		ModelBlockRenderer renderer = dispatcher.getModelRenderer();
 		ThreadLocalObjects objects = THREAD_LOCAL_OBJECTS.get();
 
+		SingleRenderTypeSbbBuilder sbbBuilder = objects.sbbBuilder;
 		PoseStack poseStack = objects.poseStack;
-		RandomSource random = objects.random;
-		BlockPos.MutableBlockPos mutableBlockPos = objects.mutableBlockPos;
-		SchematicLevel renderWorld = schematic;
-		BoundingBox bounds = renderWorld.getBounds();
+		MutableBlockPos reusedPos = objects.mutableBlockPos;
+		BoundingBox bounds = schematic.getBounds();
 
-		ShadedBlockSbbBuilder sbbBuilder = objects.sbbBuilder;
-		sbbBuilder.begin();
+		sbbBuilder.prepare(layer);
+		schematic.renderMode = true;
 
-		renderWorld.renderMode = true;
-		ModelBlockRenderer.enableCaching();
-		for (BlockPos localPos : BlockPos.betweenClosed(bounds.minX(), bounds.minY(), bounds.minZ(), bounds.maxX(), bounds.maxY(), bounds.maxZ())) {
-			BlockPos pos = mutableBlockPos.setWithOffset(localPos, anchor);
-			BlockState state = renderWorld.getBlockState(pos);
+		Iterator<BlockPos> positions = Iterators.transform(
+			BlockPos.betweenClosedStream(bounds).iterator(),
+			pos -> reusedPos.setWithOffset(Objects.requireNonNull(pos), this.anchor)
+		);
 
-			if (state.getRenderShape() == RenderShape.MODEL) {
-				BakedModel model = dispatcher.getBlockModel(state);
-				long seed = state.getSeed(pos);
-				random.setSeed(seed);
-				if (model.isVanillaAdapter()) {
-					if (ItemBlockRenderTypes.getChunkRenderType(state) != layer) {
-						continue;
-					}
-				} else {
-					model = LayerFilteringBakedModel.wrap(model, layer);
-				}
-				// FIXME HIGH LOGISTICS
-//				model = shadeSeparatingWrapper.wrapModel(model);
+		BakedModelBufferer.bufferBlocks(positions, schematic, poseStack, true, sbbBuilder);
 
-				poseStack.pushPose();
-				poseStack.translate(localPos.getX(), localPos.getY(), localPos.getZ());
+		schematic.renderMode = false;
 
-				renderer.tesselateBlock(renderWorld, model, state, pos, poseStack, sbbBuilder, true, random,
-						seed, OverlayTexture.NO_OVERLAY);
-
-				poseStack.popPose();
-			}
-		}
-		ModelBlockRenderer.clearCache();
-		renderWorld.renderMode = false;
-
-		return sbbBuilder.end();
+		return sbbBuilder.build();
 	}
 
 	// fabric: calling chunkBufferLayers early causes issues (#612), let the map handle its size on its own
@@ -137,9 +107,8 @@ public class SchematicRenderer {
 
 	private static class ThreadLocalObjects {
 		public final PoseStack poseStack = new PoseStack();
-		public final RandomSource random = RandomSource.createNewThreadLocalInstance();
 		public final BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-		public final ShadedBlockSbbBuilder sbbBuilder = ShadedBlockSbbBuilder.create();
+		public final SingleRenderTypeSbbBuilder sbbBuilder = new SingleRenderTypeSbbBuilder();
 	}
 
 }

@@ -42,7 +42,6 @@ import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import com.simibubi.create.content.kinetics.drill.CobbleGenOptimisation;
 import com.simibubi.create.content.logistics.stockTicker.StockTickerInteractionHandler;
 import com.simibubi.create.content.processing.burner.BlazeBurnerHandler;
-import com.simibubi.create.content.redstone.displayLink.ClickToLinkBlockItem;
 import com.simibubi.create.content.redstone.link.LinkHandler;
 import com.simibubi.create.content.redstone.link.controller.LinkedControllerServerHandler;
 import com.simibubi.create.content.trains.entity.CarriageEntityHandler;
@@ -262,7 +261,6 @@ public class CommonEvents {
 		UseBlockCallback.EVENT.register(ValveHandleBlock::onBlockActivated);
 		UseBlockCallback.EVENT.register(ClipboardValueSettingsHandler::rightClickToCopy);
 		UseBlockCallback.EVENT.register(ChainConveyorConnectionHandler::onItemUsedOnBlock);
-		UseBlockCallback.EVENT.register(ClickToLinkBlockItem::linkableItemAlwaysPlacesWhenUsed);
 		AttackBlockCallback.EVENT.register(ClipboardValueSettingsHandler::leftClickToPaste);
 		AttackBlockCallback.EVENT.register(ZapperInteractionHandler::leftClickingBlocksWithTheZapperSelectsTheBlock);
 		UseEntityCallback.EVENT.register(ScheduleItemEntityInteraction::interactWithConductor);

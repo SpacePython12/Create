@@ -20,26 +20,23 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-public abstract class ClickToLinkBlockItem extends BlockItem {
+import io.github.fabricators_of_create.porting_lib.item.BlockUseBypassingItem;
+
+public abstract class ClickToLinkBlockItem extends BlockItem implements BlockUseBypassingItem {
 
 	public ClickToLinkBlockItem(Block pBlock, Properties pProperties) {
 		super(pBlock, pProperties);
 	}
 
-	public static InteractionResult linkableItemAlwaysPlacesWhenUsed(Player player, Level level, InteractionHand hand, BlockHitResult hit) {
-		ItemStack usedItem = player.getItemInHand(hand);
-		if (!(usedItem.getItem() instanceof ClickToLinkBlockItem blockItem))
-			return InteractionResult.PASS;
-		if (level.getBlockState(hit.getBlockPos()).is(blockItem.getBlock()))
-			return InteractionResult.PASS;
-
-		return InteractionResult.FAIL;
+	// fabric: replaces linkableItemAlwaysPlacesWhenUsed
+	@Override
+	public boolean shouldBypass(BlockState state, BlockPos pos, Level level, Player player, InteractionHand hand) {
+		return !state.is(this.getBlock());
 	}
 
 	@Override

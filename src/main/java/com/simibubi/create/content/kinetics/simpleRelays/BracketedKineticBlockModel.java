@@ -4,8 +4,8 @@ import java.util.function.Supplier;
 
 import com.simibubi.create.content.decoration.bracket.BracketedBlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.utility.fabric.VirtualRenderHelper;
 
-import dev.engine_room.flywheel.lib.model.baked.EmptyVirtualBlockGetter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -29,7 +29,7 @@ public class BracketedKineticBlockModel extends ForwardingBakedModel {
 
 	@Override
 	public void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
-		if (blockView instanceof EmptyVirtualBlockGetter) {
+		if (VirtualRenderHelper.isVirtual(blockView)) {
 			super.emitBlockQuads(blockView, state, pos, randomSupplier, context);
 			return;
 		}

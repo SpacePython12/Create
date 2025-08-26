@@ -133,7 +133,10 @@ public class CreateMainMenuScreen extends AbstractSimiScreen {
 		RenderSystem.enableBlend();
 
 		ms.pushPose();
-		ms.translate(width / 2 - 32, 32, -10);
+		// fabric: I have no idea why, but this 0 is a -10 on forge.
+		// it seems to have no visual effect, but on fabric it causes the logo to disappear when
+		// the screen was opened from in-world, but not in the title screen. just use 0 instead.
+		ms.translate(width / 2 - 32, 32, 0);
 		ms.pushPose();
 		ms.scale(0.25f, 0.25f, 0.25f);
 		AllGuiTextures.LOGO.render(graphics, 0, 0);
